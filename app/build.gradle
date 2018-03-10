@@ -1,0 +1,107 @@
+apply plugin: 'com.android.application'
+
+def getProperty(String filename, String propName) {
+    def propsFile = rootProject.file(filename)
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        if (props[propName] != null) {
+            print("BUILD GRANDLE OK")
+            return props[propName]
+        } else {
+            print("No such property " + propName + " in file " + filename);
+        }
+    } else {
+        print(filename + " does not exist!")
+    }
+}
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.odauday"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BASE_URL", "\"${getProperty("local.properties", "base_url")}\""
+        buildConfigField "String", "API_KEY", "\"${getProperty("local.properties", "api_key")}\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation "com.android.support:support-fragment:26.1.0"
+
+    /*Open Library
+    * 1. Dagger 2.14.1
+    * 2. Timber 4.6.1
+    * 3. RxJava 2.1.10
+    * 4. RxAndroid 2.0.2
+    * 5. Retrofit 2.3.0
+    * 6. LifeCycle
+    * 7. DataBinding
+    * 8. Glide
+    * */
+
+    /*Version*/
+    def daggerVersion = "2.14.1"
+    def loggerVersion = "4.6.1"
+    def rxJavaVersion = "2.1.10"
+    def rxAndroidVersion = "2.0.2"
+    def retrofitVersion = "2.3.0"
+    def picassoVersion = "2.5.2"
+    def lifecycleVersion = "1.1.0"
+    def dataBindingVersion = "2.3.0"
+
+    implementation "com.google.dagger:dagger:${daggerVersion}"
+    implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+
+    implementation "com.jakewharton.timber:timber:${loggerVersion}"
+
+    implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+
+    implementation "com.squareup.picasso:picasso:${picassoVersion}"
+
+
+//    implementation "com.github.bumptech.glide:glide:${glideVersion}"
+//    annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
+
+    implementation "android.arch.lifecycle:extensions:${lifecycleVersion}"
+    annotationProcessor "android.arch.lifecycle:compiler:${lifecycleVersion}"
+
+    annotationProcessor "com.android.databinding:compiler:${dataBindingVersion}"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
