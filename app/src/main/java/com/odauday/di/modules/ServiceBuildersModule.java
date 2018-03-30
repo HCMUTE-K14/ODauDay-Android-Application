@@ -1,6 +1,8 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
+import com.odauday.model.Tag;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -16,7 +18,7 @@ public class ServiceBuildersModule {
     
     @Provides
     @Singleton
-    UserService.Public providePublicUserService(@Named("publicRetrofit") Retrofit retrofit) {
+    UserService.Public PublicUserService(@Named("publicRetrofit") Retrofit retrofit) {
         return retrofit.create(UserService.Public.class);
     }
     
@@ -24,5 +26,17 @@ public class ServiceBuildersModule {
     @Singleton
     UserService.Protect provideProtectUserService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(UserService.Protect.class);
+    }
+    
+    @Provides
+    @Singleton
+    TagService.Public providePublicTagService(@Named("publicRetrofit") Retrofit retrofit){
+        return retrofit.create(TagService.Public.class);
+    }
+    
+    @Provides
+    @Singleton
+    TagService.Protect provideProtectTagService(@Named("protectRetrofit") Retrofit retrofit){
+        return retrofit.create(TagService.Protect.class);
     }
 }

@@ -61,8 +61,6 @@ public class ForgotPasswordActivity extends
     @Override
     protected void onStart() {
         super.onStart();
-        
-        processingTaskFromViewModel();
     }
     
     @Override
