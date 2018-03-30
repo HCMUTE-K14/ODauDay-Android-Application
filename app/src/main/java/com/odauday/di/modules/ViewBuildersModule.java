@@ -1,10 +1,12 @@
 package com.odauday.di.modules;
 
-import com.odauday.MainActivity;
-import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
-import com.odauday.ui.test.GithubUserActivity;
-import com.odauday.ui.test.GithubUserModule;
+import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
+import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
+import com.odauday.ui.user.login.LoginActivity;
+import com.odauday.ui.user.login.LoginModule;
+import com.odauday.ui.user.register.RegisterActivity;
+import com.odauday.ui.user.register.RegisterModule;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -15,12 +17,16 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ViewBuildersModule {
     
-    @ContributesAndroidInjector(modules = MainActivityModule.class)
+    @ContributesAndroidInjector(modules = LoginModule.class)
     @PerActivity
-    abstract MainActivity bindMainActivity();
+    abstract LoginActivity bindLoginActivity();
     
-    @ContributesAndroidInjector(modules = GithubUserModule.class)
+    
+    @ContributesAndroidInjector(modules = RegisterModule.class)
     @PerActivity
-    abstract GithubUserActivity bindGitHubUserActivity();
+    abstract RegisterActivity bindRegisterActivity();
     
+    @ContributesAndroidInjector(modules = ForgotPasswordModule.class)
+    @PerActivity
+    abstract ForgotPasswordActivity bindForgotPasswordActivity();
 }

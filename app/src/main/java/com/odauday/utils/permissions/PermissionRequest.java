@@ -12,7 +12,7 @@ public class PermissionRequest {
     
     private static final String TAG = PermissionRequest.class.getSimpleName();
     
-    private static Random ramdom;
+    private static Random random;
     
     private int requestCode;
     
@@ -25,18 +25,18 @@ public class PermissionRequest {
     }
     
     public PermissionRequest() {
-        if (ramdom == null) {
-            ramdom = new Random();
+        if (random == null) {
+            random = new Random();
         }
     }
     
     public PermissionRequest(
               ArrayList<String> permissions,
               PermissionCallBack permissionCallBack) {
-        if (ramdom == null) {
-            ramdom = new Random();
+        if (random == null) {
+            random = new Random();
         }
-        this.requestCode = ramdom.nextInt(Integer.MAX_VALUE);
+        this.requestCode = random.nextInt(Integer.MAX_VALUE);
         this.permissions = permissions;
         this.permissionCallBack = permissionCallBack;
     }

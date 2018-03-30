@@ -51,37 +51,38 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
         } else {
             final int startVersion = dataVersion;
             final List<T> oldData = data;
-    
+            
             new AsyncTask<Void, Void, DiffResult>() {
                 @Override
-                protected DiffUtil.DiffResult  doInBackground(Void... voids) {
+                protected DiffUtil.DiffResult doInBackground(Void... voids) {
                     return DiffUtil.calculateDiff(new DiffUtil.Callback() {
                         @Override
                         public int getOldListSize() {
                             return oldData.size();
                         }
-                
+                        
                         @Override
                         public int getNewListSize() {
                             return newData.size();
                         }
-                
+                        
                         @Override
                         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
                             T oldItem = oldData.get(oldItemPosition);
                             T newItem = newData.get(newItemPosition);
                             return BaseAdapter.this.areItemsTheSame(oldItem, newItem);
                         }
-                
+                        
                         @Override
-                        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                        public boolean areContentsTheSame(int oldItemPosition,
+                                  int newItemPosition) {
                             T oldItem = oldData.get(oldItemPosition);
                             T newItem = newData.get(newItemPosition);
                             return BaseAdapter.this.areContentsTheSame(oldItem, newItem);
                         }
                     });
                 }
-        
+                
                 @Override
                 protected void onPostExecute(DiffUtil.DiffResult diffResult) {
                     if (startVersion != dataVersion) {
@@ -89,7 +90,7 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
                     }
                     data.addAll(newData);
                     diffResult.dispatchUpdatesTo(BaseAdapter.this);
-            
+                    
                 }
             }.execute();
         }

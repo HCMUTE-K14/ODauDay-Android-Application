@@ -7,10 +7,11 @@ import android.arch.lifecycle.ViewModelProvider;
  * Created by infamouSs on 2/28/18.
  */
 
+@SuppressWarnings("unchecked")
 public class ViewModelFactory<V> implements ViewModelProvider.Factory {
     
     
-    private V viewModel;
+    private final V viewModel;
     
     public ViewModelFactory(V viewModel) {
         this.viewModel = viewModel;

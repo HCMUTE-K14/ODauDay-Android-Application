@@ -22,7 +22,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
-        android:text="@{user.login}"
         app:layout_constraintStart_toEndOf="@+id/stars"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="repository name" />
@@ -33,7 +32,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginLeft="@dimen/default_margin"
-        android:text="@{String.valueOf(user.id)}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name"
         tools:layout_editor_absoluteX="@dimen/default_margin"
@@ -42,7 +40,6 @@
       <ImageView
         android:id="@+id/stars"
         android:layout_width="30dp"
-        app:imageUrl="@{user.avatarUrl}"
         android:layout_height="30dp" />
     </android.support.constraint.ConstraintLayout>
   </android.support.v7.widget.CardView>

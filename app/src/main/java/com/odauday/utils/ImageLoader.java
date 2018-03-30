@@ -1,8 +1,9 @@
 package com.odauday.utils;
 
 import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.odauday.R;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by infamouSs on 3/6/18.
@@ -10,11 +11,12 @@ import com.squareup.picasso.Picasso;
 
 public class ImageLoader {
     
-    public static void load(ImageView imageView, String image) {
-        Picasso.with(imageView.getContext())
+    public static void load(ImageView imageView, Object image) {
+        Glide.with(imageView.getContext())
                   .load(image)
-                  .placeholder(R.drawable.ic_launcher_background)
-                  .error(R.drawable.ic_launcher_background)
+                  .apply(new RequestOptions()
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .error(R.drawable.ic_launcher_background))
                   .into(imageView);
     }
 }

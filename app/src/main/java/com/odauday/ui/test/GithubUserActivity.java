@@ -12,6 +12,7 @@ import com.odauday.databinding.GithubUserActivityBinding;
 import com.odauday.exception.BaseException;
 import com.odauday.model.User;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.viewmodel.BaseViewModel;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -20,8 +21,8 @@ import javax.inject.Inject;
  */
 
 public class GithubUserActivity extends
-                                BaseMVVMActivity<GithubUserViewModel, GithubUserActivityBinding> implements
-                                                                                                 GithubUserContract {
+                                BaseMVVMActivity<GithubUserActivityBinding> implements
+                                                                            GithubUserContract {
     
     @Inject
     GithubUserViewModel mGithubUserViewModel;
@@ -43,9 +44,10 @@ public class GithubUserActivity extends
         super.onCreate(savedInstanceState);
     }
     
+    
     @Override
-    protected GithubUserViewModel buildViewModel() {
-        return mGithubUserViewModel;
+    protected void processingTaskFromViewModel() {
+    
     }
     
     @SuppressWarnings("unchecked")
@@ -91,10 +93,15 @@ public class GithubUserActivity extends
         mGithubUserViewModel.getData();
     }
     
+    @Override
+    protected BaseViewModel getViewModel(String tag) {
+        return mGithubUserViewModel;
+    }
+    
     private void showOrHideProgressBar(boolean isLoading) {
-        new Handler().postDelayed(() -> {
-            mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        }, 1000);
+        new Handler().postDelayed(
+                  () -> mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE),
+                  1000);
     }
     
     @Override

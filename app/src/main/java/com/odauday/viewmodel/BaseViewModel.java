@@ -2,7 +2,6 @@ package com.odauday.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableBoolean;
 import com.odauday.viewmodel.model.Resource;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -12,11 +11,8 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseViewModel extends ViewModel {
     
-    protected final ObservableBoolean mIsLoading = new ObservableBoolean(false);
-    
-    protected CompositeDisposable mCompositeDisposable;
-    
     protected final MutableLiveData<Resource> response = new MutableLiveData<>();
+    protected CompositeDisposable mCompositeDisposable;
     
     public BaseViewModel() {
         this.mCompositeDisposable = new CompositeDisposable();
@@ -30,10 +26,6 @@ public abstract class BaseViewModel extends ViewModel {
     
     public CompositeDisposable getCompositeDisposable() {
         return mCompositeDisposable;
-    }
-    
-    public void setIsLoading(boolean isLoading) {
-        mIsLoading.set(isLoading);
     }
     
     public void setCompositeDisposable(CompositeDisposable compositeDisposable) {

@@ -27,13 +27,9 @@ public class NetworkUtils {
                   .getSystemService(Context.CONNECTIVITY_SERVICE);
         
         NetworkInfo networkInfo = connManager != null ? connManager.getActiveNetworkInfo() : null;
-        if (networkInfo == null) {
-            return false;
-        }
-        if (!networkInfo.isConnected()) {
-            return false;
-        }
-        return networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-    
+        return networkInfo != null &&
+               networkInfo.isConnected() &&
+               networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+        
     }
 }

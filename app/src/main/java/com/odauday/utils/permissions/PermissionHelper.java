@@ -55,7 +55,7 @@ public class PermissionHelper {
             return;
         }
         PermissionRequest permissionRequest = new PermissionRequest(
-                  new ArrayList<String>(Arrays.asList(permissions)), permissionCallBack);
+                  new ArrayList<>(Arrays.asList(permissions)), permissionCallBack);
         permissionRequests.add(permissionRequest);
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

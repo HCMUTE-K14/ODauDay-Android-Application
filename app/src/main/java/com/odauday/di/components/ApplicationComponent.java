@@ -26,6 +26,8 @@ import javax.inject.Singleton;
           ViewBuildersModule.class})
 public interface ApplicationComponent {
     
+    void inject(RootApplication app);
+    
     @Component.Builder
     interface Builder {
         
@@ -39,8 +41,5 @@ public interface ApplicationComponent {
         Builder repository(RepositoryBuildersModule repositoryBuildersModule);
         
         ApplicationComponent build();
-        
     }
-    
-    void inject(RootApplication app);
 }

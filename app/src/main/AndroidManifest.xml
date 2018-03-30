@@ -3,7 +3,8 @@
   package="com.odauday">
 
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.INTERNET" />
+
   <application
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
@@ -12,13 +13,45 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
+
+
+    <meta-data
+      android:name="com.facebook.sdk.ApplicationId"
+      android:value="@string/facebook_app_id" />
+
+    <activity
+      android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+      android:label="@string/app_name"
+      android:name="com.facebook.FacebookActivity" />
+    <activity
+      android:exported="true"
+      android:name="com.facebook.CustomTabActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <data android:scheme="@string/fb_login_protocol_scheme" />
+      </intent-filter>
+    </activity>
+
     <activity
       android:label="@string/app_name"
-      android:name=".MainActivity"
-      android:theme="@style/AppTheme.NoActionBar">
+      android:name=".MainActivity">
 
     </activity>
-    <activity android:name=".ui.test.GithubUserActivity" >
+    <activity android:name=".ui.user.login.LoginActivity">
+
+    </activity>
+    <activity android:name=".ui.user.register.RegisterActivity">
+
+    </activity>
+    <activity android:name=".ui.user.forgotpassword.ForgotPasswordActivity" />
+    <activity
+      android:name=".WelcomeActivity"
+      android:theme="@style/AppTheme.Launcher">
+
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 

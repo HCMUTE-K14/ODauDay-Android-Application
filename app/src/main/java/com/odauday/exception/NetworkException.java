@@ -10,6 +10,10 @@ public class NetworkException extends BaseException {
         super(message);
     }
     
+    public NetworkException(Exception ex) {
+        super(ex);
+    }
+    
     public NetworkException(String message, Exception ex) {
         super(message, ex);
     }

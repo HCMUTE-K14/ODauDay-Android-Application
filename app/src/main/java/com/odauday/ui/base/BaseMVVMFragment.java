@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,10 @@ import javax.inject.Inject;
 public abstract class BaseMVVMFragment<VM extends BaseViewModel,
           VB extends ViewDataBinding> extends BaseFragment implements Injectable {
     
-    @Inject
-    ViewModelProvider.Factory mFactory;
-    
     protected VM mViewModel;
     protected AutoClearedData<VB> mBinding;
+    @Inject
+    ViewModelProvider.Factory mFactory;
     
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public abstract class BaseMVVMFragment<VM extends BaseViewModel,
     
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
               @Nullable Bundle savedInstanceState) {
         VB binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
         

@@ -5,7 +5,7 @@ import com.odauday.BuildConfig;
 import com.odauday.RootApplication;
 import com.odauday.SchedulersExecutor;
 import com.odauday.api.EndPoint;
-import com.odauday.data.local.PreferencesHelper;
+import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.di.scopes.PerApplication;
 import dagger.Module;
 import dagger.Provides;

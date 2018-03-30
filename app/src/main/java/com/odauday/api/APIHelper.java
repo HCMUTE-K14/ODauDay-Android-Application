@@ -16,9 +16,11 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -34,7 +36,6 @@ public class APIHelper {
     
     public static final String API_KEY = "X-API-KEY";
     
-    
     private final Context mContext;
     
     public APIHelper(Context context) {
@@ -47,7 +48,10 @@ public class APIHelper {
     
     public Gson createDefaultGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+        gsonBuilder
+                  .excludeFieldsWithoutExposeAnnotation()
+                  .setPrettyPrinting()
+                  .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         return createGson(gsonBuilder);
     }
     
@@ -89,8 +93,14 @@ public class APIHelper {
     }
     
     public OkHttpClient createClient(Cache cache, Interceptor interceptor) {
+        
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
+                  message -> Timber.tag("Network").d(message))
+                  .setLevel(Level.BODY);
+        
         return new OkHttpClient.Builder()
                   .cache(cache)
+                  .addInterceptor(logging)
                   .addInterceptor(interceptor)
                   .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
                   .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
@@ -105,16 +115,16 @@ public class APIHelper {
         if (gson == null) {
             gson = createDefaultGson();
         }
-        
         return new Retrofit.Builder()
                   .baseUrl(baseURL)
                   .client(client)
                   .addConverterFactory(GsonConverterFactory.create(gson))
-                  .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                  .addCallAdapterFactory(SingleCallAdapter.create())
                   .build();
     }
     
-    public <T> T createService(final Class<T> clazz, String baseURL, OkHttpClient client, Gson gson) {
+    public <T> T createService(final Class<T> clazz, String baseURL, OkHttpClient client,
+              Gson gson) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             return null;
         }

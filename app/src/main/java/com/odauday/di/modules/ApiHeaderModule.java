@@ -3,7 +3,8 @@ package com.odauday.di.modules;
 import com.odauday.api.APIHeader;
 import com.odauday.api.APIHeader.ProtectApiHeader;
 import com.odauday.api.APIHeader.PublicApiHeader;
-import com.odauday.data.local.PreferencesHelper;
+import com.odauday.data.local.cache.PrefKey;
+import com.odauday.data.local.cache.PreferencesHelper;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -23,8 +24,8 @@ public class ApiHeaderModule {
               PreferencesHelper preferencesHelper) {
         
         return new APIHeader.ProtectApiHeader(
-                  preferencesHelper.getAccessToken(),
-                  preferencesHelper.getCurrentUserId(),
+                  preferencesHelper.get(PrefKey.ACCESS_TOKEN, ""),
+                  preferencesHelper.get(PrefKey.USER_ID, ""),
                   apiKey);
     }
     

@@ -17,7 +17,7 @@ def getProperty(String filename, String propName) {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.odauday"
         minSdkVersion 15
@@ -48,11 +48,11 @@ dependencies {
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support:cardview-v7:26.1.0'
-    implementation "com.android.support:support-fragment:26.1.0"
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:cardview-v7:27.0.2'
+    implementation "com.android.support:support-fragment:27.0.2"
 
     /*Open Library
     * 1. Dagger 2.14.1
@@ -71,9 +71,11 @@ dependencies {
     def rxJavaVersion = "2.1.10"
     def rxAndroidVersion = "2.0.2"
     def retrofitVersion = "2.3.0"
-    def picassoVersion = "2.5.2"
+    def glideVersion = "4.6.1"
     def lifecycleVersion = "1.1.0"
     def dataBindingVersion = "2.3.0"
+    def facebookSDKVersion = "4.31.0"
+    def bottomNavigationVersion = "2.0.4"
 
     implementation "com.google.dagger:dagger:${daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
@@ -89,17 +91,20 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
-    implementation "com.squareup.picasso:picasso:${picassoVersion}"
-
-
-//    implementation "com.github.bumptech.glide:glide:${glideVersion}"
-//    annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
+    implementation "com.github.bumptech.glide:glide:${glideVersion}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
 
     implementation "android.arch.lifecycle:extensions:${lifecycleVersion}"
     annotationProcessor "android.arch.lifecycle:compiler:${lifecycleVersion}"
 
     annotationProcessor "com.android.databinding:compiler:${dataBindingVersion}"
+
+    implementation "com.facebook.android:facebook-login:${facebookSDKVersion}"
+
+    implementation "com.ashokvarma.android:bottom-navigation-bar:${bottomNavigationVersion}"
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

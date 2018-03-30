@@ -13,16 +13,18 @@ public class AutoClearedData<T> {
     
     public AutoClearedData(Fragment fragment, T value) {
         FragmentManager fragmentManager = fragment.getFragmentManager();
-        fragmentManager.registerFragmentLifecycleCallbacks(
-                  new FragmentManager.FragmentLifecycleCallbacks() {
-                      @Override
-                      public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-                          if (f == fragment) {
-                              AutoClearedData.this.value = null;
-                              fragmentManager.unregisterFragmentLifecycleCallbacks(this);
+        if (fragmentManager != null) {
+            fragmentManager.registerFragmentLifecycleCallbacks(
+                      new FragmentManager.FragmentLifecycleCallbacks() {
+                          @Override
+                          public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
+                              if (f == fragment) {
+                                  AutoClearedData.this.value = null;
+                                  fragmentManager.unregisterFragmentLifecycleCallbacks(this);
+                              }
                           }
-                      }
-                  }, false);
+                      }, false);
+        }
         this.value = value;
     }
     

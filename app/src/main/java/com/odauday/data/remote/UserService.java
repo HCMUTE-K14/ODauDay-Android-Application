@@ -1,10 +1,26 @@
 package com.odauday.data.remote;
 
+import static com.odauday.api.EndPoint.CHANGE_PASSWORD;
+import static com.odauday.api.EndPoint.FORGOT_PASSWORD;
+import static com.odauday.api.EndPoint.LOGIN_NORMAL;
+import static com.odauday.api.EndPoint.LOGIN_WITH_FACEBOOK;
+import static com.odauday.api.EndPoint.REGISTER;
+import static com.odauday.api.EndPoint.USERS;
+
+import com.odauday.data.remote.model.JsonResponse;
+import com.odauday.data.remote.model.MessageResponse;
+import com.odauday.data.remote.model.users.ChangePasswordRequest;
+import com.odauday.data.remote.model.users.FacebookAuthRequest;
+import com.odauday.data.remote.model.users.ForgotPasswordRequest;
+import com.odauday.data.remote.model.users.LoginResponse;
+import com.odauday.data.remote.model.users.NormalAuthRequest;
+import com.odauday.data.remote.model.users.RegisterRequest;
 import com.odauday.model.User;
 import io.reactivex.Single;
-import java.util.List;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -12,15 +28,29 @@ import retrofit2.http.Query;
 
 public interface UserService {
     
-    public interface Public {
-        //users?access_token=294239c172eb94a8f141bac7ba6cdb7ced298aa0
-        @GET("/")
-        Single<List<User>> test(@Query("since") int since);
+    interface Public {
+        
+        @POST(LOGIN_NORMAL)
+        Single<JsonResponse<LoginResponse>> login(@Body NormalAuthRequest request);
+        
+        @POST(LOGIN_WITH_FACEBOOK)
+        Single<JsonResponse<LoginResponse>> login(@Body FacebookAuthRequest request);
+        
+        @POST(REGISTER)
+        Single<JsonResponse<MessageResponse>> register(@Body RegisterRequest request);
+        
+        @POST(FORGOT_PASSWORD)
+        Single<JsonResponse<MessageResponse>> forgotPassword(@Body ForgotPasswordRequest request);
+        
     }
     
-    public interface Protect {
+    interface Protect {
         
-        @GET("/")
-        Single<List<User>> testProtect();
+        @PUT(USERS + "/{id}")
+        Single<JsonResponse<MessageResponse>> updateProfile(@Path("id") String userId,
+                  @Body User user);
+        
+        @PUT(CHANGE_PASSWORD)
+        Single<JsonResponse<MessageResponse>> changePassword(@Body ChangePasswordRequest request);
     }
 }

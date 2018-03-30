@@ -1,4 +1,34 @@
 <resources>
   <string name="app_name">odauday</string>
   <string name="action_settings">Settings</string>
+  <string name="txt_email">Email</string>
+  <string name="txt_password">Password</string>
+  <string name="txt_login">Login</string>
+  <string name="txt_or">Or</string>
+  <string name="txt_login_with_facebook">Login with facebook</string>
+  <string name="txt_register">Register</string>
+  <string name="txt_forgot_password">Forgot Password</string>
+  <string name="message_email_is_required">Email is required</string>
+  <string name="message_password_is_required">Password is required</string>
+  <string name="message_email_is_invalid">Email is invalid</string>
+  <string name="message_already_has_account">Already has account! Login here</string>
+  <string name="txt_display_name">Display name</string>
+  <string name="message_display_name_is_required">Display name is required</string>
+  <string name="message_re_password_do_not_match">Re-password do not match</string>
+  <string name="message_re_password_is_required">Re-password is required</string>
+  <string name="content_description_default">image</string>
+  <string name="txt_re_password">Re-Password</string>
+
+
+  <string name="facebook_app_id">608460789487323</string>
+  <string name="fb_login_protocol_scheme">fb608460789487323</string>
+  <string name="message_registration_failed">Account registration failed. Please try later !</string>
+  <string name="message_service_unavailable">Sorry! This service is not available, Please try again</string>
+  <string name="txt_submit">Submit</string>
+
+  <string name="flat_nav_bar_title_alert">Alerts</string>
+  <string name="flat_nav_bar_title_more">More</string>
+  <string name="flat_nav_bar_title_saved_search">History</string>
+  <string name="flat_nav_bar_title_search">Search</string>
+  <string name="flat_nav_bar_title_favorite">Favorite</string>
 </resources>

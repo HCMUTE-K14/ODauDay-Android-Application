@@ -12,38 +12,47 @@ import dagger.android.AndroidInjection;
  * Created by infamouSs on 3/5/18.
  */
 
-public abstract class BaseMVVMActivity<VM extends BaseViewModel,
-          VB extends ViewDataBinding> extends BaseActivity implements Injectable {
+public abstract class BaseMVVMActivity<VB extends ViewDataBinding> extends BaseActivity implements
+                                                                                        Injectable {
     
-    protected VM mViewModel;
+    //====================== Variable =============================//
+    
     protected VB mBinding;
+    
+    //====================== Override Method ======================//
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         injectDI();
         super.onCreate(savedInstanceState);
         
-        mViewModel = buildViewModel();
         mBinding = buildBinding();
     }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        processingTaskFromViewModel();
+    }
+    
+    @Override
+    protected void onDestroy() {
+        mBinding = null;
+        super.onDestroy();
+    }
+    
+    //====================== BaseMethod ==========================//
+    
+    protected abstract BaseViewModel getViewModel(String tag);
     
     protected void injectDI() {
         AndroidInjection.inject(this);
     }
     
-    protected abstract VM buildViewModel();
-    
+    protected abstract void processingTaskFromViewModel();
     
     protected VB buildBinding() {
         return DataBindingUtil.setContentView(this, getLayoutId());
-    }
-    
-    public VM getViewModel() {
-        return mViewModel;
-    }
-    
-    public void setViewModel(VM viewModel) {
-        mViewModel = viewModel;
     }
     
     public VB getBinding() {
@@ -52,11 +61,5 @@ public abstract class BaseMVVMActivity<VM extends BaseViewModel,
     
     public void setBinding(VB binding) {
         mBinding = binding;
-    }
-    
-    @Override
-    protected void onDestroy() {
-        mBinding = null;
-        super.onDestroy();
     }
 }
