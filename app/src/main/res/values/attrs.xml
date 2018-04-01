@@ -8,4 +8,5 @@
     <attr format="color" name="civ_fill_color" />
     <attr format="color" name="civ_circle_background_color" />
   </declare-styleable>
+
 </resources>

@@ -21,6 +21,7 @@ public class RootApplication extends Application implements HasActivityInjector 
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
     
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,5 +44,4 @@ public class RootApplication extends Application implements HasActivityInjector 
     public AndroidInjector<Activity> activityInjector() {
         return mDispatchingAndroidInjector;
     }
-    
 }

@@ -31,4 +31,23 @@
   <string name="flat_nav_bar_title_saved_search">History</string>
   <string name="flat_nav_bar_title_search">Search</string>
   <string name="flat_nav_bar_title_favorite">Favorite</string>
+  <string name="txt_list_view">List view</string>
+  <string name="txt_map_view">Map view</string>
+  <string name="txt_search">Search</string>
+  <string name="txt_search_type">Search Type</string>
+  <string name="txt_rent">Rent</string>
+  <string name="txt_buy">Buy</string>
+  <string name="txt_all">All</string>
+  <string name="txt_any">Any</string>
+  <string name="txt_filter_price">Price</string>
+  <string name="txt_filter_location">Location</string>
+  <string name="txt_filter_size">Size</string>
+  <string name="txt_filter_property_type">Property Type</string>
+  <string name="txt_filter_num_of_bedroom">Bedrooms</string>
+  <string name="txt_filter_num_of_bathroom">Bathrooms</string>
+  <string name="txt_filter_num_of_parking">Parking</string>
+  <string name="txt_filter_tags">Tags</string>
+  <string name="txt_map_area">Map area</string>
+  <string name="txt_filter_more_options">More options</string>
+  <string name="txt_filter_less_options">Less options</string>
 </resources>

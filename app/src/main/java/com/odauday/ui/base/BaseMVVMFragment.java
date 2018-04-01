@@ -1,8 +1,10 @@
 package com.odauday.ui.base;
 
-import android.arch.lifecycle.ViewModelProvider;
+import android.app.Activity;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,24 +14,23 @@ import android.view.ViewGroup;
 import com.odauday.di.Injectable;
 import com.odauday.ui.common.AutoClearedData;
 import com.odauday.viewmodel.BaseViewModel;
-import javax.inject.Inject;
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Created by infamouSs on 3/5/18.
  */
 
-public abstract class BaseMVVMFragment<VM extends BaseViewModel,
-          VB extends ViewDataBinding> extends BaseFragment implements Injectable {
+public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseFragment implements
+                                                                                        Injectable {
     
-    protected VM mViewModel;
+    //====================== Variable Method =========================//
     protected AutoClearedData<VB> mBinding;
-    @Inject
-    ViewModelProvider.Factory mFactory;
     
+    
+    //====================== Override Method =========================//
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = buildViewModel();
     }
     
     @Nullable
@@ -43,6 +44,45 @@ public abstract class BaseMVVMFragment<VM extends BaseViewModel,
         return binding.getRoot();
     }
     
-    protected abstract VM buildViewModel();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
     
+    @Override
+    public void onStart() {
+        super.onStart();
+        processingTaskFromViewModel();
+    }
+    
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            injectDI();
+        }
+        super.onAttach(activity);
+    }
+    
+    @Override
+    public void onAttach(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            injectDI();
+        }
+        super.onAttach(context);
+    }
+    
+    //====================== Base Method =========================//
+    
+    protected void injectDI() {
+        AndroidSupportInjection.inject(this);
+    }
+    
+    protected abstract BaseViewModel getViewModel(String tag);
+    
+    protected abstract void processingTaskFromViewModel();
+    
+    public AutoClearedData<VB> getBinding() {
+        return mBinding;
+    }
 }

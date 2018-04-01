@@ -11,29 +11,35 @@ import com.odauday.R;
 public enum NavigationTab {
     
     SEARCH_TAB(R.drawable.ic_nav_bar_search_selected, R.drawable.ic_nav_bar_search,
-              R.string.flat_nav_bar_title_search),
+              R.string.flat_nav_bar_title_search, "SEARCH_TAB"),
     ALERT_TAB(R.drawable.ic_nav_bar_alert_selected, R.drawable.ic_nav_bar_alert,
-              R.string.flat_nav_bar_title_alert),
+              R.string.flat_nav_bar_title_alert, "ALERT_TAB"),
     FAVORITE_TAB(R.drawable.ic_nav_bar_favorite_selected, R.drawable.ic_nav_bar_favortie,
-              R.string.flat_nav_bar_title_favorite),
+              R.string.flat_nav_bar_title_favorite, "FAVORITE_TAB"),
     SAVED_SEARCH_TAB(R.drawable.ic_nav_bar_savedsearch_selected, R.drawable.ic_nav_bar_savedsearch,
-              R.string.flat_nav_bar_title_saved_search),
+              R.string.flat_nav_bar_title_saved_search, "SAVED_SEARCH_TAB"),
     MORE_TAB(R.drawable.ic_nav_bar_more_selected, R.drawable.ic_nav_bar_more,
-              R.string.flat_nav_bar_title_more);
+              R.string.flat_nav_bar_title_more, "MORE_TAB");
     
-    private int mIconIdActive;
-    private int mIconIdInactive;
-    private int mTitleId;
+    private final int mIconIdActive;
+    private final int mIconIdInactive;
+    private final int mTitleId;
+    private final String mNameTab;
     
-    private NavigationTab(int activeIconId, int inactiveIconId, int titleId) {
+    
+    NavigationTab(int activeIconId, int inactiveIconId, int titleId, String nameTab) {
         this.mIconIdActive = activeIconId;
         this.mIconIdInactive = inactiveIconId;
         this.mTitleId = titleId;
+        this.mNameTab = nameTab;
     }
     
     BottomNavigationItem build(Context context) {
         return new BottomNavigationItem(this.mIconIdActive, this.mTitleId)
                   .setInactiveIcon(context.getResources().getDrawable(this.mIconIdInactive));
-        
+    }
+    
+    public String getNameTab() {
+        return mNameTab;
     }
 }

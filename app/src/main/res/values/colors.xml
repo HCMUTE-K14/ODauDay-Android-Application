@@ -12,5 +12,10 @@
 
   <color name="nav_bar_text_active">#26b019</color>
   <color name="nav_bar_text_inactive">#0c9700</color>
+  <color name="alert_red">#f54f21</color>
+
+  <color name="background_selector_toolbar">#0c9700</color>
+
+  <color name="transparent">#00ffffff</color>
 
 </resources>

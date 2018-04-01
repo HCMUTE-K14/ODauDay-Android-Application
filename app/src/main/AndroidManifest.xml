@@ -49,7 +49,7 @@
     </activity>
     <activity android:name=".ui.user.forgotpassword.ForgotPasswordActivity" />
     <activity
-      android:name=".WelcomeActivity"
+      android:name=".ui.welcome.WelcomeActivity"
       android:theme="@style/AppTheme.Launcher">
 
       <intent-filter>

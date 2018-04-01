@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:fitsSystemWindows="true">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/banner"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="@color/colorPrimary">-->
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:paddingStart="8dp"-->
+    <!--android:paddingLeft="8dp"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:text="Filter"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="18sp"-->
+    <!--tools:ignore="RtlSymmetry" />-->
+    <!--</LinearLayout>-->
+    <ScrollView
+      android:id="@+id/scroll_view"
+      android:scrollbarStyle="outsideOverlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/btn_search"
+      android:clipToPadding="false"
+      android:fillViewport="true">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <com.odauday.ui.search.common.view.SearchTypeChooser
+          android:id="@+id/filter_search_type"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+        <LinearLayout
+          android:id="@+id/filter_main_option"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_property_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+          android:id="@+id/filter_advance_option"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_bedrooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_bath_rooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_parking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+          <com.odauday.ui.search.common.view.FilterOptionLabelView
+            android:id="@+id/filter_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+        <Button
+          android:id="@+id/btn_more_options"
+          style="?android:attr/borderlessButtonStyle"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          android:background="@color/white"
+          android:text="@string/txt_filter_more_options"
+          android:textColor="@color/background_selector_toolbar"
+          android:textSize="14sp" />
+      </LinearLayout>
+    </ScrollView>
+    <android.support.v7.widget.AppCompatButton
+      android:id="@+id/btn_search"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:layout_alignParentBottom="true"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:background="@color/alert_red"
+      android:text="@string/txt_search"
+      android:textColor="@color/white"
+      android:textSize="18sp" />
+  </RelativeLayout>
+
+
+</layout>

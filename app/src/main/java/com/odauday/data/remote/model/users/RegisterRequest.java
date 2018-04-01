@@ -25,7 +25,7 @@ public class RegisterRequest implements BaseRequest {
     private String displayName;
     
     public RegisterRequest() {
-
+    
     }
     
     public RegisterRequest(String email, String password, String displayName) {
