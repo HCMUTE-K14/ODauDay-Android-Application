@@ -3,6 +3,7 @@ package com.odauday.ui.view.bottomnav;
 import android.content.Context;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.odauday.R;
+import com.odauday.utils.TextUtils;
 
 /**
  * Created by infamouSs on 3/30/18.
@@ -32,6 +33,22 @@ public enum NavigationTab {
         this.mIconIdInactive = inactiveIconId;
         this.mTitleId = titleId;
         this.mNameTab = nameTab;
+    }
+    
+    public static boolean isNavigationTab(String tag) {
+        if (TextUtils.isEmpty(tag)) {
+            return false;
+        }
+        switch (tag) {
+            case "SEARCH_TAB":
+            case "ALERT_TAB":
+            case "FAVORITE_TAB":
+            case "SAVED_SEARCH_TAB":
+            case "MORE_TAB":
+                return true;
+            default:
+                return false;
+        }
     }
     
     BottomNavigationItem build(Context context) {

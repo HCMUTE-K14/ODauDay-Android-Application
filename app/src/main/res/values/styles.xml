@@ -20,4 +20,9 @@
   <style name="AppTheme.Launcher">
     <item name="android:windowBackground">@drawable/splash_screen_background</item>
   </style>
+
+  <style name="AlertDialogStyle" parent="@android:style/Theme.Holo.Light.Dialog">
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:background">@color/white</item>
+  </style>
 </resources>

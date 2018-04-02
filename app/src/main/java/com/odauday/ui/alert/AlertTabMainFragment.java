@@ -20,9 +20,9 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     //====================== Override Base Method =========================//
     
     public static AlertTabMainFragment newInstance() {
-
+        
         Bundle args = new Bundle();
-
+        
         AlertTabMainFragment fragment = new AlertTabMainFragment();
         fragment.setArguments(args);
         return fragment;

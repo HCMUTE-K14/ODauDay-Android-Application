@@ -9,12 +9,14 @@ import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
+import com.odauday.ui.search.SearchTabMainFragment;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.AnimationUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import java.util.Stack;
 import javax.inject.Inject;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
@@ -33,7 +35,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Inject
     UserRepository mUserRepository;
     
-    private String mCurrentTab;
+    Stack<String> mTabStack = new Stack<>();
     
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -63,18 +65,32 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     @Override
     public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (count <= 1) {
-            //Show Dialog Confirm Quit ?
+        try {
+            if (mTabStack.empty()) {
+                mTabStack.push(NavigationTab.SEARCH_TAB.getNameTab());
+            }
+            String tag = mTabStack.pop();
+            if (tag.equals(NavigationTab.SEARCH_TAB.getNameTab())) {
+                SearchTabMainFragment searchTabMainFragment = (SearchTabMainFragment) getSupportFragmentManager()
+                          .findFragmentByTag(SearchTabMainFragment.TAG);
+                if (searchTabMainFragment.isDrawerOpening()) {
+                    return;
+                }
+                finish();
+                return;
+            }
+            if (mTabStack.empty()) {
+                finish();
+                return;
+            }
+            
+            mBinding.bottomNavBar.select(mTabStack.peek(), false);
+            getSupportFragmentManager()
+                      .popBackStack(mTabStack.peek(), 0);
+        } catch (Exception ex) {
             finish();
-        } else {
-            String tag = getSupportFragmentManager()
-                      .getBackStackEntryAt(count - 2)
-                      .getName();
-            getSupportFragmentManager().popBackStack();
-            mCurrentTab = tag;
-            mBinding.bottomNavBar.select(tag, false);
         }
+        
     }
     
     private void init() {
@@ -82,6 +98,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             @Override
             public void onTabSelected(int position) {
                 String nameTab = mBinding.bottomNavBar.getNameTab(position);
+                mTabStack.push(nameTab);
                 mNavigationController.navigateTo(nameTab);
             }
             
@@ -93,14 +110,13 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             @Override
             public void onTabReselected(int position) {
                 String nameTab = mBinding.bottomNavBar.getNameTab(position);
-                if (!nameTab.equals(mCurrentTab)) {
-                    mCurrentTab = nameTab;
+                if (!nameTab.equals(mTabStack.peek())) {
                     mNavigationController.navigateTo(nameTab);
                 }
             }
         });
         mBinding.bottomNavBar.select(0, true);
-        mCurrentTab = NavigationTab.SEARCH_TAB.getNameTab();
+        // mTabStack.push(NavigationTab.SEARCH_TAB.getNameTab());
     }
     
     public void toggleBottomBar(boolean show) {

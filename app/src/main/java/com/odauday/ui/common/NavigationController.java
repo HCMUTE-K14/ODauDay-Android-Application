@@ -43,7 +43,7 @@ public class NavigationController {
         } else if (tag.equals(NavigationTab.MORE_TAB.getNameTab())) {
             navigateToMoreTab();
         } else {
-            throw new IllegalArgumentException("Not found Fragment with tag");
+            throw new IllegalArgumentException("Not found Navigation Fragment with tag");
         }
     }
     

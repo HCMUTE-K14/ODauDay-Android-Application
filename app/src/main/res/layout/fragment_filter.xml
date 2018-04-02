@@ -65,7 +65,8 @@
           android:id="@+id/filter_advance_option"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          android:visibility="gone">
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_bedrooms"
             android:layout_width="wrap_content"

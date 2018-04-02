@@ -130,7 +130,7 @@ public class FlatNavigationBar extends FrameLayout {
         } else if (tag.equals(NavigationTab.MORE_TAB.getNameTab())) {
             select(4, callListener);
         } else {
-            throw new IllegalArgumentException("Not found Fragment with tag");
+            // throw new IllegalArgumentException("Not found Fragment with tag");
         }
     }
     

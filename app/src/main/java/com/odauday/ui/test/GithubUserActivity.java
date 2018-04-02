@@ -36,7 +36,7 @@ public class GithubUserActivity extends
     
     @Override
     public void handlerError(Exception ex) {
-    
+
     }
     
     @Override
@@ -47,7 +47,7 @@ public class GithubUserActivity extends
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     @SuppressWarnings("unchecked")

@@ -42,7 +42,7 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     //====================== ViewBinding Method =========================//

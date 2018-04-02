@@ -1,21 +1,21 @@
 package com.odauday.ui.search;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.odauday.MainActivity;
 import com.odauday.R;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.common.AttachFragmentRunnable;
+import com.odauday.ui.common.NavigationController;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
@@ -42,11 +42,9 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Inject
     DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
+    boolean mIsBottomBarHide = true;
     
-    private Toolbar mToolbar;
-    private LinearLayout mToolBarView;
-    private Button mSearchBar;
-    private Button mButtonFilter;
+    //====================== Override Base Method =========================//
     
     //====================== Constructor =========================//
     public static SearchTabMainFragment newInstance() {
@@ -56,11 +54,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         SearchTabMainFragment fragment = new SearchTabMainFragment();
         fragment.setArguments(args);
         
-        Timber.tag(TAG).i("New Instance");
         return fragment;
     }
-    
-    //====================== Override Base Method =========================//
     
     @Override
     public int getLayoutId() {
@@ -70,28 +65,14 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        if (mChildFragmentInjector == null) {
-            Timber.tag(TAG).d("njector null");
-        } else {
-            Timber.tag(TAG).d("not null");
-        }
         initBinding();
         setupToolBar(view);
         setupFilterNavigation();
-        
-        
     }
-    
     
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mSearchTabViewModel;
-    }
-    
-    @Override
-    protected void processingTaskFromViewModel() {
-    
     }
     
     //====================== ViewBinding Method =========================//
@@ -100,7 +81,13 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     //====================== Helper Method =========================//
     
+    @Override
+    protected void processingTaskFromViewModel() {
+    
+    }
+    
     private void initBinding() {
+        
         mBinding.get().btnMapList.setOnClickMapListListener(new OnClickMapListListener() {
             @Override
             public void onShowListView() {
@@ -142,11 +129,14 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             public void onDrawerStateChanged(int newState) {
                 if (newState == DrawerLayout.STATE_SETTLING) {
                     if (((MainActivity) getActivity()) != null) {
-                        boolean isDrawerOpen = mBinding.get().drawerLayout.isDrawerVisible(Gravity.END);
+                        boolean isDrawerOpen = mBinding.get().drawerLayout
+                                  .isDrawerVisible(Gravity.END);
                         if (!isDrawerOpen) {
                             ((MainActivity) getActivity()).toggleBottomBar(false);
+                            mIsBottomBarHide = false;
                         } else {
                             ((MainActivity) getActivity()).toggleBottomBar(true);
+                            mIsBottomBarHide = true;
                         }
                     }
                     
@@ -154,8 +144,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             }
         });
     }
-    
-    boolean isNeedShowBottomBar = true;
     
     private void openDrawer() {
         mBinding.get().drawerLayout.openDrawer(Gravity.END);
@@ -170,35 +158,33 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void setupFilterNavigation() {
-        //        Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
-        //                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-        //                  .setFragmentManager(getActivity().getSupportFragmentManager())
-        //                  .setFragment(FilterNavigationFragment.newInstance())
-        //                  .setTagFragment(FilterNavigationFragment.TAG)
-        //                  .setContainerId(R.id.filter_nav)
-        //                  .build();
-        //
-        //        new Handler().postDelayed(runnableAttachFilterFragment,
-        //                  NavigationController.DELAY_ATTACH_FRAGMENT);
+        if (getActivity().getSupportFragmentManager() == null) {
+            throw new NullPointerException("Fragment manager is null");
+        }
+        Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(getActivity().getSupportFragmentManager())
+                  .setFragment(FilterNavigationFragment.newInstance())
+                  .setTagFragment(FilterNavigationFragment.TAG)
+                  .setContainerId(R.id.filter_nav)
+                  .build();
         
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.filter_nav,
-                  FilterNavigationFragment.newInstance()).commit();
+        new Handler().postDelayed(runnableAttachFilterFragment,
+                  NavigationController.DELAY_ATTACH_FRAGMENT);
+        
     }
     
     private void bindViewOnToolBar(View view) {
-        mToolbar = view.findViewById(R.id.toolbar);
-        mToolBarView = mToolbar.findViewById(R.id.toolbar_view);
-        mToolBarView.setVisibility(View.VISIBLE);
-        mSearchBar = mToolbar.findViewById(R.id.search_bar);
-        mButtonFilter = mToolbar.findViewById(R.id.btn_filter);
-        
-        mSearchBar.setOnClickListener(searchbar -> {
-            
+        mBinding.get().toolbar.searchBar.setOnClickListener(viewSearchBar -> {
             Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT).show();
         });
-        mButtonFilter.setOnClickListener(filter -> {
+        mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> {
             openDrawer();
         });
+    }
+    
+    public boolean isDrawerOpening() {
+        return mBinding.get().drawerLayout.isDrawerOpen(Gravity.END);
     }
     
     @Override

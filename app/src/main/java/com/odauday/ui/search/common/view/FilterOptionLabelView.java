@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.odauday.R;
 
@@ -50,9 +51,15 @@ public class FilterOptionLabelView extends LinearLayout {
         }
         View rootView = inflater.inflate(R.layout.layout_filter_option_header_value, this, true);
         
+        RelativeLayout mainLayout = rootView.findViewById(R.id.main_layout);
         mTextViewLabel = rootView.findViewById(R.id.txt_label);
         mTextViewValue = rootView.findViewById(R.id.txt_value);
         mTextViewMoreValue = rootView.findViewById(R.id.txt_more_value);
+        mainLayout.setOnClickListener(view -> {
+            if (mListener != null) {
+                mListener.onClick();
+            }
+        });
     }
     
     public TextView getTextLabel() {
@@ -89,11 +96,6 @@ public class FilterOptionLabelView extends LinearLayout {
     
     public void setListener(OnCLickFilterOption listener) {
         mListener = listener;
-        this.setOnClickListener(view -> {
-            if (mListener != null) {
-                listener.onClick();
-            }
-        });
     }
     
     public interface OnCLickFilterOption {

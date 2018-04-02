@@ -17,5 +17,5 @@
   <color name="background_selector_toolbar">#0c9700</color>
 
   <color name="transparent">#00ffffff</color>
-
+  <item name="null_color" type="color">234234</item>
 </resources>
