@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.odauday.di.Injectable;
 import com.odauday.ui.common.AutoClearedData;
 import com.odauday.viewmodel.BaseViewModel;
+import dagger.android.AndroidInjection;
 import javax.inject.Inject;
 
 /**
@@ -20,9 +21,11 @@ import javax.inject.Inject;
 
 public abstract class BaseMVVMFragment<VM extends BaseViewModel,
           VB extends ViewDataBinding> extends BaseFragment implements Injectable {
-    
+    @Inject
     protected VM mViewModel;
+    
     protected AutoClearedData<VB> mBinding;
+    
     @Inject
     ViewModelProvider.Factory mFactory;
     
@@ -31,7 +34,6 @@ public abstract class BaseMVVMFragment<VM extends BaseViewModel,
         super.onCreate(savedInstanceState);
         mViewModel = buildViewModel();
     }
-    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

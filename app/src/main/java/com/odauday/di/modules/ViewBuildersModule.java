@@ -7,6 +7,9 @@ import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.user.login.LoginModule;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.user.register.RegisterModule;
+import com.odauday.ui.user.tag.ActivityDemo;
+import com.odauday.ui.user.tag.FragmentDemo;
+import com.odauday.ui.user.tag.TagModule;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -29,4 +32,12 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = ForgotPasswordModule.class)
     @PerActivity
     abstract ForgotPasswordActivity bindForgotPasswordActivity();
+    
+    @ContributesAndroidInjector(modules = TagModule.class)
+    @PerActivity
+    abstract ActivityDemo bindActivityDemo();
+    
+    @ContributesAndroidInjector(modules = TagModule.class)
+    @PerActivity
+    abstract FragmentDemo bindFragmentDemo();
 }

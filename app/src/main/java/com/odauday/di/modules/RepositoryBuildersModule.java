@@ -1,8 +1,10 @@
 package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
+import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
 import dagger.Module;
 import dagger.Provides;
@@ -26,5 +28,12 @@ public class RepositoryBuildersModule {
                   protectUserService,
                   preferencesHelper,
                   schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    TagRepository provideTagRepository(TagService.Public publicTagService,
+              TagService.Protect protectTagService, SchedulersExecutor schedulersExecutor) {
+        return new TagRepository(publicTagService,protectTagService,schedulersExecutor);
     }
 }
