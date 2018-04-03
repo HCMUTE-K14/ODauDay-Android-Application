@@ -12,5 +12,5 @@ public class Constants {
     public static final String INTENT_EXTRA_SELECTION_TO = "intent_extra_select_to";
     public static final String INTENT_EXTRA_HAS_TO_WHEEL = "intent_extra_has_to_wheel";
     public static final String INTENT_EXTRA_IS_CURRENCY = "intent_extra_is_currency";
-    
+
 }

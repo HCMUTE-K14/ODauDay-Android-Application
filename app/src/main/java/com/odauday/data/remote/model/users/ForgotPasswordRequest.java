@@ -8,22 +8,22 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ForgotPasswordRequest {
-    
+
     @SerializedName("email")
     @Expose
     private String email;
-    
+
     public ForgotPasswordRequest() {
     }
-    
+
     public ForgotPasswordRequest(String email) {
         this.email = email;
     }
-    
+
     @Override
     public String toString() {
         return "ForgotPasswordRequest{" +
-               "email='" + email + '\'' +
-               '}';
+            "email='" + email + '\'' +
+            '}';
     }
 }

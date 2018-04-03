@@ -3,14 +3,14 @@
   android:layout_height="wrap_content"
   android:padding="16dp"
   android:orientation="horizontal">
-  <com.odauday.ui.search.common.view.FilterPicker
+  <com.odauday.ui.search.common.view.FilterNumberPicker
     android:id="@+id/filter_from"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_weight="1" />
-  <com.odauday.ui.search.common.view.FilterPicker
+    android:layout_weight="1"/>
+  <com.odauday.ui.search.common.view.FilterNumberPicker
     android:id="@+id/filter_to"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_weight="1" />
+    android:layout_weight="1"/>
 </LinearLayout>

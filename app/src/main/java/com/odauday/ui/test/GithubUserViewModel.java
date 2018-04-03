@@ -9,17 +9,17 @@ import javax.inject.Inject;
  */
 
 public class GithubUserViewModel extends BaseViewModel {
-    
-    
+
+
     private final UserRepository mUserRepository;
-    
+
     public int currentIndex = 1;
-    
+
     @Inject
     public GithubUserViewModel(UserRepository mUserRepository) {
         this.mUserRepository = mUserRepository;
     }
-    
+
     public void getData() {
         //        mCompositeDisposable.add(mUserRepository.test(currentIndex)
         //                  .doOnSubscribe(disposable -> {
@@ -39,10 +39,10 @@ public class GithubUserViewModel extends BaseViewModel {
         //                                response.setValue(Resource.error(throwable));
         //                            }));
     }
-    
+
     public void loadNextPage() {
         currentIndex++;
-        
+
         getData();
     }
 }

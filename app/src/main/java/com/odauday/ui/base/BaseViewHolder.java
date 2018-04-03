@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
  */
 
 public class BaseViewHolder<VB extends ViewDataBinding> extends RecyclerView.ViewHolder {
-    
+
     public final VB mBinding;
-    
+
     public BaseViewHolder(VB dataBinding) {
         super(dataBinding.getRoot());
         this.mBinding = dataBinding;

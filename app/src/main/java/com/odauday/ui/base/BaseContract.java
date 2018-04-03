@@ -5,10 +5,10 @@ package com.odauday.ui.base;
  */
 
 public interface BaseContract {
-    
+
     void loading(boolean isLoading);
-    
+
     void onSuccess(Object object);
-    
+
     void onFailure(Exception ex);
 }

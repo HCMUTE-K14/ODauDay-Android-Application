@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+  <data>
+    <import type="com.odauday.ui.search.navigation.FilterOption"/>
+    <variable
+      name="viewModel"
+      type="com.odauday.ui.search.navigation.FilterNavigationViewModel"/>
+  </data>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@color/white"
     android:clickable="true"
     android:fitsSystemWindows="true">
@@ -38,7 +46,7 @@
         <com.odauday.ui.search.common.view.SearchTypeChooser
           android:id="@+id/filter_search_type"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
+          android:layout_height="wrap_content"/>
         <LinearLayout
           android:id="@+id/filter_main_option"
           android:layout_width="match_parent"
@@ -47,19 +55,30 @@
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:textHeader="@{@string/txt_filter_location}"
+            app:txtValue="@{@string/txt_map_area}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showNumberPickerDialog(FilterOption.PRICE)}"
+            app:textHeader="@{@string/txt_filter_price}"
+            app:txtValue="@{@string/txt_any}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_size"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showNumberPickerDialog(FilterOption.SIZE)}"
+            app:textHeader="@{@string/txt_filter_size}"
+            app:txtValue="@{@string/txt_any}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_property_type"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showTypePickerDialog(FilterOption.PROPERTY_TYPE)}"
+            app:textHeader="@{@string/txt_filter_property_type}"
+            app:txtValue="@{@string/txt_any}"/>
         </LinearLayout>
         <LinearLayout
           android:id="@+id/filter_advance_option"
@@ -70,19 +89,30 @@
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_bedrooms"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showNumberPickerDialog(FilterOption.BEDROOMS)}"
+            app:textHeader="@{@string/txt_filter_num_of_bedroom}"
+            app:txtValue="@{@string/txt_any}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_bath_rooms"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showNumberPickerDialog(FilterOption.BATHROOMS)}"
+            app:textHeader="@{@string/txt_filter_num_of_bathroom}"
+            app:txtValue="@{@string/txt_any}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_parking"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showNumberPickerDialog(FilterOption.PARKING)}"
+            app:textHeader="@{@string/txt_filter_num_of_parking}"
+            app:txtValue="@{@string/txt_any}"/>
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_tag"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:textHeader="@{@string/txt_filter_tags}"
+            app:txtValue="@{@string/txt_any}"/>
         </LinearLayout>
         <Button
           android:id="@+id/btn_more_options"
@@ -93,7 +123,7 @@
           android:background="@color/white"
           android:text="@string/txt_filter_more_options"
           android:textColor="@color/background_selector_toolbar"
-          android:textSize="14sp" />
+          android:textSize="14sp"/>
       </LinearLayout>
     </ScrollView>
     <android.support.v7.widget.AppCompatButton
@@ -107,7 +137,7 @@
       android:background="@color/alert_red"
       android:text="@string/txt_search"
       android:textColor="@color/white"
-      android:textSize="18sp" />
+      android:textSize="18sp"/>
   </RelativeLayout>
 
 

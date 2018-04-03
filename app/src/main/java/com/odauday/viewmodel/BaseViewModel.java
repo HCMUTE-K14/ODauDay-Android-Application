@@ -10,30 +10,30 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 
 public abstract class BaseViewModel extends ViewModel {
-    
+
     protected final MutableLiveData<Resource> response = new MutableLiveData<>();
     protected CompositeDisposable mCompositeDisposable;
-    
+
     public BaseViewModel() {
         this.mCompositeDisposable = new CompositeDisposable();
     }
-    
+
     @Override
     protected void onCleared() {
         mCompositeDisposable.dispose();
         super.onCleared();
     }
-    
+
     public CompositeDisposable getCompositeDisposable() {
         return mCompositeDisposable;
     }
-    
+
     public void setCompositeDisposable(CompositeDisposable compositeDisposable) {
         mCompositeDisposable = compositeDisposable;
     }
-    
+
     public MutableLiveData<Resource> response() {
         return response;
     }
-    
+
 }

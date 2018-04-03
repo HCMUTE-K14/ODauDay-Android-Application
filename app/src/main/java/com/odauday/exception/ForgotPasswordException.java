@@ -8,23 +8,23 @@ import java.util.List;
  */
 
 public class ForgotPasswordException extends BaseException {
-    
+
     public ForgotPasswordException(List<ErrorResponse> errors) {
         super(errors);
     }
-    
+
     public ForgotPasswordException(String message) {
         super(message);
     }
-    
+
     public ForgotPasswordException(String message, Exception ex) {
         super(message, ex);
     }
-    
+
     public ForgotPasswordException(String message, Throwable ex) {
         super(message, ex);
     }
-    
+
     public ForgotPasswordException(Exception ex) {
         super(ex);
     }

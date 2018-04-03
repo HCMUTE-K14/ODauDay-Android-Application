@@ -28,32 +28,32 @@ import retrofit2.http.Path;
  */
 
 public interface UserService {
-    
+
     interface Public {
-        
+
         @POST(LOGIN_NORMAL)
         Single<JsonResponse<LoginResponse>> login(@Body NormalAuthRequest request);
-        
+
         @POST(LOGIN_WITH_FACEBOOK)
         Single<JsonResponse<LoginResponse>> login(@Body FacebookAuthRequest request);
-        
+
         @POST(REGISTER)
         Single<JsonResponse<MessageResponse>> register(@Body RegisterRequest request);
-        
+
         @POST(FORGOT_PASSWORD)
         Single<JsonResponse<MessageResponse>> forgotPassword(@Body ForgotPasswordRequest request);
-        
+
         @POST("/health-check")
         Single<JsonResponse<MessageResponse>> test(@Body SearchCriteria searchCriteria);
-        
+
     }
-    
+
     interface Protect {
-        
+
         @PUT(USERS + "/{id}")
         Single<JsonResponse<MessageResponse>> updateProfile(@Path("id") String userId,
-                  @Body User user);
-        
+            @Body User user);
+
         @PUT(CHANGE_PASSWORD)
         Single<JsonResponse<MessageResponse>> changePassword(@Body ChangePasswordRequest request);
     }

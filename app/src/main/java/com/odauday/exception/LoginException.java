@@ -8,24 +8,24 @@ import java.util.List;
  */
 
 public class LoginException extends BaseException {
-    
-    
+
+
     public LoginException(List<ErrorResponse> errors) {
         super(errors);
     }
-    
+
     public LoginException(String message) {
         super(message);
     }
-    
+
     public LoginException(Exception ex) {
         super(ex);
     }
-    
+
     public LoginException(String message, Exception ex) {
         super(message, ex);
     }
-    
+
     public LoginException(String message, Throwable ex) {
         super(message, ex);
     }

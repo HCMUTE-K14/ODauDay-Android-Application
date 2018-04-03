@@ -5,5 +5,5 @@ package com.odauday.data;
  */
 
 public interface Repository {
-    
+
 }

@@ -9,8 +9,8 @@ import java.util.List;
  */
 
 public interface GithubUserContract extends Contract {
-    
+
     void showData(List<User> users);
-    
+
     void handlerError(Exception ex);
 }

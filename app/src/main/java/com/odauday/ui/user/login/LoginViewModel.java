@@ -12,27 +12,27 @@ import javax.inject.Inject;
  */
 
 public class LoginViewModel extends BaseViewModel {
-    
+
     private final UserRepository mUserRepository;
-    
+
     @Inject
     public LoginViewModel(UserRepository userRepository) {
         this.mUserRepository = userRepository;
     }
-    
-    
+
+
     public void login(AbstractAuthRequest request) {
-        
+
         Disposable disposable = mUserRepository.login(request)
-                  .doOnSubscribe(onSubscribe -> {
-                      response.setValue(Resource.loading(null));
-                  })
-                  .subscribe(success -> {
-                      response.setValue(Resource.success(""));
-                  }, error -> {
-                      response.setValue(Resource.error(error));
-                  });
-        
+            .doOnSubscribe(onSubscribe -> {
+                response.setValue(Resource.loading(null));
+            })
+            .subscribe(success -> {
+                response.setValue(Resource.success(""));
+            }, error -> {
+                response.setValue(Resource.error(error));
+            });
+
         mCompositeDisposable.add(disposable);
     }
 }

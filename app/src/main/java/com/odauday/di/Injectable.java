@@ -5,5 +5,5 @@ package com.odauday.di;
  */
 
 public interface Injectable {
-    
+
 }

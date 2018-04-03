@@ -13,13 +13,13 @@ import retrofit2.Retrofit;
 
 @Module
 public class ServiceBuildersModule {
-    
+
     @Provides
     @Singleton
     UserService.Public providePublicUserService(@Named("publicRetrofit") Retrofit retrofit) {
         return retrofit.create(UserService.Public.class);
     }
-    
+
     @Provides
     @Singleton
     UserService.Protect provideProtectUserService(@Named("protectRetrofit") Retrofit retrofit) {

@@ -7,6 +7,6 @@ import okhttp3.Headers;
  */
 
 abstract class AbstractApiHeader {
-    
+
     public abstract Headers getHeader();
 }

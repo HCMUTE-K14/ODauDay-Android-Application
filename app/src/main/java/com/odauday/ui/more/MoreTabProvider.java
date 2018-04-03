@@ -9,7 +9,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class MoreTabProvider {
-    
+
     @ContributesAndroidInjector(modules = MoreTabModule.class)
     @PerFragment
     abstract MoreTabMainFragment provideMoreTab();

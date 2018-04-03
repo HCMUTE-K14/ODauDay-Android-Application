@@ -12,12 +12,12 @@ import dagger.Provides;
 
 @Module
 public class GithubUserModule {
-    
+
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(GithubUserViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-    
+
     @Provides
     GithubUserViewModel provideGitHubViewModel(UserRepository userRepository) {
         return new GithubUserViewModel(userRepository);

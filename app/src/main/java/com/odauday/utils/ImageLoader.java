@@ -10,19 +10,19 @@ import com.odauday.R;
  */
 
 public class ImageLoader {
-    
+
     public static void load(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
-                  .load(image)
-                  .apply(new RequestOptions()
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .error(R.drawable.ic_launcher_background))
-                  .into(imageView);
+            .load(image)
+            .apply(new RequestOptions()
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background))
+            .into(imageView);
     }
-    
+
     public static void loadWithoutOptions(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
-                  .load(image)
-                  .into(imageView);
+            .load(image)
+            .into(imageView);
     }
 }

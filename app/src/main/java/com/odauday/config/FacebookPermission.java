@@ -5,8 +5,8 @@ package com.odauday.config;
  */
 
 public class FacebookPermission {
-    
+
     public static final String EMAIL = "email";
-    
+
     public static final String PUBLIC_PROFILE = "public_profile";
 }

@@ -11,15 +11,15 @@ import dagger.Provides;
  */
 @Module
 public class ForgotPasswordModule {
-    
+
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(ForgotPasswordViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-    
+
     @Provides
     ForgotPasswordViewModel provideForgotPasswordViewModel(UserRepository userRepository) {
         return new ForgotPasswordViewModel(userRepository);
-        
+
     }
 }

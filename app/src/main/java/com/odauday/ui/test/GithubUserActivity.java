@@ -21,35 +21,35 @@ import javax.inject.Inject;
  */
 
 public class GithubUserActivity extends
-                                BaseMVVMActivity<GithubUserActivityBinding> implements
-                                                                            GithubUserContract {
-    
+    BaseMVVMActivity<GithubUserActivityBinding> implements
+    GithubUserContract {
+
     @Inject
     GithubUserViewModel mGithubUserViewModel;
-    
+
     private GithubUserAdapter mGithubUserAdapter;
-    
+
     @Override
     public void showData(List<User> users) {
         mGithubUserAdapter.setData(users);
     }
-    
+
     @Override
     public void handlerError(Exception ex) {
 
     }
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    
-    
+
+
     @Override
     protected void processingTaskFromViewModel() {
 
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onStart() {
@@ -75,35 +75,35 @@ public class GithubUserActivity extends
             }
         });
         mGithubUserAdapter = new GithubUserAdapter();
-        
+
         mBinding.repoList.addOnScrollListener(new OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager)
-                          recyclerView.getLayoutManager();
+                    recyclerView.getLayoutManager();
                 int lastPosition = layoutManager
-                          .findLastVisibleItemPosition();
+                    .findLastVisibleItemPosition();
                 if (lastPosition == mGithubUserAdapter.getItemCount() - 1) {
                     mGithubUserViewModel.loadNextPage();
                 }
             }
         });
-        
+
         mBinding.repoList.setAdapter(mGithubUserAdapter);
         mGithubUserViewModel.getData();
     }
-    
+
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mGithubUserViewModel;
     }
-    
+
     private void showOrHideProgressBar(boolean isLoading) {
         new Handler().postDelayed(
-                  () -> mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE),
-                  1000);
+            () -> mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE),
+            1000);
     }
-    
+
     @Override
     public int getLayoutId() {
         return R.layout.github_user_activity;

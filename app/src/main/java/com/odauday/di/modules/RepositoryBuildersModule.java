@@ -13,18 +13,18 @@ import javax.inject.Singleton;
  */
 @Module
 public class RepositoryBuildersModule {
-    
+
     @Provides
     @Singleton
     UserRepository provideUserRepository(
-              UserService.Public publicUserService,
-              UserService.Protect protectUserService,
-              PreferencesHelper preferencesHelper,
-              SchedulersExecutor schedulersExecutor) {
+        UserService.Public publicUserService,
+        UserService.Protect protectUserService,
+        PreferencesHelper preferencesHelper,
+        SchedulersExecutor schedulersExecutor) {
         return new UserRepository(
-                  publicUserService,
-                  protectUserService,
-                  preferencesHelper,
-                  schedulersExecutor);
+            publicUserService,
+            protectUserService,
+            preferencesHelper,
+            schedulersExecutor);
     }
 }

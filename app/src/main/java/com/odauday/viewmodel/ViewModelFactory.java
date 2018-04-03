@@ -9,14 +9,14 @@ import android.arch.lifecycle.ViewModelProvider;
 
 @SuppressWarnings("unchecked")
 public class ViewModelFactory<V> implements ViewModelProvider.Factory {
-    
-    
+
+
     private final V viewModel;
-    
+
     public ViewModelFactory(V viewModel) {
         this.viewModel = viewModel;
     }
-    
+
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(viewModel.getClass())) {

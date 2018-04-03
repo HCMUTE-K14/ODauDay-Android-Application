@@ -5,5 +5,5 @@ package com.odauday.ui.base;
  */
 
 public interface Contract {
-    
+
 }

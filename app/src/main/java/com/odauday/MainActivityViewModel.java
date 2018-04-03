@@ -8,9 +8,9 @@ import javax.inject.Inject;
  */
 
 public class MainActivityViewModel extends BaseViewModel {
-    
+
     @Inject
     public MainActivityViewModel() {
-    
+
     }
 }

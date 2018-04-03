@@ -11,12 +11,12 @@ import dagger.Provides;
 
 @Module
 public class AlertTabModule {
-    
+
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(AlertTabViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-    
+
     @Provides
     AlertTabViewModel provideAlertTabViewModel() {
         return new AlertTabViewModel();

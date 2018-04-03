@@ -17,29 +17,29 @@ import timber.log.Timber;
  */
 
 public class RootApplication extends Application implements HasActivityInjector {
-    
+
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
-    
-    
+
+
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        
+
         DaggerApplicationComponent
-                  .builder()
-                  .application(this)
-                  .network(new NetworkModule(this))
-                  .service(new ServiceBuildersModule())
-                  .repository(new RepositoryBuildersModule())
-                  .build()
-                  .inject(this);
+            .builder()
+            .application(this)
+            .network(new NetworkModule(this))
+            .service(new ServiceBuildersModule())
+            .repository(new RepositoryBuildersModule())
+            .build()
+            .inject(this);
     }
-    
+
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return mDispatchingAndroidInjector;

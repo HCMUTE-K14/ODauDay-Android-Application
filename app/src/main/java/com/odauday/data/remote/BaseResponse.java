@@ -5,5 +5,5 @@ package com.odauday.data.remote;
  */
 
 public interface BaseResponse {
-    
+
 }

@@ -12,12 +12,12 @@ import dagger.Provides;
 
 @Module
 public class SearchTabModule {
-    
+
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(SearchTabViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-    
+
     @Provides
     SearchTabViewModel provideSearchTabViewModel(UserRepository userRepository) {
         return new SearchTabViewModel(userRepository);

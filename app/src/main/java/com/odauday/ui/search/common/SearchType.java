@@ -7,19 +7,19 @@ import com.odauday.R;
  */
 
 public enum SearchType {
-    
+
     RENT(R.string.txt_rent, 0),
     BUY(R.string.txt_buy, 1),
     ALL(R.string.txt_all, 2);
-    
+
     private final int mValue;
     private final int mResourceId;
-    
+
     SearchType(int resourceId, int value) {
         this.mResourceId = resourceId;
         this.mValue = value;
     }
-    
+
     public static SearchType getByValue(int value) {
         switch (value) {
             case 0:
@@ -31,11 +31,11 @@ public enum SearchType {
                 return SearchType.ALL;
         }
     }
-    
+
     public int getValue() {
         return mValue;
     }
-    
+
     public int getResourceId() {
         return mResourceId;
     }

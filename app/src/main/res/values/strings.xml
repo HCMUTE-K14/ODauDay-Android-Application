@@ -54,4 +54,13 @@
   <string name="txt_min">Min</string>
   <string name="txt_max">Max</string>
   <string name="message_max_value_less_than_min_value">Max value cannot be less than min value</string>
+  <string name="txt_cancel">Cancel</string>
+  <string name="property_type_house">House</string>
+  <string name="property_type_apartment">Apartment</string>
+  <string name="property_type_land">Land</string>
+  <string name="property_type_level_1">First-Level house</string>
+  <string name="property_type_level_2">Second-Level house</string>
+  <string name="property_type_level_3">Third-Level house</string>
+  <string name="property_type_level_4">Four-Level house</string>
+  <string name="txt_property_type">Property Type</string>
 </resources>

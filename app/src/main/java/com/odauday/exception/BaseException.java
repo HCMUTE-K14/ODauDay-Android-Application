@@ -8,45 +8,45 @@ import java.util.List;
  */
 
 public class BaseException extends RuntimeException {
-    
+
     private String message;
-    
+
     private List<ErrorResponse> errors;
-    
+
     public BaseException(List<ErrorResponse> errors) {
         super("List Error");
         this.errors = errors;
     }
-    
+
     public BaseException(String message) {
         super(message);
         this.message = message;
     }
-    
+
     public BaseException(String message, Exception ex) {
         super(message, ex);
         this.message = message;
     }
-    
+
     public BaseException(String message, Throwable ex) {
         super(message, ex);
         this.message = message;
     }
-    
-    
+
+
     public BaseException(Exception ex) {
         super(ex);
         this.message = ex.getMessage();
     }
-    
+
     public List<ErrorResponse> getErrors() {
         return errors;
     }
-    
+
     public void setErrors(List<ErrorResponse> errors) {
         this.errors = errors;
     }
-    
+
     @Override
     public String getMessage() {
         return message;

@@ -11,13 +11,13 @@ import com.odauday.utils.ViewUtils;
  */
 
 public class WelcomeActivity extends AppCompatActivity {
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         ViewUtils.startActivity(this, MainActivity.class);
-        
+
         finish();
     }
 }
