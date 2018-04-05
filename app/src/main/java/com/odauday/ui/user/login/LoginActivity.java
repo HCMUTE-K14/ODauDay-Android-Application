@@ -60,7 +60,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
     
     private String mFacebookAccessToken;
     
-    private GraphRequest.GraphJSONObjectCallback mGraphCallBack = (object, response) -> {
+    private final GraphRequest.GraphJSONObjectCallback mGraphCallBack = (object, response) -> {
         try {
             String facebookId = object.getString("id");
             String name = object.getString("name");
@@ -75,7 +75,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
         }
     };
     
-    private FacebookCallback<LoginResult> mFacebookCallback = new FacebookCallback<LoginResult>() {
+    private final FacebookCallback<LoginResult> mFacebookCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
             mFacebookAccessToken = loginResult.getAccessToken().getToken();
@@ -92,7 +92,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
         
         @Override
         public void onCancel() {
-        
+
         }
         
         @Override

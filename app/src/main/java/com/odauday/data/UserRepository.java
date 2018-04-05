@@ -19,10 +19,12 @@ import com.odauday.exception.ForgotPasswordException;
 import com.odauday.exception.LoginException;
 import com.odauday.exception.RegisterException;
 import com.odauday.model.User;
+import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.utils.JwtUtils;
 import com.odauday.utils.JwtUtils.JwtModel;
 import io.reactivex.Single;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -48,6 +50,12 @@ public class UserRepository implements Repository {
         this.mPreferencesHelper = preferencesHelper;
         
         this.mSchedulersExecutor = schedulersExecutor;
+    }
+    
+    public Single<JsonResponse<MessageResponse>> test(SearchCriteria searchCriteria) {
+        return mPublicUserService.test(searchCriteria)
+                  .subscribeOn(mSchedulersExecutor.io())
+                  .observeOn(mSchedulersExecutor.ui());
     }
     
     public Single<User> login(AbstractAuthRequest request) {
@@ -118,6 +126,7 @@ public class UserRepository implements Repository {
                   .map(response -> {
                       try {
                           if (response.isSuccess()) {
+                              Timber.d(response.getData().toString());
                               return response.getData();
                           } else {
                               throw new ForgotPasswordException(response.getErrors());
@@ -131,7 +140,6 @@ public class UserRepository implements Repository {
                   })
                   .subscribeOn(mSchedulersExecutor.io())
                   .observeOn(mSchedulersExecutor.ui());
-        
     }
     
     private User decodeUserAccessToken(String accessToken) throws Exception {

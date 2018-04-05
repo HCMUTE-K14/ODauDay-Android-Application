@@ -1,6 +1,14 @@
 package com.odauday.di.modules;
 
+import com.odauday.MainActivity;
+import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
+import com.odauday.di.scopes.PerFragment;
+import com.odauday.ui.alert.AlertTabProvider;
+import com.odauday.ui.favorite.FavoriteTabProvider;
+import com.odauday.ui.more.MoreTabProvider;
+import com.odauday.ui.savedsearch.SavedSearchProvider;
+import com.odauday.ui.search.SearchTabProvider;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
@@ -33,11 +41,24 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract ForgotPasswordActivity bindForgotPasswordActivity();
     
+
     @ContributesAndroidInjector(modules = TagModule.class)
     @PerActivity
     abstract ActivityDemo bindActivityDemo();
     
     @ContributesAndroidInjector(modules = TagModule.class)
-    @PerActivity
+    @PerFragment
     abstract FragmentDemo bindFragmentDemo();
+
+    @ContributesAndroidInjector(modules = {
+              SearchTabProvider.class,
+              AlertTabProvider.class,
+              FavoriteTabProvider.class,
+              SavedSearchProvider.class,
+              MoreTabProvider.class,
+              MainActivityModule.class
+    })
+    @PerActivity
+    abstract MainActivity bindMainActivity();
+    
 }

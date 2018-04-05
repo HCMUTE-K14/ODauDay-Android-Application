@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
+import com.odauday.data.remote.model.ErrorResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.data.remote.model.users.ForgotPasswordRequest;
 import com.odauday.databinding.ActivityForgotPasswordBinding;
+import com.odauday.exception.BaseException;
 import com.odauday.exception.RetrofitException;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.view.MyProgressBar.MyProgressBarListener;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.TextUtils;
 import com.odauday.utils.ValidationHelper;
 import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
+import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -59,11 +63,6 @@ public class ForgotPasswordActivity extends
     }
     
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-    
-    @Override
     protected BaseViewModel getViewModel(String tag) {
         return mForgotPasswordViewModel;
     }
@@ -106,6 +105,9 @@ public class ForgotPasswordActivity extends
         mForgotPasswordViewModel.forgotPassword(request);
     }
     
+    public void close() {
+        finish();
+    }
     //====================== Contract Method =========================//
     
     @Override
@@ -137,14 +139,20 @@ public class ForgotPasswordActivity extends
             message = getString(R.string.message_service_unavailable);
         } else {
             message = ex.getMessage();
+            
+            if (TextUtils.isEmpty(message)) {
+                List<ErrorResponse> errors = ((BaseException) ex).getErrors();
+                
+                message = errors.get(0).getMessage();
+            }
         }
         
         SnackBarUtils.showSnackBar(mBinding.mainLayout, message);
-        
     }
     //====================== Helper Method =========================//
     
     private void initDataBinding() {
+        mBinding.btnBack.setOnClickListener(view -> close());
         mBinding.progressBar.setListener(mProgressBarListener);
     }
     

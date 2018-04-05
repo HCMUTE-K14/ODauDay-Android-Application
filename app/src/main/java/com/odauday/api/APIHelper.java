@@ -30,7 +30,7 @@ public class APIHelper {
     
     public static final String TAG = APIHelper.class.getSimpleName();
     
-    public static final String ACCESS_TOKEN = "X-AccessToken";
+    public static final String ACCESS_TOKEN = "X-Access-Token";
     
     public static final String USER_ID = "X-USER-ID";
     

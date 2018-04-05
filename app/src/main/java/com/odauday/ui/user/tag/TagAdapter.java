@@ -1,8 +1,11 @@
 package com.odauday.ui.user.tag;
 
 import android.databinding.DataBindingUtil;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.TagItemBinding;
@@ -27,6 +30,7 @@ public class TagAdapter extends BaseAdapter<Tag,TagItemBinding> {
     protected void bind(TagItemBinding binding, Tag item) {
         binding.setTag(item);
         binding.setHandler(this);
+       
     }
     
     @Override
@@ -39,6 +43,7 @@ public class TagAdapter extends BaseAdapter<Tag,TagItemBinding> {
         return oldItem.equals(newItem);
     }
      public void onClickTag(Tag tag){
+         Log.d("Lng","sdkfjdsf");
         Timber.tag("Song song ki").d(tag.getName());
     }
 }

@@ -13,7 +13,7 @@ public class Feature {
     @Expose
     private String id;
     
-    @SerializedName("id")
+    @SerializedName("name")
     @Expose
     private String name;
     

@@ -1,8 +1,9 @@
-package com.odauday;
+package com.odauday.ui.welcome;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import com.odauday.MainActivity;
 import com.odauday.utils.ViewUtils;
 
 /**

@@ -2,6 +2,7 @@ package com.odauday;
 
 import android.app.Activity;
 import android.app.Application;
+import android.support.v4.app.Fragment;
 import com.odauday.di.components.DaggerApplicationComponent;
 import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
@@ -9,6 +10,7 @@ import com.odauday.di.modules.ServiceBuildersModule;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -43,5 +45,4 @@ public class RootApplication extends Application implements HasActivityInjector 
     public AndroidInjector<Activity> activityInjector() {
         return mDispatchingAndroidInjector;
     }
-    
 }

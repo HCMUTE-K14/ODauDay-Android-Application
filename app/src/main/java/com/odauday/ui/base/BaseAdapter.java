@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
                                                                  RecyclerView.Adapter<BaseViewHolder<VB>> {
     
-    private List<T> data;
+    protected List<T> data;
     
     private int dataVersion = 0;
     

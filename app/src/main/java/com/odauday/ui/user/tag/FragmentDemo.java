@@ -11,12 +11,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.FragmentDemoBinding;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjection;
 import java.util.List;
 import javax.inject.Inject;
@@ -26,38 +29,47 @@ import timber.log.Timber;
  * Created by kunsubin on 4/1/2018.
  */
 
-public class FragmentDemo extends BaseMVVMFragment<TagViewModel,FragmentDemoBinding> implements TagContract{
+public class FragmentDemo extends BaseMVVMFragment<FragmentDemoBinding> implements TagContract{
     
     private TagAdapter mTagAdapter;
+    
+    @Inject
+    TagViewModel mTagViewModel;
     
     @Override
     public int getLayoutId() {
         return R.layout.fragment_demo;
     }
-    @Override
-    protected TagViewModel buildViewModel() {
-        return mViewModel;
-    }
     
     @Override
     public void onStart() {
         super.onStart();
-        processingTaskFromViewModel();
     }
     
-    private void processingTaskFromViewModel() {
-        (((ActivityDemo)getActivity()).mTagViewModel).response().observe(this, resource -> {
+    @Override
+    protected BaseViewModel getViewModel(String tag) {
+        return mTagViewModel;
+    }
+    @Override
+    protected void processingTaskFromViewModel() {
+        Log.d("Res","Không có j là không thể");
+        mTagViewModel.response().observe(this, resource -> {
+            Log.d("Res","response 1");
             if (resource != null) {
+                Log.d("Res","response sd");
                 switch (resource.status) {
                     case ERROR:
+                        Log.d("Res","response 2");
                         loading(false);
                         onFailure((Exception) resource.data);
                         break;
                     case SUCCESS:
+                        Log.d("Res","response 3");
                         loading(false);
                         onSuccess(resource.data);
                         break;
                     case LOADING:
+                        Log.d("Res","response 4");
                         loading(true);
                         break;
                     default:
@@ -67,7 +79,6 @@ public class FragmentDemo extends BaseMVVMFragment<TagViewModel,FragmentDemoBind
         });
         mBinding.get().recycleView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         mTagAdapter=new TagAdapter();
-        mBinding.get().recycleView.setAdapter(mTagAdapter);
     }
     
     @Override
@@ -78,12 +89,14 @@ public class FragmentDemo extends BaseMVVMFragment<TagViewModel,FragmentDemoBind
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       
         
     }
-    
+  
     @Override
     public void onSuccess(Object object) {
         List<Tag> list=(List<Tag>)object;
+        
         Log.d("Result:",list.get(0).getName());
        
         Toast.makeText(getActivity(),list.get(0).getName(),Toast.LENGTH_LONG).show();
@@ -98,9 +111,9 @@ public class FragmentDemo extends BaseMVVMFragment<TagViewModel,FragmentDemoBind
     }
     
     OnClickListener mOnClickListener=view -> {
-        ((ActivityDemo)getActivity()).mTagViewModel.getAllTag();
+        mTagViewModel.getAllTag();
     };
-   /* public void onClickTag(Tag tag){
+    /*public void onClickTag(Tag tag){
         Timber.tag("Song song ki").d(tag.getName());
         Toast.makeText(getActivity(),tag.getName(),Toast.LENGTH_LONG).show();
     }*/

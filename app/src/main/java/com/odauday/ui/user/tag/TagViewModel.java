@@ -1,5 +1,6 @@
 package com.odauday.ui.user.tag;
 
+import android.util.Log;
 import com.odauday.data.TagRepository;
 import com.odauday.model.Tag;
 import com.odauday.viewmodel.BaseViewModel;
@@ -21,13 +22,18 @@ public class TagViewModel extends BaseViewModel {
         mTagRepository = tagRepository;
     }
     public void getAllTag(){
+        Log.d("Lang thang","Khong nha");
         Disposable disposable=mTagRepository.getAllTag()
                   .doOnSubscribe(onSubscribe -> {
+                      Log.d("Lang thang","loading");
                       response.setValue(Resource.loading(null));
                   })
                   .subscribe(success -> {
+                      Log.d("Lang thang","thanh cong");
+                      Log.d("Lang thang",success.toString());
                       response.setValue(Resource.success(success));
                   }, error -> {
+                      Log.d("Lang thang","that bai");
                       response.setValue(Resource.error(error));
                   });
     

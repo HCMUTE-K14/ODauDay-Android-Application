@@ -28,7 +28,7 @@ public class ForgotPasswordViewModel extends BaseViewModel {
                       response.setValue(Resource.loading(null));
                   })
                   .subscribe(success -> {
-                      response.setValue(Resource.success(""));
+                      response.setValue(Resource.success(success));
                   }, error -> {
                       response.setValue(Resource.error(error));
                   });

@@ -20,5 +20,6 @@ public class EndPoint {
     public static final String CHANGE_PASSWORD = USERS + "/change-password";
     
     public static final String TAG="tag";
+    public static final String FAVORITE="favorite";
     
 }

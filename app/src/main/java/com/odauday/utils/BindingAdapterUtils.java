@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import com.odauday.model.Image;
+import java.util.List;
 
 /**
  * Created by infamouSs on 3/5/18.
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 
 public class BindingAdapterUtils {
     
+    private  static final String currencies="đ";
     
     @BindingAdapter("loadImage")
     public static void setImageUri(ImageView view, String imageUri) {
@@ -38,4 +42,22 @@ public class BindingAdapterUtils {
         view.setVisibility(show ? View.VISIBLE : View.GONE);
     }
     
+    @BindingAdapter("textDouble")
+    public static void textDouble(TextView view, double value){
+        view.setText(TextUtils.doubleFormat(value));
+    }
+    @BindingAdapter("textDoublePrice")
+    public static void textDoublePrice(TextView view, double value){
+        view.setText(TextUtils.doubleFormat(value)+" "+currencies);
+    }
+    @BindingAdapter("textInteger")
+    public static void textInteger(TextView view, int value){
+        view.setText(String.valueOf(value));
+    }
+    @BindingAdapter("loadImageMainPropertyInListImage")
+    public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images){
+        if(images!=null&&images.size()>0){
+            ImageLoader.load(view,images.get(0).getUrl().toString().trim());
+        }
+    }
 }

@@ -17,6 +17,9 @@ import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.viewmodel.BaseViewModel;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -25,9 +28,12 @@ import timber.log.Timber;
  * Created by kunsubin on 4/1/2018.
  */
 
-public class ActivityDemo extends BaseMVVMActivity<ActivityDemoBinding> implements TagContract{
+public class ActivityDemo extends BaseMVVMActivity<ActivityDemoBinding> implements TagContract,
+                                                                                   HasSupportFragmentInjector{
     
     private static final String TAG=ActivityDemo.class.getSimpleName();
+    @Inject
+    DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
     
     @Inject
     TagViewModel mTagViewModel;
@@ -103,5 +109,10 @@ public class ActivityDemo extends BaseMVVMActivity<ActivityDemoBinding> implemen
     @Override
     protected int getLayoutId() {
         return R.layout.activity_demo;
+    }
+    
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mFragmentDispatchingAndroidInjector;
     }
 }
