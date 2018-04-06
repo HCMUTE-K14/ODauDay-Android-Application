@@ -1,21 +1,15 @@
 package com.odauday.ui.favorite;
 
-import static com.odauday.viewmodel.model.Status.ERROR;
-import static com.odauday.viewmodel.model.Status.LOADING;
-import static com.odauday.viewmodel.model.Status.SUCCESS;
-
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import com.odauday.R;
 import com.odauday.config.Type;
-import com.odauday.data.remote.model.ErrorResponse;
 import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.databinding.FragmentFavoriteTabMainBinding;
-import com.odauday.exception.BaseException;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.view.HeaderFavoriteView;
@@ -44,6 +38,7 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     private EmptyFavoriteAdapter mEmptyFavoriteAdapter;
     private List<Property> mProperties;
     HeaderFavoriteView mHeaderFavoriteView;
+    private ProgressDialog mProgressDialog;
     enum SortType{
         LAST_ADDED,LOWEST_PRICE,HIGHEST_PRICE
     }
@@ -52,6 +47,8 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     }
     private SortType SORT_TYPE=SortType.LAST_ADDED;
     private FilterType FILTER_TYPE=FilterType.ALL;
+    
+    
     public static FavoriteTabMainFragment newInstance() {
         
         Bundle args = new Bundle();
@@ -61,10 +58,11 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
         
         return fragment;
     }
-    
+    //Event click share
     HeaderFavoriteView.OnClickShareListener mOnClickShareListener=view -> {
         Timber.tag(TAG).d("Share click");
     };
+    //Event click open map
     HeaderFavoriteView.OnClickMapListener mOnClickMapListener=view -> {
         Timber.tag(TAG).d("Map click");
     };
@@ -117,6 +115,12 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     private void initHeaderView() {
         mProperties=new ArrayList<>();
         mHeaderFavoriteView=mBinding.get().headerFavorite;
+        
+        mProgressDialog=new ProgressDialog(getActivity());
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setMessage(getActivity().getString(R.string.txt_progress));
+        mProgressDialog.show();
+        
         mHeaderFavoriteView.setTitle(getResources().getString(R.string.txt_shortlist));
         mHeaderFavoriteView.setOnClickShareListener(mOnClickShareListener);
         mHeaderFavoriteView.setOnClickMapListener(mOnClickMapListener);
@@ -243,6 +247,11 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     }
     @Override
     public void loading(boolean isLoading) {
+        if(isLoading){
+            mProgressDialog.show();
+        }else {
+            mProgressDialog.dismiss();
+        }
         Timber.tag(TAG).d("Loading");
     }
     @Override
@@ -276,4 +285,5 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
         //}
         SnackBarUtils.showSnackBar(mBinding.get().shortlist, message);
     }
+    
 }

@@ -5,9 +5,12 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.odauday.R;
+import com.odauday.model.Property;
 
 /**
  * Created by kunsubin on 4/5/2018.
@@ -18,10 +21,14 @@ public class StarView extends RelativeLayout {
     private RelativeLayout mRelativeLayout;
     private ImageView mImageView;
     private OnClickStarListener mOnClickStarListener;
-    enum STATUS{
-        CHECK,UN_CHECK
+    private Animation mAnimationRight;
+    private Animation mAnimationLeft;
+    enum STATUS {
+        CHECK, UN_CHECK
     }
-    private STATUS mSTATUS=STATUS.UN_CHECK;
+    
+    private STATUS mSTATUS = STATUS.UN_CHECK;
+    
     public StarView(Context context) {
         super(context);
         init(context);
@@ -36,7 +43,8 @@ public class StarView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-    private void init(Context context){
+    
+    private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
@@ -44,54 +52,60 @@ public class StarView extends RelativeLayout {
         }
         View rootView = inflater.inflate(R.layout.layout_star, this, true);
         bindingView(rootView);
-        chaneStatus(context);
-        addOnClick(context);
+        changeStatus(context);
     }
     
-   
     private void bindingView(View rootView) {
-        if(rootView==null){
+        if (rootView == null) {
             return;
         }
-        mRelativeLayout=rootView.findViewById(R.id.relative_layout_star);
-        mImageView=rootView.findViewById(R.id.image_star);
-        mSTATUS=STATUS.UN_CHECK;
+        mRelativeLayout = rootView.findViewById(R.id.relative_layout_star);
+        mImageView = rootView.findViewById(R.id.image_star);
+        mAnimationRight = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_right);
+        mAnimationLeft = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_left);
+        mSTATUS = STATUS.UN_CHECK;
     }
-    private void chaneStatus(Context context){
-        switch (mSTATUS){
+    
+    private void changeStatus(Context context) {
+        switch (mSTATUS) {
             case CHECK:
-                mImageView.setColorFilter(ContextCompat.getColor(context,R.color.yellow));
+                mImageView.startAnimation(mAnimationLeft);
+                mImageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
+                mSTATUS = STATUS.UN_CHECK;
                 break;
             case UN_CHECK:
-                mImageView.setColorFilter(ContextCompat.getColor(context,R.color.white));
+                mImageView.startAnimation(mAnimationRight);
+                mImageView.setColorFilter(ContextCompat.getColor(context, R.color.yellow));
+                mSTATUS = STATUS.CHECK;
                 break;
             default:
                 break;
         }
     }
-    private void addOnClick(Context context) {
-        mRelativeLayout.setOnClickListener(view -> {
-            if(mSTATUS==STATUS.CHECK){
-                mOnClickStarListener.onUnCheckStar();
-                mSTATUS=STATUS.UN_CHECK;
-                chaneStatus(context);
-                return;
-            }
-            if(mSTATUS==STATUS.UN_CHECK){
-                mOnClickStarListener.onCheckStar();
-                mSTATUS=STATUS.CHECK;
-                chaneStatus(context);
-                return;
-            }
-        });
+    public void setSTATUS(STATUS STATUS) {
+        this.mSTATUS = STATUS;
+        changeStatus(getContext());
     }
-    
+    public void addOnClick(Property property) {
+        if (mSTATUS == STATUS.CHECK) {
+            mOnClickStarListener.onUnCheckStar(property);
+            changeStatus(getContext());
+            return;
+        }
+        if (mSTATUS == STATUS.UN_CHECK) {
+            mOnClickStarListener.onCheckStar(property);
+            changeStatus(getContext());
+            return;
+        }
+    }
     public void setOnClickStarListener(OnClickStarListener onClickStarListener) {
         mOnClickStarListener = onClickStarListener;
     }
     
-    public interface OnClickStarListener{
-        void onCheckStar();
-        void onUnCheckStar();
+    public interface OnClickStarListener {
+        
+        void onCheckStar(Property property);
+        
+        void onUnCheckStar(Property property);
     }
 }

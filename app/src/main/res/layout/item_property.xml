@@ -12,6 +12,7 @@
 <android.support.v7.widget.CardView
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
+  android:background="?android:attr/selectableItemBackground"
   android:layout_marginTop="10dp"
   android:layout_marginBottom="10dp">
   <LinearLayout
@@ -42,15 +43,14 @@
         android:layout_alignParentBottom="true"
         android:textSize="25dp"
         app:textDoublePrice="@{property.price}"/>
-      <ImageView
+      <com.odauday.ui.view.StarView
+        android:id="@+id/star_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/ic_star"
         android:layout_alignParentRight="true"
-        android:tint="@color/yellow"
-        android:onClick="@{() -> handler.onClickProperty(property)}"
+        android:onClick="@{(view)->handler.onClickFavorite(view,property)}"
         />
     </RelativeLayout>
 

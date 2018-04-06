@@ -16,6 +16,7 @@ import com.odauday.R;
  */
 
 public class HeaderFavoriteView extends RelativeLayout {
+    
     private TextView mTextViewTitle;
     private ImageView mImageViewShare;
     private ImageView mImageViewMap;
@@ -44,9 +45,10 @@ public class HeaderFavoriteView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-    private void init(Context context){
+    
+    private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -58,18 +60,19 @@ public class HeaderFavoriteView extends RelativeLayout {
     }
     
     private void initPopup(Context context) {
-        mPopupMenuSort= new PopupMenu(context, mRelativeLayoutSort);
+        mPopupMenuSort = new PopupMenu(context, mRelativeLayoutSort);
         mPopupMenuSort.getMenuInflater().inflate(R.menu.popup_menu_sort, mPopupMenuSort.getMenu());
         mPopupMenuSort.setOnMenuItemClickListener(item -> {
-            if(mOnItemClickMenuSort!=null){
+            if (mOnItemClickMenuSort != null) {
                 mOnItemClickMenuSort.onClickItemMenuSort(item);
             }
             return false;
         });
-        mPopupMenuFilter=new PopupMenu(context,mRelativeLayoutFilter);
-        mPopupMenuFilter.getMenuInflater().inflate(R.menu.popup_menu_filter, mPopupMenuFilter.getMenu());
+        mPopupMenuFilter = new PopupMenu(context, mRelativeLayoutFilter);
+        mPopupMenuFilter.getMenuInflater()
+            .inflate(R.menu.popup_menu_filter, mPopupMenuFilter.getMenu());
         mPopupMenuFilter.setOnMenuItemClickListener(item -> {
-            if(mOnItemClickMenuFilter!=null){
+            if (mOnItemClickMenuFilter != null) {
                 mOnItemClickMenuFilter.onClickItemMenuFilter(item);
             }
             return false;
@@ -77,30 +80,27 @@ public class HeaderFavoriteView extends RelativeLayout {
     }
     
     private void bindView(View rootView) {
-        if(rootView==null){
+        if (rootView == null) {
             return;
         }
-        mTextViewTitle=rootView.findViewById(R.id.txt_title);
-        mImageViewShare=rootView.findViewById(R.id.image_share);
-        mImageViewMap=rootView.findViewById(R.id.image_map);
-        mRelativeLayoutSort=rootView.findViewById(R.id.relative_layout_sort);
-        mTextViewSort=rootView.findViewById(R.id.txt_sort_name);
-        mRelativeLayoutFilter=rootView.findViewById(R.id.relative_layout_filter);
-        mTextViewFilter=rootView.findViewById(R.id.txt_filter_name);
+        mTextViewTitle = rootView.findViewById(R.id.txt_title);
+        mImageViewShare = rootView.findViewById(R.id.image_share);
+        mImageViewMap = rootView.findViewById(R.id.image_map);
+        mRelativeLayoutSort = rootView.findViewById(R.id.relative_layout_sort);
+        mTextViewSort = rootView.findViewById(R.id.txt_sort_name);
+        mRelativeLayoutFilter = rootView.findViewById(R.id.relative_layout_filter);
+        mTextViewFilter = rootView.findViewById(R.id.txt_filter_name);
         
-       
+        
     }
-    private void addOnClick(){
-        if(mOnClickShareListener!=null){
-            mImageViewShare.setOnClickListener(view ->{
-                mOnClickShareListener.onClick(view);
-            });
-        }
-        if(mOnClickMapListener!=null){
-            mImageViewMap.setOnClickListener(view -> {
-                mOnClickMapListener.onClick(view);
-            });
-        }
+    
+    private void addOnClick() {
+        mImageViewShare.setOnClickListener(view -> {
+            mOnClickShareListener.onClick(view);
+        });
+        mImageViewMap.setOnClickListener(view -> {
+            mOnClickMapListener.onClick(view);
+        });
         mRelativeLayoutSort.setOnClickListener(view -> {
             mPopupMenuSort.show();
         });
@@ -109,32 +109,39 @@ public class HeaderFavoriteView extends RelativeLayout {
         });
         return;
     }
-    public void setTitle(String title){
+    
+    public void setTitle(String title) {
         mTextViewTitle.setText(title);
     }
-    public void setOnClickShareListener(OnClickShareListener onClickShareListener){
-        this.mOnClickShareListener=onClickShareListener;
+    
+    public void setOnClickShareListener(OnClickShareListener onClickShareListener) {
+        this.mOnClickShareListener = onClickShareListener;
     }
-    public void setOnClickMapListener(OnClickMapListener onClickMapListener){
-        this.mOnClickMapListener=onClickMapListener;
+    
+    public void setOnClickMapListener(OnClickMapListener onClickMapListener) {
+        this.mOnClickMapListener = onClickMapListener;
     }
+    
     public void setOnItemClickMenuSort(
-              OnItemClickMenuSort onItemClickMenuSort) {
+        OnItemClickMenuSort onItemClickMenuSort) {
         mOnItemClickMenuSort = onItemClickMenuSort;
     }
     
     public void setOnItemClickMenuFilter(
-              OnItemClickMenuFilter onItemClickMenuFilter) {
+        OnItemClickMenuFilter onItemClickMenuFilter) {
         mOnItemClickMenuFilter = onItemClickMenuFilter;
     }
-    public void setTextViewSort(String textViewSort){
+    
+    public void setTextViewSort(String textViewSort) {
         this.mTextViewSort.setText(textViewSort);
     }
-    public void setTextViewFilter(String textViewFilter){
+    
+    public void setTextViewFilter(String textViewFilter) {
         this.mTextViewFilter.setText(textViewFilter);
     }
     
-    public static class Builder{
+    public static class Builder {
+        
         private Context mContext;
         private String mTitle;
         private OnClickShareListener mOnClickShareListener;
@@ -142,34 +149,39 @@ public class HeaderFavoriteView extends RelativeLayout {
         private OnItemClickMenuSort mOnItemClickMenuSort;
         private OnItemClickMenuFilter mOnItemClickMenuFilter;
         
-        public Builder(Context context){
-            this.mContext=context;
+        public Builder(Context context) {
+            this.mContext = context;
         }
-        public Builder setTitle(String title){
-            this.mTitle=title;
+        
+        public Builder setTitle(String title) {
+            this.mTitle = title;
             return this;
         }
-        public Builder setOnClickShareListener(OnClickShareListener onClickShareListener){
-            this.mOnClickShareListener=onClickShareListener;
+        
+        public Builder setOnClickShareListener(OnClickShareListener onClickShareListener) {
+            this.mOnClickShareListener = onClickShareListener;
             return this;
         }
-        public Builder setOnClickMapListener(OnClickMapListener onClickMapListener){
-            this.mOnClickMapListener=onClickMapListener;
+        
+        public Builder setOnClickMapListener(OnClickMapListener onClickMapListener) {
+            this.mOnClickMapListener = onClickMapListener;
             return this;
         }
+        
         public Builder setOnItemClickMenuSort(
-                  OnItemClickMenuSort onItemClickMenuSort) {
+            OnItemClickMenuSort onItemClickMenuSort) {
             this.mOnItemClickMenuSort = onItemClickMenuSort;
             return this;
         }
-    
+        
         public Builder setOnItemClickMenuFilter(
-                  OnItemClickMenuFilter onItemClickMenuFilter) {
+            OnItemClickMenuFilter onItemClickMenuFilter) {
             this.mOnItemClickMenuFilter = onItemClickMenuFilter;
             return this;
         }
-        public HeaderFavoriteView build(){
-            HeaderFavoriteView headerFavoriteView=new HeaderFavoriteView(mContext);
+        
+        public HeaderFavoriteView build() {
+            HeaderFavoriteView headerFavoriteView = new HeaderFavoriteView(mContext);
             headerFavoriteView.setTitle(mTitle);
             headerFavoriteView.setOnClickShareListener(mOnClickShareListener);
             headerFavoriteView.setOnClickMapListener(mOnClickMapListener);
@@ -179,16 +191,23 @@ public class HeaderFavoriteView extends RelativeLayout {
         }
     }
     
-    public interface OnClickShareListener{
+    public interface OnClickShareListener {
+        
         void onClick(View view);
     }
-    public interface OnClickMapListener{
+    
+    public interface OnClickMapListener {
+        
         void onClick(View view);
     }
-    public interface  OnItemClickMenuSort{
+    
+    public interface OnItemClickMenuSort {
+        
         void onClickItemMenuSort(MenuItem item);
     }
-    public interface  OnItemClickMenuFilter{
+    
+    public interface OnItemClickMenuFilter {
+        
         void onClickItemMenuFilter(MenuItem item);
     }
 }

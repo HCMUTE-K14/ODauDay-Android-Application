@@ -1,20 +1,26 @@
 package com.odauday.ui.favorite;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
 import com.odauday.databinding.ItemPropertyBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
+import com.odauday.ui.view.StarView;
+import com.odauday.ui.view.StarView.OnClickStarListener;
 import java.util.ArrayList;
 import java.util.List;
+import timber.log.Timber;
 
 /**
  * Created by kunsubin on 4/5/2018.
  */
 
 public class FavoriteAdapter extends BaseAdapter<Property,ItemPropertyBinding> {
+    public static final String TAG=FavoriteAdapter.class.getSimpleName();
     public FavoriteAdapter() {
     
     }
@@ -30,7 +36,8 @@ public class FavoriteAdapter extends BaseAdapter<Property,ItemPropertyBinding> {
     protected void bind(ItemPropertyBinding binding, Property item) {
         binding.setProperty(item);
         binding.setHandler(this);
-        //ImageLoader.load(binding.imageRoom,item.getImages().get(0).getUrl().toString().trim());
+        binding.starView.setOnClickStarListener(mOnClickStarListener);
+        
     }
     
     @Override
@@ -52,8 +59,17 @@ public class FavoriteAdapter extends BaseAdapter<Property,ItemPropertyBinding> {
         data.addAll(_data);
         notifyDataSetChanged();
     }
-    
-    public void onClickProperty(Property property){
-    
+    StarView.OnClickStarListener mOnClickStarListener=new OnClickStarListener() {
+        @Override
+        public void onCheckStar(Property property) {
+            Timber.tag(TAG).d("Check: "+property.getName());
+        }
+        @Override
+        public void onUnCheckStar(Property property) {
+            Timber.tag(TAG).d("UnCheck: "+property.getName());
+        }
+    };
+    public void onClickFavorite(View view, Property property){
+        ((StarView)view).addOnClick(property);
     }
 }
