@@ -7,8 +7,7 @@ public enum ApiLanguageSupport {
 
     VI("vi"),
     EN("en");
-
-
+    
     private final String lang;
 
     ApiLanguageSupport(String lang) {

@@ -35,9 +35,9 @@ public class ChangePasswordRequest {
     @Override
     public String toString() {
         return "ChangePasswordRequest{" +
-            "userId='" + userId + '\'' +
-            ", oldPassword='" + oldPassword + '\'' +
-            ", newPassword='" + newPassword + '\'' +
-            '}';
+               "userId='" + userId + '\'' +
+               ", oldPassword='" + oldPassword + '\'' +
+               ", newPassword='" + newPassword + '\'' +
+               '}';
     }
 }

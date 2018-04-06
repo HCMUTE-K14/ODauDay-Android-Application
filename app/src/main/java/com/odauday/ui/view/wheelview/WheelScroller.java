@@ -32,7 +32,7 @@ import android.widget.Scroller;
  * Scroller class handles scrolling events and updates the
  */
 public class WheelScroller {
-
+    
     /**
      * Minimum delta for scrolling
      */
@@ -64,7 +64,7 @@ public class WheelScroller {
             if (delta != 0) {
                 listener.onScroll(delta);
             }
-
+            
             // scrolling is not finished when it comes to final Y
             // so, finish it manually
             if (Math.abs(currY - scroller.getFinalY()) < MIN_DELTA_FOR_SCROLLING) {
@@ -87,7 +87,7 @@ public class WheelScroller {
             //  when user touch and move the wheel
             return true;
         }
-
+        
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             lastScrollY = 0;
             final int maxY = 0x7FFFFFFF;
@@ -97,7 +97,7 @@ public class WheelScroller {
             return true;
         }
     };
-
+    
     /**
      * Constructor
      *
@@ -107,13 +107,13 @@ public class WheelScroller {
     public WheelScroller(Context context, ScrollingListener listener) {
         gestureDetector = new GestureDetector(context, gestureListener);
         gestureDetector.setIsLongpressEnabled(false);
-
+        
         scroller = new Scroller(context);
-
+        
         this.listener = listener;
         this.context = context;
     }
-
+    
     /**
      * Set the the specified scrolling interpolator
      *
@@ -123,7 +123,7 @@ public class WheelScroller {
         scroller.forceFinished(true);
         scroller = new Scroller(context, interpolator);
     }
-
+    
     /**
      * Scroll the wheel
      *
@@ -132,22 +132,22 @@ public class WheelScroller {
      */
     public void scroll(int distance, int time) {
         scroller.forceFinished(true);
-
+        
         lastScrollY = 0;
-
+        
         scroller.startScroll(0, 0, 0, distance, time != 0 ? time : SCROLLING_DURATION);
         setNextMessage(MESSAGE_SCROLL);
-
+        
         startScrolling();
     }
-
+    
     /**
      * Stops scrolling
      */
     public void stopScrolling() {
         scroller.forceFinished(true);
     }
-
+    
     /**
      * Handles Touch event
      *
@@ -160,7 +160,7 @@ public class WheelScroller {
                 scroller.forceFinished(true);
                 clearMessages();
                 break;
-
+            
             case MotionEvent.ACTION_MOVE:
                 // perform scrolling
                 int distanceY = (int) (event.getY() - lastTouchedY);
@@ -171,14 +171,14 @@ public class WheelScroller {
                 }
                 break;
         }
-
+        
         if (!gestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent.ACTION_UP) {
             justify();
         }
-
+        
         return true;
     }
-
+    
     /**
      * Set next message to queue. Clears queue before.
      *
@@ -188,7 +188,7 @@ public class WheelScroller {
         clearMessages();
         animationHandler.sendEmptyMessage(message);
     }
-
+    
     /**
      * Clears messages from queue
      */
@@ -196,7 +196,7 @@ public class WheelScroller {
         animationHandler.removeMessages(MESSAGE_SCROLL);
         animationHandler.removeMessages(MESSAGE_JUSTIFY);
     }
-
+    
     /**
      * Justifies wheel
      */
@@ -204,7 +204,7 @@ public class WheelScroller {
         listener.onJustify();
         setNextMessage(MESSAGE_JUSTIFY);
     }
-
+    
     /**
      * Starts scrolling
      */
@@ -214,7 +214,7 @@ public class WheelScroller {
             listener.onStarted();
         }
     }
-
+    
     /**
      * Finishes scrolling
      */
@@ -224,29 +224,29 @@ public class WheelScroller {
             isScrollingPerformed = false;
         }
     }
-
+    
     /**
      * Scrolling listener interface
      */
     public interface ScrollingListener {
-
+        
         /**
          * Scrolling callback called when scrolling is performed.
          *
          * @param distance the distance to scroll
          */
         void onScroll(int distance);
-
+        
         /**
          * Starting callback called when scrolling is started
          */
         void onStarted();
-
+        
         /**
          * Finishing callback called after justifying
          */
         void onFinished();
-
+        
         /**
          * Justifying callback called to justify a view when scrolling is ended
          */

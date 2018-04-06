@@ -37,7 +37,7 @@ public class MyProgressBar extends RelativeLayout {
     private void init(Context context) {
 
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -49,8 +49,8 @@ public class MyProgressBar extends RelativeLayout {
             return;
         }
         mProgressBar.getIndeterminateDrawable().setColorFilter(
-            ContextCompat.getColor(context, R.color.colorPrimary),
-            PorterDuff.Mode.SRC_IN);
+                  ContextCompat.getColor(context, R.color.colorPrimary),
+                  PorterDuff.Mode.SRC_IN);
     }
 
     @Override

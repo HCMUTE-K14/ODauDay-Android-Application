@@ -21,8 +21,8 @@ import javax.inject.Inject;
  */
 
 public class GithubUserActivity extends
-    BaseMVVMActivity<GithubUserActivityBinding> implements
-    GithubUserContract {
+                                BaseMVVMActivity<GithubUserActivityBinding> implements
+                                                                            GithubUserContract {
 
     @Inject
     GithubUserViewModel mGithubUserViewModel;
@@ -80,9 +80,9 @@ public class GithubUserActivity extends
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager)
-                    recyclerView.getLayoutManager();
+                          recyclerView.getLayoutManager();
                 int lastPosition = layoutManager
-                    .findLastVisibleItemPosition();
+                          .findLastVisibleItemPosition();
                 if (lastPosition == mGithubUserAdapter.getItemCount() - 1) {
                     mGithubUserViewModel.loadNextPage();
                 }
@@ -100,8 +100,8 @@ public class GithubUserActivity extends
 
     private void showOrHideProgressBar(boolean isLoading) {
         new Handler().postDelayed(
-            () -> mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE),
-            1000);
+                  () -> mBinding.progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE),
+                  1000);
     }
 
     @Override

@@ -15,18 +15,18 @@
       android:layout_height="wrap_content"
       android:padding="16dp"
       android:textColor="#0ea800"
-      android:textSize="23sp"/>
+      android:textSize="23sp" />
     <View
       android:id="@+id/dialog_header_line"
       android:layout_width="match_parent"
       android:layout_height="4dp"
       android:layout_below="@id/dialog_txt_header"
-      android:background="@drawable/green_divider_line"/>
+      android:background="@drawable/green_divider_line" />
     <FrameLayout
       android:id="@+id/dialog_content"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/dialog_header_line"/>
+      android:layout_below="@id/dialog_header_line" />
   </RelativeLayout>
   <LinearLayout
     android:id="@+id/dialog_layout_btn"
@@ -42,7 +42,7 @@
       android:layout_weight="1.0"
       android:padding="15dp"
       android:textColor="@color/colorPrimary"
-      android:textSize="12sp"/>
+      android:textSize="20sp" />
     <Button
       android:id="@+id/dialog_btn_ok"
       style="?android:attr/borderlessButtonStyle"
@@ -51,6 +51,6 @@
       android:layout_weight="1.0"
       android:padding="15dp"
       android:textColor="@color/colorPrimary"
-      android:textSize="12sp"/>
+      android:textSize="20sp" />
   </LinearLayout>
 </RelativeLayout>

@@ -10,16 +10,16 @@ import dagger.Provides;
  */
 @Module
 public class MainActivityModule {
-
+    
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(MainActivityViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-
+    
     @Provides
     MainActivityViewModel provideMainActivityViewModel() {
         return new MainActivityViewModel();
     }
-
-
+    
+    
 }

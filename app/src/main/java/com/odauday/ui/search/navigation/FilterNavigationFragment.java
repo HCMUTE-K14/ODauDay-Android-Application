@@ -8,8 +8,10 @@ import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.FragmentFilterBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
-import com.odauday.ui.search.common.view.FilterNumberPickerDialog.OnCompletePickedListener;
+import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.ui.search.common.view.FilterNumberPickerDialog.OnCompletePickedNumberListener;
 import com.odauday.ui.search.common.view.OnCompletePickedType;
+import com.odauday.ui.search.common.view.tagdialog.TagChip;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.List;
 import javax.inject.Inject;
@@ -20,26 +22,30 @@ import timber.log.Timber;
  */
 
 public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBinding> implements
-    OnCompletePickedListener, OnCompletePickedType {
-
+                                                                                      OnCompletePickedNumberListener,
+                                                                                      OnCompletePickedType {
+    
     //====================== Variable =========================//
     public static final String TAG = FilterNavigationFragment.class.getSimpleName();
-
+    
     @Inject
     FilterNavigationViewModel mFilterNavigationViewModel;
-
+    
+    
+    private SearchCriteria mSearchCriteria;
+    
     private boolean mIsShowMoreOptions = false;
-
+    
     //====================== Constructor =========================//
-    public static FilterNavigationFragment newInstance() {
-
+    public static FilterNavigationFragment newInstance(SearchCriteria searchCriteria) {
+        
         Bundle args = new Bundle();
-
+        
         FilterNavigationFragment fragment = new FilterNavigationFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
+    
     //====================== Override Base Method =========================//
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -48,27 +54,27 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         mBinding.get().setViewModel(mFilterNavigationViewModel);
         initFilterView();
     }
-
+    
     @Override
     public int getLayoutId() {
         return R.layout.fragment_filter;
     }
-
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return null;
     }
-
+    
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
-
+    
     //====================== Implement method =========================//
-
+    
     @Override
     public void onCompletePickedNumber(int requestCode, int pickedValueFrom, int pickedValueTo) {
-
+        
         FilterOption option = FilterOption.getByRequestCode(requestCode);
         switch (option) {
             case PRICE:
@@ -77,12 +83,12 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
             case BATHROOMS:
             case PARKING:
                 Toast.makeText(getContext(), pickedValueFrom + "-" + pickedValueTo,
-                    Toast.LENGTH_SHORT).show();
+                          Toast.LENGTH_SHORT).show();
             default:
                 break;
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public void onCompletePickedType(int requestCode, Object value) {
@@ -92,44 +98,48 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 List<Integer> listSelectedPropertyType = (List<Integer>) value;
                 Timber.d(listSelectedPropertyType.toString());
                 break;
+            case TAGS:
+                List<TagChip> selectedTag = (List<TagChip>) value;
+                Timber.d(selectedTag.toString());
+                break;
             default:
                 break;
         }
     }
-
+    
     //====================== Contract method =========================//
     //====================== Helper method =========================//
-
+    
     private void initFilterView() {
         mBinding.get().scrollView.setOnTouchListener(null);
         mBinding.get().filterSearchType.setListener(searchType -> {
-
+        
         });
-
+        
         mBinding.get().btnMoreOptions.setOnClickListener(view -> {
             toggleMoreOptions();
         });
     }
-
+    
     public void toggleMoreOptions() {
         mIsShowMoreOptions = !mIsShowMoreOptions;
         showAdvancedOptions(mIsShowMoreOptions);
         mBinding.get().btnMoreOptions.postDelayed(() -> {
             mBinding.get().scrollView
-                .fullScroll(View.FOCUS_DOWN);
+                      .fullScroll(View.FOCUS_DOWN);
         }, 500);
     }
-
+    
     private void showAdvancedOptions(boolean show) {
         mBinding.get().filterAdvanceOption.setVisibility(show ? View.VISIBLE : View.GONE);
         mBinding.get().btnMoreOptions.setText(show ? R.string.txt_filter_less_options
-            : R.string.txt_filter_more_options);
+                  : R.string.txt_filter_more_options);
     }
-
+    
     private void resetMoreOptions() {
         mIsShowMoreOptions = false;
         mBinding.get().btnMoreOptions.setText(R.string.txt_filter_more_options);
         mBinding.get().filterAdvanceOption.setVisibility(View.GONE);
     }
-
+    
 }

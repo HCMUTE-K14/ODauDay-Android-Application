@@ -10,6 +10,7 @@ import dagger.Provides;
  */
 @Module
 public class FilterNavigationModule {
+
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(FilterNavigationViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);

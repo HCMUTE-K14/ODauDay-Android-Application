@@ -23,29 +23,29 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ViewBuildersModule {
-
+    
     @ContributesAndroidInjector(modules = LoginModule.class)
     @PerActivity
     abstract LoginActivity bindLoginActivity();
-
-
+    
+    
     @ContributesAndroidInjector(modules = RegisterModule.class)
     @PerActivity
     abstract RegisterActivity bindRegisterActivity();
-
+    
     @ContributesAndroidInjector(modules = ForgotPasswordModule.class)
     @PerActivity
     abstract ForgotPasswordActivity bindForgotPasswordActivity();
-
+    
     @ContributesAndroidInjector(modules = {
-        SearchTabProvider.class,
-        AlertTabProvider.class,
-        FavoriteTabProvider.class,
-        SavedSearchProvider.class,
-        MoreTabProvider.class,
-        MainActivityModule.class
+              SearchTabProvider.class,
+              AlertTabProvider.class,
+              FavoriteTabProvider.class,
+              SavedSearchProvider.class,
+              MoreTabProvider.class,
+              MainActivityModule.class
     })
     @PerActivity
     abstract MainActivity bindMainActivity();
-
+    
 }

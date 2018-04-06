@@ -1,7 +1,6 @@
 package com.odauday.ui.search.common.view;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,31 +18,31 @@ import com.odauday.ui.view.wheelview.WheelView;
  */
 
 public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWheelScrollListener {
-
+    
     public boolean mHasToWheel;
     public boolean mIsCurrency;
     public FilterNumberPicker mFilterNumberPickerFrom;
     public FilterNumberPicker mFilterNumberPickerTo;
-
+    
     public static FilterNumberPickerDialog newInstance(Builder builder) {
-
+        
         if (!builder.isCurrency) {
             return FilterNumberPickerDialog
-                .newInstance(builder.title, builder.valueRes, builder.displayValueRes,
-                    builder.selectedFrom, builder.selectedTo, builder.hasToWheel);
+                      .newInstance(builder.title, builder.valueRes, builder.displayValueRes,
+                                builder.selectedFrom, builder.selectedTo, builder.hasToWheel);
         } else {
             return FilterNumberPickerDialog.newInstanceWithCurrency(builder.title, builder.valueRes,
-                builder.selectedFrom, builder.selectedTo);
+                      builder.selectedFrom, builder.selectedTo);
         }
     }
-
+    
     private static FilterNumberPickerDialog newInstance(
-        String title, int valueRes,
-        int displayValueRes, int selectedFrom,
-        int selectedTo, boolean hasToWheel) {
-
+              String title, int valueRes,
+              int displayValueRes, int selectedFrom,
+              int selectedTo, boolean hasToWheel) {
+        
         FilterNumberPickerDialog dialog = new FilterNumberPickerDialog();
-
+        
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", title);
         bundle.putInt(Constants.INTENT_EXTRA_VALUE_RES, valueRes);
@@ -53,15 +52,15 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         bundle.putBoolean(Constants.INTENT_EXTRA_HAS_TO_WHEEL, hasToWheel);
         bundle.putBoolean(Constants.INTENT_EXTRA_IS_CURRENCY, false);
         dialog.setArguments(bundle);
-
+        
         return dialog;
     }
-
+    
     private static FilterNumberPickerDialog newInstanceWithCurrency(
-        String title, int valueRes,
-        int selectedFrom, int selectedTo) {
+              String title, int valueRes,
+              int selectedFrom, int selectedTo) {
         FilterNumberPickerDialog dialog = new FilterNumberPickerDialog();
-
+        
         Bundle bundle = new Bundle();
         bundle.putString("TITLE", title);
         bundle.putInt(Constants.INTENT_EXTRA_VALUE_RES, valueRes);
@@ -70,73 +69,68 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         bundle.putBoolean(Constants.INTENT_EXTRA_HAS_TO_WHEEL, true);
         bundle.putBoolean(Constants.INTENT_EXTRA_IS_CURRENCY, true);
         dialog.setArguments(bundle);
-
+        
         return dialog;
     }
-
+    
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (getArguments() == null) {
             throw new IllegalArgumentException("Need bundle to init this dialog");
         }
-
+        
         this.mIsCurrency = getArguments().getBoolean(Constants.INTENT_EXTRA_IS_CURRENCY, false);
         this.mHasToWheel = getArguments().getBoolean(Constants.INTENT_EXTRA_HAS_TO_WHEEL, true);
-
+        
         View v = View.inflate(getActivity(), R.layout.layout_dialog_choose_max_min, null);
         this.mFilterNumberPickerFrom = v.findViewById(R.id.filter_from);
         this.mFilterNumberPickerTo = v.findViewById(R.id.filter_to);
         this.mFilterNumberPickerFrom.addScrollingListener(this);
         this.mFilterNumberPickerTo.addScrollingListener(this);
-
+        
         if (this.mIsCurrency) {
             int[] intValues = getResources()
-                .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+                      .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
             this.mFilterNumberPickerFrom
-                .setViewAdapter(new WheelAdapterImpl(this, intValues, true, true));
+                      .setViewAdapter(new WheelAdapterImpl(this, intValues, true, true));
             this.mFilterNumberPickerTo
-                .setViewAdapter(new WheelAdapterImpl(this, intValues, false, true));
+                      .setViewAdapter(new WheelAdapterImpl(this, intValues, false, true));
         } else {
             String[] displayedValues = getResources().getStringArray(
-                getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
+                      getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
             this.mFilterNumberPickerFrom
-                .setViewAdapter(new WheelAdapterImpl(this, displayedValues, true, true));
+                      .setViewAdapter(new WheelAdapterImpl(this, displayedValues, true, true));
             this.mFilterNumberPickerTo
-                .setViewAdapter(new WheelAdapterImpl(this, displayedValues, false, true));
+                      .setViewAdapter(new WheelAdapterImpl(this, displayedValues, false, true));
         }
         int currentItemFrom = getSelectedValue(
-            getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_FROM));
+                  getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_FROM));
         this.mFilterNumberPickerFrom.setCurrentItem(currentItemFrom);
         this.mFilterNumberPickerFrom.setHeading(getString(R.string.txt_min));
-
+        
         if (this.mHasToWheel) {
             int currentItemTo = getSelectedValue(
-                getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_TO));
+                      getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_TO));
             this.mFilterNumberPickerTo.setCurrentItem(currentItemTo);
             this.mFilterNumberPickerTo.setHeading(getString(R.string.txt_max));
         } else {
             this.mFilterNumberPickerTo.setVisibility(View.GONE);
         }
-
+        
         setTitle(getArguments().getString("TITLE"));
         setContent(v);
-        setPositiveButton(getString(R.string.txt_done), null);
-        setNegativeButton(getString(R.string.txt_cancel), null);
-        final AlertDialog dialog = (AlertDialog) create();
-        setOnShowDialog(dialogInterface -> {
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                .setOnClickListener(new OnShowFilterPickerDialogEvent());
-        });
-        return dialog;
+        setPositiveButton(getString(R.string.txt_done), false,
+                  new OnShowFilterPickerDialogEvent());
+        return (AlertDialog) create();
     }
-
+    
     private int getSelectedValue(int selectedValue) {
         if (getArguments() == null) {
             throw new IllegalArgumentException("Need bundle to init this dialog");
         }
         int[] intValues = getResources()
-            .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+                  .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
         if (this.mIsCurrency && selectedValue == 0) {
             return 0;
         }
@@ -152,30 +146,37 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         }
         return 0;
     }
-
+    
+    public void onPause() {
+        super.onPause();
+        this.mFilterNumberPickerFrom.removeScrollingListener(this);
+        this.mFilterNumberPickerTo.removeScrollingListener(this);
+    }
+    
+    
     @Override
     public void onScrollingStarted(WheelView wheel) {
 
     }
-
+    
     @Override
     public void onScrollingFinished(WheelView wheel) {
         switch (wheel.getId()) {
             case R.id.filter_from:
                 if (this.mFilterNumberPickerTo.getCurrentItem() > 0 &&
                     this.mFilterNumberPickerFrom.getCurrentItem() >
-                        this.mFilterNumberPickerTo.getCurrentItem()) {
+                    this.mFilterNumberPickerTo.getCurrentItem()) {
                     this.mFilterNumberPickerTo
-                        .setCurrentItem(this.mFilterNumberPickerFrom.getCurrentItem(), true);
+                              .setCurrentItem(this.mFilterNumberPickerFrom.getCurrentItem(), true);
                     return;
                 }
                 return;
             case R.id.filter_to:
                 if (this.mFilterNumberPickerTo.getCurrentItem() != 0 &&
                     this.mFilterNumberPickerTo.getCurrentItem() <
-                        this.mFilterNumberPickerFrom.getCurrentItem()) {
+                    this.mFilterNumberPickerFrom.getCurrentItem()) {
                     this.mFilterNumberPickerFrom
-                        .setCurrentItem(this.mFilterNumberPickerTo.getCurrentItem(), true);
+                              .setCurrentItem(this.mFilterNumberPickerTo.getCurrentItem(), true);
                     return;
                 }
                 return;
@@ -183,14 +184,14 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                 return;
         }
     }
-
+    
     private int getIntValue(FilterNumberPicker picker) {
         if (getArguments() == null) {
             throw new IllegalArgumentException("Need bundle to init this dialog");
         }
         int index = picker.getCurrentItem();
         int[] intValues = getResources()
-            .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+                  .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
         if (!this.mIsCurrency) {
             return intValues[index];
         }
@@ -199,14 +200,14 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         }
         return intValues[index - 1];
     }
-
-    public interface OnCompletePickedListener {
-
+    
+    public interface OnCompletePickedNumberListener {
+        
         void onCompletePickedNumber(int requestCode, int pickedValueFrom, int pickedValueTo);
     }
-
+    
     public static class Builder {
-
+        
         String title;
         int valueRes;
         int displayValueRes;
@@ -214,77 +215,79 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         int selectedTo;
         boolean hasToWheel;
         boolean isCurrency;
-
+        
         public Builder(boolean isCurrency) {
             this.isCurrency = isCurrency;
         }
-
+        
         public Builder setTitle(String title) {
             this.title = title;
             return this;
         }
-
+        
         public Builder setValueRes(int valueRes) {
             this.valueRes = valueRes;
             return this;
         }
-
+        
         public Builder setDisplayValueRes(int displayValueRes) {
             this.displayValueRes = displayValueRes;
             return this;
         }
-
+        
         public Builder setSelectedFrom(int selectedFrom) {
             this.selectedFrom = selectedFrom;
             return this;
         }
-
+        
         public Builder setSelectedTo(int selectedTo) {
             this.selectedTo = selectedTo;
             return this;
         }
-
+        
         public Builder setHasToWheel(boolean hasToWheel) {
             this.hasToWheel = hasToWheel;
             return this;
         }
-
+        
         public Builder setCurrency(boolean currency) {
             isCurrency = currency;
             return this;
         }
-
+        
         public FilterNumberPickerDialog build() {
             return FilterNumberPickerDialog.newInstance(this);
         }
     }
-
+    
     class OnShowFilterPickerDialogEvent implements View.OnClickListener {
-
+        
         @Override
         public void onClick(View view) {
             Fragment fragment = FilterNumberPickerDialog.this.getTargetFragment();
-            if (fragment != null && (fragment instanceof OnCompletePickedListener)) {
+            if (fragment != null && (fragment instanceof OnCompletePickedNumberListener)) {
                 int toValue;
                 if (FilterNumberPickerDialog.this.mHasToWheel) {
                     toValue = FilterNumberPickerDialog.this
-                        .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerTo);
+                              .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerTo);
                 } else {
                     toValue = 0;
                 }
                 int fromValue = FilterNumberPickerDialog.this
-                    .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerFrom);
-                if (!FilterNumberPickerDialog.this.mHasToWheel || toValue <= 0 || toValue >= fromValue) {
-                    ((OnCompletePickedListener) fragment)
-                        .onCompletePickedNumber(FilterNumberPickerDialog.this.getTargetRequestCode(),
-                            fromValue,
-                            toValue);
+                          .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerFrom);
+                if (!FilterNumberPickerDialog.this.mHasToWheel || toValue <= 0 ||
+                    toValue >= fromValue) {
+                    ((OnCompletePickedNumberListener) fragment)
+                              .onCompletePickedNumber(
+                                        FilterNumberPickerDialog.this.getTargetRequestCode(),
+                                        fromValue,
+                                        toValue);
                     FilterNumberPickerDialog.this.dismiss();
                     return;
                 }
                 Toast.makeText(FilterNumberPickerDialog.this.getActivity(),
-                    R.string.message_max_value_less_than_min_value, Toast.LENGTH_SHORT)
-                    .show();
+                          R.string.message_max_value_less_than_min_value, Toast.LENGTH_SHORT)
+                          .show();
             }
         }
     }

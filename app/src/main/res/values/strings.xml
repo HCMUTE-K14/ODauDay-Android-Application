@@ -63,4 +63,6 @@
   <string name="property_type_level_3">Third-Level house</string>
   <string name="property_type_level_4">Four-Level house</string>
   <string name="txt_property_type">Property Type</string>
+  <string name="txt_tags_hint">eg. study, pool, george st, etc</string>
+  <string name="txt_recent_tag">Recent Tags</string>
 </resources>

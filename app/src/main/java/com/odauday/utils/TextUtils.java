@@ -35,8 +35,8 @@ public class TextUtils {
         }
         StringBuilder stringBuilder = new StringBuilder();
         Object valueOf = (d > 99.9d || isRound || (!isRound && d > 9.99d))
-            ? Integer.valueOf((((int) d) * 10) / 10)
-            : d + "";
+                  ? Integer.valueOf((((int) d) * 10) / 10)
+                  : d + "";
         return stringBuilder.append(valueOf).append("").append(SHORT_MONEY[iteration]).toString();
     }
 }

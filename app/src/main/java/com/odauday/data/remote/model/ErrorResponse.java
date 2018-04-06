@@ -62,8 +62,8 @@ public class ErrorResponse implements BaseResponse {
     @Override
     public String toString() {
         return "ErrorResponse{" +
-            "code=" + code +
-            ", message='" + message + '\'' +
-            '}';
+               "code=" + code +
+               ", message='" + message + '\'' +
+               '}';
     }
 }

@@ -21,7 +21,7 @@ import dagger.android.support.AndroidSupportInjection;
  */
 
 public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseFragment implements
-    Injectable {
+                                                                                        Injectable {
 
     //====================== Variable Method =========================//
     protected AutoClearedData<VB> mBinding;
@@ -36,7 +36,7 @@ public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseF
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+              @Nullable Bundle savedInstanceState) {
         VB binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
 
         mBinding = new AutoClearedData<>(this, binding);

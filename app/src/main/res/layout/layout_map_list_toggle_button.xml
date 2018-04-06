@@ -17,7 +17,7 @@
     android:layout_toLeftOf="@id/text_btn"
     android:layout_toStartOf="@id/text_btn"
     android:contentDescription="@string/content_description_default"
-    android:src="@drawable/ic_fab_list"/>
+    android:src="@drawable/ic_fab_list" />
   <TextView
     android:id="@+id/text_btn"
     android:textStyle="bold"
@@ -29,5 +29,5 @@
     android:layout_centerVertical="true"
     android:text="@string/txt_list_view"
     android:textColor="#26b019"
-    android:textSize="14sp"/>
+    android:textSize="14sp" />
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.TextView;
 import com.odauday.R;
 
@@ -21,19 +22,19 @@ import com.odauday.R;
  */
 
 public class BaseDialogFragment extends DialogFragment {
-
+    
     private static final float MATCH_PARENT_WIDTH = 400.0f;
-
+    
     private Builder mDialogBuilder;
     private View mDialogView;
     private OnShowListener mOnShowListener;
-
+    
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.mDialogBuilder = setupDialog((AppCompatActivity) context);
     }
-
+    
     public Dialog create() {
         final Dialog dialogFragment = this.mDialogBuilder.create();
         dialogFragment.setCanceledOnTouchOutside(true);
@@ -52,33 +53,68 @@ public class BaseDialogFragment extends DialogFragment {
         });
         return dialogFragment;
     }
-
+    
     protected void setTitle(String title) {
         ((TextView) this.mDialogView.findViewById(R.id.dialog_txt_header)).setText(title);
     }
-
-    protected void setPositiveButton(String text, OnClickListener listener) {
+    
+    protected void setPositiveAlertDialogButton(String text, OnClickListener listener) {
         this.mDialogBuilder.setPositiveButton(text, listener);
     }
-
-    protected void setNegativeButton(String text, OnClickListener listener) {
+    
+    protected void setNegativeAlertDialogButton(String text, OnClickListener listener) {
         this.mDialogBuilder.setNegativeButton(text, listener);
     }
+    
+    protected void setPositiveButton(String text, boolean isShowNegativeButton,
+              View.OnClickListener listener) {
+        boolean isVisibleLayoutButton = this.mDialogView
+                                                  .findViewById(R.id.dialog_layout_btn)
+                                                  .getVisibility() == View.VISIBLE;
+        if (!isVisibleLayoutButton) {
+            this.mDialogView.findViewById(R.id.dialog_layout_btn)
+                      .setVisibility(View.VISIBLE);
+        }
 
+        this.mDialogView.findViewById(R.id.dialog_btn_cancel)
+                  .setVisibility(isShowNegativeButton ? View.VISIBLE : View.GONE);
+        
+        Button btn = this.mDialogView.findViewById(R.id.dialog_btn_ok);
+        btn.setText(text);
+        btn.setOnClickListener(listener);
+    }
+    
+    protected void setNegativeButton(String text, boolean isShowPositiveButton,
+              View.OnClickListener listener) {
+        boolean isVisibleLayoutButton = this.mDialogView
+                                                  .findViewById(R.id.dialog_layout_btn)
+                                                  .getVisibility() == View.VISIBLE;
+        if (!isVisibleLayoutButton) {
+            this.mDialogView.findViewById(R.id.dialog_layout_btn)
+                      .setVisibility(View.VISIBLE);
+        }
+        this.mDialogView.findViewById(R.id.dialog_btn_ok)
+                  .setVisibility(isShowPositiveButton ? View.VISIBLE : View.GONE);
+        
+        Button btn = this.mDialogView.findViewById(R.id.dialog_btn_cancel);
+        btn.setText(text);
+        btn.setOnClickListener(listener);
+    }
+    
     protected void setContent(View v) {
         ((ViewGroup) this.mDialogView.findViewById(R.id.dialog_content)).addView(v);
     }
-
+    
     protected void setOnShowDialog(OnShowListener listener) {
         this.mOnShowListener = listener;
     }
-
+    
     public Builder setupDialog(Activity activity) {
         Builder builder = new Builder(activity);
         this.mDialogView = View.inflate(activity, R.layout.layout_dialog_template, null);
         builder.setView(this.mDialogView);
         this.mDialogView.findViewById(R.id.dialog_layout_btn)
-            .setVisibility(View.GONE);
+                  .setVisibility(View.GONE);
         return builder;
     }
 }

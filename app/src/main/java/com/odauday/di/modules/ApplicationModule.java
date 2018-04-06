@@ -18,31 +18,33 @@ import javax.inject.Singleton;
 @PerApplication
 @Module
 public class ApplicationModule {
-
+    
     @Provides
     Context provideContext(RootApplication application) {
         return application.getApplicationContext();
-
+        
     }
-
+    
     @Provides
     @Named("baseURL")
     String provideBaseURL() {
         return EndPoint.BASE_URL;
     }
-
+    
     @Provides
     @Named("apiKey")
     String provideApiKey() {
         return BuildConfig.API_KEY;
     }
-
+    
+    
+    
     @Provides
     @Singleton
     PreferencesHelper providePreferencesHelper(Context context) {
         return new PreferencesHelper(context);
     }
-
+    
     @Provides
     SchedulersExecutor provideSchedulersExecutor() {
         return new SchedulersExecutor();

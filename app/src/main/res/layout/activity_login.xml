@@ -19,7 +19,7 @@
         layout="@layout/layout_back_button_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"/>
+        android:layout_marginLeft="15dp" />
 
       <LinearLayout
         android:id="@+id/main_layout"
@@ -35,7 +35,7 @@
           android:layout_height="150dp"
           android:layout_gravity="center_horizontal"
           android:contentDescription="@string/content_description_default"
-          app:loadImage="@{@drawable/logo}"/>
+          app:loadImage="@{@drawable/logo}" />
 
         <android.support.design.widget.TextInputLayout
           android:id="@+id/txt_input_email"
@@ -51,7 +51,7 @@
             android:hint="@string/txt_email"
             android:inputType="textEmailAddress"
             android:textColor="#303030"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -67,7 +67,7 @@
             android:hint="@string/txt_password"
             android:inputType="textPassword"
             android:textColor="#303030"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
@@ -82,14 +82,14 @@
           android:onClick="login"
           android:text="@string/txt_login"
           android:textColor="@color/color_text_login"
-          android:textSize="15sp"/>
+          android:textSize="15sp" />
 
         <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
           android:text="@string/txt_or"
-          android:textSize="15sp"/>
+          android:textSize="15sp" />
 
         <FrameLayout
           android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:id="@+id/btn_real_login_facebook"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
           <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login_with_facebook"
@@ -112,7 +112,7 @@
             android:onClick="login"
             android:text="@string/txt_login_with_facebook"
             android:textColor="@color/white"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         </FrameLayout>
 
@@ -133,7 +133,7 @@
             android:onClick="register"
             android:text="@string/txt_register"
             android:textColor="#2FB84D"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
           <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_forgot_password"
@@ -146,7 +146,7 @@
             android:onClick="forgotPassword"
             android:text="@string/txt_forgot_password"
             android:textColor="#2FB84D"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
         </LinearLayout>
       </LinearLayout>
       <com.odauday.ui.view.MyProgressBar
@@ -154,7 +154,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/btn_back"
-        android:visibility="gone"/>
+        android:visibility="gone" />
     </RelativeLayout>
 
   </ScrollView>

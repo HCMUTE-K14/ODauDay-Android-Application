@@ -12,18 +12,18 @@ public class AnimationUtils {
 
     public static void fadeOut(View view, float translationY, long duration) {
         view.animate()
-            .translationY(translationY)
-            .alpha(0.0f)
-            .setDuration(duration)
-            .start();
+                  .translationY(translationY)
+                  .alpha(0.0f)
+                  .setDuration(duration)
+                  .start();
     }
 
     public static void fadeIn(View view, float translationY, long duration) {
         view.animate()
-            .translationY(translationY)
-            .alpha(1.0f)
-            .setDuration(duration)
-            .start();
+                  .translationY(translationY)
+                  .alpha(1.0f)
+                  .setDuration(duration)
+                  .start();
     }
 
     public static Animation loadAnimation(Context context, int resourceId) {

@@ -13,7 +13,7 @@ import dagger.android.AndroidInjection;
  */
 
 public abstract class BaseMVVMActivity<VB extends ViewDataBinding> extends BaseActivity implements
-    Injectable {
+                                                                                        Injectable {
 
     //====================== Variable =============================//
 

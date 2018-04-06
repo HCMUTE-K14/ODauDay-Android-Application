@@ -10,7 +10,8 @@ public enum FilterOption {
     BEDROOMS(3, "FILTER_BEDROOM"),
     BATHROOMS(4, "FILTER_BATHROOM"),
     PARKING(5, "FILTER_PARKING"),
-    PROPERTY_TYPE(6, "PROPERTY_TYPE");
+    PROPERTY_TYPE(6, "PROPERTY_TYPE"),
+    TAGS(7, "TAGS");
 
     private int mRequestCode;
     private String mTag;
@@ -34,6 +35,8 @@ public enum FilterOption {
                 return FilterOption.PARKING;
             case 6:
                 return FilterOption.PROPERTY_TYPE;
+            case 7:
+                return FilterOption.TAGS;
             default:
                 throw new IllegalArgumentException("Not found FilterOption with request code");
         }

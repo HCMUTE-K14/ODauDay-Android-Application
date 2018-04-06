@@ -31,7 +31,7 @@ public class FacebookAuthRequest extends AbstractAuthRequest {
     }
 
     public FacebookAuthRequest(String facebookId, String email,
-        String displayName, String accessToken) {
+              String displayName, String accessToken) {
         super(LoginType.FACEBOOK);
         this.facebookId = facebookId;
         this.email = email;
@@ -98,10 +98,10 @@ public class FacebookAuthRequest extends AbstractAuthRequest {
     @Override
     public String toString() {
         return "FacebookAuthRequest{" +
-            "facebookId='" + facebookId + '\'' +
-            ", email='" + email + '\'' +
-            ", displayName='" + displayName + '\'' +
-            ", accessToken='" + accessToken + '\'' +
-            '}';
+               "facebookId='" + facebookId + '\'' +
+               ", email='" + email + '\'' +
+               ", displayName='" + displayName + '\'' +
+               ", accessToken='" + accessToken + '\'' +
+               '}';
     }
 }

@@ -18,28 +18,28 @@ import javax.inject.Singleton;
 @PerApplication
 @Singleton
 @Component(modules = {
-    AndroidSupportInjectionModule.class,
-    ApplicationModule.class,
-    NetworkModule.class,
-    ServiceBuildersModule.class,
-    RepositoryBuildersModule.class,
-    ViewBuildersModule.class})
+          AndroidSupportInjectionModule.class,
+          ApplicationModule.class,
+          NetworkModule.class,
+          ServiceBuildersModule.class,
+          RepositoryBuildersModule.class,
+          ViewBuildersModule.class})
 public interface ApplicationComponent {
-
+    
     void inject(RootApplication app);
-
+    
     @Component.Builder
     interface Builder {
-
+        
         @BindsInstance
         Builder application(RootApplication application);
-
+        
         Builder network(NetworkModule networkModule);
-
+        
         Builder service(ServiceBuildersModule serviceBuildersModule);
-
+        
         Builder repository(RepositoryBuildersModule repositoryBuildersModule);
-
+        
         ApplicationComponent build();
     }
 }

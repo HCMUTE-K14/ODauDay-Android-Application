@@ -9,7 +9,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class AlertTabProvider {
-
+    
     @ContributesAndroidInjector(modules = AlertTabModule.class)
     @PerFragment
     abstract AlertTabMainFragment provideAlertTab();

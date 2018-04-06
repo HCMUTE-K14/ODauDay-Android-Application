@@ -32,7 +32,7 @@ public class SearchTypeChooser extends LinearLayout {
     }
 
     public SearchTypeChooser(Context context,
-        @Nullable AttributeSet attrs) {
+              @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -44,7 +44,7 @@ public class SearchTypeChooser extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -59,8 +59,8 @@ public class SearchTypeChooser extends LinearLayout {
     private void setupSpinner(Context context) {
         List<String> searchTypes = getSearchTypes(context);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
-            android.R.layout.simple_spinner_item,
-            searchTypes);
+                  android.R.layout.simple_spinner_item,
+                  searchTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -68,7 +68,7 @@ public class SearchTypeChooser extends LinearLayout {
             public void onItemSelected(AdapterView<?> adapterView, View view, final int i, long l) {
                 if (mListener != null) {
                     new Handler().postDelayed(
-                        () -> mListener.onSelectedSearchType(SearchType.getByValue(i)), 10);
+                              () -> mListener.onSelectedSearchType(SearchType.getByValue(i)), 10);
                 }
             }
 
@@ -100,7 +100,7 @@ public class SearchTypeChooser extends LinearLayout {
     }
 
     public void setListener(
-        OnSelectedSearchType listener) {
+              OnSelectedSearchType listener) {
         mListener = listener;
     }
 

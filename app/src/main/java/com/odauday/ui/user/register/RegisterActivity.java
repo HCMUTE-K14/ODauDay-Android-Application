@@ -25,8 +25,8 @@ import timber.log.Timber;
  */
 
 public class RegisterActivity extends
-    BaseMVVMActivity<ActivityRegisterBinding> implements
-    RegisterContract {
+                              BaseMVVMActivity<ActivityRegisterBinding> implements
+                                                                        RegisterContract {
 
     //====================== Variable ======================//
     public static final String TAG = RegisterActivity.class.getSimpleName();
@@ -164,7 +164,7 @@ public class RegisterActivity extends
 
         if (ValidationHelper.isEmpty(displayName)) {
             mBinding.txtInputDisplayName
-                .setError(getString(R.string.message_display_name_is_required));
+                      .setError(getString(R.string.message_display_name_is_required));
             mBinding.displayName.requestFocus();
             return false;
         }
@@ -177,7 +177,7 @@ public class RegisterActivity extends
 
         if (ValidationHelper.isEmpty(rePassword)) {
             mBinding.txtInputRePassword
-                .setError(getString(R.string.message_re_password_is_required));
+                      .setError(getString(R.string.message_re_password_is_required));
             mBinding.rePassword.requestFocus();
 
             return false;
@@ -185,7 +185,7 @@ public class RegisterActivity extends
 
         if (!ValidationHelper.isEqual(password, rePassword)) {
             mBinding.txtInputRePassword
-                .setError(getString(R.string.message_re_password_do_not_match));
+                      .setError(getString(R.string.message_re_password_do_not_match));
             mBinding.rePassword.requestFocus();
 
             return false;

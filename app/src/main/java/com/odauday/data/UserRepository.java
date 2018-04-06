@@ -31,33 +31,33 @@ import timber.log.Timber;
  */
 
 public class UserRepository implements Repository {
-
+    
     private final UserService.Public mPublicUserService;
     private final UserService.Protect mProtectUserService;
     private final PreferencesHelper mPreferencesHelper;
-
+    
     private final SchedulersExecutor mSchedulersExecutor;
-
+    
     @Inject
     public UserRepository(
-        UserService.Public publicUserService,
-        UserService.Protect protectUserService,
-        PreferencesHelper preferencesHelper,
-        SchedulersExecutor schedulersExecutor) {
-
+              UserService.Public publicUserService,
+              UserService.Protect protectUserService,
+              PreferencesHelper preferencesHelper,
+              SchedulersExecutor schedulersExecutor) {
+        
         this.mPublicUserService = publicUserService;
         this.mProtectUserService = protectUserService;
         this.mPreferencesHelper = preferencesHelper;
-
+        
         this.mSchedulersExecutor = schedulersExecutor;
     }
-
+    
     public Single<JsonResponse<MessageResponse>> test(SearchCriteria searchCriteria) {
-        return mPublicUserService.test(searchCriteria)
-            .subscribeOn(mSchedulersExecutor.io())
-            .observeOn(mSchedulersExecutor.ui());
+        return mProtectUserService.test(searchCriteria)
+                  .subscribeOn(mSchedulersExecutor.io())
+                  .observeOn(mSchedulersExecutor.ui());
     }
-
+    
     public Single<User> login(AbstractAuthRequest request) {
         Single<JsonResponse<LoginResponse>> result;
         if (request.getType() == LoginType.FACEBOOK) {
@@ -67,18 +67,18 @@ public class UserRepository implements Repository {
         } else {
             throw new LoginException("Invalid request");
         }
-
+        
         Single<User> userSingle = result.map(response -> {
             try {
                 if (response.isSuccess()) {
                     String accessToken = response.getData().getAccessToken();
-
+                    
                     User userFromJwt = decodeUserAccessToken(accessToken);
-
+                    
                     mPreferencesHelper.put(PrefKey.ACCESS_TOKEN, accessToken);
                     mPreferencesHelper
-                        .put(PrefKey.CURRENT_USER, JwtUtils.toJson(userFromJwt, User.class));
-
+                              .put(PrefKey.CURRENT_USER, JwtUtils.toJson(userFromJwt, User.class));
+                    
                     return userFromJwt;
                 } else {
                     throw new LoginException(response.getErrors());
@@ -90,73 +90,73 @@ public class UserRepository implements Repository {
                 throw new LoginException(ex.getMessage());
             }
         });
-
+        
         return userSingle
-            .subscribeOn(mSchedulersExecutor.io())
-            .observeOn(mSchedulersExecutor.ui());
-
+                  .subscribeOn(mSchedulersExecutor.io())
+                  .observeOn(mSchedulersExecutor.ui());
+        
     }
-
+    
     public Single<MessageResponse> register(RegisterRequest request) {
         Single<JsonResponse<MessageResponse>> result = mPublicUserService.register(request);
-
+        
         return result
-            .map(response -> {
-                try {
-                    if (response.isSuccess()) {
-                        return response.getData();
-                    } else {
-                        throw new RegisterException(response.getErrors());
-                    }
-                } catch (Exception ex) {
-                    if (ex instanceof RegisterException) {
-                        throw ex;
-                    }
-                    throw new RegisterException(ex.getMessage());
-                }
-            })
-            .subscribeOn(mSchedulersExecutor.io())
-            .observeOn(mSchedulersExecutor.ui());
+                  .map(response -> {
+                      try {
+                          if (response.isSuccess()) {
+                              return response.getData();
+                          } else {
+                              throw new RegisterException(response.getErrors());
+                          }
+                      } catch (Exception ex) {
+                          if (ex instanceof RegisterException) {
+                              throw ex;
+                          }
+                          throw new RegisterException(ex.getMessage());
+                      }
+                  })
+                  .subscribeOn(mSchedulersExecutor.io())
+                  .observeOn(mSchedulersExecutor.ui());
     }
-
+    
     public Single<MessageResponse> forgotPassword(ForgotPasswordRequest request) {
         Single<JsonResponse<MessageResponse>> result = mPublicUserService.forgotPassword(request);
-
+        
         return result
-            .map(response -> {
-                try {
-                    if (response.isSuccess()) {
-                        Timber.d(response.getData().toString());
-                        return response.getData();
-                    } else {
-                        throw new ForgotPasswordException(response.getErrors());
-                    }
-                } catch (Exception ex) {
-                    if (ex instanceof ForgotPasswordException) {
-                        throw ex;
-                    }
-                    throw new RegisterException(ex.getMessage());
-                }
-            })
-            .subscribeOn(mSchedulersExecutor.io())
-            .observeOn(mSchedulersExecutor.ui());
+                  .map(response -> {
+                      try {
+                          if (response.isSuccess()) {
+                              Timber.d(response.getData().toString());
+                              return response.getData();
+                          } else {
+                              throw new ForgotPasswordException(response.getErrors());
+                          }
+                      } catch (Exception ex) {
+                          if (ex instanceof ForgotPasswordException) {
+                              throw ex;
+                          }
+                          throw new RegisterException(ex.getMessage());
+                      }
+                  })
+                  .subscribeOn(mSchedulersExecutor.io())
+                  .observeOn(mSchedulersExecutor.ui());
     }
-
+    
     private User decodeUserAccessToken(String accessToken) throws Exception {
         JwtModel jwtModel = JwtUtils.decoded(accessToken);
-
+        
         return JwtUtils.parseBody(jwtModel, User.class);
     }
-
-
+    
+    
     public Public getPublicUserService() {
         return mPublicUserService;
     }
-
+    
     public Protect getProtectUserService() {
         return mProtectUserService;
     }
-
+    
     public SchedulersExecutor scheduler() {
         return mSchedulersExecutor;
     }

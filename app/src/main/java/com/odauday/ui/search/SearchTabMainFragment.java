@@ -30,7 +30,7 @@ import timber.log.Timber;
  */
 
 public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMainBinding> implements
-    HasSupportFragmentInjector {
+                                                                                          HasSupportFragmentInjector {
 
 
     //====================== Variable =========================//
@@ -41,8 +41,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
 
     @Inject
     DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
-    boolean mIsBottomBarHide = true;
-
+    
     //====================== Override Base Method =========================//
 
     //====================== Constructor =========================//
@@ -129,13 +128,11 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 if (newState == DrawerLayout.STATE_SETTLING) {
                     if (((MainActivity) getActivity()) != null) {
                         boolean isDrawerOpen = mBinding.get().drawerLayout
-                            .isDrawerVisible(Gravity.END);
+                                  .isDrawerVisible(Gravity.END);
                         if (!isDrawerOpen) {
                             ((MainActivity) getActivity()).toggleBottomBar(false);
-                            mIsBottomBarHide = false;
                         } else {
                             ((MainActivity) getActivity()).toggleBottomBar(true);
-                            mIsBottomBarHide = true;
                         }
                     }
 
@@ -161,15 +158,15 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             throw new NullPointerException("Fragment manager is null");
         }
         Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(getActivity().getSupportFragmentManager())
-            .setFragment(FilterNavigationFragment.newInstance())
-            .setTagFragment(FilterNavigationFragment.TAG)
-            .setContainerId(R.id.filter_nav)
-            .build();
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(getActivity().getSupportFragmentManager())
+                  .setFragment(FilterNavigationFragment.newInstance())
+                  .setTagFragment(FilterNavigationFragment.TAG)
+                  .setContainerId(R.id.filter_nav)
+                  .build();
 
         new Handler().postDelayed(runnableAttachFilterFragment,
-            10);
+                  10);
 
     }
 

@@ -8,7 +8,7 @@ import javax.inject.Inject;
  */
 
 public class AlertTabViewModel extends BaseViewModel {
-
+    
     @Inject
     public AlertTabViewModel() {
 

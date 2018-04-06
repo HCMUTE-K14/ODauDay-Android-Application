@@ -68,9 +68,9 @@ public class MinMaxObject<T> implements Parcelable {
     @Override
     public String toString() {
         return "MinMaxObject{" +
-            "min=" + min +
-            ", max=" + max +
-            '}';
+               "min=" + min +
+               ", max=" + max +
+               '}';
     }
 
     @Override

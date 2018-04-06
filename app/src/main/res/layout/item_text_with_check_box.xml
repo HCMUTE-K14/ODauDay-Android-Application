@@ -3,7 +3,7 @@
   <data>
     <variable
       name="item"
-      type="com.odauday.ui.ItemSelection"/>
+      type="com.odauday.ui.ItemSelection" />
   </data>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_layout"
@@ -17,19 +17,19 @@
       android:id="@+id/text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@{item.displayString}"
       android:layout_centerVertical="true"
+      android:text="@{item.displayString}"
       android:textColor="#747c8a"
-      android:textSize="20sp"/>
+      android:textSize="20sp" />
     <CheckBox
       android:id="@+id/check_box"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentEnd="true"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_marginEnd="8dp"
       android:layout_marginRight="8dp"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
       android:checked="@{item.selected}"
-      android:clickable="false"/>
+      android:clickable="false" />
   </RelativeLayout>
 </layout>

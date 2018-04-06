@@ -34,20 +34,20 @@ public class MapListToggleButton extends RelativeLayout {
     }
 
     public MapListToggleButton(@NonNull Context context,
-        @Nullable AttributeSet attrs) {
+              @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     public MapListToggleButton(@NonNull Context context, @Nullable AttributeSet attrs,
-        int defStyleAttr) {
+              int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -117,7 +117,7 @@ public class MapListToggleButton extends RelativeLayout {
     }
 
     public void setOnClickMapListListener(
-        OnClickMapListListener buttonListener) {
+              OnClickMapListListener buttonListener) {
         mButtonListener = buttonListener;
     }
 

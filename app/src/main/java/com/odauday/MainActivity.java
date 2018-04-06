@@ -19,46 +19,46 @@ import java.util.Stack;
 import javax.inject.Inject;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
-    HasSupportFragmentInjector {
-
+                                                                        HasSupportFragmentInjector {
+    
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
-
+    
     @Inject
     NavigationController mNavigationController;
-
+    
     @Inject
     MainActivityViewModel mMainActivityViewModel;
-
-
+    
     Stack<String> mTabStack = new Stack<>();
-
+    
+    
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
-
-
+    
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
     }
-
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mMainActivityViewModel;
     }
-
+    
     @Override
     public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
         return mFragmentDispatchingAndroidInjector;
     }
-
+    
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
-
+    
     @Override
     public void onBackPressed() {
         try {
@@ -68,28 +68,27 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             String tag = mTabStack.pop();
             if (tag.equals(NavigationTab.SEARCH_TAB.getNameTab())) {
                 SearchTabMainFragment searchTabMainFragment = (SearchTabMainFragment) getSupportFragmentManager()
-                    .findFragmentByTag(SearchTabMainFragment.TAG);
+                          .findFragmentByTag(SearchTabMainFragment.TAG);
                 if (searchTabMainFragment.isDrawerOpening()) {
                     return;
                 }
                 finish();
                 return;
             }
-
+            
             if (mTabStack.empty()) {
                 finish();
                 return;
             }
-
+            
             mBinding.bottomNavBar.select(mTabStack.peek(), false);
             getSupportFragmentManager()
-                .popBackStack(mTabStack.peek(), 0);
+                      .popBackStack(mTabStack.peek(), 0);
         } catch (Exception ex) {
             finish();
         }
-
     }
-
+    
     private void init() {
         mBinding.bottomNavBar.setOnTabSelectedListener(new OnTabSelectedListener() {
             @Override
@@ -98,12 +97,12 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
                 mTabStack.push(nameTab);
                 mNavigationController.navigateTo(nameTab);
             }
-
+            
             @Override
             public void onTabUnselected(int position) {
-
+            
             }
-
+            
             @Override
             public void onTabReselected(int position) {
                 String nameTab = mBinding.bottomNavBar.getNameTab(position);
@@ -115,12 +114,12 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
         mBinding.bottomNavBar.select(0, true);
         // mTabStack.push(NavigationTab.SEARCH_TAB.getNameTab());
     }
-
+    
     public void toggleBottomBar(boolean show) {
         mBinding.bottomNavBar.setVisibility(show ? View.VISIBLE : View.GONE);
         if (mBinding.bottomNavBar.getVisibility() == View.VISIBLE) {
             mBinding.bottomNavBar
-                .startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
+                      .startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
         }
     }
 }

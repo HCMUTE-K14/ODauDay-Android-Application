@@ -61,9 +61,9 @@ public class RegisterRequest implements BaseRequest {
     @Override
     public String toString() {
         return "RegisterRequest{" +
-            "email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            ", displayName='" + displayName + '\'' +
-            '}';
+               "email='" + email + '\'' +
+               ", password='" + password + '\'' +
+               ", displayName='" + displayName + '\'' +
+               '}';
     }
 }

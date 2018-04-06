@@ -25,6 +25,7 @@ public class Point implements Parcelable {
     @SerializedName("latitude")
     @Expose
     private float latitude;
+    
     @SerializedName("longitude")
     @Expose
     private float longitude;
@@ -82,9 +83,9 @@ public class Point implements Parcelable {
     @Override
     public String toString() {
         return "Point{" +
-            "latitude=" + latitude +
-            ", longitude=" + longitude +
-            '}';
+               "latitude=" + latitude +
+               ", longitude=" + longitude +
+               '}';
     }
 
     @Override

@@ -46,8 +46,8 @@ public class NormalAuthRequest extends AbstractAuthRequest {
     @Override
     public String toString() {
         return "NormalAuthRequest{" +
-            "email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            '}';
+               "email='" + email + '\'' +
+               ", password='" + password + '\'' +
+               '}';
     }
 }

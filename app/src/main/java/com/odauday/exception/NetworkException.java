@@ -5,15 +5,15 @@ package com.odauday.exception;
  */
 
 public class NetworkException extends BaseException {
-
+    
     public NetworkException(String message) {
         super(message);
     }
-
+    
     public NetworkException(Exception ex) {
         super(ex);
     }
-
+    
     public NetworkException(String message, Exception ex) {
         super(message, ex);
     }

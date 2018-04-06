@@ -39,7 +39,7 @@ public class LoginResponse implements BaseResponse {
         LoginResponse that = (LoginResponse) o;
 
         return accessToken != null ? accessToken.equals(that.accessToken)
-            : that.accessToken == null;
+                  : that.accessToken == null;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LoginResponse implements BaseResponse {
     @Override
     public String toString() {
         return "LoginResponse{" +
-            "accessToken='" + accessToken + '\'' +
-            '}';
+               "accessToken='" + accessToken + '\'' +
+               '}';
     }
 }

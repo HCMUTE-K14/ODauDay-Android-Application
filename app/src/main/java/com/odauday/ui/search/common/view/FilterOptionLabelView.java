@@ -16,16 +16,16 @@ import com.odauday.R;
  * Created by infamouSs on 4/1/18.
  */
 @BindingMethods(
-    {
-        @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:onToggle", method = "setListener"),
-        @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtHeader", method = "setTextHeader"),
-        @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtValue", method = "setTextValue"),
-        @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtMoreValue", method = "setMoreValue")
-    }
+          {
+                    @BindingMethod(type = FilterOptionLabelView.class,
+                              attribute = "app:onToggle", method = "setListener"),
+                    @BindingMethod(type = FilterOptionLabelView.class,
+                              attribute = "app:txtHeader", method = "setTextHeader"),
+                    @BindingMethod(type = FilterOptionLabelView.class,
+                              attribute = "app:txtValue", method = "setTextValue"),
+                    @BindingMethod(type = FilterOptionLabelView.class,
+                              attribute = "app:txtMoreValue", method = "setMoreValue")
+          }
 )
 public class FilterOptionLabelView extends LinearLayout {
 
@@ -46,7 +46,7 @@ public class FilterOptionLabelView extends LinearLayout {
     }
 
     public FilterOptionLabelView(Context context,
-        @Nullable AttributeSet attrs) {
+              @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -58,7 +58,7 @@ public class FilterOptionLabelView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }

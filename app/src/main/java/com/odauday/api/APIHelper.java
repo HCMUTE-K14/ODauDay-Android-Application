@@ -13,6 +13,7 @@ import java.io.File;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,63 +28,84 @@ import timber.log.Timber;
  */
 
 public class APIHelper {
-
+    
     public static final String TAG = APIHelper.class.getSimpleName();
-
-    public static final String ACCESS_TOKEN = "X-AccessToken";
-
+    
+    public static final String ACCESS_TOKEN = "X-Access-Token";
+    
     public static final String USER_ID = "X-USER-ID";
-
+    
     public static final String API_KEY = "X-API-KEY";
-
+    
     private final Context mContext;
-
+    
     public APIHelper(Context context) {
         this.mContext = context.getApplicationContext();
     }
-
+    
     public Gson createGson(GsonBuilder gsonBuilder) {
         return gsonBuilder.create();
     }
-
+    
     public Gson createDefaultGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder
-            .excludeFieldsWithoutExposeAnnotation()
-            .setPrettyPrinting()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+                  .excludeFieldsWithoutExposeAnnotation()
+                  .setPrettyPrinting()
+                  .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         return createGson(gsonBuilder);
     }
-
+    
     public Interceptor createInterceptor(AbstractApiHeader applicationHeader) {
         return chain -> {
             try {
                 Request modifiedRequest = chain.request().newBuilder()
-                    .headers(applicationHeader.getHeader())
-                    .build();
+                          .headers(applicationHeader.getHeader())
+                          .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException("Cannot connect to Service");
             }
         };
     }
-
+    
     public Interceptor createDefaultInterceptor() {
         return chain -> {
             try {
                 Request modifiedRequest = chain.request().newBuilder()
-                    .build();
+                          .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException("Cannot connect to Service");
             }
         };
     }
-
+    
+    public Interceptor createLanguageSupportInterceptor(String lang) {
+        return chain -> {
+            try {
+                Request original = chain.request();
+                HttpUrl originalHttpUrl = original.url();
+                
+                HttpUrl url = originalHttpUrl.newBuilder()
+                          .addQueryParameter("lang", lang)
+                          .build();
+                
+                Request.Builder requestBuilder = original.newBuilder()
+                          .url(url);
+                
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            } catch (Exception ex) {
+                throw new NetworkException("Cannot connect to Service");
+            }
+        };
+    }
+    
     public Cache createCache(Context context) {
         return createDefaultCache(context);
     }
-
+    
     public Cache createDefaultCache(Context context) {
         File cacheDir = new File(context.getCacheDir().getAbsolutePath(), "/cache/");
         if (cacheDir.mkdirs() || cacheDir.isDirectory()) {
@@ -91,40 +113,42 @@ public class APIHelper {
         }
         return null;
     }
-
-    public OkHttpClient createClient(Cache cache, Interceptor interceptor) {
-
+    
+    public OkHttpClient createClient(Cache cache, Interceptor interceptor,
+              Interceptor languageInterceptor) {
+        
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
-            message -> Timber.tag("Network").d(message))
-            .setLevel(Level.BODY);
-
+                  message -> Timber.tag("Network").d(message))
+                  .setLevel(Level.BODY);
+        
         return new OkHttpClient.Builder()
-            .cache(cache)
-            .addInterceptor(logging)
-            .addInterceptor(interceptor)
-            .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
-            .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
-            .build();
+                  .cache(cache)
+                  .addInterceptor(logging)
+                  .addInterceptor(interceptor)
+                  .addInterceptor(languageInterceptor)
+                  .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
+                  .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                  .build();
     }
-
+    
     public Retrofit createRetrofit(String baseURL, @NonNull OkHttpClient client, Gson gson) {
         if (TextUtils.isEmpty(baseURL)) {
             baseURL = EndPoint.BASE_URL;
         }
-
+        
         if (gson == null) {
             gson = createDefaultGson();
         }
         return new Retrofit.Builder()
-            .baseUrl(baseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(SingleCallAdapter.create())
-            .build();
+                  .baseUrl(baseURL)
+                  .client(client)
+                  .addConverterFactory(GsonConverterFactory.create(gson))
+                  .addCallAdapterFactory(SingleCallAdapter.create())
+                  .build();
     }
-
+    
     public <T> T createService(final Class<T> clazz, String baseURL, OkHttpClient client,
-        Gson gson) {
+              Gson gson) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             return null;
         }

@@ -33,9 +33,9 @@ public class APIHeader {
     @Override
     public String toString() {
         return "APIHeader{" +
-            "mProtectApiHeader=" + mProtectApiHeader +
-            ", mPublicApiHeader=" + mPublicApiHeader +
-            '}';
+               "mProtectApiHeader=" + mProtectApiHeader +
+               ", mPublicApiHeader=" + mPublicApiHeader +
+               '}';
     }
 
     public static class ProtectApiHeader extends AbstractApiHeader {
@@ -101,10 +101,10 @@ public class APIHeader {
         @Override
         public String toString() {
             return "ProtectApiHeader{" +
-                "access_token='" + access_token + '\'' +
-                ", api_key='" + api_key + '\'' +
-                ", user_id='" + user_id + '\'' +
-                '}';
+                   "access_token='" + access_token + '\'' +
+                   ", api_key='" + api_key + '\'' +
+                   ", user_id='" + user_id + '\'' +
+                   '}';
         }
     }
 
@@ -147,8 +147,8 @@ public class APIHeader {
         @Override
         public String toString() {
             return "PublicApiHeader{" +
-                "api_key='" + api_key + '\'' +
-                '}';
+                   "api_key='" + api_key + '\'' +
+                   '}';
         }
     }
 }

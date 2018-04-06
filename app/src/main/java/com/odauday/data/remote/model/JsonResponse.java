@@ -112,12 +112,12 @@ public class JsonResponse<DATA> implements BaseResponse {
     @Override
     public String toString() {
         return "JsonResponse{" +
-            "datetime='" + datetime + '\'' +
-            ", timestamp=" + timestamp +
-            ", code=" + code +
-            ", statusText='" + statusText + '\'' +
-            ", success=" + success +
-            ", data=" + data +
-            '}';
+               "datetime='" + datetime + '\'' +
+               ", timestamp=" + timestamp +
+               ", code=" + code +
+               ", statusText='" + statusText + '\'' +
+               ", success=" + success +
+               ", data=" + data +
+               '}';
     }
 }

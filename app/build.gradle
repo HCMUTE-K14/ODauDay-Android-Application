@@ -104,7 +104,7 @@ dependencies {
     implementation "com.facebook.android:facebook-login:${facebookSDKVersion}"
 
     implementation "com.ashokvarma.android:bottom-navigation-bar:${bottomNavigationVersion}"
-
+    compile 'com.github.pchmn:MaterialChipsInput:1.0.8'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

@@ -24,14 +24,14 @@ public class RegisterViewModel extends BaseViewModel {
     public void register(RegisterRequest request) {
 
         Disposable disposable = mUserRepository.register(request)
-            .doOnSubscribe(onSubscribe -> {
-                response.setValue(Resource.loading(null));
-            })
-            .subscribe(success -> {
-                response.setValue(Resource.success(success));
-            }, error -> {
-                response.setValue(Resource.error(error));
-            });
+                  .doOnSubscribe(onSubscribe -> {
+                      response.setValue(Resource.loading(null));
+                  })
+                  .subscribe(success -> {
+                      response.setValue(Resource.success(success));
+                  }, error -> {
+                      response.setValue(Resource.error(error));
+                  });
 
         mCompositeDisposable.add(disposable);
     }

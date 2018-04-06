@@ -36,7 +36,7 @@ import timber.log.Timber;
  */
 
 public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implements
-    LoginContract {
+                                                                          LoginContract {
 
     //====================== Variable ======================//
 
@@ -67,7 +67,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
             String email = object.getString("email");
 
             AbstractAuthRequest request = new FacebookAuthRequest(facebookId, email, name,
-                mFacebookAccessToken);
+                      mFacebookAccessToken);
 
             mLoginViewModel.login(request);
         } catch (JSONException e) {
@@ -82,9 +82,9 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
 
             Bundle parameters = new Bundle();
             parameters.putString("fields",
-                "id,name,email");
+                      "id,name,email");
             GraphRequest request = GraphRequest
-                .newMeRequest(loginResult.getAccessToken(), mGraphCallBack);
+                      .newMeRequest(loginResult.getAccessToken(), mGraphCallBack);
 
             request.setParameters(parameters);
             request.executeAsync();
@@ -236,7 +236,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
 
     private void makeLoginWithFacebookRequest() {
         List<String> permissionNeeds = Arrays
-            .asList(FacebookPermission.EMAIL, FacebookPermission.PUBLIC_PROFILE);
+                  .asList(FacebookPermission.EMAIL, FacebookPermission.PUBLIC_PROFILE);
         LoginManager.getInstance().logInWithReadPermissions(this, permissionNeeds);
     }
 

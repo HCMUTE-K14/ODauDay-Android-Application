@@ -32,13 +32,13 @@ public class FlatNavigationBar extends FrameLayout {
     }
 
     public FlatNavigationBar(@NonNull Context context,
-        @Nullable AttributeSet attrs) {
+              @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     public FlatNavigationBar(@NonNull Context context, @Nullable AttributeSet attrs,
-        int defStyleAttr) {
+              int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -46,7 +46,7 @@ public class FlatNavigationBar extends FrameLayout {
     //====================== Init =========================//
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -70,23 +70,23 @@ public class FlatNavigationBar extends FrameLayout {
     private void initAlertBubbleItem() {
         mAlertBubbleItem = new TextBadgeItem();
         mAlertBubbleItem
-            .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.alert_red));
+                  .setBackgroundColor(ContextCompat.getColor(getContext(), R.color.alert_red));
         mAlertBubbleItem.setAnimationDuration(0);
     }
 
     private void initStyleBottomNavBar() {
         this.mBottomNavigationBar
-            .setMode(BottomNavigationBar.MODE_FIXED)
-            .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
-            .setAnimationDuration(0)
-            .setActiveColor(R.color.nav_bar_text_active)
-            .setInActiveColor(R.color.nav_bar_text_inactive);
+                  .setMode(BottomNavigationBar.MODE_FIXED)
+                  .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
+                  .setAnimationDuration(0)
+                  .setActiveColor(R.color.nav_bar_text_active)
+                  .setInActiveColor(R.color.nav_bar_text_inactive);
     }
 
     private NavigationTab[] getTabs() {
         return new NavigationTab[]{NavigationTab.SEARCH_TAB, NavigationTab.ALERT_TAB,
-            NavigationTab.FAVORITE_TAB, NavigationTab.SAVED_SEARCH_TAB,
-            NavigationTab.MORE_TAB};
+                  NavigationTab.FAVORITE_TAB, NavigationTab.SAVED_SEARCH_TAB,
+                  NavigationTab.MORE_TAB};
     }
 
     private void addNavButton() {
@@ -95,11 +95,11 @@ public class FlatNavigationBar extends FrameLayout {
         for (NavigationTab tab : tabs) {
             if (tab == NavigationTab.ALERT_TAB) {
                 BottomNavigationItem alertItem = tab
-                    .build(this.getContext())
-                    .setBadgeItem(mAlertBubbleItem);
+                          .build(this.getContext())
+                          .setBadgeItem(mAlertBubbleItem);
 
                 mBottomNavigationBar
-                    .addItem(alertItem);
+                          .addItem(alertItem);
             } else {
                 mBottomNavigationBar.addItem(tab.build(this.getContext()));
 
@@ -168,7 +168,7 @@ public class FlatNavigationBar extends FrameLayout {
     }
 
     public void setBottomNavigationBar(
-        BottomNavigationBar bottomNavigationBar) {
+              BottomNavigationBar bottomNavigationBar) {
         mBottomNavigationBar = bottomNavigationBar;
     }
 

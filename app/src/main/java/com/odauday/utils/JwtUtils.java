@@ -13,7 +13,7 @@ public class JwtUtils {
 
 
     public static JwtModel decoded(String JWTEncoded)
-        throws Exception {
+              throws Exception {
         String[] split = JWTEncoded.split("[.]");
 
         String header = getJson(split[0]);
@@ -71,9 +71,9 @@ public class JwtUtils {
         @Override
         public String toString() {
             return "JWT{" +
-                "header='" + header + '\'' +
-                ", body='" + body + '\'' +
-                '}';
+                   "header='" + header + '\'' +
+                   ", body='" + body + '\'' +
+                   '}';
         }
     }
 

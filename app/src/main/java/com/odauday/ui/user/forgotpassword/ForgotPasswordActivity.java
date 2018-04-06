@@ -26,8 +26,8 @@ import timber.log.Timber;
  */
 
 public class ForgotPasswordActivity extends
-    BaseMVVMActivity<ActivityForgotPasswordBinding> implements
-    ForgotPasswordContract {
+                                    BaseMVVMActivity<ActivityForgotPasswordBinding> implements
+                                                                                    ForgotPasswordContract {
 
     //====================== Variable ==================================//
     public static final String TAG = ForgotPasswordActivity.class.getSimpleName();

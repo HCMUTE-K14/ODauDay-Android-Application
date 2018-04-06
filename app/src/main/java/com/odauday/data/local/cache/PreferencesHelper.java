@@ -17,7 +17,7 @@ public class PreferencesHelper {
     @Inject
     public PreferencesHelper(Context context) {
         this.mSharedPreferences = context.getApplicationContext()
-            .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+                  .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public void put(String key, String defaultValue) {

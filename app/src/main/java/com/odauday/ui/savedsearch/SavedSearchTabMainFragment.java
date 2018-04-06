@@ -12,7 +12,7 @@ import com.odauday.viewmodel.BaseViewModel;
  */
 
 public class SavedSearchTabMainFragment extends
-    BaseMVVMFragment<FragmentSavedSearchTabMainBinding> {
+                                        BaseMVVMFragment<FragmentSavedSearchTabMainBinding> {
 
     //====================== Variable ======================//
 

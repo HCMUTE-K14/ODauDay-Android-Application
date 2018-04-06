@@ -75,9 +75,9 @@ public class Resource<T> {
     @Override
     public String toString() {
         return "Resource{" +
-            "status=" + status +
-            ", message='" + message + '\'' +
-            ", data=" + data +
-            '}';
+               "status=" + status +
+               ", message='" + message + '\'' +
+               ", data=" + data +
+               '}';
     }
 }

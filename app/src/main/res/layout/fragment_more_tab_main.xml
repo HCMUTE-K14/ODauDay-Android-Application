@@ -9,6 +9,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      android:text="More tab"/>
+      android:text="More tab" />
   </RelativeLayout>
 </layout>

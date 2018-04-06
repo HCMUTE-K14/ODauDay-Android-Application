@@ -96,7 +96,7 @@ public class FilterNumberPicker extends FrameLayout implements OnClickListener {
         v.findViewById(R.id.img_arrow_down).setOnClickListener(this);
         this.mFilterPicker.setCacheColorHint(-1);
         this.mFilterPicker.setSelectorDrawable(
-            getResources().getDrawable(R.drawable.ic_selector_wheel_view));
+                  getResources().getDrawable(R.drawable.ic_selector_wheel_view));
         addView(v);
     }
 }

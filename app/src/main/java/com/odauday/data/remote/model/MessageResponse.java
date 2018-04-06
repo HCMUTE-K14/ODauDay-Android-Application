@@ -35,7 +35,7 @@ public class MessageResponse implements BaseResponse {
     @Override
     public String toString() {
         return "MessageResponse{" +
-            "message='" + message + '\'' +
-            '}';
+               "message='" + message + '\'' +
+               '}';
     }
 }

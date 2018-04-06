@@ -49,65 +49,65 @@ public class NavigationController {
 
     private void navigateToSearchTab() {
         Runnable runnableAttachSearchTab = new AttachFragmentRunnable
-            .AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(mFragmentManager)
-            .setContainerId(mContainerId)
-            .setFragment(SearchTabMainFragment.newInstance())
-            .setTagFragment(SearchTabMainFragment.TAG)
-            .build();
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(mFragmentManager)
+                  .setContainerId(mContainerId)
+                  .setFragment(SearchTabMainFragment.newInstance())
+                  .setTagFragment(SearchTabMainFragment.TAG)
+                  .build();
 
         mHandler.postDelayed(runnableAttachSearchTab, DELAY_ATTACH_FRAGMENT);
     }
 
     private void navigateToAlertTab() {
         Runnable runnableAttachAlertTab = new AttachFragmentRunnable
-            .AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(mFragmentManager)
-            .setContainerId(mContainerId)
-            .setFragment(AlertTabMainFragment.newInstance())
-            .setTagFragment(AlertTabMainFragment.TAG)
-            .build();
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(mFragmentManager)
+                  .setContainerId(mContainerId)
+                  .setFragment(AlertTabMainFragment.newInstance())
+                  .setTagFragment(AlertTabMainFragment.TAG)
+                  .build();
 
         mHandler.postDelayed(runnableAttachAlertTab, DELAY_ATTACH_FRAGMENT);
     }
 
     private void navigateToFavoriteTab() {
         Runnable runnableAttachFavoriteTab = new AttachFragmentRunnable
-            .AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(mFragmentManager)
-            .setContainerId(mContainerId)
-            .setFragment(FavoriteTabMainFragment.newInstance())
-            .setTagFragment(FavoriteTabMainFragment.TAG)
-            .build();
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(mFragmentManager)
+                  .setContainerId(mContainerId)
+                  .setFragment(FavoriteTabMainFragment.newInstance())
+                  .setTagFragment(FavoriteTabMainFragment.TAG)
+                  .build();
 
         mHandler.postDelayed(runnableAttachFavoriteTab, DELAY_ATTACH_FRAGMENT);
     }
 
     private void navigateToSavedSearchTab() {
         Runnable runnableAttachSavedSearchTab = new AttachFragmentRunnable
-            .AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(mFragmentManager)
-            .setContainerId(mContainerId)
-            .setFragment(SavedSearchTabMainFragment.newInstance())
-            .setTagFragment(SavedSearchTabMainFragment.TAG)
-            .build();
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(mFragmentManager)
+                  .setContainerId(mContainerId)
+                  .setFragment(SavedSearchTabMainFragment.newInstance())
+                  .setTagFragment(SavedSearchTabMainFragment.TAG)
+                  .build();
 
         mHandler.postDelayed(runnableAttachSavedSearchTab, DELAY_ATTACH_FRAGMENT);
     }
 
     private void navigateToMoreTab() {
         Runnable runnableAttachMoreTab = new AttachFragmentRunnable
-            .AttachFragmentBuilder()
-            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-            .setFragmentManager(mFragmentManager)
-            .setContainerId(mContainerId)
-            .setFragment(MoreTabMainFragment.newInstance())
-            .setTagFragment(MoreTabMainFragment.TAG)
-            .build();
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(mFragmentManager)
+                  .setContainerId(mContainerId)
+                  .setFragment(MoreTabMainFragment.newInstance())
+                  .setTagFragment(MoreTabMainFragment.TAG)
+                  .build();
 
         mHandler.postDelayed(runnableAttachMoreTab, DELAY_ATTACH_FRAGMENT);
     }

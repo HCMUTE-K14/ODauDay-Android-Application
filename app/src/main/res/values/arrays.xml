@@ -139,7 +139,7 @@
     <item>4500000</item>
     <item>5000000</item>
   </integer-array>
-  <array name="price_rent">
+  <string-array name="price_rent">
     <item>50</item>
     <item>100</item>
     <item>150</item>
@@ -165,5 +165,48 @@
     <item>3000</item>
     <item>4000</item>
     <item>5000</item>
-  </array>
+  </string-array>
+  <string-array name="tags">
+    <item>Air conditioning</item>
+    <item>Alarm System</item>
+    <item>Balcony / Deck</item>
+    <item>Bath</item>
+    <item>Broadband internet access</item>
+    <item>Built in wardrobes</item>
+    <item>Cable or Satellite</item>
+    <item>City Views</item>
+    <item>Dishwasher</item>
+    <item>Double glazed windows</item>
+    <item>Energy efficient appliances</item>
+    <item>Ensuite</item>
+    <item>Fireplace(s)</item>
+    <item>Floorboards</item>
+    <item>Fully fenced</item>
+    <item>Furnished</item>
+    <item>Garden / Courtyard</item>
+    <item>Gas</item>
+    <item>Greywater system</item>
+    <item>Ground floor</item>
+    <item>Gym</item>
+    <item>Heating</item>
+    <item>Indoor Spa</item>
+    <item>Intercom</item>
+    <item>Internal Laundry</item>
+    <item>North Facing</item>
+    <item>Outdoor Spa</item>
+    <item>Pets Allowed</item>
+    <item>Rainwater storage tank</item>
+    <item>Secure Parking</item>
+    <item>Separate Dining Room</item>
+    <item>Shed</item>
+    <item>Solar hot water</item>
+    <item>Solar panels</item>
+    <item>Study</item>
+    <item>Swimming Pool</item>
+    <item>Tennis Court</item>
+    <item>Wall / ceiling insulation</item>
+    <item>Water efficient appliances</item>
+    <item>Water efficient fixtures</item>
+    <item>Water Views</item>
+  </string-array>
 </resources>

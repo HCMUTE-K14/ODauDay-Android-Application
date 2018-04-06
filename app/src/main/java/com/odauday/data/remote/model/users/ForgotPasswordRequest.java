@@ -23,7 +23,7 @@ public class ForgotPasswordRequest {
     @Override
     public String toString() {
         return "ForgotPasswordRequest{" +
-            "email='" + email + '\'' +
-            '}';
+               "email='" + email + '\'' +
+               '}';
     }
 }
