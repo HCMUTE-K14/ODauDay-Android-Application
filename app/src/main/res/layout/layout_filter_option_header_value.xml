@@ -8,10 +8,11 @@
   android:paddingBottom="8dp"
   android:background="@drawable/list_item_selector"
   android:clickable="true">
+
   <TextView
     android:id="@+id/txt_label"
     android:textStyle="bold"
-    android:layout_width="wrap_content"
+    android:layout_width="110dp"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
@@ -22,32 +23,35 @@
     android:singleLine="true"
     android:textColor="#263248" />
 
-  <TextView
-    android:id="@+id/txt_value"
+  <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignEnd="@id/txt_label"
+    android:layout_alignBaseline="@id/txt_label"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:layout_alignRight="@id/txt_label"
-    android:layout_centerVertical="true"
-    android:paddingEnd="8dp"
-    android:paddingRight="8dp"
-    android:gravity="end"
-    android:textColor="#979da7"
-    android:textSize="15sp"
-    tools:ignore="RtlSymmetry" />
-  <TextView
-    android:id="@+id/txt_more_value"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_alignEnd="@id/txt_label"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignRight="@id/txt_label"
-    android:layout_below="@id/txt_value"
-    android:textSize="15sp"
-    android:visibility="visible" />
+    android:layout_toEndOf="@id/txt_label"
+    android:layout_toRightOf="@id/txt_label"
+    android:orientation="vertical">
+    <TextView
+      android:id="@+id/txt_value"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingEnd="8dp"
+      android:paddingRight="8dp"
+      android:gravity="end"
+      android:textSize="15sp"
+      tools:ignore="RtlSymmetry" />
+    <TextView
+      android:id="@+id/txt_more_value"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingEnd="8dp"
+      android:paddingRight="8dp"
+      android:gravity="end"
+      android:textSize="15sp"
+      android:visibility="visible"
+      tools:ignore="RtlSymmetry" />
+
+  </LinearLayout>
 
 </RelativeLayout>

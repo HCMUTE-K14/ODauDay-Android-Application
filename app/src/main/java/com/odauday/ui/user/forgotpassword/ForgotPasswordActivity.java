@@ -6,7 +6,7 @@ import android.view.View;
 import com.odauday.R;
 import com.odauday.data.remote.model.ErrorResponse;
 import com.odauday.data.remote.model.MessageResponse;
-import com.odauday.data.remote.model.users.ForgotPasswordRequest;
+import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.databinding.ActivityForgotPasswordBinding;
 import com.odauday.exception.BaseException;
 import com.odauday.exception.RetrofitException;

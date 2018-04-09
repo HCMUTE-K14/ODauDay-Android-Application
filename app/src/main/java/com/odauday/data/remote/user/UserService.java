@@ -1,4 +1,4 @@
-package com.odauday.data.remote;
+package com.odauday.data.remote.user;
 
 import static com.odauday.api.EndPoint.CHANGE_PASSWORD;
 import static com.odauday.api.EndPoint.FORGOT_PASSWORD;
@@ -9,12 +9,12 @@ import static com.odauday.api.EndPoint.USERS;
 
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
-import com.odauday.data.remote.model.users.ChangePasswordRequest;
-import com.odauday.data.remote.model.users.FacebookAuthRequest;
-import com.odauday.data.remote.model.users.ForgotPasswordRequest;
-import com.odauday.data.remote.model.users.LoginResponse;
-import com.odauday.data.remote.model.users.NormalAuthRequest;
-import com.odauday.data.remote.model.users.RegisterRequest;
+import com.odauday.data.remote.user.model.ChangePasswordRequest;
+import com.odauday.data.remote.user.model.FacebookAuthRequest;
+import com.odauday.data.remote.user.model.ForgotPasswordRequest;
+import com.odauday.data.remote.user.model.LoginResponse;
+import com.odauday.data.remote.user.model.NormalAuthRequest;
+import com.odauday.data.remote.user.model.RegisterRequest;
 import com.odauday.ui.search.common.SearchCriteria;
 import io.reactivex.Single;
 import retrofit2.http.Body;

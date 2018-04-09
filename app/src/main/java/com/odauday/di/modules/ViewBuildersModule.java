@@ -47,5 +47,4 @@ public abstract class ViewBuildersModule {
     })
     @PerActivity
     abstract MainActivity bindMainActivity();
-    
 }

@@ -2,6 +2,8 @@ package com.odauday.ui.search.navigation;
 
 import com.google.gson.annotations.SerializedName;
 import com.odauday.R;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by infamouSs on 4/3/2018.
@@ -67,5 +69,13 @@ public enum PropertyType {
     
     public void setDisplayStringResource(int displayStringResource) {
         mDisplayStringResource = displayStringResource;
+    }
+    
+    public static List<Integer> convertToArrayInt(List<PropertyType> list) {
+        List<Integer> integers = new ArrayList<>();
+        for (PropertyType propertyType : list) {
+            integers.add(propertyType.getId());
+        }
+        return integers;
     }
 }

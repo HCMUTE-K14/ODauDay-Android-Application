@@ -1,4 +1,4 @@
-package com.odauday.data.remote.model.users;
+package com.odauday.data.remote.user.model;
 
 import com.odauday.data.remote.BaseRequest;
 

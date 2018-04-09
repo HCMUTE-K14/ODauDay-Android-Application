@@ -3,7 +3,7 @@ package com.odauday.di.modules;
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.remote.UserService;
+import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

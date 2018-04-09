@@ -1,7 +1,7 @@
 package com.odauday.ui.user.register;
 
 import com.odauday.data.UserRepository;
-import com.odauday.data.remote.model.users.RegisterRequest;
+import com.odauday.data.remote.user.model.RegisterRequest;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
 import io.reactivex.disposables.Disposable;
