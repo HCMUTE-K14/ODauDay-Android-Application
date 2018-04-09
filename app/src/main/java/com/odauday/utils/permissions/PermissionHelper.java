@@ -14,11 +14,11 @@ import java.util.List;
  */
 
 public class PermissionHelper {
-
+    
     private static final String TAG = PermissionHelper.class.getSimpleName();
     private static final List<PermissionRequest> permissionRequests = new ArrayList<>();
-
-
+    
+    
     public static boolean isHasPermission(Activity activity, String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return activity.checkSelfPermission(permission)
@@ -28,7 +28,7 @@ public class PermissionHelper {
                    == PackageManager.PERMISSION_GRANTED;
         }
     }
-
+    
     public static boolean isHasPermission(Activity activity, String[] permissions) {
         for (String permission : permissions) {
             if (!isHasPermission(activity, permission)) {
@@ -37,13 +37,13 @@ public class PermissionHelper {
         }
         return true;
     }
-
+    
     public static void askForPermission(
               Activity activity, String permission,
               PermissionCallBack permissionCallback) {
         askForPermission(activity, new String[]{permission}, permissionCallback);
     }
-
+    
     public static void askForPermission(
               Activity activity, String[] permissions,
               PermissionCallBack permissionCallBack) {
@@ -57,7 +57,7 @@ public class PermissionHelper {
         PermissionRequest permissionRequest = new PermissionRequest(
                   new ArrayList<>(Arrays.asList(permissions)), permissionCallBack);
         permissionRequests.add(permissionRequest);
-
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.requestPermissions(permissions,
                       permissionRequest.getRequestCode());
@@ -66,7 +66,7 @@ public class PermissionHelper {
                       permissionRequest.getRequestCode());
         }
     }
-
+    
     public static boolean verifyPermissions(int[] grantResults) {
         for (int result : grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
@@ -75,7 +75,7 @@ public class PermissionHelper {
         }
         return true;
     }
-
+    
     public static void onRequestPermissionsResult(
               int requestCode, String[] permissions,
               int[] grantResults) {
@@ -87,12 +87,12 @@ public class PermissionHelper {
                 permissionRequest.getPermissionCallBack().onPermissionGranted();
             } else {
                 permissionRequest.getPermissionCallBack().onPermissionDenied();
-
+                
             }
             permissionRequests.remove(requestResult);
         }
     }
-
+    
     public static boolean shouldShowRequestPermissionRationale(
               Activity activity,
               String permissions) {
@@ -103,9 +103,9 @@ public class PermissionHelper {
                       .shouldShowRequestPermissionRationale(activity, permissions);
         }
     }
-
+    
     public class Permission {
-
+        
         public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
         public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
         public static final String INTERNET = "android.permission.INTERNET";

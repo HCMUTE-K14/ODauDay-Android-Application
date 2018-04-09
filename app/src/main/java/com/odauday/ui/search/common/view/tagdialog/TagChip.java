@@ -14,6 +14,10 @@ public class TagChip implements ChipInterface {
     
     private Tag tag;
     
+    public TagChip(Tag tag) {
+        this.tag = tag;
+    }
+    
     public static List<Tag> convertToTag(List<ChipInterface> tagChips) {
         List<Tag> tags = new ArrayList<>();
         for (ChipInterface tagChip : tagChips) {
@@ -21,10 +25,6 @@ public class TagChip implements ChipInterface {
         }
         
         return tags;
-    }
-    
-    public TagChip(Tag tag) {
-        this.tag = tag;
     }
     
     @Override

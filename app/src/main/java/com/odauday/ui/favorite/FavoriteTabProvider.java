@@ -9,7 +9,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class FavoriteTabProvider {
-
+    
     @ContributesAndroidInjector(modules = FavoriteTabModule.class)
     @PerFragment
     abstract FavoriteTabMainFragment provideFavoriteTab();

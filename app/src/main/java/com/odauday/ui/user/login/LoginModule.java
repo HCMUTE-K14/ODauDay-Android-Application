@@ -11,15 +11,15 @@ import dagger.Provides;
  */
 @Module
 public class LoginModule {
-
+    
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(LoginViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-
+    
     @Provides
     LoginViewModel provideLoginViewModel(UserRepository userRepository) {
         return new LoginViewModel(userRepository);
-
+        
     }
 }

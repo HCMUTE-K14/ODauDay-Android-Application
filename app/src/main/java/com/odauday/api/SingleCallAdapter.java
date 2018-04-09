@@ -23,17 +23,17 @@ import timber.log.Timber;
 
 @SuppressWarnings("unchecked")
 public class SingleCallAdapter extends Factory {
-
+    
     private final RxJava2CallAdapterFactory original;
-
+    
     private SingleCallAdapter() {
         original = RxJava2CallAdapterFactory.create();
     }
-
+    
     public static CallAdapter.Factory create() {
         return new SingleCallAdapter();
     }
-
+    
     @Override
     public CallAdapter<?, ?> get(
               @NonNull Type returnType,
@@ -43,22 +43,22 @@ public class SingleCallAdapter extends Factory {
                   retrofit,
                   original.get(returnType, annotations, retrofit));
     }
-
+    
     private static class RxCallAdapterWrapper implements CallAdapter<Object, Single<?>> {
-
+        
         private final Retrofit retrofit;
         private final CallAdapter<Object, Single> wrapped;
-
+        
         RxCallAdapterWrapper(Retrofit retrofit, CallAdapter wrapped) {
             this.retrofit = retrofit;
             this.wrapped = wrapped;
         }
-
+        
         @Override
         public Type responseType() {
             return wrapped.responseType();
         }
-
+        
         @SuppressWarnings("unchecked")
         @Override
         public Single<?> adapt(@NonNull Call<Object> call) {
@@ -89,7 +89,7 @@ public class SingleCallAdapter extends Factory {
                                     .unexpectedError((Exception) throwable));
                       });
         }
-
-
+        
+        
     }
 }

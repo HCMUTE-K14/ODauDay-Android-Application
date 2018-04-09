@@ -28,16 +28,16 @@ import java.util.List;
  * Recycle stores wheel items to reuse.
  */
 public class WheelRecycle {
-
+    
     // Cached items
     private List<View> items;
-
+    
     // Cached empty items
     private List<View> emptyItems;
-
+    
     // Wheel view
     private WheelView wheel;
-
+    
     /**
      * Constructor
      *
@@ -46,7 +46,7 @@ public class WheelRecycle {
     public WheelRecycle(WheelView wheel) {
         this.wheel = wheel;
     }
-
+    
     /**
      * Recycles items from specified layout. There are saved only items not included to specified
      * range. All the cached items are removed from original layout.
@@ -72,7 +72,7 @@ public class WheelRecycle {
         }
         return firstItem;
     }
-
+    
     /**
      * Gets item view
      *
@@ -81,7 +81,7 @@ public class WheelRecycle {
     public View getItem() {
         return getCachedView(items);
     }
-
+    
     /**
      * Gets empty item view
      *
@@ -90,7 +90,7 @@ public class WheelRecycle {
     public View getEmptyItem() {
         return getCachedView(emptyItems);
     }
-
+    
     /**
      * Clears all views
      */
@@ -102,7 +102,7 @@ public class WheelRecycle {
             emptyItems.clear();
         }
     }
-
+    
     /**
      * Adds view to specified cache. Creates a cache list if it is null.
      *
@@ -114,11 +114,11 @@ public class WheelRecycle {
         if (cache == null) {
             cache = new LinkedList<View>();
         }
-
+        
         cache.add(view);
         return cache;
     }
-
+    
     /**
      * Adds view to cache. Determines view type (item view or empty one) by index.
      *
@@ -127,7 +127,7 @@ public class WheelRecycle {
      */
     private void recycleView(View view, int index) {
         int count = wheel.getViewAdapter().getItemsCount();
-
+        
         if ((index < 0 || index >= count) && !wheel.isCyclic()) {
             // empty view
             emptyItems = addView(view, emptyItems);
@@ -139,7 +139,7 @@ public class WheelRecycle {
             items = addView(view, items);
         }
     }
-
+    
     /**
      * Gets view from specified cache.
      *
@@ -154,5 +154,5 @@ public class WheelRecycle {
         }
         return null;
     }
-
+    
 }

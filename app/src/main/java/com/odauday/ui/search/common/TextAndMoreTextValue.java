@@ -1,6 +1,8 @@
 package com.odauday.ui.search.common;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.odauday.R;
 import com.odauday.model.Tag;
 import com.odauday.ui.search.navigation.FilterOption;
@@ -12,8 +14,19 @@ import java.util.List;
  * Created by infamouSs on 4/7/18.
  */
 
-public class TextAndMoreTextValue {
+public class TextAndMoreTextValue implements Parcelable {
     
+    public static final Creator<TextAndMoreTextValue> CREATOR = new Creator<TextAndMoreTextValue>() {
+        @Override
+        public TextAndMoreTextValue createFromParcel(Parcel in) {
+            return new TextAndMoreTextValue(in);
+        }
+        
+        @Override
+        public TextAndMoreTextValue[] newArray(int size) {
+            return new TextAndMoreTextValue[size];
+        }
+    };
     private String text;
     private String moreText;
     
@@ -22,26 +35,15 @@ public class TextAndMoreTextValue {
         this.moreText = moreText;
     }
     
-    public String getText() {
-        return text;
-    }
-    
-    public void setText(String text) {
-        this.text = text;
-    }
-    
-    public String getMoreText() {
-        return moreText;
-    }
-    
-    public void setMoreText(String moreText) {
-        this.moreText = moreText;
+    protected TextAndMoreTextValue(Parcel in) {
+        text = in.readString();
+        moreText = in.readString();
     }
     
     @SuppressWarnings("unchecked")
     public static TextAndMoreTextValue build(Context context, FilterOption option,
               List lists) {
-        String text = "";
+        String text;
         String moreText = "";
         
         int size = lists.size();
@@ -68,25 +70,21 @@ public class TextAndMoreTextValue {
         
         String secondItem = buildItemIndex(context, option, lists, 1);
         
-        return TextUtils.build(firstItem, ", ", secondItem);
+        return TextUtils.build(firstItem, ", ", secondItem).trim();
     }
     
     private static String buildMoreText(Context context, FilterOption option, List lists) {
         int size = lists.size();
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(", ");
         for (int i = 2; i < size; i++) {
-            if (i == size - 1) {
-                String lastItem = buildItemIndex(context, option, lists, i);
-                
-                stringBuilder.append(lastItem);
-                break;
-            }
             String item = buildItemIndex(context, option, lists, i);
             stringBuilder
                       .append(item)
                       .append(", ");
         }
-        return stringBuilder.toString();
+        
+        return stringBuilder.toString().trim();
     }
     
     private static String buildItemIndex(Context context, FilterOption option, List lists,
@@ -104,7 +102,41 @@ public class TextAndMoreTextValue {
         } catch (IndexOutOfBoundsException ex) {
             return "";
         }
-        
     }
     
+    public String getText() {
+        return text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public String getMoreText() {
+        return moreText;
+    }
+    
+    public void setMoreText(String moreText) {
+        this.moreText = moreText;
+    }
+    
+    @Override
+    public String toString() {
+        return "TextAndMoreTextValue{" +
+               "text='" + text + '\'' +
+               ", moreText='" + moreText + '\'' +
+               '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        
+        parcel.writeString(text);
+        parcel.writeString(moreText);
+    }
 }

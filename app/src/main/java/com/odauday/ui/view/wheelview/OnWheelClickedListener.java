@@ -21,7 +21,7 @@ package com.odauday.ui.view.wheelview;
  * is clicked <li> New Wheel position is set <li> Wheel view is scrolled
  */
 public interface OnWheelClickedListener {
-
+    
     /**
      * Callback method to be invoked when current item clicked
      *

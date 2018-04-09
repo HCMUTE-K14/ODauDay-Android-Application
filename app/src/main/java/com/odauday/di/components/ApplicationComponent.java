@@ -2,6 +2,7 @@ package com.odauday.di.components;
 
 import com.odauday.RootApplication;
 import com.odauday.di.modules.ApplicationModule;
+import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
 import com.odauday.di.modules.ServiceBuildersModule;
@@ -22,6 +23,7 @@ import javax.inject.Singleton;
           ApplicationModule.class,
           NetworkModule.class,
           ServiceBuildersModule.class,
+          LocalDaoModule.class,
           RepositoryBuildersModule.class,
           ViewBuildersModule.class})
 public interface ApplicationComponent {
@@ -35,6 +37,8 @@ public interface ApplicationComponent {
         Builder application(RootApplication application);
         
         Builder network(NetworkModule networkModule);
+        
+        Builder localDAO(LocalDaoModule localDaoModule);
         
         Builder service(ServiceBuildersModule serviceBuildersModule);
         

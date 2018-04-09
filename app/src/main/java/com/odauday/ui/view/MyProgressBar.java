@@ -15,36 +15,36 @@ import com.odauday.R;
  */
 
 public class MyProgressBar extends RelativeLayout {
-
+    
     private MyProgressBarListener mListener;
-
+    
     public MyProgressBar(Context context) {
         super(context);
         init(context);
     }
-
+    
     public MyProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-
+    
     public MyProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
-
+    
+    
     private void init(Context context) {
-
+        
         LayoutInflater inflater = (LayoutInflater) context
                   .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
         View rootView = inflater.inflate(R.layout.layout_progress_bar, this, true);
-
+        
         ProgressBar mProgressBar = rootView.findViewById(R.id.progressbar);
-
+        
         if (mProgressBar == null) {
             return;
         }
@@ -52,7 +52,7 @@ public class MyProgressBar extends RelativeLayout {
                   ContextCompat.getColor(context, R.color.colorPrimary),
                   PorterDuff.Mode.SRC_IN);
     }
-
+    
     @Override
     public void setVisibility(int visibility) {
         if (mListener != null) {
@@ -64,27 +64,27 @@ public class MyProgressBar extends RelativeLayout {
         }
         super.setVisibility(visibility);
     }
-
+    
     public void show() {
         this.setVisibility(View.VISIBLE);
     }
-
+    
     public void hide() {
         this.setVisibility(View.GONE);
     }
-
+    
     public MyProgressBarListener getListener() {
         return mListener;
     }
-
+    
     public void setListener(MyProgressBarListener listener) {
         mListener = listener;
     }
-
+    
     public interface MyProgressBarListener {
-
+        
         void onShow();
-
+        
         void onHide();
     }
 }

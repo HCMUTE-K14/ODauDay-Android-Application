@@ -1,5 +1,8 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.tag.RecentTagDao;
+import com.odauday.data.local.tag.RecentTagService;
+import com.odauday.data.local.tag.impl.RecentTagServiceImpl;
 import com.odauday.data.remote.search.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -32,4 +35,13 @@ public class ServiceBuildersModule {
     SearchService provideSearchService() {
         return new SearchService();
     }
+    
+    //--------------------------LOCAL---------------------------//
+    
+    @Provides
+    @Singleton
+    RecentTagService provideRecentTagService(RecentTagDao recentTagDao) {
+        return new RecentTagServiceImpl(recentTagDao);
+    }
+    
 }

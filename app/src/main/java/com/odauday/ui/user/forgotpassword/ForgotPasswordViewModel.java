@@ -12,27 +12,22 @@ import javax.inject.Inject;
  */
 
 public class ForgotPasswordViewModel extends BaseViewModel {
-
+    
     private final UserRepository mUserRepository;
-
+    
     @Inject
     public ForgotPasswordViewModel(UserRepository userRepository) {
         this.mUserRepository = userRepository;
     }
-
-
+    
+    
     public void forgotPassword(ForgotPasswordRequest request) {
-
+        
         Disposable disposable = mUserRepository.forgotPassword(request)
-                  .doOnSubscribe(onSubscribe -> {
-                      response.setValue(Resource.loading(null));
-                  })
-                  .subscribe(success -> {
-                      response.setValue(Resource.success(success));
-                  }, error -> {
-                      response.setValue(Resource.error(error));
-                  });
-
+                  .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
+                  .subscribe(success -> response.setValue(Resource.success(success)),
+                            error -> response.setValue(Resource.error(error)));
+        
         mCompositeDisposable.add(disposable);
     }
 }

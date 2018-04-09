@@ -43,7 +43,8 @@ public class PropertyTypeDialogAdapter extends
     @Override
     protected ItemTextWithCheckBoxBinding createBinding(ViewGroup parent) {
         return DataBindingUtil
-                  .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_text_with_check_box,
+                  .inflate(LayoutInflater.from(parent.getContext()),
+                            R.layout.item_text_with_check_box,
                             parent, false, null);
     }
     

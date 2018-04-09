@@ -1,6 +1,7 @@
 package com.odauday.ui.search.navigation;
 
 import android.arch.lifecycle.ViewModelProvider;
+import com.odauday.data.RecentTagRepository;
 import com.odauday.viewmodel.ViewModelFactory;
 import dagger.Module;
 import dagger.Provides;
@@ -10,14 +11,15 @@ import dagger.Provides;
  */
 @Module
 public class FilterNavigationModule {
-
+    
     @Provides
     ViewModelProvider.Factory mainViewModelProvider(FilterNavigationViewModel mainViewModel) {
         return new ViewModelFactory<>(mainViewModel);
     }
-
+    
     @Provides
-    FilterNavigationViewModel provideFilterNavigationViewModel() {
-        return new FilterNavigationViewModel();
+    FilterNavigationViewModel provideFilterNavigationViewModel(
+              RecentTagRepository recentTagRepository) {
+        return new FilterNavigationViewModel(recentTagRepository);
     }
 }

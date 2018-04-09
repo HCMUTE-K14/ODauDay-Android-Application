@@ -16,59 +16,59 @@ import com.odauday.ui.view.wheelview.adapters.WheelViewAdapter;
  */
 
 public class FilterNumberPicker extends FrameLayout implements OnClickListener {
-
+    
     private WheelView mFilterPicker;
-
+    
     public FilterNumberPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-
+    
     public FilterNumberPicker(Context context) {
         super(context);
         init(context);
     }
-
+    
     public FilterNumberPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-
+    
     public WheelViewAdapter getViewAdapter() {
         return this.mFilterPicker.getViewAdapter();
     }
-
+    
     public void setViewAdapter(WheelViewAdapter adapter) {
         this.mFilterPicker.setViewAdapter(adapter);
     }
-
+    
     public int getCurrentItem() {
         return this.mFilterPicker.getCurrentItem();
     }
-
+    
     public void setCurrentItem(int index) {
         this.mFilterPicker.setCurrentItem(index);
     }
-
+    
     public void setCurrentItem(int index, boolean isAnimated) {
         this.mFilterPicker.setCurrentItem(index, isAnimated);
     }
-
+    
     public void addScrollingListener(OnWheelScrollListener listener) {
         this.mFilterPicker.addScrollingListener(listener);
     }
-
+    
     public void removeScrollingListener(OnWheelScrollListener listener) {
         this.mFilterPicker.removeScrollingListener(listener);
     }
-
+    
     public void setId(int id) {
         this.mFilterPicker.setId(id);
     }
-
+    
     public void setHeading(String text) {
         ((TextView) findViewById(R.id.txt_header)).setText(text);
     }
-
+    
     public void onClick(View v) {
         int currentIndex = this.mFilterPicker.getCurrentItem();
         switch (v.getId()) {
@@ -85,10 +85,10 @@ public class FilterNumberPicker extends FrameLayout implements OnClickListener {
                 }
                 return;
             default:
-                return;
+                break;
         }
     }
-
+    
     private void init(Context context) {
         View v = View.inflate(context, R.layout.layout_filter_picker, null);
         this.mFilterPicker = (WheelView) v.findViewById(R.id.wheel_view);

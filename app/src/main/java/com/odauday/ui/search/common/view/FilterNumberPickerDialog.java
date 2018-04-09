@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 import com.odauday.R;
@@ -124,7 +123,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         setContent(v);
         setPositiveButton(getString(R.string.txt_done), false,
                   new OnShowFilterPickerDialogEvent());
-        return (AlertDialog) create();
+        return create();
     }
     
     private int getSelectedValue(int selectedValue) {
@@ -183,7 +182,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                 }
                 return;
             default:
-                return;
+                break;
         }
     }
     

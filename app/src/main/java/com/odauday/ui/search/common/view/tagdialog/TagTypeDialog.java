@@ -18,7 +18,6 @@ import com.odauday.ui.base.BaseDialogFragment;
 import com.odauday.ui.search.common.view.OnCompletePickedType;
 import com.odauday.ui.search.common.view.tagdialog.TagRecentAdapter.OnClickTagRecent;
 import com.pchmn.materialchips.ChipsInput;
-import com.pchmn.materialchips.model.ChipInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
                   LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         
-        mChipsInput = (ChipsInput) mView.findViewById(R.id.chips_input);
+        mChipsInput = mView.findViewById(R.id.chips_input);
         mChipsInput.getEditText().setTextSize(TEXT_SIZE);
         
         if (getArguments() == null) {
@@ -80,13 +79,13 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
         
         setTitle(getString(R.string.txt_filter_tags));
         setContent(mView);
-        setPositiveButton(getString(R.string.txt_done), false, (view) -> {
+        setPositiveAlertDialogButton(getString(R.string.txt_done), (view, which) -> {
             Fragment fragment = TagTypeDialog.this.getTargetFragment();
             if (fragment != null && (fragment instanceof OnCompletePickedType)) {
                 ((OnCompletePickedType) fragment)
                           .onCompletePickedType(
                                     TagTypeDialog.this.getTargetRequestCode(),
-                                    (List<ChipInterface>) Collections
+                                    Collections
                                               .unmodifiableList(mChipsInput.getSelectedChipList()));
             }
             dismiss();

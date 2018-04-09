@@ -10,14 +10,14 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class MinMaxObject<T> implements Parcelable {
-
+    
     @SuppressWarnings("rawtypes")
     public static final Parcelable.Creator<MinMaxObject> CREATOR = new Parcelable.Creator<MinMaxObject>() {
-
+        
         public MinMaxObject createFromParcel(Parcel in) {
             return new MinMaxObject(in);
         }
-
+        
         public MinMaxObject[] newArray(int size) {
             return new MinMaxObject[size];
         }
@@ -29,7 +29,7 @@ public class MinMaxObject<T> implements Parcelable {
     @SerializedName("max")
     @Expose
     private T max;
-
+    
     public MinMaxObject(T min, T max) {
         this.min = min;
         this.max = max;
@@ -37,7 +37,7 @@ public class MinMaxObject<T> implements Parcelable {
             MinMaxObject.mClassLoader = min.getClass().getClassLoader();
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     private MinMaxObject(Parcel parcelIn) {
         try {
@@ -48,23 +48,23 @@ public class MinMaxObject<T> implements Parcelable {
             e.printStackTrace();
         }
     }
-
+    
     public T getMin() {
         return min;
     }
-
+    
     public void setMin(T min) {
         this.min = min;
     }
-
+    
     public T getMax() {
         return max;
     }
-
+    
     public void setMax(T max) {
         this.max = max;
     }
-
+    
     @Override
     public String toString() {
         return "MinMaxObject{" +
@@ -72,17 +72,17 @@ public class MinMaxObject<T> implements Parcelable {
                ", max=" + max +
                '}';
     }
-
+    
     @Override
     public int describeContents() {
         return 0;
     }
-
+    
     @Override
     public void writeToParcel(Parcel parcelOut, int flags) {
         parcelOut.writeValue(min);
         parcelOut.writeValue(max);
     }
-
-
+    
+    
 }

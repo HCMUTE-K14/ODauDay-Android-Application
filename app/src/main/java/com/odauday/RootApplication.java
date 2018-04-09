@@ -2,16 +2,16 @@ package com.odauday;
 
 import android.app.Activity;
 import android.app.Application;
-import com.odauday.data.local.cache.PrefKey;
-import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.config.AppConfig;
+import com.odauday.data.local.tag.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
+import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
 import com.odauday.di.modules.ServiceBuildersModule;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
-import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -25,13 +25,13 @@ public class RootApplication extends Application implements HasActivityInjector 
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
     
     @Inject
-    PreferencesHelper mPreferencesHelper;
+    DaoSession mDaoSession;
     
     @Override
     public void onCreate() {
         super.onCreate();
         
-        if (BuildConfig.DEBUG) {
+        if (AppConfig.isDebug()) {
             Timber.plant(new Timber.DebugTree());
         }
         
@@ -39,10 +39,15 @@ public class RootApplication extends Application implements HasActivityInjector 
                   .builder()
                   .application(this)
                   .network(new NetworkModule(this))
+                  .localDAO(new LocalDaoModule())
                   .service(new ServiceBuildersModule())
                   .repository(new RepositoryBuildersModule())
                   .build()
                   .inject(this);
+    }
+    
+    public DaoSession getDaoSession() {
+        return mDaoSession;
     }
     
     @Override

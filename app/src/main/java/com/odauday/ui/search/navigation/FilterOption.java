@@ -12,15 +12,15 @@ public enum FilterOption {
     PARKING(5, "FILTER_PARKING"),
     PROPERTY_TYPE(6, "PROPERTY_TYPE"),
     TAGS(7, "TAGS");
-
+    
     private int mRequestCode;
     private String mTag;
-
-    private FilterOption(int requestCode, String tag) {
+    
+    FilterOption(int requestCode, String tag) {
         this.mRequestCode = requestCode;
         this.mTag = tag;
     }
-
+    
     public static FilterOption getByRequestCode(int requestCode) {
         switch (requestCode) {
             case 1:
@@ -41,11 +41,11 @@ public enum FilterOption {
                 throw new IllegalArgumentException("Not found FilterOption with request code");
         }
     }
-
+    
     public int getRequestCode() {
         return mRequestCode;
     }
-
+    
     public String getTag() {
         return mTag;
     }

@@ -9,12 +9,22 @@ import com.odauday.utils.ObjectUtils;
 /**
  * Created by infamouSs on 4/4/2018.
  */
-public class Tag implements Parcelable{
+public class Tag implements Parcelable {
     
+    public static final Creator<Tag> CREATOR = new Creator<Tag>() {
+        @Override
+        public Tag createFromParcel(Parcel in) {
+            return new Tag(in);
+        }
+        
+        @Override
+        public Tag[] newArray(int size) {
+            return new Tag[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private String id;
-    
     @SerializedName("name")
     @Expose
     private String name;
@@ -28,18 +38,6 @@ public class Tag implements Parcelable{
         id = in.readString();
         name = in.readString();
     }
-    
-    public static final Creator<Tag> CREATOR = new Creator<Tag>() {
-        @Override
-        public Tag createFromParcel(Parcel in) {
-            return new Tag(in);
-        }
-        
-        @Override
-        public Tag[] newArray(int size) {
-            return new Tag[size];
-        }
-    };
     
     public String getId() {
         return id;
@@ -91,7 +89,7 @@ public class Tag implements Parcelable{
     
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-    
+        
         dest.writeString(id);
         dest.writeString(name);
     }

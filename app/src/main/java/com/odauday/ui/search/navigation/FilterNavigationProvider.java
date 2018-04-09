@@ -9,7 +9,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class FilterNavigationProvider {
-
+    
     @ContributesAndroidInjector(modules = FilterNavigationModule.class)
     @PerChildFragment
     abstract FilterNavigationFragment provideFilterNavigation();

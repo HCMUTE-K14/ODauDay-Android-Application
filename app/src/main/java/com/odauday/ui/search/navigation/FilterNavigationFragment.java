@@ -1,11 +1,14 @@
 package com.odauday.ui.search.navigation;
 
+import static com.odauday.config.AppConfig.RATE_VND;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
-import com.odauday.config.Constants;
+import com.odauday.data.remote.search.SearchService;
+import com.odauday.data.remote.search.model.SearchRequest;
 import com.odauday.databinding.FragmentFilterBinding;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMFragment;
@@ -28,7 +31,8 @@ import timber.log.Timber;
 
 public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBinding> implements
                                                                                       OnCompletePickedNumberListener,
-                                                                                      OnCompletePickedType {
+                                                                                      OnCompletePickedType,
+                                                                                      FilterFragmentContract {
     
     //====================== Variable =========================//
     public static final String TAG = FilterNavigationFragment.class.getSimpleName();
@@ -36,49 +40,56 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Inject
     FilterNavigationViewModel mFilterNavigationViewModel;
     
+    @Inject
+    SearchService mSearchService;
+    
+    private OnCompleteRefineFilter mOnCompleteRefineFilter;
+    
     private SearchCriteria mSearchCriteria;
     
+    private boolean mIsShouldResetFilter;
     
     //====================== Constructor =========================//
     public static FilterNavigationFragment newInstance() {
         
         Bundle args = new Bundle();
+        Timber.d("New instance with non search criteria");
         
         FilterNavigationFragment fragment = new FilterNavigationFragment();
         fragment.setArguments(args);
         return fragment;
     }
     
-    public static FilterNavigationFragment newInstance(SearchCriteria searchCriteria) {
-        
-        Bundle args = new Bundle();
-        args.putParcelable(Constants.INTENT_EXTRA_CURRENT_SEARCH_CRITERIA, searchCriteria);
-        FilterNavigationFragment fragment = new FilterNavigationFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public boolean isShouldResetFilter() {
+        return mIsShouldResetFilter;
+    }
+    
+    public void setShouldResetFilter(boolean shouldResetFilter) {
+        mIsShouldResetFilter = shouldResetFilter;
     }
     
     //====================== Override Base Method =========================//
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mSearchCriteria = getArguments()
-                      .getParcelable(Constants.INTENT_EXTRA_CURRENT_SEARCH_CRITERIA);
-            
-        } else {
-            mSearchCriteria = new SearchCriteria();
-        }
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mBinding.get().setViewModel(mFilterNavigationViewModel);
         
         mFilterNavigationViewModel.setFragment(this);
-        mBinding.get().setViewModel(mFilterNavigationViewModel);
+        
+        if (mSearchService.getCurrentSearchRequest() == null) {
+            this.mSearchService.setCurrentSearchRequest(new SearchRequest(new SearchCriteria()));
+        }
+        setSearchCriteria(mSearchService.getCurrentSearchRequest().getCriteria());
+        
+        Timber.tag(TAG).d(this.mSearchCriteria.getDisplay().toString());
+        mIsShouldResetFilter = false;
+        refreshViewWithSearchCriteria();
     }
-    
     
     @Override
     public int getLayoutId() {
@@ -92,7 +103,22 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+        mFilterNavigationViewModel.response().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case ERROR:
+                        onFailure((Exception) resource.data);
+                        break;
+                    case SUCCESS:
+                        onSuccess(resource.data);
+                        break;
+                    case LOADING:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
     
     //====================== Implement method =========================//
@@ -111,43 +137,51 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 String textPrice = getMaxMinText(option, minMaxReturnObject);
                 if (textPrice.split("-").length == 2) {
                     String[] textPricePart = textPrice.split("-");
-                    mBinding.get().filterPrice.setTextValue(
-                              TextUtils.build(
-                                        getString(R.string.txt_from),
-                                        " ",
-                                        textPricePart[0].trim())
-                    );
-                    mBinding.get().filterPrice.setMoreValue(
-                              TextUtils.build(
-                                        getString(R.string.txt_to),
-                                        " ",
-                                        textPricePart[1].trim()
-                              )
-                    );
+                    String text = TextUtils.build(
+                              getString(R.string.txt_from),
+                              " ",
+                              textPricePart[0].trim());
+                    
+                    String moreText = TextUtils.build(
+                              getString(R.string.txt_to),
+                              " ",
+                              textPricePart[1].trim());
+                    mBinding.get().filterPrice.setTextValue(text);
+                    mBinding.get().filterPrice.setMoreValue(moreText);
+                    
+                    mSearchCriteria.getDisplay()
+                              .setDisplayPrice(new TextAndMoreTextValue(text, moreText));
                     return;
                 }
                 mBinding.get().filterPrice.setMoreValue("");
                 mBinding.get().filterPrice.setTextValue(textPrice);
+                mSearchCriteria.getDisplay()
+                          .setDisplayPrice(new TextAndMoreTextValue(textPrice, ""));
+                
                 break;
             case SIZE:
                 mSearchCriteria.setSize(minMaxReturnObject.getValue());
                 String textSize = getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterSize.setTextValue(textSize);
+                mSearchCriteria.getDisplay().setDisplaySize(textSize);
                 break;
             case BEDROOMS:
                 mSearchCriteria.setBedrooms(minMaxReturnObject.getValue());
                 String textBed = getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBedrooms.setTextValue(textBed);
+                mSearchCriteria.getDisplay().setDisplayBedroom(textBed);
                 break;
             case BATHROOMS:
                 mSearchCriteria.setBathrooms(minMaxReturnObject.getValue());
                 String textBath = getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBathRooms.setTextValue(textBath);
+                mSearchCriteria.getDisplay().setDisplayBathroom(textBath);
                 break;
             case PARKING:
                 mSearchCriteria.setParking(minMaxReturnObject.getValue());
                 String textPark = getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterParking.setTextValue(textPark);
+                mSearchCriteria.getDisplay().setDisplayParking(textPark);
                 break;
             default:
                 break;
@@ -164,17 +198,22 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 mSearchCriteria.setPropertyTypeByListInteger(listSelectedPropertyType);
                 TextAndMoreTextValue displayValueProperty = TextAndMoreTextValue
                           .build(getContext(), option, mSearchCriteria.getPropertyType());
+                
                 mBinding.get().filterPropertyType.setTextValue(displayValueProperty.getText());
                 mBinding.get().filterPropertyType.setMoreValue(displayValueProperty.getMoreText());
+                mSearchCriteria.getDisplay().setDisplayPropertyType(displayValueProperty);
                 break;
             case TAGS:
                 List<Tag> selectedTag = TagChip.convertToTag((List<ChipInterface>) value);
-                Timber.tag(TAG).d(selectedTag.toString());
                 mSearchCriteria.setTags(selectedTag);
                 TextAndMoreTextValue displayValueTags = TextAndMoreTextValue
                           .build(getContext(), option, mSearchCriteria.getTags());
                 mBinding.get().filterTag.setTextValue(displayValueTags.getText());
                 mBinding.get().filterTag.setMoreValue(displayValueTags.getMoreText());
+                
+                mFilterNavigationViewModel.insertCurrentTags(selectedTag);
+                
+                mSearchCriteria.getDisplay().setDisplayTag(displayValueTags);
                 break;
             default:
                 break;
@@ -182,6 +221,22 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     }
     
     //====================== Contract method =========================//
+    @Override
+    public void loading(boolean isLoading) {
+    
+    }
+    
+    @Override
+    public void onSuccess(Object object) {
+        if (object instanceof Long) {
+            Timber.tag(TAG).i("Insert tags successfully");
+        }
+    }
+    
+    @Override
+    public void onFailure(Exception ex) {
+        Timber.tag(TAG).i(ex.getMessage());
+    }
     //====================== Helper method =========================//
     
     public SearchCriteria getSearchCriteria() {
@@ -189,11 +244,34 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     }
     
     public void setSearchCriteria(SearchCriteria searchCriteria) {
-        if (searchCriteria == null) {
-            this.mSearchCriteria = new SearchCriteria();
-            return;
-        }
+        
         mSearchCriteria = searchCriteria;
+    }
+    
+    private void refreshViewWithSearchCriteria() {
+        mBinding.get().filterSearchType.getSpinner().setSelection(mSearchCriteria.getSearchType());
+        if (mBinding.get().filterPrice.getVisibility() == View.VISIBLE) {
+            TextAndMoreTextValue displayPrice = mSearchCriteria.getDisplay().getDisplayPrice();
+            mBinding.get().filterPrice.setText(displayPrice);
+        }
+        String displaySize = mSearchCriteria.getDisplay().getDisplaySize();
+        mBinding.get().filterSize.setTextValue(displaySize);
+        
+        TextAndMoreTextValue displayPropertyType = mSearchCriteria.getDisplay()
+                  .getDisplayPropertyType();
+        mBinding.get().filterPropertyType.setText(displayPropertyType);
+        
+        String displayBedroom = mSearchCriteria.getDisplay().getDisplayBedroom();
+        mBinding.get().filterBedrooms.setTextValue(displayBedroom);
+        
+        String displayBathroom = mSearchCriteria.getDisplay().getDisplaySize();
+        mBinding.get().filterBathRooms.setTextValue(displayBathroom);
+        
+        String displayParking = mSearchCriteria.getDisplay().getDisplayParking();
+        mBinding.get().filterParking.setTextValue(displayParking);
+        
+        TextAndMoreTextValue displayTag = mSearchCriteria.getDisplay().getDisplayTag();
+        mBinding.get().filterTag.setText(displayTag);
     }
     
     
@@ -233,20 +311,34 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 return any;
             }
             if (valueMax == valueMin) {
-                return TextUtils.formatIntToCurrency(valueMax * 1000);
+                return TextUtils.formatIntToCurrency(valueMax * RATE_VND);
             }
             
             if (valueMax == 0) {
                 return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMin * 1000), " ", orMore);
+                          .build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), " ", orMore);
             }
             if (valueMin == 0) {
                 return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMax * 1000), " ", orLess);
+                          .build(TextUtils.formatIntToCurrency(valueMax * RATE_VND), " ", orLess);
             }
             
-            return TextUtils.build(TextUtils.formatIntToCurrency(valueMin * 1000), "-",
-                      TextUtils.formatIntToCurrency(valueMax * 1000));
+            return TextUtils.build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), "-",
+                      TextUtils.formatIntToCurrency(valueMax * RATE_VND));
         }
+    }
+    
+    public OnCompleteRefineFilter getOnCompleteRefineFilter() {
+        return mOnCompleteRefineFilter;
+    }
+    
+    public void setOnCompleteRefineFilter(
+              OnCompleteRefineFilter onCompleteRefineFilter) {
+        mOnCompleteRefineFilter = onCompleteRefineFilter;
+    }
+    
+    public interface OnCompleteRefineFilter {
+        
+        void onCompleteRefineFilter(SearchCriteria searchCriteria);
     }
 }

@@ -21,6 +21,7 @@ package com.odauday.ui.view.wheelview;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Handler.Callback;
 import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -55,8 +56,9 @@ public class WheelScroller {
     private float lastTouchedY;
     private boolean isScrollingPerformed;
     // animation handler
-    private Handler animationHandler = new Handler() {
-        public void handleMessage(Message msg) {
+    private Handler animationHandler = new Handler(new Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
             scroller.computeScrollOffset();
             int currY = scroller.getCurrY();
             int delta = lastScrollY - currY;
@@ -78,8 +80,9 @@ public class WheelScroller {
             } else {
                 finishScrolling();
             }
+            return true;
         }
-    };
+    });
     // gesture listener
     private SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {

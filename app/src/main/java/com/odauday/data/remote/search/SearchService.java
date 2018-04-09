@@ -1,6 +1,6 @@
 package com.odauday.data.remote.search;
 
-import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.data.remote.search.model.SearchRequest;
 import javax.inject.Inject;
 
 /**
@@ -9,13 +9,19 @@ import javax.inject.Inject;
 
 public class SearchService {
     
+    private SearchRequest mSearchRequest;
+    
     @Inject
     public SearchService() {
     
     }
     
     
-    public SearchCriteria getCurrentSearchCriteria() {
-        return new SearchCriteria();
+    public SearchRequest getCurrentSearchRequest() {
+        return mSearchRequest;
+    }
+    
+    public void setCurrentSearchRequest(SearchRequest searchRequest) {
+        this.mSearchRequest = searchRequest;
     }
 }

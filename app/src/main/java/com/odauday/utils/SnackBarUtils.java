@@ -8,8 +8,8 @@ import android.view.View;
  */
 
 public class SnackBarUtils {
-
-
+    
+    
     public static void showSnackBar(View rootView, String mMessage) {
         Snackbar.make(rootView, mMessage, Snackbar.LENGTH_LONG)
                   .setAction("Action", null)

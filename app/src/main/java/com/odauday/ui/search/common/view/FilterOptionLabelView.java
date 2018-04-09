@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.ui.search.common.TextAndMoreTextValue;
+import com.odauday.utils.ObjectUtils;
+import com.odauday.utils.TextUtils;
 
 /**
  * Created by infamouSs on 4/1/18.
@@ -81,7 +84,15 @@ public class FilterOptionLabelView extends LinearLayout {
         return mTextViewValue;
     }
     
+    public void setTextValue(int value) {
+        mTextViewValue.setText(value);
+    }
+    
     public void setTextValue(String value) {
+        if (TextUtils.isEmpty(value)) {
+            setTextValue(R.string.txt_any);
+            return;
+        }
         mTextViewValue.setText(value);
     }
     
@@ -95,6 +106,27 @@ public class FilterOptionLabelView extends LinearLayout {
     
     public void setMoreValue(String moreValue) {
         this.mTextViewMoreValue.setText(moreValue);
+    }
+    
+    public void setMoreValue(int moreValue) {
+        this.mTextViewMoreValue.setText(moreValue);
+    }
+    
+    public void setText(TextAndMoreTextValue value) {
+        if (ObjectUtils.isNull(value)) {
+            setTextValue(R.string.txt_any);
+            return;
+        }
+        if (TextUtils.isEmpty(value.getText())) {
+            setTextValue(R.string.txt_any);
+        } else {
+            setTextValue(value.getText());
+            if (TextUtils.isEmpty(value.getMoreText())) {
+                setMoreValue("");
+            } else {
+                setMoreValue(value.getMoreText());
+            }
+        }
     }
     
     public void setListener(OnCLickFilterOption listener) {

@@ -30,7 +30,7 @@ public enum PropertyType {
     private int mId;
     private int mDisplayStringResource;
     
-    private PropertyType(int id, int displayString) {
+    PropertyType(int id, int displayString) {
         this.mId = id;
         this.mDisplayStringResource = displayString;
     }
@@ -55,6 +55,17 @@ public enum PropertyType {
         
     }
     
+    public static List<Integer> convertToArrayInt(List<PropertyType> list) {
+        List<Integer> integers = new ArrayList<>();
+        if (list.isEmpty()) {
+            return integers;
+        }
+        for (PropertyType propertyType : list) {
+            integers.add(propertyType.getId());
+        }
+        return integers;
+    }
+    
     public int getId() {
         return mId;
     }
@@ -69,13 +80,5 @@ public enum PropertyType {
     
     public void setDisplayStringResource(int displayStringResource) {
         mDisplayStringResource = displayStringResource;
-    }
-    
-    public static List<Integer> convertToArrayInt(List<PropertyType> list) {
-        List<Integer> integers = new ArrayList<>();
-        for (PropertyType propertyType : list) {
-            integers.add(propertyType.getId());
-        }
-        return integers;
     }
 }

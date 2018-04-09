@@ -2,6 +2,7 @@ package com.odauday.ui.search.navigation;
 
 import android.view.View;
 import com.odauday.R;
+import com.odauday.data.RecentTagRepository;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseDialogFragment;
 import com.odauday.ui.search.common.MinMaxObject;
@@ -12,23 +13,35 @@ import com.odauday.ui.search.common.view.propertydialog.PropertyTypeDialog;
 import com.odauday.ui.search.common.view.tagdialog.TagTypeDialog;
 import com.odauday.utils.TextUtils;
 import com.odauday.viewmodel.BaseViewModel;
+import com.odauday.viewmodel.model.Resource;
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/3/2018.
  */
 public class FilterNavigationViewModel extends BaseViewModel {
     
+    private final RecentTagRepository mRecentTagRepository;
     private FilterNavigationFragment mFragment;
-    
     private boolean mIsShowMoreOptions = false;
     
-    @Inject
-    public FilterNavigationViewModel() {
     
+    @Inject
+    public FilterNavigationViewModel(RecentTagRepository recentTagRepository) {
+        this.mRecentTagRepository = recentTagRepository;
+    }
+    
+    public void insertCurrentTags(List<Tag> tags) {
+        Disposable disposable = mRecentTagRepository
+                  .save(tags)
+                  .subscribe(success -> response.setValue(Resource.success(success)),
+                            error -> response.setValue(Resource.error(error)));
+        
+        mCompositeDisposable.add(disposable);
     }
     
     public FilterNavigationFragment getFragment() {
@@ -40,36 +53,63 @@ public class FilterNavigationViewModel extends BaseViewModel {
     }
     
     public void showTypePickerDialog(FilterOption option) {
+        switch (option) {
+            case PROPERTY_TYPE:
+                List<Integer> selectedPropertyType =
+                          PropertyType.convertToArrayInt(mFragment.getSearchCriteria()
+                                    .getPropertyType());
+                openPropertyTypeDialog(selectedPropertyType);
+                break;
+            case TAGS:
+                final List<Tag> recentTags = new ArrayList<>();
+                
+                mRecentTagRepository
+                          .findAllRecentTagByCurrentUserId()
+                          .subscribe(success -> {
+                              recentTags.addAll(success);
+                              List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
+                              Timber.d(recentTags.toString());
+                              openTagTypeDialog(selectedTag, recentTags);
+                          }, error -> {
+                              List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
+                              Timber.d(error.getCause());
+                              
+                              openTagTypeDialog(selectedTag, recentTags);
+                          });
+                break;
+            default:
+                break;
+        }
+    }
+    
+    private void openTagTypeDialog(List<Tag> selectedTag, List<Tag> recentTag) {
         if (mFragment.getFragmentManager() == null) {
             return;
         }
-        BaseDialogFragment dialog;
-        switch (option) {
-            case PROPERTY_TYPE:
-                List<Integer> selectedPropertyType = PropertyType
-                          .convertToArrayInt(mFragment.getSearchCriteria().getPropertyType());
-                dialog = PropertyTypeDialog
-                          .newInstance(selectedPropertyType);
-                break;
-            case TAGS:
-                List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
-                
-                List<Tag> recentTags = new ArrayList<>(Arrays.asList(new Tag("20", "Gym"),
-                          new Tag("2", "Balcony / Deck")));
-                
-                dialog = TagTypeDialog
-                          .newInstance(selectedTag, recentTags);
-                break;
-            default:
-                dialog = null;
-                break;
-        }
+        BaseDialogFragment dialog = TagTypeDialog
+                  .newInstance(selectedTag, recentTag);
+        
         if (dialog == null) {
             return;
         }
         
-        dialog.setTargetFragment(mFragment, option.getRequestCode());
-        dialog.show(mFragment.getFragmentManager(), option.getTag());
+        dialog.setTargetFragment(mFragment, FilterOption.TAGS.getRequestCode());
+        dialog.show(mFragment.getFragmentManager(), FilterOption.TAGS.getTag());
+    }
+    
+    private void openPropertyTypeDialog(List<Integer> selectedPropertyType) {
+        if (mFragment.getFragmentManager() == null) {
+            return;
+        }
+        BaseDialogFragment dialog = PropertyTypeDialog
+                  .newInstance(selectedPropertyType);
+        
+        if (dialog == null) {
+            return;
+        }
+        
+        dialog.setTargetFragment(mFragment, FilterOption.PROPERTY_TYPE.getRequestCode());
+        dialog.show(mFragment.getFragmentManager(), FilterOption.PROPERTY_TYPE.getTag());
     }
     
     public void showNumberPickerDialog(FilterOption option) {
@@ -157,10 +197,15 @@ public class FilterNavigationViewModel extends BaseViewModel {
         if (mFragment.getBinding().get() == null) {
             return;
         }
-        resetFilter();
         mFragment.getSearchCriteria().setSearchType(searchType.getValue());
         
         resetViewWhenChangeSearchType(searchType);
+        
+        if (!mFragment.isShouldResetFilter()) {
+            mFragment.setShouldResetFilter(true);
+        } else {
+            resetFilter();
+        }
     }
     
     private void resetFilter() {
@@ -198,6 +243,10 @@ public class FilterNavigationViewModel extends BaseViewModel {
         mIsShowMoreOptions = !mIsShowMoreOptions;
         
         showAdvancedOptions(mIsShowMoreOptions);
+        
+        mFragment.getBinding().get().filterAdvanceOption
+                  .postDelayed(() -> mFragment.getBinding().get().scrollView
+                            .fullScroll(View.FOCUS_DOWN), 500);
     }
     
     private void showAdvancedOptions(boolean show) {
@@ -205,15 +254,20 @@ public class FilterNavigationViewModel extends BaseViewModel {
                   .setVisibility(show ? View.VISIBLE : View.GONE);
         mFragment.getBinding().get().btnMoreOptions.setText(show ? R.string.txt_filter_less_options
                   : R.string.txt_filter_more_options);
-        mFragment.getBinding().get().filterAdvanceOption.postDelayed(() -> {
-            mFragment.getBinding().get().scrollView
-                      .fullScroll(show ? View.FOCUS_DOWN : View.FOCUS_UP);
-        }, 500);
+        
     }
     
     public void resetMoreOptions() {
         mIsShowMoreOptions = false;
         mFragment.getBinding().get().btnMoreOptions.setText(R.string.txt_filter_more_options);
         mFragment.getBinding().get().filterAdvanceOption.setVisibility(View.GONE);
+    }
+    
+    
+    public void completeRefineFilter(View view) {
+        if (mFragment.getOnCompleteRefineFilter() != null) {
+            mFragment.getOnCompleteRefineFilter()
+                      .onCompleteRefineFilter(mFragment.getSearchCriteria());
+        }
     }
 }
