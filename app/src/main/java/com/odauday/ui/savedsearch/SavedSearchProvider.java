@@ -9,7 +9,7 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module
 public abstract class SavedSearchProvider {
-
+    
     @ContributesAndroidInjector(modules = SavedSearchModule.class)
     @PerFragment
     abstract SavedSearchTabMainFragment provideSavedSearchTab();

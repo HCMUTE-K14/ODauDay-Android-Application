@@ -22,39 +22,39 @@ import dagger.android.support.AndroidSupportInjection;
 
 public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseFragment implements
                                                                                         Injectable {
-
+    
     //====================== Variable Method =========================//
     protected AutoClearedData<VB> mBinding;
-
-
+    
+    
     //====================== Override Method =========================//
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
               @Nullable Bundle savedInstanceState) {
         VB binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
-
+        
         mBinding = new AutoClearedData<>(this, binding);
-
+        
         return binding.getRoot();
     }
-
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-
+    
     @Override
     public void onStart() {
         super.onStart();
         processingTaskFromViewModel();
     }
-
+    
     @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
@@ -63,7 +63,7 @@ public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseF
         }
         super.onAttach(activity);
     }
-
+    
     @Override
     public void onAttach(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -71,17 +71,17 @@ public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseF
         }
         super.onAttach(context);
     }
-
+    
     //====================== Base Method =========================//
-
+    
     protected void injectDI() {
         AndroidSupportInjection.inject(this);
     }
-
+    
     protected abstract BaseViewModel getViewModel(String tag);
-
+    
     protected abstract void processingTaskFromViewModel();
-
+    
     public AutoClearedData<VB> getBinding() {
         return mBinding;
     }

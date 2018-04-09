@@ -59,7 +59,8 @@ public class WheelAdapterImpl implements WheelViewAdapter {
             if (this.mIsUsingMinMax) {
                 index--;
             }
-            txb.setText(TextUtils.formatIntToCurrency((float) this.mDisplayIntegers[index]));
+            txb.setText(TextUtils.formatIntWithoutCurrency((float) this.mDisplayIntegers[index],
+                      false));
         } else {
             txb.setText(this.mDisplayString[index]);
         }

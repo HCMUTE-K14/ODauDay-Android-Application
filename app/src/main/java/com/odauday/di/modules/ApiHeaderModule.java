@@ -15,20 +15,20 @@ import javax.inject.Singleton;
  */
 @Module
 public class ApiHeaderModule {
-
+    
     @Provides
     @Singleton
     @Named("protectApiHeader")
     APIHeader.ProtectApiHeader provideProtectApiHeader(
               @Named("apiKey") String apiKey,
               PreferencesHelper preferencesHelper) {
-
+        
         return new APIHeader.ProtectApiHeader(
                   preferencesHelper.get(PrefKey.ACCESS_TOKEN, ""),
                   apiKey,
                   preferencesHelper.get(PrefKey.USER_ID, ""));
     }
-
+    
     @Provides
     @Singleton
     @Named("publicApiHeader")
@@ -36,8 +36,8 @@ public class ApiHeaderModule {
               @Named("apiKey") String apiKey) {
         return new PublicApiHeader(apiKey);
     }
-
-
+    
+    
     @Provides
     @Singleton
     APIHeader provideApiHeader(ProtectApiHeader protectApiHeader, PublicApiHeader publicApiHeader) {

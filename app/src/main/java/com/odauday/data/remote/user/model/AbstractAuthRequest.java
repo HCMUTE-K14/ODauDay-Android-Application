@@ -1,4 +1,4 @@
-package com.odauday.data.remote.model.users;
+package com.odauday.data.remote.user.model;
 
 import com.odauday.data.remote.BaseRequest;
 
@@ -7,13 +7,13 @@ import com.odauday.data.remote.BaseRequest;
  */
 
 public abstract class AbstractAuthRequest implements BaseRequest {
-
+    
     private final LoginType type;
-
+    
     AbstractAuthRequest(LoginType type) {
         this.type = type;
     }
-
+    
     public LoginType getType() {
         return type;
     }

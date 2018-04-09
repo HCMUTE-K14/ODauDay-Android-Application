@@ -15,21 +15,26 @@ import java.util.List;
 
 public class SearchCriteria implements Parcelable {
     
+    public static final Creator<SearchCriteria> CREATOR = new Creator<SearchCriteria>() {
+        @Override
+        public SearchCriteria createFromParcel(Parcel in) {
+            return new SearchCriteria(in);
+        }
+        
+        @Override
+        public SearchCriteria[] newArray(int size) {
+            return new SearchCriteria[size];
+        }
+    };
     @SerializedName("type")
     @Expose
     private int searchType;
-    @SerializedName("location")
-    @Expose
-    private Point location;
-    @SerializedName("radius")
-    @Expose
-    private double radius;
     @SerializedName("price")
     @Expose
-    private MinMaxObject<Double> price;
+    private MinMaxObject<Integer> price;
     @SerializedName("size")
     @Expose
-    private MinMaxObject<Double> size;
+    private MinMaxObject<Integer> size;
     @SerializedName("property_type")
     @Expose
     private List<PropertyType> propertyTypes;
@@ -45,53 +50,29 @@ public class SearchCriteria implements Parcelable {
     @SerializedName("parking")
     @Expose
     private MinMaxObject<Integer> parking;
-    
+    private SearchCriteriaDisplay display;
     
     public SearchCriteria() {
         this.searchType = SearchType.ALL.getValue();
+        this.price = new MinMaxObject<>(-1, -1);
+        this.size = new MinMaxObject<>(-1, -1);
+        this.bedrooms = new MinMaxObject<>(-1, -1);
+        this.bathrooms = new MinMaxObject<>(-1, -1);
+        this.parking = new MinMaxObject<>(-1, 0);
+        this.propertyTypes = new ArrayList<>();
+        this.display = new SearchCriteriaDisplay();
     }
     
     protected SearchCriteria(Parcel in) {
         searchType = in.readInt();
-        location = in.readParcelable(Point.class.getClassLoader());
-        radius = in.readDouble();
         price = in.readParcelable(MinMaxObject.class.getClassLoader());
         size = in.readParcelable(MinMaxObject.class.getClassLoader());
         bedrooms = in.readParcelable(MinMaxObject.class.getClassLoader());
         bathrooms = in.readParcelable(MinMaxObject.class.getClassLoader());
         tags = in.createTypedArrayList(Tag.CREATOR);
         parking = in.readParcelable(MinMaxObject.class.getClassLoader());
+        display = in.readParcelable(SearchCriteriaDisplay.class.getClassLoader());
     }
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(searchType);
-        dest.writeParcelable(location, flags);
-        dest.writeDouble(radius);
-        dest.writeParcelable(price, flags);
-        dest.writeParcelable(size, flags);
-        dest.writeParcelable(bedrooms, flags);
-        dest.writeParcelable(bathrooms, flags);
-        dest.writeTypedList(tags);
-        dest.writeParcelable(parking, flags);
-    }
-    
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    public static final Creator<SearchCriteria> CREATOR = new Creator<SearchCriteria>() {
-        @Override
-        public SearchCriteria createFromParcel(Parcel in) {
-            return new SearchCriteria(in);
-        }
-        
-        @Override
-        public SearchCriteria[] newArray(int size) {
-            return new SearchCriteria[size];
-        }
-    };
     
     public int getSearchType() {
         return searchType;
@@ -103,44 +84,28 @@ public class SearchCriteria implements Parcelable {
         return this;
     }
     
-    public Point getLocation() {
-        return location;
-    }
-    
-    public SearchCriteria setLocation(Point location) {
-        this.location = location;
-        
-        return this;
-    }
-    
-    public double getRadius() {
-        return radius;
-    }
-    
-    public SearchCriteria setRadius(double radius) {
-        this.radius = radius;
-        
-        return this;
-    }
-    
-    public MinMaxObject<Double> getPrice() {
+    public MinMaxObject<Integer> getPrice() {
         return price;
     }
     
-    public SearchCriteria setPrice(MinMaxObject<Double> price) {
+    public void setPrice(MinMaxObject<Integer> price) {
         this.price = price;
-        
-        return this;
     }
     
-    public MinMaxObject<Double> getSize() {
+    public MinMaxObject<Integer> getSize() {
         return size;
     }
     
-    public SearchCriteria setSize(MinMaxObject<Double> size) {
+    public void setSize(MinMaxObject<Integer> size) {
         this.size = size;
-        
-        return this;
+    }
+    
+    public List<Tag> getTags() {
+        return tags;
+    }
+    
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
     
     public List<PropertyType> getPropertyType() {
@@ -190,5 +155,46 @@ public class SearchCriteria implements Parcelable {
         this.parking = parking;
         
         return this;
+    }
+    
+    public SearchCriteriaDisplay getDisplay() {
+        return display;
+    }
+    
+    public void setDisplay(SearchCriteriaDisplay display) {
+        this.display = display;
+    }
+    
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        
+        parcel.writeInt(searchType);
+        parcel.writeParcelable(price, i);
+        parcel.writeParcelable(size, i);
+        parcel.writeParcelable(bedrooms, i);
+        parcel.writeParcelable(bathrooms, i);
+        parcel.writeTypedList(tags);
+        parcel.writeParcelable(parking, i);
+        parcel.writeParcelable(display, i);
+    }
+    
+    @Override
+    public String toString() {
+        return "SearchCriteria{" +
+               "searchType=" + searchType +
+               ", price=" + price +
+               ", size=" + size +
+               ", propertyTypes=" + propertyTypes +
+               ", bedrooms=" + bedrooms +
+               ", bathrooms=" + bathrooms +
+               ", tags=" + tags +
+               ", parking=" + parking +
+               '}';
     }
 }

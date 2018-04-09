@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.ui.search.common.TextAndMoreTextValue;
+import com.odauday.utils.ObjectUtils;
+import com.odauday.utils.TextUtils;
 
 /**
  * Created by infamouSs on 4/1/18.
@@ -28,34 +31,32 @@ import com.odauday.R;
           }
 )
 public class FilterOptionLabelView extends LinearLayout {
-
+    
     private TextView mTextViewLabel;
-
+    
     private TextView mTextViewValue;
-
+    
     private TextView mTextViewMoreValue;
-
+    
     private OnCLickFilterOption mListener;
-
-    private Object mValue;
-
-
+    
+    
     public FilterOptionLabelView(Context context) {
         super(context);
         init(context);
     }
-
+    
     public FilterOptionLabelView(Context context,
               @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
-
+    
     public FilterOptionLabelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
-
+    
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                   .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,7 +64,7 @@ public class FilterOptionLabelView extends LinearLayout {
             return;
         }
         View rootView = inflater.inflate(R.layout.layout_filter_option_header_value, this, true);
-
+        
         RelativeLayout mainLayout = rootView.findViewById(R.id.main_layout);
         mTextViewLabel = rootView.findViewById(R.id.txt_label);
         mTextViewValue = rootView.findViewById(R.id.txt_value);
@@ -74,45 +75,75 @@ public class FilterOptionLabelView extends LinearLayout {
             }
         });
     }
-
+    
     public TextView getTextLabel() {
         return mTextViewLabel;
     }
-
+    
     public TextView getTextValue() {
         return mTextViewValue;
     }
-
-    public void setTextValue(String value) {
+    
+    public void setTextValue(int value) {
         mTextViewValue.setText(value);
     }
-
+    
+    public void setTextValue(String value) {
+        if (TextUtils.isEmpty(value)) {
+            setTextValue(R.string.txt_any);
+            return;
+        }
+        mTextViewValue.setText(value);
+    }
+    
     public TextView getTextMoreValue() {
         return mTextViewMoreValue;
     }
-
+    
     public void setTextHeader(String text) {
         this.mTextViewLabel.setText(text);
     }
-
-    public Object getValue() {
-        return mValue;
-    }
-
-    public void setValue(Object object) {
-        this.mValue = object;
-    }
-
+    
     public void setMoreValue(String moreValue) {
         this.mTextViewMoreValue.setText(moreValue);
     }
-
+    
+    public void setMoreValue(int moreValue) {
+        this.mTextViewMoreValue.setText(moreValue);
+    }
+    
+    public void setText(TextAndMoreTextValue value) {
+        if (ObjectUtils.isNull(value)) {
+            setTextValue(R.string.txt_any);
+            return;
+        }
+        if (TextUtils.isEmpty(value.getText())) {
+            setTextValue(R.string.txt_any);
+        } else {
+            setTextValue(value.getText());
+            if (TextUtils.isEmpty(value.getMoreText())) {
+                setMoreValue("");
+            } else {
+                setMoreValue(value.getMoreText());
+            }
+        }
+    }
+    
     public void setListener(OnCLickFilterOption listener) {
         mListener = listener;
     }
-
+    
+    public void reset() {
+        if (this.getId() == R.id.filter_location) {
+            getTextValue().setText(R.string.txt_map_area);
+        } else {
+            getTextValue().setText(R.string.txt_any);
+        }
+        setMoreValue("");
+    }
+    
     public interface OnCLickFilterOption {
-
+        
         void onClick();
     }
 }

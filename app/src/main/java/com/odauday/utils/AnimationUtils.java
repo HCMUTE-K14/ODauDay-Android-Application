@@ -9,7 +9,7 @@ import android.view.animation.Animation;
  */
 
 public class AnimationUtils {
-
+    
     public static void fadeOut(View view, float translationY, long duration) {
         view.animate()
                   .translationY(translationY)
@@ -17,7 +17,7 @@ public class AnimationUtils {
                   .setDuration(duration)
                   .start();
     }
-
+    
     public static void fadeIn(View view, float translationY, long duration) {
         view.animate()
                   .translationY(translationY)
@@ -25,7 +25,7 @@ public class AnimationUtils {
                   .setDuration(duration)
                   .start();
     }
-
+    
     public static Animation loadAnimation(Context context, int resourceId) {
         return android.view.animation.AnimationUtils.loadAnimation(context, resourceId);
     }

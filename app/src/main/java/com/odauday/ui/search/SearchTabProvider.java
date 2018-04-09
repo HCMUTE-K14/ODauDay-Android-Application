@@ -10,10 +10,10 @@ import dagger.android.ContributesAndroidInjector;
  */
 @Module(includes = FilterNavigationProvider.class)
 public abstract class SearchTabProvider {
-
+    
     @ContributesAndroidInjector(modules = {SearchTabModule.class})
     @PerFragment
     abstract SearchTabMainFragment provideSearchTab();
-
-
+    
+    
 }

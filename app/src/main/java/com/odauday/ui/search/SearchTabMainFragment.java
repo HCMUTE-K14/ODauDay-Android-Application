@@ -12,10 +12,14 @@ import android.view.View;
 import android.widget.Toast;
 import com.odauday.MainActivity;
 import com.odauday.R;
+import com.odauday.data.remote.search.SearchService;
+import com.odauday.data.remote.search.model.SearchRequest;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
+import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
+import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
 import com.odauday.viewmodel.BaseViewModel;
@@ -30,78 +34,123 @@ import timber.log.Timber;
  */
 
 public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMainBinding> implements
-                                                                                          HasSupportFragmentInjector {
-
-
+                                                                                          HasSupportFragmentInjector,
+                                                                                          OnCompleteRefineFilter {
+    
+    
     //====================== Variable =========================//
     public static final String TAG = NavigationTab.SEARCH_TAB.getNameTab();
-
+    
     @Inject
     SearchTabViewModel mSearchTabViewModel;
-
+    
     @Inject
     DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
     
+    @Inject
+    SearchService mSearchService;
+    
+    private FilterNavigationFragment mFilterNavigationFragment;
+    
     //====================== Override Base Method =========================//
-
+    
     //====================== Constructor =========================//
     public static SearchTabMainFragment newInstance() {
-
+        
         Bundle args = new Bundle();
-
+        
         SearchTabMainFragment fragment = new SearchTabMainFragment();
         fragment.setArguments(args);
-
+        
         return fragment;
     }
-
+    
     @Override
     public int getLayoutId() {
         return R.layout.fragment_search_tab_main;
     }
-
+    
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupFilterNavigation();
+    }
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initBinding();
         setupToolBar(view);
-        setupFilterNavigation();
     }
-
+    
+    @Override
+    public void onResume() {
+        Timber.d("ON RESUME");
+        
+        if (getFilterNavigation() != null) {
+            getFilterNavigation().setOnCompleteRefineFilter(this);
+        }
+        super.onResume();
+    }
+    
+    @Override
+    public void onPause() {
+        Timber.d("ON PAUSE");
+        if (getFilterNavigation() != null) {
+            getFilterNavigation().setOnCompleteRefineFilter(null);
+        }
+        super.onPause();
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Timber.d("ON destroy");
+    }
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mSearchTabViewModel;
     }
-
-    //====================== ViewBinding Method =========================//
-
-    //====================== Contract Method =========================//
-
-    //====================== Helper Method =========================//
-
+    
+    
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
-
+    
+    @Override
+    public void onCompleteRefineFilter(SearchCriteria searchCriteria) {
+        Timber.tag(TAG).i(searchCriteria.toString());
+        mSearchService.setCurrentSearchRequest(new SearchRequest(searchCriteria));
+        closeDrawer();
+    }
+    
+    //====================== ViewBinding Method =========================//
+    
+    //====================== Contract Method =========================//
+    
+    //====================== Helper Method =========================//
+    
+    
     private void initBinding() {
-
+        
         mBinding.get().btnMapList.setOnClickMapListListener(new OnClickMapListListener() {
             @Override
             public void onShowListView() {
                 Timber.tag(TAG).i("SHOW LIST");
             }
-
+            
             @Override
             public void onHideListView() {
                 Timber.tag(TAG).i("HIDE LIST");
             }
-
+            
             @Override
             public void onShowMapView() {
                 Timber.tag(TAG).i("SHOW MAP");
             }
-
+            
             @Override
             public void onHideMapView() {
                 Timber.tag(TAG).i("HIDE MAP");
@@ -110,23 +159,23 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mBinding.get().drawerLayout.addDrawerListener(new DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
+            
             }
-
+            
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-
+            
             }
-
+            
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-
+            
             }
-
+            
             @Override
             public void onDrawerStateChanged(int newState) {
                 if (newState == DrawerLayout.STATE_SETTLING) {
-                    if (((MainActivity) getActivity()) != null) {
+                    if (getActivity() != null) {
                         boolean isDrawerOpen = mBinding.get().drawerLayout
                                   .isDrawerVisible(Gravity.END);
                         if (!isDrawerOpen) {
@@ -135,56 +184,65 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                             ((MainActivity) getActivity()).toggleBottomBar(true);
                         }
                     }
-
+                    
                 }
             }
         });
     }
-
+    
     private void openDrawer() {
         mBinding.get().drawerLayout.openDrawer(Gravity.END);
     }
-
+    
     private void closeDrawer() {
         mBinding.get().drawerLayout.closeDrawer(Gravity.END);
     }
-
+    
     private void setupToolBar(View view) {
         bindViewOnToolBar(view);
     }
-
+    
     private void setupFilterNavigation() {
         if (getActivity().getSupportFragmentManager() == null) {
             throw new NullPointerException("Fragment manager is null");
         }
+        
+        if (mFilterNavigationFragment == null) {
+            mFilterNavigationFragment = FilterNavigationFragment
+                      .newInstance();
+        }
         Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
                   .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
                   .setFragmentManager(getActivity().getSupportFragmentManager())
-                  .setFragment(FilterNavigationFragment.newInstance())
+                  .setFragment(mFilterNavigationFragment)
                   .setTagFragment(FilterNavigationFragment.TAG)
                   .setContainerId(R.id.filter_nav)
                   .build();
-
+        
         new Handler().postDelayed(runnableAttachFilterFragment,
                   10);
-
+        
     }
-
+    
     private void bindViewOnToolBar(View view) {
-        mBinding.get().toolbar.searchBar.setOnClickListener(viewSearchBar -> {
-            Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT).show();
-        });
-        mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> {
-            openDrawer();
-        });
+        mBinding.get().toolbar.searchBar.setOnClickListener(
+                  viewSearchBar -> Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT)
+                            .show());
+        mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> openDrawer());
     }
-
+    
     public boolean isDrawerOpening() {
         return mBinding.get().drawerLayout.isDrawerOpen(Gravity.END);
     }
-
+    
+    private FilterNavigationFragment getFilterNavigation() {
+        return mFilterNavigationFragment;
+    }
+    
     @Override
     public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
         return mChildFragmentInjector;
     }
+    
+    
 }

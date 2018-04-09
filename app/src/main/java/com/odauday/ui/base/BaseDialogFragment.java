@@ -75,7 +75,7 @@ public class BaseDialogFragment extends DialogFragment {
             this.mDialogView.findViewById(R.id.dialog_layout_btn)
                       .setVisibility(View.VISIBLE);
         }
-
+        
         this.mDialogView.findViewById(R.id.dialog_btn_cancel)
                   .setVisibility(isShowNegativeButton ? View.VISIBLE : View.GONE);
         

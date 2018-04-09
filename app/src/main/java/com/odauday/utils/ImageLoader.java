@@ -10,7 +10,7 @@ import com.odauday.R;
  */
 
 public class ImageLoader {
-
+    
     public static void load(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
                   .load(image)
@@ -19,7 +19,7 @@ public class ImageLoader {
                             .error(R.drawable.ic_launcher_background))
                   .into(imageView);
     }
-
+    
     public static void loadWithoutOptions(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
                   .load(image)

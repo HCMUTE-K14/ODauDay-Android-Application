@@ -1,69 +1,53 @@
-package com.odauday.data.remote.model.users;
+package com.odauday.data.remote.user.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.odauday.data.remote.BaseRequest;
 
 /**
- * Created by infamouSs on 3/23/18.
+ * Created by infamouSs on 2/27/18.
  */
 
-public class RegisterRequest implements BaseRequest {
-
-
+public class NormalAuthRequest extends AbstractAuthRequest {
+    
     @SerializedName("email")
     @Expose
     private String email;
-
+    
     @SerializedName("password")
     @Expose
     private String password;
-
-
-    @SerializedName("display_name")
-    @Expose
-    private String displayName;
-
-    public RegisterRequest() {
-
+    
+    public NormalAuthRequest() {
+        super(LoginType.NORMAL);
     }
-
-    public RegisterRequest(String email, String password, String displayName) {
+    
+    public NormalAuthRequest(String email, String password) {
+        super(LoginType.NORMAL);
         this.email = email;
         this.password = password;
-        this.displayName = displayName;
     }
-
+    
     public String getEmail() {
         return email;
     }
-
+    
     public void setEmail(String email) {
         this.email = email;
     }
-
+    
     public String getPassword() {
         return password;
     }
-
+    
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
+    
     @Override
     public String toString() {
-        return "RegisterRequest{" +
+        return "NormalAuthRequest{" +
                "email='" + email + '\'' +
                ", password='" + password + '\'' +
-               ", displayName='" + displayName + '\'' +
                '}';
     }
 }

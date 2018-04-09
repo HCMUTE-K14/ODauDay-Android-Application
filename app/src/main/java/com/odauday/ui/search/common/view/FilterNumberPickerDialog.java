@@ -4,14 +4,15 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.ui.base.BaseDialogFragment;
+import com.odauday.ui.search.common.MinMaxObject;
 import com.odauday.ui.view.wheelview.OnWheelScrollListener;
 import com.odauday.ui.view.wheelview.WheelView;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/2/18.
@@ -122,7 +123,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         setContent(v);
         setPositiveButton(getString(R.string.txt_done), false,
                   new OnShowFilterPickerDialogEvent());
-        return (AlertDialog) create();
+        return create();
     }
     
     private int getSelectedValue(int selectedValue) {
@@ -156,7 +157,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
     
     @Override
     public void onScrollingStarted(WheelView wheel) {
-
+    
     }
     
     @Override
@@ -181,7 +182,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                 }
                 return;
             default:
-                return;
+                break;
         }
     }
     
@@ -201,9 +202,31 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         return intValues[index - 1];
     }
     
+    private String getStringValue(FilterNumberPicker picker) {
+        if (getArguments() == null) {
+            throw new IllegalArgumentException("Need bundle to init this dialog");
+        }
+        
+        if (getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES) == 0x00) {
+            return "";
+        }
+        
+        int index = picker.getCurrentItem();
+        String[] stringValues = getResources()
+                  .getStringArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
+        
+        if (!this.mIsCurrency) {
+            return stringValues[index];
+        }
+        if (index == 0) {
+            return stringValues[index];
+        }
+        return stringValues[index - 1];
+    }
+    
     public interface OnCompletePickedNumberListener {
         
-        void onCompletePickedNumber(int requestCode, int pickedValueFrom, int pickedValueTo);
+        void onCompletePickedNumber(int requestCode, PickerMinMaxReturnObject object);
     }
     
     public static class Builder {
@@ -277,12 +300,24 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                           .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerFrom);
                 if (!FilterNumberPickerDialog.this.mHasToWheel || toValue <= 0 ||
                     toValue >= fromValue) {
+                    MinMaxObject<String> display = new MinMaxObject<>(
+                              getStringValue(mFilterNumberPickerFrom),
+                              getStringValue(mFilterNumberPickerTo));
+                    
+                    MinMaxObject<Integer> value = new MinMaxObject<>(fromValue, toValue);
+                    
+                    PickerMinMaxReturnObject returnObject = new PickerMinMaxReturnObject(display,
+                              value);
                     ((OnCompletePickedNumberListener) fragment)
                               .onCompletePickedNumber(
                                         FilterNumberPickerDialog.this.getTargetRequestCode(),
-                                        fromValue,
-                                        toValue);
+                                        returnObject);
                     FilterNumberPickerDialog.this.dismiss();
+                    
+                    Timber.tag("PICKER")
+                              .d("STRING_FROM:" + getStringValue(mFilterNumberPickerFrom));
+                    Timber.tag("PICKER").d("STRING_TO:" + getStringValue(mFilterNumberPickerTo));
+                    
                     return;
                 }
                 Toast.makeText(FilterNumberPickerDialog.this.getActivity(),

@@ -16,4 +16,5 @@ public class Constants {
     public static final String INTENT_EXTRA_SELECTED_PROPERTY_TYPE = "intent_extra_selected_property_type";
     public static final String INTENT_EXTRA_SELECTED_TAG = "intent_extra_selected_tag";
     public static final String INTENT_EXTRA_RECENT_TAG = "intent_extra_recent_tag";
+    public static final String INTENT_EXTRA_CURRENT_SEARCH_CRITERIA = "intent_extra_current_search_criteria";
 }

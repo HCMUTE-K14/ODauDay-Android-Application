@@ -20,12 +20,13 @@ import com.odauday.ui.search.common.view.tagdialog.TagRecentAdapter.OnClickTagRe
 import com.pchmn.materialchips.ChipsInput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by infamouSs on 4/3/2018.
  */
-public class TagTypeDialogTagRecent extends BaseDialogFragment implements OnClickTagRecent {
+public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecent {
     
     
     private static final float TEXT_SIZE = 18.0f;
@@ -35,20 +36,20 @@ public class TagTypeDialogTagRecent extends BaseDialogFragment implements OnClic
     private OnCompletePickedType mOnCompletePickedType;
     
     
-    public static TagTypeDialogTagRecent newInstance(List<Tag> selectedTags, List<Tag> recentTags) {
+    public static TagTypeDialog newInstance(List<Tag> selectedTags, List<Tag> recentTags) {
         
         Bundle args = new Bundle();
         
         args.putParcelableArrayList(INTENT_EXTRA_SELECTED_TAG, (ArrayList<Tag>) selectedTags);
         args.putParcelableArrayList(INTENT_EXTRA_RECENT_TAG, (ArrayList<Tag>) recentTags);
         
-        TagTypeDialogTagRecent fragment = new TagTypeDialogTagRecent();
+        TagTypeDialog fragment = new TagTypeDialog();
         fragment.setArguments(args);
         
         return fragment;
     }
     
-    
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class TagTypeDialogTagRecent extends BaseDialogFragment implements OnClic
                   LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         
-        mChipsInput = (ChipsInput) mView.findViewById(R.id.chips_input);
+        mChipsInput = mView.findViewById(R.id.chips_input);
         mChipsInput.getEditText().setTextSize(TEXT_SIZE);
         
         if (getArguments() == null) {
@@ -78,13 +79,14 @@ public class TagTypeDialogTagRecent extends BaseDialogFragment implements OnClic
         
         setTitle(getString(R.string.txt_filter_tags));
         setContent(mView);
-        setPositiveButton(getString(R.string.txt_done), false, (view) -> {
-            Fragment fragment = TagTypeDialogTagRecent.this.getTargetFragment();
+        setPositiveAlertDialogButton(getString(R.string.txt_done), (view, which) -> {
+            Fragment fragment = TagTypeDialog.this.getTargetFragment();
             if (fragment != null && (fragment instanceof OnCompletePickedType)) {
                 ((OnCompletePickedType) fragment)
                           .onCompletePickedType(
-                                    TagTypeDialogTagRecent.this.getTargetRequestCode(),
-                                    mChipsInput.getSelectedChipList());
+                                    TagTypeDialog.this.getTargetRequestCode(),
+                                    Collections
+                                              .unmodifiableList(mChipsInput.getSelectedChipList()));
             }
             dismiss();
         });

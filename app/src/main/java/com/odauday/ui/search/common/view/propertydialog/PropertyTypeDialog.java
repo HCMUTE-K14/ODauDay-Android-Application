@@ -27,7 +27,7 @@ public class PropertyTypeDialog extends BaseDialogFragment {
         PropertyTypeDialog dialog = new PropertyTypeDialog();
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(INTENT_EXTRA_SELECTED_PROPERTY_TYPE,
-                  (ArrayList) selectedProperty);
+                  (ArrayList<Integer>) selectedProperty);
         dialog.setArguments(bundle);
         return dialog;
     }

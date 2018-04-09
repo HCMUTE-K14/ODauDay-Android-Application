@@ -2,7 +2,6 @@
 <resources>
   <integer-array name="bedroom_count_int">
     <item>-1</item>
-    <item>0</item>
     <item>1</item>
     <item>2</item>
     <item>3</item>
@@ -11,7 +10,6 @@
   </integer-array>
   <string-array name="bedroom_count_string">
     <item>@string/txt_any</item>
-    <item>Studio</item>
     <item>1</item>
     <item>2</item>
     <item>3</item>
@@ -138,34 +136,44 @@
     <item>4000000</item>
     <item>4500000</item>
     <item>5000000</item>
+    <item>5500000</item>
+    <item>6000000</item>
+    <item>6500000</item>
+    <item>7000000</item>
+    <item>7500000</item>
+    <item>8000000</item>
+    <item>8500000</item>
+    <item>9000000</item>
+    <item>9500000</item>
+    <item>10000000</item>
   </integer-array>
-  <string-array name="price_rent">
-    <item>50</item>
-    <item>100</item>
-    <item>150</item>
-    <item>200</item>
-    <item>250</item>
-    <item>300</item>
-    <item>350</item>
-    <item>400</item>
-    <item>450</item>
+  <integer-array name="price_rent">
     <item>500</item>
-    <item>550</item>
-    <item>600</item>
-    <item>650</item>
-    <item>700</item>
-    <item>750</item>
-    <item>800</item>
-    <item>850</item>
-    <item>900</item>
-    <item>950</item>
     <item>1000</item>
     <item>1500</item>
     <item>2000</item>
+    <item>2500</item>
     <item>3000</item>
+    <item>3500</item>
     <item>4000</item>
+    <item>4500</item>
     <item>5000</item>
-  </string-array>
+    <item>5500</item>
+    <item>6000</item>
+    <item>6500</item>
+    <item>7000</item>
+    <item>7500</item>
+    <item>8000</item>
+    <item>8500</item>
+    <item>9000</item>
+    <item>9500</item>
+    <item>10000</item>
+    <item>15000</item>
+    <item>20000</item>
+    <item>30000</item>
+    <item>40000</item>
+    <item>50000</item>
+  </integer-array>
   <string-array name="tags">
     <item>Air conditioning</item>
     <item>Alarm System</item>
@@ -209,4 +217,5 @@
     <item>Water efficient fixtures</item>
     <item>Water Views</item>
   </string-array>
+
 </resources>
