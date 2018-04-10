@@ -21,6 +21,7 @@ import timber.log.Timber;
 
 public class FavoriteAdapter extends BaseAdapter<Property,ItemPropertyBinding> {
     public static final String TAG=FavoriteAdapter.class.getSimpleName();
+    private OnClickStarListener mOnClickStarListeners;
     public FavoriteAdapter() {
     
     }
@@ -59,17 +60,36 @@ public class FavoriteAdapter extends BaseAdapter<Property,ItemPropertyBinding> {
         data.addAll(_data);
         notifyDataSetChanged();
     }
-    StarView.OnClickStarListener mOnClickStarListener=new OnClickStarListener() {
+    
+    public void setOnClickStarListeners(
+        OnClickStarListener onClickStarListeners) {
+        mOnClickStarListeners = onClickStarListeners;
+    }
+    
+    StarView.OnClickStarListener<Property> mOnClickStarListener=new StarView.OnClickStarListener<Property>() {
         @Override
-        public void onCheckStar(Property property) {
-            Timber.tag(TAG).d("Check: "+property.getName());
+        public void onCheckStar(Property item) {
+            
+            mOnClickStarListeners.onCheckStar(item);
         }
+    
         @Override
-        public void onUnCheckStar(Property property) {
-            Timber.tag(TAG).d("UnCheck: "+property.getName());
+        public void onUnCheckStar(Property item) {
+           
+            mOnClickStarListeners.onUnCheckStar(item);
         }
     };
+    
     public void onClickFavorite(View view, Property property){
         ((StarView)view).addOnClick(property);
     }
+    public void onClickProperty(Property property){
+        Timber.tag(TAG).d("Property: "+property.getName());
+    }
+    
+    public interface OnClickStarListener{
+        void onCheckStar(Property property);
+        void onUnCheckStar(Property property);
+    }
+    
 }

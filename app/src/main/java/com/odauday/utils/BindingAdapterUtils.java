@@ -46,6 +46,10 @@ public class BindingAdapterUtils {
     public static void textDouble(TextView view, double value){
         view.setText(TextUtils.doubleFormat(value));
     }
+    @BindingAdapter("textFloat")
+    public static void textFloat(TextView view, float value){
+        view.setText(TextUtils.formatDecimal(value));
+    }
     @BindingAdapter("textDoublePrice")
     public static void textDoublePrice(TextView view, double value){
         view.setText(TextUtils.doubleFormat(value)+" "+currencies);

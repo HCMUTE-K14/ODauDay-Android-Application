@@ -1,92 +1,92 @@
 package com.odauday.data;
 
 import com.odauday.SchedulersExecutor;
-import com.odauday.data.remote.FavoriteService;
-import com.odauday.data.remote.FavoriteService.Protect;
-import com.odauday.data.remote.FavoriteService.Public;
+import com.odauday.data.remote.SearchService;
+import com.odauday.data.remote.SearchService.Protect;
+import com.odauday.data.remote.SearchService.Public;
 import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
+import com.odauday.data.remote.model.SearchResponse;
 import com.odauday.exception.FavoriteException;
-import com.odauday.exception.TagException;
-import com.odauday.model.Favorite;
+import com.odauday.exception.SearchException;
+import com.odauday.model.Search;
 import io.reactivex.Single;
 import javax.inject.Inject;
 
 
 /**
- * Created by kunsubin on 4/4/2018.
+ * Created by kunsubin on 4/9/2018.
  */
 
-public class FavoriteRepository implements Repository {
-    
-    private final FavoriteService.Public mPublicFavoriteService;
-    private final FavoriteService.Protect mProtectFavoriteService;
+public class SearchRepository implements Repository{
+    private final SearchService.Public mPublicSearchService;
+    private final SearchService.Protect mProtectSearchService;
     private final SchedulersExecutor mSchedulersExecutor;
     
     @Inject
-    public FavoriteRepository(Public publicFavoriteService,
-        Protect protectFavoriteService,
+    public SearchRepository(Public publicSearchService,
+        Protect protectSearchService,
         SchedulersExecutor schedulersExecutor) {
-        mPublicFavoriteService = publicFavoriteService;
-        mProtectFavoriteService = protectFavoriteService;
+        mPublicSearchService = publicSearchService;
+        mProtectSearchService = protectSearchService;
         mSchedulersExecutor = schedulersExecutor;
     }
-    public Single<FavoriteResponse> getFavoritePropertyByUser(String user_id) {
-        Single<JsonResponse<FavoriteResponse>> result = mProtectFavoriteService.getFavoritePropertyByUser(user_id);
+    public Single<SearchResponse> getSearchByUser(String user_id) {
+        Single<JsonResponse<SearchResponse>> result = mProtectSearchService.getSearchByUser(user_id);
         return result
             .map(response -> {
                 try {
                     if(response.isSuccess()){
                         return response.getData();
                     }
-                    throw new FavoriteException(response.getErrors());
+                    throw new SearchException(response.getErrors());
                     
                 } catch (Exception ex) {
-                    if(ex instanceof FavoriteException){
+                    if(ex instanceof SearchException){
                         throw ex;
                     }
-                    throw new FavoriteException(ex.getMessage());
+                    throw new SearchException(ex.getMessage());
                 }
             })
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
     }
-    public Single<MessageResponse> checkFavorite(Favorite favorite) {
-        Single<JsonResponse<MessageResponse>> result = mProtectFavoriteService.checkFavorite(favorite);
+    public Single<MessageResponse> saveSearch(Search search) {
+        Single<JsonResponse<MessageResponse>> result = mProtectSearchService.saveSearch(search);
         return result
             .map(response -> {
                 try {
                     if(response.isSuccess()){
                         return response.getData();
                     }
-                    throw new FavoriteException(response.getErrors());
+                    throw new SearchException(response.getErrors());
                     
                 } catch (Exception ex) {
-                    if(ex instanceof FavoriteException){
+                    if(ex instanceof SearchException){
                         throw ex;
                     }
-                    throw new FavoriteException(ex.getMessage());
+                    throw new SearchException(ex.getMessage());
                 }
             })
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
     }
-    public Single<MessageResponse> unCheckFavorite(String propertyId) {
-        Single<JsonResponse<MessageResponse>> result = mProtectFavoriteService.unCheckFavorite(propertyId);
+    public Single<MessageResponse> removeSearch(String search_id) {
+        Single<JsonResponse<MessageResponse>> result = mProtectSearchService.removeSearch(search_id);
         return result
             .map(response -> {
                 try {
                     if(response.isSuccess()){
                         return response.getData();
                     }
-                    throw new FavoriteException(response.getErrors());
+                    throw new SearchException(response.getErrors());
                     
                 } catch (Exception ex) {
-                    if(ex instanceof FavoriteException){
+                    if(ex instanceof SearchException){
                         throw ex;
                     }
-                    throw new FavoriteException(ex.getMessage());
+                    throw new SearchException(ex.getMessage());
                 }
             })
             .subscribeOn(mSchedulersExecutor.io())

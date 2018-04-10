@@ -16,7 +16,7 @@ import com.odauday.model.Property;
  * Created by kunsubin on 4/5/2018.
  */
 
-public class StarView extends RelativeLayout {
+public class StarView<T> extends RelativeLayout {
     
     private RelativeLayout mRelativeLayout;
     private ImageView mImageView;
@@ -70,12 +70,12 @@ public class StarView extends RelativeLayout {
         switch (mSTATUS) {
             case CHECK:
                 mImageView.startAnimation(mAnimationLeft);
-                mImageView.setColorFilter(ContextCompat.getColor(context, R.color.white));
+                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_listing_shortlist_no_padding));
                 mSTATUS = STATUS.UN_CHECK;
                 break;
             case UN_CHECK:
                 mImageView.startAnimation(mAnimationRight);
-                mImageView.setColorFilter(ContextCompat.getColor(context, R.color.yellow));
+                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_listing_shortlist_selected_no_padding));
                 mSTATUS = STATUS.CHECK;
                 break;
             default:
@@ -86,14 +86,14 @@ public class StarView extends RelativeLayout {
         this.mSTATUS = STATUS;
         changeStatus(getContext());
     }
-    public void addOnClick(Property property) {
+    public void addOnClick(T item) {
         if (mSTATUS == STATUS.CHECK) {
-            mOnClickStarListener.onUnCheckStar(property);
+            mOnClickStarListener.onUnCheckStar(item);
             changeStatus(getContext());
             return;
         }
         if (mSTATUS == STATUS.UN_CHECK) {
-            mOnClickStarListener.onCheckStar(property);
+            mOnClickStarListener.onCheckStar(item);
             changeStatus(getContext());
             return;
         }
@@ -102,10 +102,10 @@ public class StarView extends RelativeLayout {
         mOnClickStarListener = onClickStarListener;
     }
     
-    public interface OnClickStarListener {
+    public interface OnClickStarListener<T> {
         
-        void onCheckStar(Property property);
+        void onCheckStar(T item);
         
-        void onUnCheckStar(Property property);
+        void onUnCheckStar(T item);
     }
 }

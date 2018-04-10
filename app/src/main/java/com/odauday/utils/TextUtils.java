@@ -2,6 +2,7 @@ package com.odauday.utils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -44,5 +45,9 @@ public class TextUtils {
         BigDecimal number = new BigDecimal(value);
         String result=number.stripTrailingZeros().toPlainString();
         return result;
+    }
+    public static String formatDecimal(float value){
+        NumberFormat formatter = new DecimalFormat("#0.000");
+        return formatter.format(value);
     }
 }

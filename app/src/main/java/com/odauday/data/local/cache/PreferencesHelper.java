@@ -2,7 +2,14 @@ package com.odauday.data.local.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.odauday.model.Search;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 2/28/18.
@@ -39,7 +46,18 @@ public class PreferencesHelper {
     public void put(String key, long defaultValue) {
         mSharedPreferences.edit().putLong(key, defaultValue).apply();
     }
-    
+    public <T> void putList(String key, List<T> list) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        mSharedPreferences.edit().putString(key, json).apply();
+    }
+    public List<Search> getList(String key, String defaultValue){
+        Gson gson = new Gson();
+        String jsonPreferences=mSharedPreferences.getString(key, defaultValue);
+        Type listType = new TypeToken<ArrayList<Search>>(){}.getType();
+        List<Search> list = gson.fromJson(jsonPreferences, listType);
+        return list;
+    }
     public String get(String key, String defaultValue) {
         return mSharedPreferences.getString(key, defaultValue);
     }

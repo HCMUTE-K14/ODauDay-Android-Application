@@ -2,10 +2,12 @@ package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.FavoriteRepository;
+import com.odauday.data.SearchRepository;
 import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.FavoriteService;
+import com.odauday.data.remote.SearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
 import dagger.Module;
@@ -41,8 +43,14 @@ public class RepositoryBuildersModule {
     
     @Provides
     @Singleton
-    FavoriteRepository provideFavoriteRespository(FavoriteService.Public publicFavoriteService,
+    FavoriteRepository provideFavoriteRepository(FavoriteService.Public publicFavoriteService,
         FavoriteService.Protect protectFavoriteService, SchedulersExecutor schedulersExecutor){
         return new FavoriteRepository(publicFavoriteService,protectFavoriteService,schedulersExecutor);
+    }
+    @Provides
+    @Singleton
+    SearchRepository provideSearchRepository(SearchService.Public publicSearchService, SearchService.Protect protectSearchService,
+        SchedulersExecutor schedulersExecutor){
+        return new SearchRepository(publicSearchService,protectSearchService,schedulersExecutor);
     }
 }

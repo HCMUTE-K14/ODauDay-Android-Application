@@ -21,6 +21,8 @@ public interface FavoriteService {
         Single<JsonResponse<FavoriteResponse>> getFavoritePropertyByUser(@Query("id")String user_id);
     }
     interface Protect{
+        @GET(FAVORITE)
+        Single<JsonResponse<FavoriteResponse>> getFavoritePropertyByUser(@Query("id")String user_id);
         @POST(FAVORITE)
         Single<JsonResponse<MessageResponse>> checkFavorite(@Body Favorite request);
         @DELETE(FAVORITE)

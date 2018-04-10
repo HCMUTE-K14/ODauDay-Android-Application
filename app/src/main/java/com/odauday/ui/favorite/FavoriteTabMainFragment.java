@@ -8,10 +8,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import com.odauday.R;
 import com.odauday.config.Type;
+import com.odauday.data.local.cache.PrefKey;
+import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.remote.model.ErrorResponse;
 import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.databinding.FragmentFavoriteTabMainBinding;
+import com.odauday.exception.BaseException;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.favorite.FavoriteAdapter.OnClickStarListener;
 import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
@@ -34,11 +39,15 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     
     @Inject
     FavoriteViewModel mFavoriteViewModel;
+    @Inject
+    PreferencesHelper mPreferencesHelper;
+    
     private FavoriteAdapter mFavoriteAdapter;
     private EmptyFavoriteAdapter mEmptyFavoriteAdapter;
     private List<Property> mProperties;
     HeaderFavoriteView mHeaderFavoriteView;
     private ProgressDialog mProgressDialog;
+    
     enum SortType{
         LAST_ADDED,LOWEST_PRICE,HIGHEST_PRICE
     }
@@ -102,6 +111,17 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
         }
         mHeaderFavoriteView.setTextViewFilter(item.getTitle().toString());
     };
+    FavoriteAdapter.OnClickStarListener mOnClickStarListener=new OnClickStarListener() {
+        @Override
+        public void onCheckStar(Property property) {
+            Timber.tag(TAG).d("Check: "+property.getName());
+        }
+        
+        @Override
+        public void onUnCheckStar(Property property) {
+            Timber.tag(TAG).d("UnCheck: "+property.getName());
+        }
+    };
     @Override
     public int getLayoutId() {
         return R.layout.fragment_favorite_tab_main;
@@ -139,6 +159,8 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
         getFavorite();
     }
     private void getFavorite(){
+       // mPreferencesHelper.put(PrefKey.USER_ID,"a88211ba-3077-40e2-9685-5ab450abb114");
+        //mPreferencesHelper.put(PrefKey.ACCESS_TOKEN,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiYTg4MjExYmEtMzA3Ny00MGUyLTk2ODUtNWFiNDUwYWJiMTE0IiwiZW1haWwiOiJkYW9odXVsb2M5NDE5QGdtYWlsLmNvbSIsImRpc3BsYXlfbmFtZSI6ImluZmFtb3VTcyIsInBob25lIjpudWxsLCJhdmF0YXIiOm51bGwsInJvbGUiOiJ1c2VyIiwic3RhdHVzIjoicGVuZGluZyIsImZhY2Vib29rX2lkIjpudWxsLCJhbW91bnQiOm51bGx9LCJpYXQiOjE1MjIyMTM4NzN9.kbl64zvlPOFlc8NdFqlcbAc-I5I7D1WVC_BwUYearjs");
         mFavoriteViewModel.getFavoritePropertyByUser("a88211ba-3077-40e2-9685-5ab450abb114");
     }
     @Override
@@ -164,6 +186,7 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
         });
         mBinding.get().recycleViewFavorite.setLayoutManager(new GridLayoutManager(getActivity(),1));
         mFavoriteAdapter=new FavoriteAdapter();
+        mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
         mEmptyFavoriteAdapter=new EmptyFavoriteAdapter();
 
     }

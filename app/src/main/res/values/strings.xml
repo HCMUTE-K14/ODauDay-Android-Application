@@ -64,4 +64,15 @@
   <string name="error_favorite">Cannot get favorite on Service</string>
   <string name="empty_favorite">Empty favorite</string>
   <string name="txt_progress">Please Wait....</string>
+  <string name="txt_latitude">Lat:</string>
+  <string name="txt_longitude">Long:</string>
+  <string name="txt_notification">Notification</string>
+  <string name="txt_delete">Delete</string>
+  <string name="txt_recent_saved_search"><![CDATA[Recent & Saved Searches]]></string>
+  <string name="txt_empty_saved_search">Save your favorite searches!</string>
+  <string name="txt_note_empty_saved_search">Save searches by tapping the overflow and the menu button. Make sure you\'re logged in.</string>
+  <string name="empty_recent_saved_search">Empty saved search</string>
+  <string name="txt_saved_search">Saved Searches</string>
+  <string name="txt_recent_search">Recent Searches</string>
+  <string name="cannot_remove_saved_search">Cannot remove saved search.</string>
 </resources>

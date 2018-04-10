@@ -87,10 +87,6 @@ public class Property {
     @Expose
     private List<Image> mImages;
     
-    @SerializedName("features")
-    @Expose
-    private List<Feature> mFeatures;
-    
     @SerializedName("tags")
     @Expose
     private List<Tag> mTags;
@@ -252,14 +248,6 @@ public class Property {
         mImages = images;
     }
     
-    public List<Feature> getFeatures() {
-        return mFeatures;
-    }
-    
-    public void setFeatures(List<Feature> features) {
-        mFeatures = features;
-    }
-    
     public List<Tag> getTags() {
         return mTags;
     }
@@ -298,7 +286,6 @@ public class Property {
                ", mEmails=" + mEmails +
                ", mPhones=" + mPhones +
                ", mImages=" + mImages +
-               ", mFeatures=" + mFeatures +
                ", mTags=" + mTags +
                ", mCategories=" + mCategories +
                '}';

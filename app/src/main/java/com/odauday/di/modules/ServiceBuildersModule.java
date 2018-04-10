@@ -1,6 +1,7 @@
 package com.odauday.di.modules;
 
 import com.odauday.data.remote.FavoriteService;
+import com.odauday.data.remote.SearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
 import dagger.Module;
@@ -53,4 +54,17 @@ public class ServiceBuildersModule {
         @Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(FavoriteService.Protect.class);
     }
+    
+    @Provides
+    @Singleton
+    SearchService.Public providePublicSearchSevice(@Named("publicRetrofit") Retrofit retrofit){
+        return retrofit.create(SearchService.Public.class);
+    }
+    
+    @Provides
+    @Singleton
+    SearchService.Protect provideProtectSearchSevice(@Named("protectRetrofit") Retrofit retrofit){
+        return retrofit.create(SearchService.Protect.class);
+    }
+    
 }
