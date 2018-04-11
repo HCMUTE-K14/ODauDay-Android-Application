@@ -72,11 +72,15 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.d("ON create");
+        
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Timber.d("ON view created");
+        
         mBinding.get().setViewModel(mFilterNavigationViewModel);
         
         mFilterNavigationViewModel.setFragment(this);
@@ -86,7 +90,6 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         }
         setSearchCriteria(mSearchService.getCurrentSearchRequest().getCriteria());
         
-        Timber.tag(TAG).d(this.mSearchCriteria.getDisplay().toString());
         mIsShouldResetFilter = false;
         refreshViewWithSearchCriteria();
     }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.odauday.R;
 import com.odauday.config.AppConfig;
 import com.odauday.exception.NetworkException;
 import com.odauday.utils.NetworkUtils;
@@ -76,7 +77,8 @@ public class APIHelper {
                           .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
-                throw new NetworkException("Cannot connect to Service");
+                throw new NetworkException(
+                          mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -97,7 +99,8 @@ public class APIHelper {
                 Request request = requestBuilder.build();
                 return chain.proceed(request);
             } catch (Exception ex) {
-                throw new NetworkException("Cannot connect to Service");
+                throw new NetworkException(
+                          mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -139,6 +142,10 @@ public class APIHelper {
         if (gson == null) {
             gson = createDefaultGson();
         }
+        
+        if (!NetworkUtils.isNetworkAvailable(mContext)) {
+            throw new NetworkException(mContext.getString(R.string.message_no_internet_access));
+        }
         return new Retrofit.Builder()
                   .baseUrl(baseURL)
                   .client(client)
@@ -156,7 +163,8 @@ public class APIHelper {
             Retrofit retrofit = createRetrofit(baseURL, client, gson);
             return retrofit.create(clazz);
         } catch (Exception e) {
-            throw new NetworkException("Cannot connect to Service");
+            throw new NetworkException(
+                      mContext.getString(R.string.message_cannot_connect_to_service));
         }
     }
 }

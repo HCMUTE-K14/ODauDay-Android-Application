@@ -7,7 +7,6 @@ import com.odauday.SchedulersExecutor;
 import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.DatabaseHelper;
-import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.tag.DaoMaster;
 import com.odauday.data.local.tag.DaoMaster.DevOpenHelper;
 import com.odauday.data.local.tag.DaoMaster.OpenHelper;
@@ -63,12 +62,6 @@ public class ApplicationModule {
         }
         Database db = helper.getWritableDb();
         return new DaoMaster(db).newSession();
-    }
-    
-    @Provides
-    @Singleton
-    PreferencesHelper providePreferencesHelper(Context context) {
-        return new PreferencesHelper(context);
     }
     
     @Provides

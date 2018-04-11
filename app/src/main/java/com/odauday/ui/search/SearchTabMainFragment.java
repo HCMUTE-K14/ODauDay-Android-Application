@@ -5,12 +5,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
-import com.odauday.MainActivity;
 import com.odauday.R;
 import com.odauday.data.remote.search.SearchService;
 import com.odauday.data.remote.search.model.SearchRequest;
@@ -18,6 +15,7 @@ import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
 import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
 import com.odauday.ui.view.bottomnav.NavigationTab;
@@ -51,6 +49,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     SearchService mSearchService;
     
     private FilterNavigationFragment mFilterNavigationFragment;
+    private MapViewFragment mMapViewFragment;
     
     //====================== Override Base Method =========================//
     
@@ -73,20 +72,23 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupFilterNavigation();
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
         initBinding();
         setupToolBar(view);
+        if (savedInstanceState == null) {
+            Timber.d("saveInstance null");
+        }
+        setupFilterNavigation();
+        setupMapView();
     }
     
     @Override
     public void onResume() {
-        Timber.d("ON RESUME");
-        
         if (getFilterNavigation() != null) {
             getFilterNavigation().setOnCompleteRefineFilter(this);
         }
@@ -95,7 +97,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onPause() {
-        Timber.d("ON PAUSE");
         if (getFilterNavigation() != null) {
             getFilterNavigation().setOnCompleteRefineFilter(null);
         }
@@ -105,7 +106,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.d("ON destroy");
     }
     
     @Override
@@ -116,7 +116,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     @Override
@@ -156,38 +156,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 Timber.tag(TAG).i("HIDE MAP");
             }
         });
-        mBinding.get().drawerLayout.addDrawerListener(new DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-            
-            }
-            
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-            
-            }
-            
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-            
-            }
-            
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                if (newState == DrawerLayout.STATE_SETTLING) {
-                    if (getActivity() != null) {
-                        boolean isDrawerOpen = mBinding.get().drawerLayout
-                                  .isDrawerVisible(Gravity.END);
-                        if (!isDrawerOpen) {
-                            ((MainActivity) getActivity()).toggleBottomBar(false);
-                        } else {
-                            ((MainActivity) getActivity()).toggleBottomBar(true);
-                        }
-                    }
-                    
-                }
-            }
-        });
     }
     
     private void openDrawer() {
@@ -211,17 +179,39 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             mFilterNavigationFragment = FilterNavigationFragment
                       .newInstance();
         }
-        Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
+        
+        Runnable attachRunnableFilterNav = new AttachFragmentRunnable
+                  .AttachFragmentBuilder()
                   .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
                   .setFragmentManager(getActivity().getSupportFragmentManager())
+                  .setContainerId(R.id.filter_nav)
                   .setFragment(mFilterNavigationFragment)
                   .setTagFragment(FilterNavigationFragment.TAG)
-                  .setContainerId(R.id.filter_nav)
+                  .setAddToBackTrack(true)
                   .build();
         
-        new Handler().postDelayed(runnableAttachFilterFragment,
-                  10);
+        new Handler().postDelayed(attachRunnableFilterNav, 10);
+    }
+    
+    private void setupMapView() {
+        if (getActivity().getSupportFragmentManager() == null) {
+            throw new NullPointerException("Fragment manager is null");
+        }
         
+        if (mMapViewFragment == null) {
+            mMapViewFragment = MapViewFragment.newInstance();
+        }
+        Runnable attachRunnableMapView = new AttachFragmentRunnable
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(getActivity().getSupportFragmentManager())
+                  .setContainerId(R.id.fragment_map_view)
+                  .setFragment(mMapViewFragment)
+                  .setTagFragment(MapViewFragment.TAG)
+                  .setAddToBackTrack(true)
+                  .build();
+        
+        new Handler().postDelayed(attachRunnableMapView, 50);
     }
     
     private void bindViewOnToolBar(View view) {
@@ -243,6 +233,4 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
         return mChildFragmentInjector;
     }
-    
-    
 }

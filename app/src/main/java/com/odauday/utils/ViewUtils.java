@@ -3,7 +3,11 @@ package com.odauday.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
+import com.odauday.R;
 
 /**
  * Created by infamouSs on 3/26/18.
@@ -38,5 +42,25 @@ public class ViewUtils {
             return;
         }
         view.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+    
+    public static void showHideView(View view, boolean show) {
+        view.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+    
+    public static void showGoToSettingsDialog(AppCompatActivity activity) {
+        if (activity == null) {
+            return;
+        }
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setTitle(R.string.message_location_services_disabled)
+                  .setCancelable(false)
+                  .setPositiveButton(activity.getString(R.string.txt_settings),
+                            (dialog, id) -> activity.startActivity(
+                                      new Intent("android.settings.LOCATION_SOURCE_SETTINGS")));
+        alertDialogBuilder
+                  .setNegativeButton(activity.getString(R.string.txt_cancel),
+                            (dialog, id) -> dialog.cancel());
+        alertDialogBuilder.create().show();
     }
 }

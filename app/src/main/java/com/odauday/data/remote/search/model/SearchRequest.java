@@ -8,8 +8,8 @@ import com.odauday.ui.search.common.SearchCriteria;
 
 public class SearchRequest {
     
-    private Point location;
-    private double radius;
+    private CoreSearchRequest core;
+    
     private SearchCriteria criteria;
     
     public SearchRequest() {
@@ -20,20 +20,12 @@ public class SearchRequest {
         this.criteria = searchCriteria;
     }
     
-    public Point getLocation() {
-        return location;
+    public CoreSearchRequest getCore() {
+        return core;
     }
     
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-    
-    public double getRadius() {
-        return radius;
-    }
-    
-    public void setRadius(double radius) {
-        this.radius = radius;
+    public void setCore(CoreSearchRequest core) {
+        this.core = core;
     }
     
     public SearchCriteria getCriteria() {

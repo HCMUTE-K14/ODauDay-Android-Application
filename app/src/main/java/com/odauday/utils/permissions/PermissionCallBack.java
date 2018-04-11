@@ -5,8 +5,8 @@ package com.odauday.utils.permissions;
  */
 
 public interface PermissionCallBack {
-
+    
     void onPermissionGranted();
-
+    
     void onPermissionDenied();
 }

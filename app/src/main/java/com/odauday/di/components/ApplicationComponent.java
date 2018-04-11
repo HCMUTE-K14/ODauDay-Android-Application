@@ -4,6 +4,7 @@ import com.odauday.RootApplication;
 import com.odauday.di.modules.ApplicationModule;
 import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
+import com.odauday.di.modules.PreferenceModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
 import com.odauday.di.modules.ServiceBuildersModule;
 import com.odauday.di.modules.ViewBuildersModule;
@@ -21,6 +22,7 @@ import javax.inject.Singleton;
 @Component(modules = {
           AndroidSupportInjectionModule.class,
           ApplicationModule.class,
+          PreferenceModule.class,
           NetworkModule.class,
           ServiceBuildersModule.class,
           LocalDaoModule.class,
@@ -35,6 +37,8 @@ public interface ApplicationComponent {
         
         @BindsInstance
         Builder application(RootApplication application);
+        
+        Builder preference(PreferenceModule preferenceModule);
         
         Builder network(NetworkModule networkModule);
         

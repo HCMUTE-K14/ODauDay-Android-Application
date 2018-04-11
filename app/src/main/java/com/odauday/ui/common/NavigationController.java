@@ -55,6 +55,7 @@ public class NavigationController {
                   .setContainerId(mContainerId)
                   .setFragment(SearchTabMainFragment.newInstance())
                   .setTagFragment(SearchTabMainFragment.TAG)
+                  .setAddToBackTrack(true)
                   .build();
         
         mHandler.postDelayed(runnableAttachSearchTab, DELAY_ATTACH_FRAGMENT);
@@ -68,6 +69,7 @@ public class NavigationController {
                   .setContainerId(mContainerId)
                   .setFragment(AlertTabMainFragment.newInstance())
                   .setTagFragment(AlertTabMainFragment.TAG)
+                  .setAddToBackTrack(true)
                   .build();
         
         mHandler.postDelayed(runnableAttachAlertTab, DELAY_ATTACH_FRAGMENT);
@@ -81,6 +83,7 @@ public class NavigationController {
                   .setContainerId(mContainerId)
                   .setFragment(FavoriteTabMainFragment.newInstance())
                   .setTagFragment(FavoriteTabMainFragment.TAG)
+                  .setAddToBackTrack(true)
                   .build();
         
         mHandler.postDelayed(runnableAttachFavoriteTab, DELAY_ATTACH_FRAGMENT);
@@ -94,6 +97,7 @@ public class NavigationController {
                   .setContainerId(mContainerId)
                   .setFragment(SavedSearchTabMainFragment.newInstance())
                   .setTagFragment(SavedSearchTabMainFragment.TAG)
+                  .setAddToBackTrack(true)
                   .build();
         
         mHandler.postDelayed(runnableAttachSavedSearchTab, DELAY_ATTACH_FRAGMENT);
@@ -107,6 +111,7 @@ public class NavigationController {
                   .setContainerId(mContainerId)
                   .setFragment(MoreTabMainFragment.newInstance())
                   .setTagFragment(MoreTabMainFragment.TAG)
+                  .setAddToBackTrack(true)
                   .build();
         
         mHandler.postDelayed(runnableAttachMoreTab, DELAY_ATTACH_FRAGMENT);

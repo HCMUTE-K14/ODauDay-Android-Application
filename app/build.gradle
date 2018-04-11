@@ -111,6 +111,9 @@ dependencies {
     implementation "com.github.pchmn:MaterialChipsInput:${chipInputVersion}"
 
     implementation "org.greenrobot:greendao:${greenDaoVersion}"
+    implementation 'com.google.android.gms:play-services-maps:12.0.1'
+    implementation "com.google.android.gms:play-services-location:12.0.1"
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

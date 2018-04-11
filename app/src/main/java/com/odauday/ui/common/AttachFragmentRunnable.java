@@ -19,6 +19,7 @@ public class AttachFragmentRunnable implements Runnable {
     private FragmentManager mFragmentManager;
     private String mTagFragment;
     private int mTypeAttach;
+    private boolean mAddToBackTrack;
     
     public AttachFragmentRunnable(AttachFragmentBuilder builder) {
         this.mContainerId = builder.mContainerId;
@@ -26,6 +27,7 @@ public class AttachFragmentRunnable implements Runnable {
         this.mFragmentManager = builder.mFragmentManager;
         this.mTagFragment = builder.mTagFragment;
         this.mTypeAttach = builder.mTypeAttach;
+        this.mAddToBackTrack = builder.mAddToBackTrack;
     }
     
     @Override
@@ -51,8 +53,12 @@ public class AttachFragmentRunnable implements Runnable {
             transaction.replace(mContainerId, mFragment, mTagFragment);
         }
         
-        transaction.addToBackStack(mTagFragment);
-        transaction.commit();
+        if (mAddToBackTrack) {
+            transaction.addToBackStack(mTagFragment);
+            transaction.commit();
+        } else {
+            transaction.commit();
+        }
     }
     
     public static class AttachFragmentBuilder {
@@ -62,6 +68,7 @@ public class AttachFragmentRunnable implements Runnable {
         private FragmentManager mFragmentManager;
         private String mTagFragment;
         private int mTypeAttach;
+        private boolean mAddToBackTrack;
         
         public AttachFragmentBuilder setContainerId(int id) {
             this.mContainerId = id;
@@ -85,6 +92,12 @@ public class AttachFragmentRunnable implements Runnable {
         
         public AttachFragmentBuilder setTypeAttach(int type) {
             this.mTypeAttach = type;
+            return this;
+        }
+        
+        public AttachFragmentBuilder setAddToBackTrack(boolean addtoBackTrack) {
+            mAddToBackTrack = addtoBackTrack;
+            
             return this;
         }
         

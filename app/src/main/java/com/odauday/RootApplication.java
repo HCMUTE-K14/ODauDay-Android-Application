@@ -3,10 +3,12 @@ package com.odauday;
 import android.app.Activity;
 import android.app.Application;
 import com.odauday.config.AppConfig;
+import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.tag.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
 import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
+import com.odauday.di.modules.PreferenceModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
 import com.odauday.di.modules.ServiceBuildersModule;
 import dagger.android.AndroidInjector;
@@ -27,6 +29,9 @@ public class RootApplication extends Application implements HasActivityInjector 
     @Inject
     DaoSession mDaoSession;
     
+    @Inject
+    PreferencesHelper mPreferencesHelper;
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,6 +43,7 @@ public class RootApplication extends Application implements HasActivityInjector 
         DaggerApplicationComponent
                   .builder()
                   .application(this)
+                  .preference(new PreferenceModule())
                   .network(new NetworkModule(this))
                   .localDAO(new LocalDaoModule())
                   .service(new ServiceBuildersModule())

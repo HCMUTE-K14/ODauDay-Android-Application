@@ -44,7 +44,7 @@ public class FavoriteTabMainFragment extends BaseMVVMFragment<FragmentFavoriteTa
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     //====================== ViewBinding Method =========================//

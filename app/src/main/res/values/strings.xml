@@ -18,6 +18,7 @@
   <string name="message_re_password_is_required">Re-password is required</string>
   <string name="content_description_default">image</string>
   <string name="txt_re_password">Re-Password</string>
+  <string name="message_tap_to_retry">Network error. Tap here to retry.</string>
 
 
   <string name="facebook_app_id">608460789487323</string>
@@ -71,4 +72,15 @@
   <string name="txt_from">From</string>
   <string name="txt_to">To</string>
   <string name="txt_rent_per_month">Price (per month)</string>
+  <string name="title_activity_maps">Map</string>
+  <string name="txt_dialog_title_map_type">Map type</string>
+  <string name="txt_ok">Ok</string>
+  <string name="message_permission_location_request">Application want to know your location.</string>
+  <string name="message_location_services_disabled">Location services disabled</string>
+  <string name="txt_settings">Settings</string>
+  <string name="message_waiting_for_location">Waiting for location...</string>
+  <string name="message_cannot_find_your_location">Can not find your location !</string>
+  <string name="message_cannot_connect_to_service">Cannot connect to Service</string>
+  <string name="message_no_internet_access">No Internet Access</string>
+
 </resources>
