@@ -13,4 +13,10 @@ public class PrefKey {
     public static final String LAST_LOCATION = "last_location";
     public static final String LAST_ZOOM_LEVEL = "last_zoom_level";
     
+    public static final String RECENT_SEARCH_CRITERIA_MODE_ALL = "recent_search_criteria_mode_all";
+    public static final String RECENT_SEARCH_CRITERIA_MODE_BUY = "recent_search_criteria_mode_buy";
+    public static final String RECENT_SEARCH_CRITERIA_MODE_RENT = "recent_search_criteria_mode_rent";
+    
+    public static final String LAST_BOUNDS = "last_bounds";
+    public static final String LAST_SEARCH_MODE = "last_search_mode";
 }

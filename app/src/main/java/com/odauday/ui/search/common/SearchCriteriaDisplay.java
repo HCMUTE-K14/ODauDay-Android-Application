@@ -20,16 +20,23 @@ public class SearchCriteriaDisplay implements Parcelable {
             return new SearchCriteriaDisplay[size];
         }
     };
+
     private TextAndMoreTextValue displayPrice;
+
     private String displaySize;
+
     private TextAndMoreTextValue displayPropertyType;
+
     private String displayBedroom;
+
     private String displayBathroom;
+
     private String displayParking;
+
     private TextAndMoreTextValue displayTag;
     
     public SearchCriteriaDisplay() {
-    
+
     }
     
     protected SearchCriteriaDisplay(Parcel in) {

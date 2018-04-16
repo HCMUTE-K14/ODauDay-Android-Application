@@ -81,7 +81,7 @@ public class SearchTypeChooser extends LinearLayout {
             
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-            
+
             }
         });
         mSpinner.setSelection(SearchType.ALL.getValue());

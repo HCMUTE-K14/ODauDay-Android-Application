@@ -2,13 +2,16 @@ package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.RecentTagRepository;
+import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.tag.RecentTagService;
+import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by infamouSs on 2/28/18.
@@ -27,6 +30,18 @@ public class RepositoryBuildersModule {
                   publicUserService,
                   protectUserService,
                   preferencesHelper,
+                  schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    SearchPropertyRepository provideSearchPropertyRepository(
+              EventBus eventBus,
+              SearchService searchService,
+              SchedulersExecutor schedulersExecutor) {
+        return new SearchPropertyRepository(
+                  eventBus,
+                  searchService,
                   schedulersExecutor);
     }
     

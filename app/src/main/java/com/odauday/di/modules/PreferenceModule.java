@@ -1,7 +1,6 @@
 package com.odauday.di.modules;
 
 import android.content.Context;
-import com.google.gson.Gson;
 import com.odauday.data.local.cache.MapPreferenceHelper;
 import com.odauday.data.local.cache.PreferencesHelper;
 import dagger.Module;
@@ -23,8 +22,7 @@ public class PreferenceModule {
     
     @Provides
     @Singleton
-    MapPreferenceHelper provideMapPreferencesHelper(PreferencesHelper preferencesHelper,
-              Gson gson) {
-        return new MapPreferenceHelper(preferencesHelper, gson);
+    MapPreferenceHelper provideMapPreferencesHelper(PreferencesHelper preferencesHelper) {
+        return new MapPreferenceHelper(preferencesHelper);
     }
 }

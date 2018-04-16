@@ -26,30 +26,39 @@ public class SearchCriteria implements Parcelable {
             return new SearchCriteria[size];
         }
     };
+    
     @SerializedName("type")
     @Expose
     private int searchType;
+    
     @SerializedName("price")
     @Expose
     private MinMaxObject<Integer> price;
+    
     @SerializedName("size")
     @Expose
     private MinMaxObject<Integer> size;
+    
     @SerializedName("property_type")
     @Expose
     private List<PropertyType> propertyTypes;
+    
     @SerializedName("bedrooms")
     @Expose
     private MinMaxObject<Integer> bedrooms;
+    
     @SerializedName("bathrooms")
     @Expose
     private MinMaxObject<Integer> bathrooms;
+    
     @SerializedName("tags")
     @Expose
     private List<Tag> tags;
+    
     @SerializedName("parking")
     @Expose
     private MinMaxObject<Integer> parking;
+    
     private SearchCriteriaDisplay display;
     
     public SearchCriteria() {
@@ -58,7 +67,7 @@ public class SearchCriteria implements Parcelable {
         this.size = new MinMaxObject<>(-1, -1);
         this.bedrooms = new MinMaxObject<>(-1, -1);
         this.bathrooms = new MinMaxObject<>(-1, -1);
-        this.parking = new MinMaxObject<>(-1, 0);
+        this.parking = new MinMaxObject<>(-1, -1);
         this.propertyTypes = new ArrayList<>();
         this.display = new SearchCriteriaDisplay();
     }
@@ -165,6 +174,53 @@ public class SearchCriteria implements Parcelable {
         this.display = display;
     }
     
+    
+    @SuppressWarnings("unchecked")
+    public SearchCriteria normalize() {
+        SearchCriteria searchCriteria = this;
+        
+        SearchCriteria normalize = new SearchCriteria();
+        
+        MinMaxObject<Integer> price = (MinMaxObject<Integer>) searchCriteria.price.normalize();
+        MinMaxObject<Integer> size = (MinMaxObject<Integer>) searchCriteria.size.normalize();
+        MinMaxObject<Integer> bedrooms = (MinMaxObject<Integer>) searchCriteria.bedrooms
+                  .normalize();
+        MinMaxObject<Integer> bathrooms = (MinMaxObject<Integer>) searchCriteria.bathrooms
+                  .normalize();
+        MinMaxObject<Integer> parkings = (MinMaxObject<Integer>) searchCriteria.parking.normalize();
+        
+        List<Tag> tags;
+        
+        if (searchCriteria.getTags() == null || searchCriteria.getTags().isEmpty()) {
+            tags = null;
+        } else {
+            tags = new ArrayList<>();
+            for (Tag tag : searchCriteria.getTags()) {
+                tags.add(new Tag(tag.getId()));
+            }
+        }
+        
+        List<PropertyType> propertyTypes;
+        
+        if (searchCriteria.getPropertyType() == null ||
+            searchCriteria.getPropertyType().isEmpty()) {
+            propertyTypes = null;
+        } else {
+            propertyTypes = new ArrayList<>(searchCriteria.getPropertyType());
+        }
+        
+        normalize.setSearchType(searchCriteria.getSearchType());
+        normalize.setPrice(price);
+        normalize.setSize(size);
+        normalize.setBedrooms(bedrooms);
+        normalize.setBathrooms(bathrooms);
+        normalize.setParking(parkings);
+        normalize.setTags(tags);
+        normalize.setPropertyType(propertyTypes);
+        normalize.setDisplay(null);
+        
+        return searchCriteria;
+    }
     
     @Override
     public int describeContents() {

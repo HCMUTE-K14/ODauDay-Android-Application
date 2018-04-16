@@ -40,7 +40,7 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     //====================== ViewBinding Method =========================//

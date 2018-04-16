@@ -32,7 +32,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     Stack<String> mTabStack = new Stack<>();
     
-    
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
@@ -56,7 +55,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     @Override
@@ -100,7 +99,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             
             @Override
             public void onTabUnselected(int position) {
-            
+
             }
             
             @Override

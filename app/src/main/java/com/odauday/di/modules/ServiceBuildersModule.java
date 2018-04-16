@@ -2,8 +2,8 @@ package com.odauday.di.modules;
 
 import com.odauday.data.local.tag.RecentTagDao;
 import com.odauday.data.local.tag.RecentTagService;
-import com.odauday.data.local.tag.impl.RecentTagServiceImpl;
-import com.odauday.data.remote.search.SearchService;
+import com.odauday.data.local.tag.RecentTagServiceImpl;
+import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
@@ -32,8 +32,8 @@ public class ServiceBuildersModule {
     
     @Provides
     @Singleton
-    SearchService provideSearchService() {
-        return new SearchService();
+    SearchService provideSearchService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(SearchService.class);
     }
     
     //--------------------------LOCAL---------------------------//

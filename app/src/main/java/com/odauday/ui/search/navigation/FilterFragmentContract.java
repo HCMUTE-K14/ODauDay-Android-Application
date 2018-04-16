@@ -7,5 +7,5 @@ import com.odauday.ui.base.BaseContract;
  */
 
 public interface FilterFragmentContract extends BaseContract {
-    
+
 }

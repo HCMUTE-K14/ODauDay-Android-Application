@@ -20,6 +20,9 @@ public class AttachFragmentRunnable implements Runnable {
     private String mTagFragment;
     private int mTypeAttach;
     private boolean mAddToBackTrack;
+    private int mAnimationIn;
+    private int mAnimationOut;
+    
     
     public AttachFragmentRunnable(AttachFragmentBuilder builder) {
         this.mContainerId = builder.mContainerId;
@@ -28,6 +31,8 @@ public class AttachFragmentRunnable implements Runnable {
         this.mTagFragment = builder.mTagFragment;
         this.mTypeAttach = builder.mTypeAttach;
         this.mAddToBackTrack = builder.mAddToBackTrack;
+        this.mAnimationIn = builder.mAnimationIn;
+        this.mAnimationOut = builder.mAnimationOut;
     }
     
     @Override
@@ -53,6 +58,10 @@ public class AttachFragmentRunnable implements Runnable {
             transaction.replace(mContainerId, mFragment, mTagFragment);
         }
         
+        if (mAnimationIn != 0 && mAnimationOut != 0) {
+            transaction.setCustomAnimations(mAnimationIn, mAnimationOut);
+        }
+        
         if (mAddToBackTrack) {
             transaction.addToBackStack(mTagFragment);
             transaction.commit();
@@ -69,6 +78,8 @@ public class AttachFragmentRunnable implements Runnable {
         private String mTagFragment;
         private int mTypeAttach;
         private boolean mAddToBackTrack;
+        private int mAnimationIn;
+        private int mAnimationOut;
         
         public AttachFragmentBuilder setContainerId(int id) {
             this.mContainerId = id;
@@ -98,6 +109,16 @@ public class AttachFragmentRunnable implements Runnable {
         public AttachFragmentBuilder setAddToBackTrack(boolean addtoBackTrack) {
             mAddToBackTrack = addtoBackTrack;
             
+            return this;
+        }
+        
+        public AttachFragmentBuilder setAnimationIn(int animationIn) {
+            mAnimationIn = animationIn;
+            return this;
+        }
+        
+        public AttachFragmentBuilder setAnimationOut(int animationOut) {
+            mAnimationOut = animationOut;
             return this;
         }
         

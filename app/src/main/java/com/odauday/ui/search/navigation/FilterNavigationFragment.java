@@ -7,8 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
-import com.odauday.data.remote.search.SearchService;
-import com.odauday.data.remote.search.model.SearchRequest;
+import com.odauday.data.SearchPropertyRepository;
+import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.databinding.FragmentFilterBinding;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMFragment;
@@ -41,57 +42,50 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     FilterNavigationViewModel mFilterNavigationViewModel;
     
     @Inject
-    SearchService mSearchService;
+    SearchPropertyRepository mSearchPropertyRepository;
+    
+    @Inject
+    MapPreferenceHelper mMapPreferenceHelper;
     
     private OnCompleteRefineFilter mOnCompleteRefineFilter;
     
     private SearchCriteria mSearchCriteria;
     
-    private boolean mIsShouldResetFilter;
+    private boolean mIsFirstTime = true;
     
     //====================== Constructor =========================//
     public static FilterNavigationFragment newInstance() {
         
         Bundle args = new Bundle();
-        Timber.d("New instance with non search criteria");
         
         FilterNavigationFragment fragment = new FilterNavigationFragment();
         fragment.setArguments(args);
         return fragment;
     }
     
-    public boolean isShouldResetFilter() {
-        return mIsShouldResetFilter;
-    }
-    
-    public void setShouldResetFilter(boolean shouldResetFilter) {
-        mIsShouldResetFilter = shouldResetFilter;
-    }
-    
     //====================== Override Base Method =========================//
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.d("ON create");
-        
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Timber.d("ON view created");
         
         mBinding.get().setViewModel(mFilterNavigationViewModel);
         
         mFilterNavigationViewModel.setFragment(this);
+        int lastSearchMode = mMapPreferenceHelper.getLastSearchMode();
         
-        if (mSearchService.getCurrentSearchRequest() == null) {
-            this.mSearchService.setCurrentSearchRequest(new SearchRequest(new SearchCriteria()));
+        if (mSearchPropertyRepository.getCurrentSearchRequest() == null) {
+            SearchCriteria searchCriteria = mMapPreferenceHelper
+                      .getRecentSearchCriteria(lastSearchMode);
+            this.mSearchPropertyRepository
+                      .setCurrentSearchRequest(
+                                new SearchRequest(searchCriteria));
         }
-        setSearchCriteria(mSearchService.getCurrentSearchRequest().getCriteria());
-        
-        mIsShouldResetFilter = false;
-        refreshViewWithSearchCriteria();
+        setSearchCriteria(mMapPreferenceHelper.getRecentSearchCriteria(lastSearchMode));
     }
     
     @Override
@@ -122,6 +116,13 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 }
             }
         });
+    }
+    
+    @Override
+    public void onDestroy() {
+        Timber.d("ON Destroy filter nav");
+        
+        super.onDestroy();
     }
     
     //====================== Implement method =========================//
@@ -247,12 +248,11 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     }
     
     public void setSearchCriteria(SearchCriteria searchCriteria) {
-        
         mSearchCriteria = searchCriteria;
+        refreshViewWithSearchCriteria();
     }
     
     private void refreshViewWithSearchCriteria() {
-        mBinding.get().filterSearchType.getSpinner().setSelection(mSearchCriteria.getSearchType());
         if (mBinding.get().filterPrice.getVisibility() == View.VISIBLE) {
             TextAndMoreTextValue displayPrice = mSearchCriteria.getDisplay().getDisplayPrice();
             mBinding.get().filterPrice.setText(displayPrice);
@@ -275,6 +275,19 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         
         TextAndMoreTextValue displayTag = mSearchCriteria.getDisplay().getDisplayTag();
         mBinding.get().filterTag.setText(displayTag);
+        
+        mBinding.get().filterSearchType.getSpinner().setSelection(mSearchCriteria.getSearchType());
+    }
+    
+    private void resetFilter() {
+        mBinding.get().filterLocation.reset();
+        mBinding.get().filterPrice.reset();
+        mBinding.get().filterSize.reset();
+        mBinding.get().filterPropertyType.reset();
+        mBinding.get().filterBedrooms.reset();
+        mBinding.get().filterBathRooms.reset();
+        mBinding.get().filterParking.reset();
+        mBinding.get().filterTag.reset();
     }
     
     
@@ -339,6 +352,19 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
               OnCompleteRefineFilter onCompleteRefineFilter) {
         mOnCompleteRefineFilter = onCompleteRefineFilter;
     }
+    
+    public boolean isFirstTime() {
+        return mIsFirstTime;
+    }
+    
+    public void setFirstTime(boolean firstTime) {
+        mIsFirstTime = firstTime;
+    }
+    
+    public MapPreferenceHelper getMapPreferenceHelper() {
+        return mMapPreferenceHelper;
+    }
+    
     
     public interface OnCompleteRefineFilter {
         

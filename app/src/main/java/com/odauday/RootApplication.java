@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.local.tag.DaoSession;
+import com.odauday.data.local.history.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
+import com.odauday.di.modules.BusModule;
 import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.PreferenceModule;
@@ -44,6 +45,7 @@ public class RootApplication extends Application implements HasActivityInjector 
                   .builder()
                   .application(this)
                   .preference(new PreferenceModule())
+                  .bus(new BusModule())
                   .network(new NetworkModule(this))
                   .localDAO(new LocalDaoModule())
                   .service(new ServiceBuildersModule())

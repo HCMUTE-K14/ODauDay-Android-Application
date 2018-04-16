@@ -11,6 +11,6 @@ public class MainActivityViewModel extends BaseViewModel {
     
     @Inject
     public MainActivityViewModel() {
-    
+
     }
 }

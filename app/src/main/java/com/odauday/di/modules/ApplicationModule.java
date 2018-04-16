@@ -7,10 +7,10 @@ import com.odauday.SchedulersExecutor;
 import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.DatabaseHelper;
-import com.odauday.data.local.tag.DaoMaster;
-import com.odauday.data.local.tag.DaoMaster.DevOpenHelper;
-import com.odauday.data.local.tag.DaoMaster.OpenHelper;
-import com.odauday.data.local.tag.DaoSession;
+import com.odauday.data.local.history.DaoMaster;
+import com.odauday.data.local.history.DaoMaster.DevOpenHelper;
+import com.odauday.data.local.history.DaoMaster.OpenHelper;
+import com.odauday.data.local.history.DaoSession;
 import com.odauday.di.scopes.PerApplication;
 import dagger.Module;
 import dagger.Provides;
@@ -63,6 +63,7 @@ public class ApplicationModule {
         Database db = helper.getWritableDb();
         return new DaoMaster(db).newSession();
     }
+    
     
     @Provides
     SchedulersExecutor provideSchedulersExecutor() {

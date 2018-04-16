@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/1/18.
@@ -64,6 +65,36 @@ public class MinMaxObject<T> implements Parcelable {
     public void setMax(T max) {
         this.max = max;
     }
+    
+    
+    public MinMaxObject normalize() {
+        try {
+            int maxValue = Integer.valueOf(String.valueOf(max));
+            int minValue = Integer.valueOf(String.valueOf(min));
+            if (maxValue == -1 && minValue == -1) {
+                return null;
+            }
+            
+            if (maxValue == -1 && minValue >= 0) {
+                Timber.d("Normalize minmaxobject 2");
+                
+                return new MinMaxObject<Integer>(minValue, null);
+            }
+            
+            if (maxValue >= 0 && minValue == -1) {
+                Timber.d("Normalize minmaxobject 3");
+                
+                return new MinMaxObject<Integer>(null, maxValue);
+            }
+            Timber.d("Normalize minmaxobject 4");
+            
+            return new MinMaxObject<Integer>(minValue, maxValue);
+            
+        } catch (Exception ex) {
+            return this;
+        }
+    }
+    
     
     @Override
     public String toString() {

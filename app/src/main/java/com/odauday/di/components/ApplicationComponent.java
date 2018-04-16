@@ -2,6 +2,7 @@ package com.odauday.di.components;
 
 import com.odauday.RootApplication;
 import com.odauday.di.modules.ApplicationModule;
+import com.odauday.di.modules.BusModule;
 import com.odauday.di.modules.LocalDaoModule;
 import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.PreferenceModule;
@@ -23,6 +24,7 @@ import javax.inject.Singleton;
           AndroidSupportInjectionModule.class,
           ApplicationModule.class,
           PreferenceModule.class,
+          BusModule.class,
           NetworkModule.class,
           ServiceBuildersModule.class,
           LocalDaoModule.class,
@@ -39,6 +41,8 @@ public interface ApplicationComponent {
         Builder application(RootApplication application);
         
         Builder preference(PreferenceModule preferenceModule);
+        
+        Builder bus(BusModule busModule);
         
         Builder network(NetworkModule networkModule);
         

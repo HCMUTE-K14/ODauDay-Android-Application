@@ -126,7 +126,7 @@ public class APIHelper {
         
         return new OkHttpClient.Builder()
                   .cache(cache)
-                  .addInterceptor(logging)
+                  //  .addInterceptor(logging)
                   .addInterceptor(interceptor)
                   .addInterceptor(languageInterceptor)
                   .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
@@ -154,6 +154,7 @@ public class APIHelper {
                   .build();
     }
     
+    @Deprecated
     public <T> T createService(final Class<T> clazz, String baseURL, OkHttpClient client,
               Gson gson) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {

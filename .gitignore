@@ -3,12 +3,14 @@
 /build
 /captures
 
+
 *.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/dictionaries
 .idea/libraries
+.idea/caches
 
 # Built application files
 *.apk

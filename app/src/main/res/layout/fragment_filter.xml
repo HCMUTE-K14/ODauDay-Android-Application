@@ -10,7 +10,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:clickable="true"
     android:fitsSystemWindows="true">
     <ScrollView
@@ -24,7 +23,6 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:orientation="vertical">
         <com.odauday.ui.search.common.view.SearchTypeChooser
           android:id="@+id/filter_search_type"
@@ -106,7 +104,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@color/white"
             android:onClick="@{viewModel::toggleMoreOptions}"
             android:text="@string/txt_filter_more_options"
             android:textColor="@color/background_selector_toolbar"

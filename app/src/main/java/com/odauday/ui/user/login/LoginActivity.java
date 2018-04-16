@@ -92,7 +92,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
         
         @Override
         public void onCancel() {
-
+        
         }
         
         @Override

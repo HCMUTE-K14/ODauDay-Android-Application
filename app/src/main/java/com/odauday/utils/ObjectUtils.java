@@ -26,4 +26,24 @@ public class ObjectUtils {
     public static boolean nonNull(Object obj) {
         return obj != null;
     }
+    
+    public static boolean isNumberType(Object object) {
+        return isDouble(object) || isInteger(object) || isFloat(object) || isLong(object);
+    }
+    
+    public static boolean isDouble(Object object) {
+        return object instanceof Double;
+    }
+    
+    public static boolean isInteger(Object object) {
+        return object instanceof Integer;
+    }
+    
+    public static boolean isFloat(Object object) {
+        return object instanceof Float;
+    }
+    
+    public static boolean isLong(Object object) {
+        return object instanceof Long;
+    }
 }

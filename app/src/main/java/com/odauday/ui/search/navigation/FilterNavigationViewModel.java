@@ -6,7 +6,6 @@ import com.odauday.data.RecentTagRepository;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseDialogFragment;
 import com.odauday.ui.search.common.MinMaxObject;
-import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.SearchType;
 import com.odauday.ui.search.common.view.FilterNumberPickerDialog;
 import com.odauday.ui.search.common.view.propertydialog.PropertyTypeDialog;
@@ -120,7 +119,6 @@ public class FilterNavigationViewModel extends BaseViewModel {
             case PRICE:
                 SearchType searchType = SearchType
                           .getByValue(mFragment.getSearchCriteria().getSearchType());
-                
                 title = TextUtils.build(mFragment.getString(R.string.txt_filter_price),
                           mFragment.getString(R.string.txt_filter_price_rate));
                 
@@ -197,28 +195,16 @@ public class FilterNavigationViewModel extends BaseViewModel {
         if (mFragment.getBinding().get() == null) {
             return;
         }
-        mFragment.getSearchCriteria().setSearchType(searchType.getValue());
-        
         resetViewWhenChangeSearchType(searchType);
         
-        if (!mFragment.isShouldResetFilter()) {
-            mFragment.setShouldResetFilter(true);
-        } else {
-            resetFilter();
+        if (mFragment.isFirstTime()) {
+            mFragment.setFirstTime(false);
+            return;
         }
-    }
-    
-    private void resetFilter() {
         
-        mFragment.setSearchCriteria(new SearchCriteria());
-        mFragment.getBinding().get().filterLocation.reset();
-        mFragment.getBinding().get().filterPrice.reset();
-        mFragment.getBinding().get().filterSize.reset();
-        mFragment.getBinding().get().filterPropertyType.reset();
-        mFragment.getBinding().get().filterBedrooms.reset();
-        mFragment.getBinding().get().filterBathRooms.reset();
-        mFragment.getBinding().get().filterParking.reset();
-        mFragment.getBinding().get().filterTag.reset();
+        mFragment.getMapPreferenceHelper().putLastSearchMode(searchType.getValue());
+        mFragment.setSearchCriteria(mFragment.getMapPreferenceHelper()
+                  .getRecentSearchCriteria(searchType.getValue()));
         
     }
     

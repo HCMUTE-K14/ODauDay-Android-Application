@@ -39,6 +39,10 @@ public class Tag implements Parcelable {
         name = in.readString();
     }
     
+    public Tag(String id) {
+        this.id = id;
+    }
+    
     public String getId() {
         return id;
     }

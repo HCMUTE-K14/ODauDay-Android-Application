@@ -9,12 +9,17 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 import com.odauday.R;
-import com.odauday.data.remote.search.SearchService;
-import com.odauday.data.remote.search.model.SearchRequest;
+import com.odauday.data.SearchPropertyRepository;
+import com.odauday.data.SearchPropertyState;
+import com.odauday.data.local.cache.MapPreferenceHelper;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
 import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
+import com.odauday.ui.search.common.event.OnErrorDownloadProperty;
+import com.odauday.ui.search.common.event.ReloadSearchEvent;
+import com.odauday.ui.search.common.view.InformationBar.InformationBarListener;
 import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
@@ -25,6 +30,9 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 /**
@@ -46,7 +54,13 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     DispatchingAndroidInjector<Fragment> mChildFragmentInjector;
     
     @Inject
-    SearchService mSearchService;
+    SearchPropertyRepository mSearchPropertyRepository;
+    
+    @Inject
+    MapPreferenceHelper mMapPreferenceHelper;
+    
+    @Inject
+    EventBus mBus;
     
     private FilterNavigationFragment mFilterNavigationFragment;
     private MapViewFragment mMapViewFragment;
@@ -80,10 +94,10 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         
         initBinding();
         setupToolBar(view);
-        if (savedInstanceState == null) {
-            Timber.d("saveInstance null");
-        }
-        setupFilterNavigation();
+        new Handler().postDelayed(() -> {
+            setupFilterNavigation();
+            getFilterNavigation().setOnCompleteRefineFilter(this);
+        }, 10);
         setupMapView();
     }
     
@@ -104,8 +118,44 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     @Override
+    public void onStart() {
+        super.onStart();
+        mBus.register(this);
+    }
+    
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBus.unregister(this);
+    }
+    
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        Timber.d("ON Destroy search tab");
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeStateWhenSearchProperty(SearchPropertyState state) {
+        if (state.isShouldShowProgressBar()) {
+            mBinding.get().inforBar.showProgressBar();
+            return;
+        }
+        mBinding.get().inforBar.hideProgressBar();
+        if (mBinding.get().inforBar.isShowErrorContainer()) {
+            mBinding.get().inforBar.showHideErrorContainer(false);
+        }
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorSearchProperty(OnErrorDownloadProperty errorDownloadProperty) {
+        mBinding.get().inforBar.showHideErrorContainer(true);
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCompleteDownloadProperty(OnCompleteDownloadProperty onCompleteDownloadProperty) {
+        String textStatus = String.valueOf(onCompleteDownloadProperty.getResult().size());
+        mBinding.get().inforBar.setTextStatus(textStatus);
     }
     
     @Override
@@ -116,14 +166,15 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
     
     @Override
     public void onCompleteRefineFilter(SearchCriteria searchCriteria) {
-        Timber.tag(TAG).i(searchCriteria.toString());
-        mSearchService.setCurrentSearchRequest(new SearchRequest(searchCriteria));
+        mMapPreferenceHelper.putRecentSearchCriteria(searchCriteria);
+        mSearchPropertyRepository.getCurrentSearchRequest().setCriteria(searchCriteria);
         closeDrawer();
+        mBus.post(new ReloadSearchEvent());
     }
     
     //====================== ViewBinding Method =========================//
@@ -156,6 +207,22 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 Timber.tag(TAG).i("HIDE MAP");
             }
         });
+        mBinding.get().inforBar.setListener(new InformationBarListener() {
+            @Override
+            public void onClickSaveSearch() {
+            
+            }
+            
+            @Override
+            public void onCLickSort() {
+            
+            }
+            
+            @Override
+            public void onClickReload() {
+                mBus.post(new ReloadSearchEvent());
+            }
+        });
     }
     
     private void openDrawer() {
@@ -180,17 +247,9 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                       .newInstance();
         }
         
-        Runnable attachRunnableFilterNav = new AttachFragmentRunnable
-                  .AttachFragmentBuilder()
-                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-                  .setFragmentManager(getActivity().getSupportFragmentManager())
-                  .setContainerId(R.id.filter_nav)
-                  .setFragment(mFilterNavigationFragment)
-                  .setTagFragment(FilterNavigationFragment.TAG)
-                  .setAddToBackTrack(true)
-                  .build();
-        
-        new Handler().postDelayed(attachRunnableFilterNav, 10);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                  .replace(R.id.filter_nav, mFilterNavigationFragment, FilterNavigationFragment.TAG)
+                  .commit();
     }
     
     private void setupMapView() {
@@ -201,6 +260,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         if (mMapViewFragment == null) {
             mMapViewFragment = MapViewFragment.newInstance();
         }
+        
         Runnable attachRunnableMapView = new AttachFragmentRunnable
                   .AttachFragmentBuilder()
                   .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
@@ -208,7 +268,9 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                   .setContainerId(R.id.fragment_map_view)
                   .setFragment(mMapViewFragment)
                   .setTagFragment(MapViewFragment.TAG)
-                  .setAddToBackTrack(true)
+                  .setAddToBackTrack(false)
+                  .setAnimationIn(android.R.anim.fade_in)
+                  .setAnimationOut(android.R.anim.fade_out)
                   .build();
         
         new Handler().postDelayed(attachRunnableMapView, 50);
@@ -228,6 +290,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     private FilterNavigationFragment getFilterNavigation() {
         return mFilterNavigationFragment;
     }
+    
     
     @Override
     public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {

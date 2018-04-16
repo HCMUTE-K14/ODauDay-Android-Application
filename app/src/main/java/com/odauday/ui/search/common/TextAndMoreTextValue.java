@@ -27,7 +27,10 @@ public class TextAndMoreTextValue implements Parcelable {
             return new TextAndMoreTextValue[size];
         }
     };
+
     private String text;
+    
+
     private String moreText;
     
     public TextAndMoreTextValue(String text, String moreText) {

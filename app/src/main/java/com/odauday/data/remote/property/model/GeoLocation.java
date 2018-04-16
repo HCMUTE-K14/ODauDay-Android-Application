@@ -1,4 +1,4 @@
-package com.odauday.data.remote.search.model;
+package com.odauday.data.remote.property.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,42 +10,47 @@ import com.google.gson.annotations.SerializedName;
  * Created by infamouSs on 4/1/18.
  */
 
-public class Location implements Parcelable {
+public class GeoLocation implements Parcelable {
     
-    public static final Creator<Location> CREATOR = new Creator<Location>() {
+    public static final Creator<GeoLocation> CREATOR = new Creator<GeoLocation>() {
         @Override
-        public Location createFromParcel(Parcel in) {
-            return new Location(in);
+        public GeoLocation createFromParcel(Parcel in) {
+            return new GeoLocation(in);
         }
         
         @Override
-        public Location[] newArray(int size) {
-            return new Location[size];
+        public GeoLocation[] newArray(int size) {
+            return new GeoLocation[size];
         }
     };
     @SerializedName("latitude")
     @Expose
     private double latitude;
+    
     @SerializedName("longitude")
     @Expose
     private double longitude;
     
     private String name = "";
     
-    public Location(double latitude, double longitude) {
+    public GeoLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
     
-    public Location(LatLng latLng) {
+    public GeoLocation(LatLng latLng) {
         this.latitude = latLng.latitude;
         this.longitude = latLng.longitude;
     }
     
-    protected Location(Parcel in) {
+    protected GeoLocation(Parcel in) {
         latitude = in.readFloat();
         longitude = in.readFloat();
         name = in.readString();
+    }
+    
+    public static GeoLocation fromLatLng(LatLng latLng) {
+        return new GeoLocation(latLng.latitude, latLng.longitude);
     }
     
     public double getLatitude() {
@@ -63,7 +68,6 @@ public class Location implements Parcelable {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-    
     
     public String getName() {
         return name;
@@ -94,15 +98,15 @@ public class Location implements Parcelable {
             return false;
         }
         
-        Location location = (Location) o;
+        GeoLocation geoLocation = (GeoLocation) o;
         
-        if (Double.compare(location.latitude, latitude) != 0) {
+        if (Double.compare(geoLocation.latitude, latitude) != 0) {
             return false;
         }
-        if (Double.compare(location.longitude, longitude) != 0) {
+        if (Double.compare(geoLocation.longitude, longitude) != 0) {
             return false;
         }
-        return name != null ? name.equals(location.name) : location.name == null;
+        return name != null ? name.equals(geoLocation.name) : geoLocation.name == null;
     }
     
     @Override
@@ -119,7 +123,7 @@ public class Location implements Parcelable {
     
     @Override
     public String toString() {
-        return "Location{" +
+        return "GeoLocation{" +
                "latitude=" + latitude +
                ", longitude=" + longitude +
                '}';

@@ -1,5 +1,6 @@
 package com.odauday.ui.search.common.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -14,8 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.odauday.R;
 import com.odauday.utils.ViewUtils;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by infamouSs on 4/10/18.
@@ -23,7 +27,9 @@ import com.odauday.utils.ViewUtils;
 
 public class InformationBar extends LinearLayout {
     
+    private static final int DEBOUNCE_TIMEOUT = 1000;
     private InformationBarListener mListener;
+    private boolean mIsShowErrorContainer = false;
     
     public InformationBar(Context context) {
         super(context);
@@ -67,20 +73,23 @@ public class InformationBar extends LinearLayout {
                   AnimationUtils.loadAnimation(context, R.anim.fade_out_reverse_repeat));
     }
     
+    @SuppressLint("CheckResult")
     private void setupListener() {
-        getMainView().setOnClickListener(mainView -> {
-            if (mListener != null) {
-                mListener.onClickReload();
-            }
-        });
-        
+        RxView.clicks(getContainerError())
+                  .throttleFirst(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(success -> {
+                      if (mListener != null) {
+                          mListener.onClickReload();
+                      }
+                  });
         getButtonSort().setOnClickListener(btnSort -> {
             if (mListener != null) {
                 mListener.onCLickSort();
             }
         });
         
-        getButtonSaveSearch().setOnClickListener(btnSaveSearch -> {
+        getButtonSaveSearch().setOnClickListener(saveSearchBtn -> {
             if (mListener != null) {
                 mListener.onClickSaveSearch();
             }
@@ -92,6 +101,7 @@ public class InformationBar extends LinearLayout {
     }
     
     public void showHideErrorContainer(boolean show) {
+        mIsShowErrorContainer = show;
         hideProgressBar();
         ViewUtils.showHideView(getContainerError(), show);
         ViewUtils.showHideView(getTextViewStatus(), !show);
@@ -145,6 +155,10 @@ public class InformationBar extends LinearLayout {
     
     public void setListener(InformationBarListener listener) {
         mListener = listener;
+    }
+    
+    public boolean isShowErrorContainer() {
+        return mIsShowErrorContainer;
     }
     
     public interface InformationBarListener {

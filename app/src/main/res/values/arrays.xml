@@ -141,11 +141,6 @@
     <item>6500000</item>
     <item>7000000</item>
     <item>7500000</item>
-    <item>8000000</item>
-    <item>8500000</item>
-    <item>9000000</item>
-    <item>9500000</item>
-    <item>10000000</item>
   </integer-array>
   <integer-array name="price_rent">
     <item>500</item>

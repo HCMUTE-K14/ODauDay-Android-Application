@@ -1,9 +1,6 @@
-package com.odauday.data.local.tag.impl;
+package com.odauday.data.local.tag;
 
-import com.odauday.data.local.tag.RecentTag;
-import com.odauday.data.local.tag.RecentTagDao;
 import com.odauday.data.local.tag.RecentTagDao.Properties;
-import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.model.Tag;
 import io.reactivex.Single;
 import java.util.ArrayList;

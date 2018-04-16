@@ -12,8 +12,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.odauday.R;
-import com.odauday.data.remote.search.model.CoreSearchRequest;
-import com.odauday.data.remote.search.model.Location;
+import com.odauday.data.remote.property.model.CoreSearchRequest;
+import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
@@ -23,29 +23,33 @@ import com.odauday.utils.permissions.PermissionHelper.Permission;
  * Created by infamouSs on 4/11/18.
  */
 
+
 public class MapUtils {
     
     public static final String[] LOCATION_PERMISSION = new String[]{
               Permission.ACCESS_COARSE_LOCATION, Permission.FINE_LOCATION};
     
-    public static CoreSearchRequest getCoreSearchRequest(GoogleMap map, int orientation) {
+    public static CoreSearchRequest getCoreSearchRequestFromCurrentLocation(GoogleMap map,
+              int orientation) {
         VisibleRegion vr = map.getProjection().getVisibleRegion();
+        
         double top = vr.latLngBounds.northeast.latitude;
         double left = vr.latLngBounds.southwest.longitude;
         
-        Location locationCenter = new Location(map.getCameraPosition().target);
+        GeoLocation geoLocationCenter = new GeoLocation(map.getCameraPosition().target);
         
         switch (orientation) {
             
             case Configuration.ORIENTATION_LANDSCAPE:
-                Location locationLeft = new Location(locationCenter.getLatitude(), left);
-                return new CoreSearchRequest(locationCenter, locationLeft);
+                GeoLocation geoLocationLeft = new GeoLocation(geoLocationCenter.getLatitude(),
+                          left);
+                return new CoreSearchRequest(geoLocationCenter, geoLocationLeft, vr.latLngBounds);
             case Configuration.ORIENTATION_PORTRAIT:
             case Configuration.ORIENTATION_SQUARE:
             case Configuration.ORIENTATION_UNDEFINED:
             default:
-                Location locationTop = new Location(top, locationCenter.getLongitude());
-                return new CoreSearchRequest(locationCenter, locationTop);
+                GeoLocation geoLocationTop = new GeoLocation(top, geoLocationCenter.getLongitude());
+                return new CoreSearchRequest(geoLocationCenter, geoLocationTop, vr.latLngBounds);
         }
     }
     

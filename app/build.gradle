@@ -64,6 +64,7 @@ dependencies {
     * 6. LifeCycle
     * 7. DataBinding
     * 8. Glide
+    *
     * */
 
     /*Version*/
@@ -79,6 +80,9 @@ dependencies {
     def bottomNavigationVersion = "2.0.4"
     def chipInputVersion = "1.0.8"
     def greenDaoVersion = "3.2.2"
+    def googlePlayVersion = "12.0.1"
+    def eventBusVersion = "3.1.1"
+    def rxViewBindingVersion = "2.1.1"
 
     implementation "com.google.dagger:dagger:${daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
@@ -111,8 +115,13 @@ dependencies {
     implementation "com.github.pchmn:MaterialChipsInput:${chipInputVersion}"
 
     implementation "org.greenrobot:greendao:${greenDaoVersion}"
-    implementation 'com.google.android.gms:play-services-maps:12.0.1'
-    implementation "com.google.android.gms:play-services-location:12.0.1"
+
+    implementation "com.google.android.gms:play-services-maps:${googlePlayVersion}"
+    implementation "com.google.android.gms:play-services-location:${googlePlayVersion}"
+
+    implementation "org.greenrobot:eventbus:${eventBusVersion}"
+    implementation "com.jakewharton.rxbinding2:rxbinding:${rxViewBindingVersion}"
+
 
 
     testImplementation 'junit:junit:4.12'
