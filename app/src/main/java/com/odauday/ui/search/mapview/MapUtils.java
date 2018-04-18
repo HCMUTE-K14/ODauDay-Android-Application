@@ -94,6 +94,10 @@ public class MapUtils {
         moveMap(map, location, zoomLevel, true);
     }
     
+    public static boolean isVisibleInBounds(GoogleMap map, GeoLocation location) {
+        return map.getProjection().getVisibleRegion().latLngBounds.contains(location.toLatLng());
+    }
+    
     public static void requireLocationPermission(Activity activity,
               PermissionCallBack permissionCallBack) {
         if (PermissionHelper.shouldShowRequestPermissionRationale(activity,

@@ -84,15 +84,15 @@ public class FilterOptionLabelView extends LinearLayout {
         return mTextViewValue;
     }
     
-    public void setTextValue(int value) {
-        mTextViewValue.setText(value);
-    }
-    
     public void setTextValue(String value) {
         if (TextUtils.isEmpty(value)) {
             setTextValue(R.string.txt_any);
             return;
         }
+        mTextViewValue.setText(value);
+    }
+    
+    public void setTextValue(int value) {
         mTextViewValue.setText(value);
     }
     

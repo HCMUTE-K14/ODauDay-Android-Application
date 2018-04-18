@@ -1,5 +1,6 @@
 package com.odauday.utils;
 
+import android.content.Context;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,17 +23,22 @@ public class ImageLoader {
               R.drawable.ic_gallery_placeholder7,
               R.drawable.ic_gallery_placeholder8,
               R.drawable.ic_gallery_placeholder9,
-              R.drawable.ic_gallery_placeholder10};
+              R.drawable.ic_gallery_placeholder10
+    };
     
-    public static void load(ImageView imageView, Object image) {
+    public static void load(Context context, ImageView imageView, Object image) {
         int placeHolder = randomPlaceHolder();
-        
-        Glide.with(imageView.getContext())
+        Glide.with(context)
                   .load(image)
                   .apply(new RequestOptions()
                             .placeholder(placeHolder)
                             .error(placeHolder))
                   .into(imageView);
+    }
+    
+    
+    public static void load(ImageView imageView, Object image) {
+        load(imageView.getContext(), imageView, image);
     }
     
     public static void loadWithoutOptions(ImageView imageView, Object image) {
@@ -41,7 +47,7 @@ public class ImageLoader {
                   .into(imageView);
     }
     
-    private static int randomPlaceHolder() {
-        return new Random().nextInt(PLACE_HOLDER.length);
+    public static int randomPlaceHolder() {
+        return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length - 1)];
     }
 }

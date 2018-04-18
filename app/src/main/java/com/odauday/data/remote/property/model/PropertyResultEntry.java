@@ -4,7 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.odauday.model.Media;
 import com.odauday.utils.ObjectUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by infamouSs on 4/12/18.
@@ -26,9 +29,6 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("address")
     @Expose
     private String address;
@@ -56,28 +56,16 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("is_visited")
     @Expose
     private boolean isVisited;
+    @SerializedName("media")
+    @Expose
+    private List<Media> media = new ArrayList<>();
     
     public PropertyResultEntry() {
 
     }
     
-    public PropertyResultEntry(String id, String name, String address, int numOfBedRooms,
-              int numOfBathRooms, int numOfParkings,
-              GeoLocation location, boolean isFavorite, boolean isVisited) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.numOfBedRooms = numOfBedRooms;
-        this.numOfBathRooms = numOfBathRooms;
-        this.numOfParkings = numOfParkings;
-        this.location = location;
-        this.isFavorite = isFavorite;
-        this.isVisited = isVisited;
-    }
-
     protected PropertyResultEntry(Parcel in) {
         id = in.readString();
-        name = in.readString();
         address = in.readString();
         price = in.readDouble();
         searchType = in.readString();
@@ -87,8 +75,9 @@ public class PropertyResultEntry implements Parcelable {
         location = in.readParcelable(GeoLocation.class.getClassLoader());
         isFavorite = in.readByte() != 0;
         isVisited = in.readByte() != 0;
+        media = in.createTypedArrayList(Media.CREATOR);
     }
-
+    
     public String getId() {
         return id;
     }
@@ -97,13 +86,6 @@ public class PropertyResultEntry implements Parcelable {
         this.id = id;
     }
     
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
     
     public String getAddress() {
         return address;
@@ -160,23 +142,31 @@ public class PropertyResultEntry implements Parcelable {
     public void setVisited(boolean visited) {
         isVisited = visited;
     }
-
+    
     public double getPrice() {
         return price;
     }
-
+    
     public void setPrice(double price) {
         this.price = price;
     }
-
+    
     public String getSearchType() {
         return searchType;
     }
-
+    
     public void setSearchType(String searchType) {
         this.searchType = searchType;
     }
-
+    
+    public List<Media> getMedia() {
+        return media;
+    }
+    
+    public void setMedia(List<Media> media) {
+        this.media = media;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -192,7 +182,6 @@ public class PropertyResultEntry implements Parcelable {
                isFavorite == entry.isFavorite &&
                isVisited == entry.isVisited &&
                ObjectUtils.equals(id, entry.id) &&
-               ObjectUtils.equals(name, entry.name) &&
                ObjectUtils.equals(address, entry.address) &&
                ObjectUtils.equals(location, entry.location);
     }
@@ -201,7 +190,7 @@ public class PropertyResultEntry implements Parcelable {
     public int hashCode() {
         
         return ObjectUtils
-                  .hash(id, name, address, numOfBedRooms, numOfBathRooms, numOfParkings, location,
+                  .hash(id, address, numOfBedRooms, numOfBathRooms, numOfParkings, location,
                             isFavorite, isVisited);
     }
     
@@ -209,7 +198,6 @@ public class PropertyResultEntry implements Parcelable {
     public String toString() {
         return "PropertyResultEntry{" +
                "id='" + id + '\'' +
-               ", name='" + name + '\'' +
                ", address='" + address + '\'' +
                ", numOfBedRooms=" + numOfBedRooms +
                ", numOfBathRooms=" + numOfBathRooms +
@@ -219,17 +207,16 @@ public class PropertyResultEntry implements Parcelable {
                ", isVisited=" + isVisited +
                '}';
     }
-
+    
     @Override
     public int describeContents() {
         return 0;
     }
-
+    
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        
         parcel.writeString(id);
-        parcel.writeString(name);
         parcel.writeString(address);
         parcel.writeDouble(price);
         parcel.writeString(searchType);
@@ -239,5 +226,6 @@ public class PropertyResultEntry implements Parcelable {
         parcel.writeParcelable(location, i);
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeByte((byte) (isVisited ? 1 : 0));
+        parcel.writeTypedList(media);
     }
 }

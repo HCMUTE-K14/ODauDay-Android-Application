@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="60dp">
-
+  android:layout_height="65dp"
+  android:background="@color/white">
+  <ImageView
+    android:id="@+id/image"
+    android:layout_width="100dp"
+    android:layout_height="65dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/content_description_default"
+    android:scaleType="centerCrop" />
+  <TextView
+    android:id="@+id/txt_price"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_toEndOf="@id/image"
+    android:layout_toRightOf="@id/image"
+    android:ellipsize="end"
+    android:singleLine="true"
+    android:textColor="#b42b70"
+    android:textSize="14sp" />
+  <TextView
+    android:id="@+id/txt_feature"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/txt_price"
+    android:layout_toEndOf="@id/image"
+    android:layout_toRightOf="@id/image"
+    android:ellipsize="end"
+    android:singleLine="true"
+    android:textSize="14sp" />
+  <TextView
+    android:id="@+id/txt_address"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/txt_feature"
+    android:layout_toEndOf="@id/image"
+    android:layout_toRightOf="@id/image"
+    android:singleLine="true"
+    android:textColor="#747c8a"
+    android:textSize="14sp" />
+  <!--<FrameLayout-->
+  <!--android:id="@id/vitals_fav_hitbox"-->
+  <!--android:layout_width="UNKNOWN_DATA_0x7f0d0152"-->
+  <!--android:layout_height="UNKNOWN_DATA_0x7f0d0152"-->
+  <!--android:layout_alignParentRight="true"-->
+  <!--android:layout_alignParentTop="true"-->
+  <!--android:paddingBottom="@dimen/padding_std"-->
+  <!--android:paddingRight="@dimen/padding_std"-->
+  <!--android:clickable="true">-->
+  <!--<ImageView-->
+  <!--android:id="@id/shortlist_image"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="match_parent"-->
+  <!--android:adjustViewBounds="true"-->
+  <!--android:clickable="false"-->
+  <!--android:scaleType="centerInside"-->
+  <!--android:src="@drawable/ic_listing_shortlist_no_padding" />-->
+  <!--</FrameLayout>-->
+  <View
+    android:layout_width="1dp"
+    android:layout_height="1dp"
+    android:layout_alignParentBottom="true"
+    android:background="#eaebed" />
 </RelativeLayout>

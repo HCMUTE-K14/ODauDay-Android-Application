@@ -12,6 +12,6 @@ public class SearchTabViewModel extends BaseViewModel {
     
     @Inject
     public SearchTabViewModel(UserRepository userRepository) {
-    
+
     }
 }

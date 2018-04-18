@@ -7,24 +7,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+import com.odauday.MainActivity;
 import com.odauday.R;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
 import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.ui.search.common.event.NeedCloseVitalProperty;
 import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
 import com.odauday.ui.search.common.event.OnErrorDownloadProperty;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.common.view.InformationBar.InformationBarListener;
+import com.odauday.ui.search.common.view.VitalPropertyView;
 import com.odauday.ui.search.mapview.MapViewFragment;
+import com.odauday.ui.search.mapview.MapViewFragment.MapFragmentClickCallBack;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -41,7 +48,8 @@ import timber.log.Timber;
 
 public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMainBinding> implements
                                                                                           HasSupportFragmentInjector,
-                                                                                          OnCompleteRefineFilter {
+                                                                                          OnCompleteRefineFilter,
+                                                                                          MapFragmentClickCallBack {
     
     
     //====================== Variable =========================//
@@ -61,6 +69,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Inject
     EventBus mBus;
+    
+    VitalPropertyView mVitalPropertyView;
     
     private FilterNavigationFragment mFilterNavigationFragment;
     private MapViewFragment mMapViewFragment;
@@ -99,6 +109,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             getFilterNavigation().setOnCompleteRefineFilter(this);
         }, 10);
         setupMapView();
+        getMapViewFragment().setMapFragmentClickCallBack(this);
+        initVitalProperty();
     }
     
     @Override
@@ -166,7 +178,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+
     }
     
     @Override
@@ -175,6 +187,29 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mSearchPropertyRepository.getCurrentSearchRequest().setCriteria(searchCriteria);
         closeDrawer();
         mBus.post(new ReloadSearchEvent());
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedCloseVitalProperty(NeedCloseVitalProperty needCloseVitalProperty) {
+        View vitalPropertyContainer = getVitalPropertyContainer();
+        
+        if (vitalPropertyContainer != null &&
+            vitalPropertyContainer.getVisibility() == View.VISIBLE) {
+            showVitalProperty(false);
+            showBottomBar(true);
+        }
+    }
+    
+    @Override
+    public void onMapPropertyClick(PropertyResultEntry entry) {
+        View vitalPropertyContainer = getVitalPropertyContainer();
+        if (vitalPropertyContainer != null) {
+            if (vitalPropertyContainer.getVisibility() != View.VISIBLE) {
+                showBottomBar(false);
+                showVitalProperty(true);
+            }
+            mVitalPropertyView.setProperty(entry);
+        }
     }
     
     //====================== ViewBinding Method =========================//
@@ -210,12 +245,12 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mBinding.get().inforBar.setListener(new InformationBarListener() {
             @Override
             public void onClickSaveSearch() {
-            
+
             }
             
             @Override
             public void onCLickSort() {
-            
+
             }
             
             @Override
@@ -223,6 +258,69 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 mBus.post(new ReloadSearchEvent());
             }
         });
+    }
+    
+    private void initVitalProperty() {
+        if ((MainActivity) getActivity() != null) {
+            mVitalPropertyView = new VitalPropertyView(this.getActivity());
+            
+            ((MainActivity) getActivity()).getBinding().vitalPropertyContainer
+                      .addView(mVitalPropertyView);
+            
+            ViewUtils.showHideView(
+                      ((MainActivity) getActivity()).getBinding().vitalPropertyContainer,
+                      false);
+        }
+    }
+    
+    private View getVitalPropertyContainer() {
+        if (((MainActivity) getActivity()) != null) {
+            return ((MainActivity) getActivity()).getBinding().vitalPropertyContainer;
+        }
+        return null;
+    }
+    
+    private View getBottomBar() {
+        if (((MainActivity) getActivity()) != null) {
+            return ((MainActivity) getActivity()).getBinding().bottomNavBar;
+        }
+        return null;
+    }
+    
+    private void showVitalProperty(boolean show) {
+        if ((MainActivity) getActivity() != null) {
+            View view = getVitalPropertyContainer();
+            if (view == null) {
+                return;
+            }
+            if (show) {
+                view.startAnimation(
+                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_up));
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.startAnimation(
+                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_down));
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+    
+    private void showBottomBar(boolean show) {
+        if ((MainActivity) getActivity() != null) {
+            View view = getBottomBar();
+            if (view == null) {
+                return;
+            }
+            if (show) {
+                view.startAnimation(
+                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_up));
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.startAnimation(
+                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_down));
+                view.setVisibility(View.GONE);
+            }
+        }
     }
     
     private void openDrawer() {
@@ -287,13 +385,18 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         return mBinding.get().drawerLayout.isDrawerOpen(Gravity.END);
     }
     
-    private FilterNavigationFragment getFilterNavigation() {
+    public FilterNavigationFragment getFilterNavigation() {
         return mFilterNavigationFragment;
     }
     
+    public MapViewFragment getMapViewFragment() {
+        return mMapViewFragment;
+    }
     
     @Override
     public AndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
         return mChildFragmentInjector;
     }
+    
+    
 }

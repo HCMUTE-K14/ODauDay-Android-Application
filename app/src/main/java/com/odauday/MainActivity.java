@@ -30,6 +30,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Inject
     MainActivityViewModel mMainActivityViewModel;
     
+    
     Stack<String> mTabStack = new Stack<>();
     
     protected int getLayoutId() {
@@ -89,6 +90,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     }
     
     private void init() {
+        
         mBinding.bottomNavBar.setOnTabSelectedListener(new OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {

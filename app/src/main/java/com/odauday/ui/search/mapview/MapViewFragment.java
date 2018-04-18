@@ -40,6 +40,7 @@ import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.di.Injectable;
 import com.odauday.ui.search.common.SearchCriteria;
+import com.odauday.ui.search.common.event.NeedCloseVitalProperty;
 import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.mapview.MapOverlayView.MapOverlayListener;
@@ -88,6 +89,9 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     private GoogleApiClient mLocationClient;
     
+    
+    private MapFragmentClickCallBack mMapFragmentClickCallBack;
+    
     private GeoLocation mLastGeoLocation;
     private GeoLocation[] mLastBounds;
     
@@ -110,18 +114,25 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }
     };
     
+    private Marker mOpenedMarker;
+    private GeoLocation mOpenedLocation;
+    
+    private boolean mIsShowVitalProperty;
     
     public static MapViewFragment newInstance() {
-        
+
         Bundle args = new Bundle();
         Timber.tag(TAG).d("New instance MapViewFragment");
-        
+
         MapViewFragment fragment = new MapViewFragment();
         fragment.setArguments(args);
-        
+
         return fragment;
     }
     
+    public boolean isShowVitalProperty() {
+        return mIsShowVitalProperty;
+    }
     
     @SuppressWarnings("deprecation")
     @Override
@@ -253,12 +264,12 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             this.mPendingToShowLocations = null;
         }
     }
-
+    
     @Override
     public void onCameraIdle() {
         performSearch();
     }
-
+    
     @Override
     public void onClickMyLocation() {
         if (MapUtils.isHasLocationPermission(getActivity())) {
@@ -276,53 +287,13 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             MapUtils.requireLocationPermission(getActivity(), mPermissionCallBack);
         }
     }
-
-
-    private void moveToLastLocation() {
-        MapUtils.moveMap(mMap, mLastGeoLocation.toLatLng(), mZoomLevel, false);
-        try {
-            mMap.moveCamera(CameraUpdateFactory
-                      .newLatLngBounds(
-                                new LatLngBounds(mLastBounds[0].toLatLng(),
-                                          mLastBounds[1].toLatLng()),
-                                0));
-        } catch (Exception ignored) {
-
-        }
-    }
-
-    
-    private void performSearch() {
-        SearchRequest searchRequest = makeSearchRequest();
-        mSearchRepository.search(searchRequest);
-        
-        saveStateSearch(searchRequest);
-    }
-
-    private void saveStateSearch(SearchRequest searchRequest) {
-        mMapPreferenceHelper.putLastLocation(searchRequest.getCore().getCenter());
-        mMapPreferenceHelper.putLastZoomLevel(searchRequest.getZoom());
-        mMapPreferenceHelper.putLastBounds(searchRequest.getCore().getBounds());
-    }
-    
-    private SearchRequest makeSearchRequest() {
-        int ot = getResources().getConfiguration().orientation;
-        float zoom = mMap.getCameraPosition().zoom;
-        
-        CoreSearchRequest coreSearchRequest = MapUtils
-                  .getCoreSearchRequestFromCurrentLocation(mMap, ot);
-        
-        SearchCriteria searchCriteria = mSearchRepository
-                  .getCurrentSearchRequest()
-                  .getCriteria();
-        
-        return new SearchRequest(coreSearchRequest, searchCriteria,
-                  zoom);
-    }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdatedSearchResult(OnCompleteDownloadProperty completeDownloadProperty) {
+        
         mMapViewAdapter.setData(completeDownloadProperty.getResult());
+        closeOpenedMarker();
+        closeVitals();
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -330,7 +301,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         performSearch();
     }
     
-
+    
     @Override
     public void onClickMapLayer(int type) {
         if (type == 0) {
@@ -341,72 +312,109 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             this.mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
     }
-
+    
     @Override
     public void onMapLockToggle(boolean isMapUnLocked) {
     }
-
-
-    protected void injectDI() {
-        AndroidSupportInjection.inject(this);
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Timber.d(connectionResult.getErrorMessage());
-    }
-
-
+    
     @Override
     public void onUpdatedListLocation(Collection<GeoLocation> locations) {
         if (this.mMap == null) {
             this.mPendingToShowLocations = locations;
             return;
         }
-        //Close selected Property
-
         this.mMap.clear();
         this.mMapMarkers.clear();
         for (GeoLocation mapDisplayItem : locations) {
             LatLng entryLatLng = mapDisplayItem.toLatLng();
             boolean isInVisibleRegion = mMap.getProjection().getVisibleRegion().latLngBounds
                       .contains(entryLatLng);
-
+            
             if (!isInVisibleRegion) {
                 continue;
             }
-
             MarkerOptions markerOptions = new MarkerOptions()
                       .position(entryLatLng)
                       .icon(this.mMapViewAdapter.getMarkerIconForLocation(mapDisplayItem));
-
+            
             Marker marker = this.mMap.addMarker(markerOptions);
             this.mMapMarkers.put(mapDisplayItem, marker);
         }
         mBus.post(SearchPropertyState.COMPLETE_SHOW_DATA);
     }
-
+    
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (this.mMap == null) {
             return true;
         }
-        //setSelectedMarker(marker);
-        //        this.mMapClickCallback.onMapPropertySelected(
-        //                  this.mMapAdapter.getEntriesAtLocation(marker.getPosition()));
+        setSelectedMarker(marker);
+        
         return true;
     }
+    
+    protected void injectDI() {
+        AndroidSupportInjection.inject(this);
+    }
+    
+    
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
 
+    }
+    
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+    
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Timber.d(connectionResult.getErrorMessage());
+    }
+    
+    private void closeOpenedMarker() {
+        if (this.mOpenedMarker != null) {
+            this.mOpenedMarker.remove();
+            this.mOpenedMarker = null;
+            this.mOpenedLocation = null;
+        }
+    }
+    
+    private void closeVitals() {
+        this.mBus.post(new NeedCloseVitalProperty());
+    }
+    
+    private void setSelectedMarker(Marker marker) {
+        boolean isSameMarker;
+        if (this.mOpenedMarker == null ||
+            !marker.getPosition().equals(this.mOpenedMarker.getPosition())) {
+            isSameMarker = false;
+        } else {
+            isSameMarker = true;
+        }
+        if (!isSameMarker) {
+            PropertyResultEntry entry = mMapViewAdapter
+                      .getEntriesAtLocation(marker.getPosition())
+                      .get(0);
+            
+            mMapFragmentClickCallBack.onMapPropertyClick(entry);
+            mIsShowVitalProperty = true;
+            
+            closeOpenedMarker();
+        }
+        setOpenedMarker(marker);
+    }
+    
+    
+    private void setOpenedMarker(Marker openedMarker) {
+        MarkerOptions options = new MarkerOptions();
+        options.icon(mMapViewAdapter.getMarkSelectedBitmapDescriptor());
+        options.position(openedMarker.getPosition());
+        this.mOpenedMarker = this.mMap.addMarker(options);
+        this.mOpenedLocation = GeoLocation.fromLatLng(this.mOpenedMarker.getPosition());
+    }
+    
     private void moveToMyLocation() {
         if (getActivity() == null) {
             return;
@@ -444,10 +452,57 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }
         
     }
+    
+    private void moveToLastLocation() {
+        MapUtils.moveMap(mMap, mLastGeoLocation.toLatLng(), mZoomLevel, false);
+        try {
+            mMap.moveCamera(CameraUpdateFactory
+                      .newLatLngBounds(
+                                new LatLngBounds(mLastBounds[0].toLatLng(),
+                                          mLastBounds[1].toLatLng()),
+                                0));
+        } catch (Exception ignored) {
 
+        }
+    }
+    
+    
+    private void performSearch() {
+        SearchRequest searchRequest = makeSearchRequest();
+        mSearchRepository.search(searchRequest);
+        
+        saveStateSearch(searchRequest);
+    }
+    
+    private void saveStateSearch(SearchRequest searchRequest) {
+        mMapPreferenceHelper.putLastLocation(searchRequest.getCore().getCenter());
+        mMapPreferenceHelper.putLastZoomLevel(searchRequest.getZoom());
+        mMapPreferenceHelper.putLastBounds(searchRequest.getCore().getBounds());
+    }
+    
+    private SearchRequest makeSearchRequest() {
+        int ot = getResources().getConfiguration().orientation;
+        float zoom = mMap.getCameraPosition().zoom;
+        
+        CoreSearchRequest coreSearchRequest = MapUtils
+                  .getCoreSearchRequestFromCurrentLocation(mMap, ot);
+        
+        SearchCriteria searchCriteria = mSearchRepository
+                  .getCurrentSearchRequest()
+                  .getCriteria();
+        
+        return new SearchRequest(coreSearchRequest, searchCriteria,
+                  zoom);
+    }
+    
+    public void setMapFragmentClickCallBack(
+              MapFragmentClickCallBack mapFragmentClickCallBack) {
+        mMapFragmentClickCallBack = mapFragmentClickCallBack;
+    }
+    
     
     public interface MapFragmentClickCallBack {
-
+        
         void onMapPropertyClick(PropertyResultEntry entry);
         
         //void on

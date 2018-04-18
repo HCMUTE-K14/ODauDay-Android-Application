@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.odauday.R;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.utils.BitmapUtils;
@@ -26,12 +27,16 @@ public class MapViewAdapter {
     
     private HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
     private Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
+    private BitmapDescriptor mMarkSelectedBitmapDescriptor;
+    
     private OnUpdatedListLocation mOnUpdatedListLocation;
     private Context mContext;
     
     public MapViewAdapter(Context context) {
         this.mContext = context;
+        mMarkSelectedBitmapDescriptor = buildMarkSelectedBitmapDescriptor();
     }
+    
     
     public void setData(List<PropertyResultEntry> listings) {
         this.mMapDisplayItems.clear();
@@ -78,6 +83,17 @@ public class MapViewAdapter {
         return this.mMapDisplayItems.get(location);
     }
     
+    private BitmapDescriptor buildMarkSelectedBitmapDescriptor() {
+        int resourceId = R.drawable.ic_map_pin_selected;
+        Bitmap resizeMarker = BitmapUtils.resize(mContext, resourceId, 140, WIDTH_MARKER);
+        
+        return BitmapDescriptorFactory.fromBitmap(resizeMarker);
+    }
+    
+    public BitmapDescriptor getMarkSelectedBitmapDescriptor() {
+        return mMarkSelectedBitmapDescriptor;
+    }
+    
     @SuppressWarnings("unchecked")
     public BitmapDescriptor getMarkerIconForLocation(GeoLocation entryLatLng) {
         MarkerType markerType = getMapPin(entryLatLng);
@@ -91,7 +107,7 @@ public class MapViewAdapter {
         }
         int resourceId = MarkerType.valueOf(markerType.name()).getResourceId();
         Bitmap resizeMarker = BitmapUtils.resize(mContext, resourceId, HEIGHT_MARKER, WIDTH_MARKER);
-
+        
         bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizeMarker);
         this.mMarketIconBitmapDescriptors.put(markerType, new WeakReference(bitmapDescriptor));
         return bitmapDescriptor;
@@ -128,12 +144,12 @@ public class MapViewAdapter {
     }
     
     public interface OnUpdatedListLocation {
-
+        
         void onUpdatedListLocation(Collection<GeoLocation> locations);
     }
     
     public interface ListingsUpdateListener {
-
+        
         void onListingsUpdated(Collection<GeoLocation> collection);
     }
 }

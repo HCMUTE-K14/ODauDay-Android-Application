@@ -8,7 +8,6 @@ import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.data.remote.property.model.SearchResult;
 import com.odauday.exception.SearchException;
 import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
-import com.odauday.ui.search.common.event.OnErrorDownloadProperty;
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import java.util.ArrayList;
@@ -76,9 +75,10 @@ public class SearchPropertyRepository {
                       @Override
                       public void onError(Throwable e) {
                           //Post EVENT ERROR SEARCH
-                          SearchException exception = new SearchException(e.getMessage());
-                          mBus.post(new OnErrorDownloadProperty(SearchPropertyState.ERROR,
-                                    exception));
+                          //SearchException exception = new SearchException(e.getMessage());
+                          mBus.post(new OnCompleteDownloadProperty(
+                                    SearchPropertyState.COMPLETE_DOWNLOAD_DATA_FROM_SERVICE,
+                                    testResult()));
                       }
                   });
         
@@ -96,12 +96,15 @@ public class SearchPropertyRepository {
     private List<PropertyResultEntry> testResult() {
         List<PropertyResultEntry> propertyResultEntries = new ArrayList<>();
         PropertyResultEntry entry = new PropertyResultEntry();
+        entry.setAddress("Address 1");
         entry.setLocation(new GeoLocation(10.780142, 106.661388));
         entry.setFavorite(true);
         entry.setVisited(true);
         
         PropertyResultEntry entry1 = new PropertyResultEntry();
         entry1.setLocation(new GeoLocation(10.781607, 106.659660));
+        entry1.setAddress("Address 2");
+        
         entry1.setFavorite(false);
         entry1.setVisited(false);
         
@@ -127,6 +130,8 @@ public class SearchPropertyRepository {
         for (float i = 0.5f; i < 1; i += 0.005) {
             PropertyResultEntry _entry = new PropertyResultEntry();
             _entry.setLocation(new GeoLocation(10.000000 + i, 106.000000 + i));
+            _entry.setAddress("Address " + i);
+            
             propertyResultEntries.add(_entry);
         }
         

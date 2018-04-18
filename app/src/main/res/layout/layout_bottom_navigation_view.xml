@@ -5,6 +5,6 @@
   <com.ashokvarma.bottomnavigation.BottomNavigationBar
     android:id="@+id/nav_bar"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="65dp"
     android:background="@drawable/bottom_nav_background" />
 </RelativeLayout>

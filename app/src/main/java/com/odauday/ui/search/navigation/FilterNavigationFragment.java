@@ -227,7 +227,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     //====================== Contract method =========================//
     @Override
     public void loading(boolean isLoading) {
-    
+
     }
     
     @Override
