@@ -24,4 +24,5 @@
   <color name="colorGray">#636363</color>
   <color name="color_background_share_property">#ABDCDE</color>
   <color name="color_orange">#F54F21</color>
+  <color name="background_gray_white">#FAFBFC</color>
 </resources>

@@ -4,9 +4,12 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import com.odauday.R;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -19,6 +22,8 @@ import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.ui.propertymanager.PropertyAdapter.OnClickMenuListener;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.viewmodel.BaseViewModel;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -41,6 +46,8 @@ public class ActivityPropertyManager extends BaseMVVMActivity<ActivityPropertyMa
     private ProgressDialog mProgressDialog;
     private Property mPropertyDelete;
     private List<Property> mProperties;
+    private PopupMenu mPopupMenu;
+    
     private PropertyAdapter.OnClickMenuListener mOnClickMenuListener=new OnClickMenuListener() {
         @Override
         public void editProperty(Property property) {
@@ -97,7 +104,6 @@ public class ActivityPropertyManager extends BaseMVVMActivity<ActivityPropertyMa
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         
             }
-    
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Timber.tag(TAG).d(charSequence.toString());
@@ -105,7 +111,6 @@ public class ActivityPropertyManager extends BaseMVVMActivity<ActivityPropertyMa
                     mPropertyAdapter.filter(charSequence.toString());
                 }
             }
-    
             @Override
             public void afterTextChanged(Editable editable) {
             
@@ -122,8 +127,6 @@ public class ActivityPropertyManager extends BaseMVVMActivity<ActivityPropertyMa
     private void getData() {
         mProgressDialog.show();
         mPropertyManagerViewModel.setPropertyManagerContract(this);
-//        mPreferencesHelper.put(PrefKey.USER_ID,"a88211ba-3077-40e2-9685-5ab450abb114");
-//        mPreferencesHelper.put(PrefKey.ACCESS_TOKEN,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiYTg4MjExYmEtMzA3Ny00MGUyLTk2ODUtNWFiNDUwYWJiMTE0IiwiZW1haWwiOiJkYW9odXVsb2M5NDE5QGdtYWlsLmNvbSIsImRpc3BsYXlfbmFtZSI6ImluZmFtb3VTcyIsInBob25lIjpudWxsLCJhdmF0YXIiOm51bGwsInJvbGUiOiJ1c2VyIiwic3RhdHVzIjoicGVuZGluZyIsImZhY2Vib29rX2lkIjpudWxsLCJhbW91bnQiOm51bGx9LCJpYXQiOjE1MjIyMTM4NzN9.kbl64zvlPOFlc8NdFqlcbAc-I5I7D1WVC_BwUYearjs");
         mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID,""));
     }
     
@@ -233,5 +236,69 @@ public class ActivityPropertyManager extends BaseMVVMActivity<ActivityPropertyMa
             message = getString(R.string.cannot_delete_property);
         }
         SnackBarUtils.showSnackBar(mBinding.propertyManager, message);
+    }
+    public void onClickMore(View view){
+        mPopupMenu = new PopupMenu(this,view);
+        mPopupMenu.getMenuInflater()
+            .inflate(R.menu.menu_sort_property_manager, mPopupMenu.getMenu());
+        mPopupMenu.setOnMenuItemClickListener(item -> {
+            handlerClickItem(item);
+            return false;
+        });
+        mPopupMenu.show();
+    }
+    private void handlerClickItem(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.ascending:
+                Timber.tag(TAG).d("Ascending Click");
+                ascendingProperty();
+                break;
+            case R.id.descending:
+                Timber.tag(TAG).d("Descending Click");
+                descendingProperty();
+                break;
+                default:
+                    break;
+        }
+    }
+    
+    private void ascendingProperty() {
+        List<Property> list=mProperties;
+        Comparator<Property> comparator=(property1, property2) ->{
+            return property1.getName().compareTo(property2.getName());
+        };
+        if(list!=null&&list.size()>0){
+            
+            Collections.sort(list,comparator);
+            
+            if(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter){
+        
+            }else {
+                mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
+            }
+            mPropertyAdapter.setData(list);
+        }else {
+            mBinding.recycleViewProperties.setAdapter(mEmptyPropertyAdapter);
+        }
+    }
+    
+    private void descendingProperty() {
+        List<Property> list=mProperties;
+        Comparator<Property> comparator=(property1, property2) ->{
+            return property2.getName().compareTo(property1.getName());
+        };
+        if(list!=null&&list.size()>0){
+        
+            Collections.sort(list,comparator);
+        
+            if(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter){
+            
+            }else {
+                mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
+            }
+            mPropertyAdapter.setData(list);
+        }else {
+            mBinding.recycleViewProperties.setAdapter(mEmptyPropertyAdapter);
+        }
     }
 }

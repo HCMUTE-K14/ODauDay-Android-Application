@@ -1,5 +1,6 @@
 package com.odauday.utils;
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -67,4 +68,11 @@ public class BindingAdapterUtils {
             ImageLoader.load(view,images.get(0).getUrl());
         }
     }
+    @BindingAdapter("loadIconMenu")
+    public static void loadIconMenu(ImageView view, String icon_name){
+        Context context=view.getContext();
+        int resID = context.getResources().getIdentifier(icon_name , "drawable", context.getPackageName());
+        view.setImageDrawable(context.getResources().getDrawable(resID));
+    }
+    
 }

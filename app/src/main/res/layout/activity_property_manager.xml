@@ -52,6 +52,7 @@
       android:layout_centerVertical="true"
       android:tint="@color/white"
       android:background="?android:attr/selectableItemBackground"
+      android:onClick="onClickMore"
       />
   </RelativeLayout>
   <RelativeLayout

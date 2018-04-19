@@ -33,9 +33,9 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
     private List<Property> mDisplayProperty=new ArrayList<>();
     @Override
     protected ItemPropertyManagerBinding createBinding(ViewGroup parent) {
-        ItemPropertyManagerBinding itemRecentSearchesBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+        ItemPropertyManagerBinding itemPropertyManagerBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
             R.layout.item_property_manager,parent,false);
-        return itemRecentSearchesBinding;
+        return itemPropertyManagerBinding;
     }
     
     @Override
