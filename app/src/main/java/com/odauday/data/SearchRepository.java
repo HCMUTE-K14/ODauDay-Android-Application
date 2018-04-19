@@ -2,13 +2,9 @@ package com.odauday.data;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.remote.SearchService;
-import com.odauday.data.remote.SearchService.Protect;
-import com.odauday.data.remote.SearchService.Public;
-import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.data.remote.model.SearchResponse;
-import com.odauday.exception.FavoriteException;
 import com.odauday.exception.SearchException;
 import com.odauday.model.Search;
 import io.reactivex.Single;
@@ -20,20 +16,19 @@ import javax.inject.Inject;
  */
 
 public class SearchRepository implements Repository{
-    private final SearchService.Public mPublicSearchService;
-    private final SearchService.Protect mProtectSearchService;
+    
+    private final SearchService mSearchService;
     private final SchedulersExecutor mSchedulersExecutor;
     
     @Inject
-    public SearchRepository(Public publicSearchService,
-        Protect protectSearchService,
+    public SearchRepository(SearchService searchService,
         SchedulersExecutor schedulersExecutor) {
-        mPublicSearchService = publicSearchService;
-        mProtectSearchService = protectSearchService;
+        mSearchService = searchService;
         mSchedulersExecutor = schedulersExecutor;
     }
+    
     public Single<SearchResponse> getSearchByUser(String user_id) {
-        Single<JsonResponse<SearchResponse>> result = mProtectSearchService.getSearchByUser(user_id);
+        Single<JsonResponse<SearchResponse>> result = mSearchService.getSearchByUser(user_id);
         return result
             .map(response -> {
                 try {
@@ -53,7 +48,7 @@ public class SearchRepository implements Repository{
             .observeOn(mSchedulersExecutor.ui());
     }
     public Single<MessageResponse> saveSearch(Search search) {
-        Single<JsonResponse<MessageResponse>> result = mProtectSearchService.saveSearch(search);
+        Single<JsonResponse<MessageResponse>> result = mSearchService.saveSearch(search);
         return result
             .map(response -> {
                 try {
@@ -73,7 +68,7 @@ public class SearchRepository implements Repository{
             .observeOn(mSchedulersExecutor.ui());
     }
     public Single<MessageResponse> removeSearch(String search_id) {
-        Single<JsonResponse<MessageResponse>> result = mProtectSearchService.removeSearch(search_id);
+        Single<JsonResponse<MessageResponse>> result = mSearchService.removeSearch(search_id);
         return result
             .map(response -> {
                 try {

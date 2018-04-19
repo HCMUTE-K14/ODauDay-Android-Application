@@ -24,6 +24,22 @@ public class Search {
     @Expose
     private float longitude;
     
+    @SerializedName("latitude_ns")
+    @Expose
+    private float latitude_ns;
+    
+    @SerializedName("longitude_ns")
+    @Expose
+    private float longitude_ns;
+    
+    @SerializedName("latitude_sw")
+    @Expose
+    private float latitude_sw;
+    
+    @SerializedName("longitude_sw")
+    @Expose
+    private float longitude_sw;
+    
     @SerializedName("date_created")
     @Expose
     private String date_created;
@@ -66,6 +82,38 @@ public class Search {
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public float getLatitude_ns() {
+        return latitude_ns;
+    }
+    
+    public void setLatitude_ns(float latitude_ns) {
+        this.latitude_ns = latitude_ns;
+    }
+    
+    public float getLongitude_ns() {
+        return longitude_ns;
+    }
+    
+    public void setLongitude_ns(float longitude_ns) {
+        this.longitude_ns = longitude_ns;
+    }
+    
+    public float getLatitude_sw() {
+        return latitude_sw;
+    }
+    
+    public void setLatitude_sw(float latitude_sw) {
+        this.latitude_sw = latitude_sw;
+    }
+    
+    public float getLongitude_sw() {
+        return longitude_sw;
+    }
+    
+    public void setLongitude_sw(float longitude_sw) {
+        this.longitude_sw = longitude_sw;
     }
     
     @Override

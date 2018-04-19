@@ -7,5 +7,6 @@ import com.odauday.ui.base.BaseContract;
  */
 
 public interface FavoriteContract extends BaseContract {
-    
+    void shareFavoriteSuccess(Object object);
+    void shareFavoriteError(Object object);
 }

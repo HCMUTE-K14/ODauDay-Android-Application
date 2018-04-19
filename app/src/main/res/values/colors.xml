@@ -22,4 +22,6 @@
   <color name="colorGreen">#0c9700</color>
   <color name="colorWhite">#ffffff</color>
   <color name="colorGray">#636363</color>
+  <color name="color_background_share_property">#ABDCDE</color>
+  <color name="color_orange">#F54F21</color>
 </resources>

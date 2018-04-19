@@ -1,7 +1,6 @@
 package com.odauday.ui.view;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.odauday.R;
-import com.odauday.model.Property;
 
 /**
  * Created by kunsubin on 4/5/2018.

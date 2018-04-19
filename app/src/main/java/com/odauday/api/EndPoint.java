@@ -22,5 +22,6 @@ public class EndPoint {
     public static final String TAG="tag";
     public static final String FAVORITE="favorite";
     public static final String SEARCH="search";
+    public static final String PROPERTY="property";
     
 }

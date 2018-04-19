@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 import com.odauday.model.Image;
+import com.odauday.utils.TextUtils.Locale;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ public class BindingAdapterUtils {
     }
     @BindingAdapter("textDoublePrice")
     public static void textDoublePrice(TextView view, double value){
-        view.setText(TextUtils.doubleFormat(value)+" "+currencies);
+        view.setText(TextUtils.formatNumber(value, Locale.VN) + " " + currencies);
     }
     @BindingAdapter("textInteger")
     public static void textInteger(TextView view, int value){
@@ -61,7 +63,8 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images){
         if(images!=null&&images.size()>0){
-            ImageLoader.load(view,images.get(0).getUrl().toString().trim());
+           // Glide.with(view.getContext()).load(images.get(0).getUrl());
+            ImageLoader.load(view,images.get(0).getUrl());
         }
     }
 }

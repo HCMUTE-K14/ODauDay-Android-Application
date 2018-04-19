@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+  <data>
+
+  </data>
+<RelativeLayout
+  android:id="@+id/property_manager"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <RelativeLayout
+    android:id="@+id/layout_top_bar"
+    android:layout_width="fill_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical">
+    <LinearLayout
+      android:id="@+id/ic_back"
+      android:layout_width="50.0dip"
+      android:layout_height="fill_parent"
+      android:background="?android:attr/selectableItemBackground"
+      android:clickable="true"
+      android:onClick="onClickBack"
+      android:gravity="center_vertical"
+      android:orientation="vertical">
+      <ImageView
+        android:layout_width="50.0dip"
+        android:layout_height="match_parent"
+        android:padding="10.0dip"
+        android:src="@drawable/ic_back_button_white" />
+    </LinearLayout>
+
+    <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_centerInParent="true"
+      android:layout_toLeftOf="@+id/image_more"
+      android:layout_toRightOf="@+id/ic_back"
+      android:ellipsize="end"
+      android:focusable="true"
+      android:gravity="center_vertical"
+      android:text="@string/property_manager"
+      android:textColor="@color/white"
+      android:textSize="20sp" />
+    <ImageView
+      android:id="@+id/image_more"
+      android:layout_width="30dp"
+      android:layout_height="45dp"
+      android:layout_marginRight="5dp"
+      android:layout_alignParentRight="true"
+      android:src="@drawable/ic_nav_bar_more_vertical"
+      android:layout_centerVertical="true"
+      android:tint="@color/white"
+      android:background="?android:attr/selectableItemBackground"
+      />
+  </RelativeLayout>
+  <RelativeLayout
+    android:id="@+id/search_property"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:layout_margin="5dp"
+    android:background="@android:drawable/editbox_background"
+    android:layout_below="@+id/layout_top_bar"
+    android:gravity="center">
+    <EditText
+      android:id="@+id/txt_search_bar"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:hint="@string/txt_search"
+      android:gravity="center"
+      android:background="@android:color/transparent"
+      android:drawableLeft="@android:drawable/ic_menu_search"
+      android:drawableTint="@color/colorGray"
+      />
+  </RelativeLayout>
+  <RelativeLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/search_property">
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycle_view_properties"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+  </RelativeLayout>
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/btn_add_event"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="18dp"
+    android:layout_marginRight="10dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:src="@drawable/ic_add_white"
+    app:backgroundTint="#2CB34A"
+    app:elevation="4dp" />
+
+</RelativeLayout>
+</layout>

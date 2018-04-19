@@ -3,6 +3,8 @@ package com.odauday.utils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -12,6 +14,9 @@ public class TextUtils {
     
     private static char[] SHORT_MONEY = new char[]{'k', 'm', 'b', 't'};
     
+    enum Locale{
+        VN,US
+    }
     
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
@@ -49,5 +54,16 @@ public class TextUtils {
     public static String formatDecimal(float value){
         NumberFormat formatter = new DecimalFormat("#0.000");
         return formatter.format(value);
+    }
+    public static String formatNumber(double value,Locale locale){
+        NumberFormat formatter = new DecimalFormat("#,###.00");
+        if(locale==Locale.US){
+            return formatter.format(value);
+        }else {
+            String number=formatter.format(value).replace(".","/");
+            number=number.replace(",",".");
+            number=number.replace("/",",");
+            return number;
+        }
     }
 }

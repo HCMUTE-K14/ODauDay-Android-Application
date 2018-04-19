@@ -47,17 +47,17 @@ public class Property {
     @Expose
     private String description;
     
-    @SerializedName("num_of_bedrom")
+    @SerializedName("num_of_bedroom")
     @Expose
-    private int num_of_bedrom;
+    private int num_of_bedroom;
     
-    @SerializedName("num_of_bathrom")
+    @SerializedName("num_of_bathroom")
     @Expose
-    private int num_of_bathrom;
+    private int num_of_bathroom;
     
-    @SerializedName("num_of_packing")
+    @SerializedName("num_of_parking")
     @Expose
-    private int num_of_packing;
+    private int num_of_parking;
     
     @SerializedName("land_size")
     @Expose
@@ -66,6 +66,10 @@ public class Property {
     @SerializedName("type_id")
     @Expose
     private String type_id;
+    
+    @SerializedName("time_contact")
+    @Expose
+    private String time_contact;
     
     @SerializedName("date_created")
     @Expose
@@ -94,6 +98,10 @@ public class Property {
     @SerializedName("categorys")
     @Expose
     private List<Category> mCategories;
+    
+    @SerializedName("Favorite")
+    @Expose
+    private Favorite mFavorite;
     
     
     public String getId() {
@@ -168,28 +176,28 @@ public class Property {
         this.description = description;
     }
     
-    public int getNum_of_bedrom() {
-        return num_of_bedrom;
+    public int getNum_of_bedroom() {
+        return num_of_bedroom;
     }
     
-    public void setNum_of_bedrom(int num_of_bedrom) {
-        this.num_of_bedrom = num_of_bedrom;
+    public void setNum_of_bedroom(int num_of_bedroom) {
+        this.num_of_bedroom = num_of_bedroom;
     }
     
-    public int getNum_of_bathrom() {
-        return num_of_bathrom;
+    public int getNum_of_bathroom() {
+        return num_of_bathroom;
     }
     
-    public void setNum_of_bathrom(int num_of_bathrom) {
-        this.num_of_bathrom = num_of_bathrom;
+    public void setNum_of_bathroom(int num_of_bathroom) {
+        this.num_of_bathroom = num_of_bathroom;
     }
     
-    public int getNum_of_packing() {
-        return num_of_packing;
+    public int getNum_of_parking() {
+        return num_of_parking;
     }
     
-    public void setNum_of_packing(int num_of_packing) {
-        this.num_of_packing = num_of_packing;
+    public void setNum_of_parking(int num_of_parking) {
+        this.num_of_parking = num_of_parking;
     }
     
     public double getLand_size() {
@@ -222,6 +230,14 @@ public class Property {
     
     public void setDate_end(Date date_end) {
         this.date_end = date_end;
+    }
+    
+    public String getTime_contact() {
+        return time_contact;
+    }
+    
+    public void setTime_contact(String time_contact) {
+        this.time_contact = time_contact;
     }
     
     public List<Email> getEmails() {
@@ -264,6 +280,14 @@ public class Property {
         mCategories = categories;
     }
     
+    public Favorite getFavorite() {
+        return mFavorite;
+    }
+    
+    public void setFavorite(Favorite favorite) {
+        mFavorite = favorite;
+    }
+    
     @Override
     public String toString() {
         return "Property{" +
@@ -276,9 +300,9 @@ public class Property {
                ", status='" + status + '\'' +
                ", price=" + price +
                ", description='" + description + '\'' +
-               ", num_of_bedrom=" + num_of_bedrom +
-               ", num_of_bathrom=" + num_of_bathrom +
-               ", num_of_packing=" + num_of_packing +
+               ", num_of_bedrom=" + num_of_bedroom +
+               ", num_of_bathrom=" + num_of_bathroom +
+               ", num_of_packing=" + num_of_parking +
                ", land_size=" + land_size +
                ", type_id='" + type_id + '\'' +
                ", date_created=" + date_created +
@@ -289,5 +313,19 @@ public class Property {
                ", mTags=" + mTags +
                ", mCategories=" + mCategories +
                '}';
+    }
+    
+    public class Favorite{
+        @SerializedName("date_created")
+        @Expose
+        private Date date_created;
+        public Date getDate_created() {
+            return date_created;
+        }
+    
+        public void setDate_created(Date date_created) {
+            this.date_created = date_created;
+        }
+        
     }
 }

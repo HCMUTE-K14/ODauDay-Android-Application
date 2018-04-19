@@ -75,4 +75,26 @@
   <string name="txt_saved_search">Saved Searches</string>
   <string name="txt_recent_search">Recent Searches</string>
   <string name="cannot_remove_saved_search">Cannot remove saved search.</string>
+  <string name="cannot_uncheck_favorites">Cannot uncheck favorites</string>
+  <string name="label_share_favorite">Share Shortlisted properties with a friend.</string>
+  <string name="txt_email_friend">Friend\'s Email Address</string>
+  <string name="txt_your_name">Your Name</string>
+  <string name="txt_your_email">Your Email</string>
+  <string name="txt_from">From</string>
+  <string name="send_email">Send Email</string>
+  <string name="empty_email_friend">Empty email friend</string>
+  <string name="empty_your_name">Empty your name</string>
+  <string name="empty_your_email">Empty your email</string>
+  <string name="error_share_favorite">Cannot share favorite</string>
+  <string name="txt_service_unvailable">Service Unavailable</string>
+  <string name="property_manager">Property Manager</string>
+  <string name="filter">Filter</string>
+  <string name="txt_rent_property">RENT</string>
+  <string name="empty_property">Empty properties</string>
+  <string name="txt_empty_property">Empty property</string>
+  <string name="txt_edit">Edit</string>
+  <string name="txt_mark_the_end">Mark the end</string>
+  <string name="txt_reuse">Reuse</string>
+  <string name="txt_add_extends_time">Add extends time</string>
+  <string name="cannot_delete_property">Cannot delete property</string>
 </resources>

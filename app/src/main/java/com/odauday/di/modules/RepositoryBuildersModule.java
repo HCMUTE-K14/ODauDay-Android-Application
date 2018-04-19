@@ -2,11 +2,13 @@ package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.FavoriteRepository;
+import com.odauday.data.PropertyRepository;
 import com.odauday.data.SearchRepository;
 import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.FavoriteService;
+import com.odauday.data.remote.PropertyService;
 import com.odauday.data.remote.SearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
@@ -40,17 +42,21 @@ public class RepositoryBuildersModule {
         TagService.Protect protectTagService, SchedulersExecutor schedulersExecutor) {
         return new TagRepository(publicTagService, protectTagService, schedulersExecutor);
     }
-    
     @Provides
     @Singleton
-    FavoriteRepository provideFavoriteRepository(FavoriteService.Public publicFavoriteService,
-        FavoriteService.Protect protectFavoriteService, SchedulersExecutor schedulersExecutor){
-        return new FavoriteRepository(publicFavoriteService,protectFavoriteService,schedulersExecutor);
+    PropertyRepository providePropertyRepository(PropertyService.Public publicPropertyService,
+        PropertyService.Protect protectPropertyService, SchedulersExecutor schedulersExecutor){
+        return new PropertyRepository(publicPropertyService,protectPropertyService,schedulersExecutor);
     }
     @Provides
     @Singleton
-    SearchRepository provideSearchRepository(SearchService.Public publicSearchService, SearchService.Protect protectSearchService,
+    FavoriteRepository provideFavoriteRepository(FavoriteService favoriteService, SchedulersExecutor schedulersExecutor){
+        return new FavoriteRepository(favoriteService,schedulersExecutor);
+    }
+    @Provides
+    @Singleton
+    SearchRepository provideSearchRepository(SearchService searchService,
         SchedulersExecutor schedulersExecutor){
-        return new SearchRepository(publicSearchService,protectSearchService,schedulersExecutor);
+        return new SearchRepository(searchService,schedulersExecutor);
     }
 }

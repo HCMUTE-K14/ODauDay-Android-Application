@@ -7,6 +7,8 @@ import com.odauday.di.scopes.PerFragment;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
+import com.odauday.ui.propertymanager.ActivityPropertyManager;
+import com.odauday.ui.propertymanager.PropertyManagerModule;
 import com.odauday.ui.savedsearch.SavedSearchProvider;
 import com.odauday.ui.search.SearchTabProvider;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
@@ -61,4 +63,7 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract MainActivity bindMainActivity();
     
+    @ContributesAndroidInjector(modules = PropertyManagerModule.class)
+    @PerActivity
+    abstract ActivityPropertyManager provideActivityPropertyManager();
 }

@@ -19,16 +19,12 @@ import retrofit2.http.Query;
 
 public interface SearchService {
     
-    interface Public{
-        @GET(SEARCH)
-        Single<JsonResponse<SearchResponse>> getSearchByUser(@Query("id")String user_id);
-    }
-    interface Protect{
-        @GET(SEARCH)
-        Single<JsonResponse<SearchResponse>> getSearchByUser(@Query("id")String user_id);
-        @POST(SEARCH)
-        Single<JsonResponse<MessageResponse>> saveSearch(@Body Search request);
-        @DELETE(SEARCH)
-        Single<JsonResponse<MessageResponse>> removeSearch(@Query("id")String search_id);
-    }
+    @GET(SEARCH)
+    Single<JsonResponse<SearchResponse>> getSearchByUser(@Query("id") String user_id);
+    
+    @POST(SEARCH)
+    Single<JsonResponse<MessageResponse>> saveSearch(@Body Search request);
+    
+    @DELETE(SEARCH)
+    Single<JsonResponse<MessageResponse>> removeSearch(@Query("id") String search_id);
 }

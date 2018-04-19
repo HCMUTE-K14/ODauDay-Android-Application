@@ -14,7 +14,7 @@
   android:layout_height="wrap_content"
   android:background="?android:attr/selectableItemBackground"
   android:layout_marginTop="10dp"
-  android:layout_marginBottom="10dp">
+  android:layout_marginBottom="5dp">
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -34,6 +34,22 @@
         android:scaleType="centerCrop"
         app:loadImageMainPropertyInListImage="@{property.images}"
         android:src="@color/colorGray" />
+      <RelativeLayout
+        android:id="@+id/relative_type"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center"
+          android:textColor="@color/white"
+          android:textStyle="bold"
+          android:text="@{property.type_id}"
+          />
+      </RelativeLayout>
       <TextView
         android:id="@+id/txt_price"
         android:layout_width="wrap_content"
@@ -43,11 +59,12 @@
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:textSize="25dp"
+        android:text="sdfdsfdsf"
         app:textDoublePrice="@{property.price}"/>
       <com.odauday.ui.view.StarView
         android:id="@+id/star_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
@@ -56,17 +73,17 @@
     </RelativeLayout>
 
     <RelativeLayout
+      android:id="@+id/relative_info"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
-
       <TextView
         android:id="@+id/txt_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{property.name}"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorGray"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
         android:textSize="18dp"
 
         />
@@ -75,57 +92,81 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txt_address"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp">
         <TextView
           android:id="@+id/txt_number_bed_room"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="@color/colorGray"
+          android:textColor="@color/black"
           android:textSize="15dp"
-          app:textInteger="@{property.num_of_bedrom}"/>
+          app:textInteger="@{property.num_of_bedroom}"/>
         <ImageView
           android:id="@+id/image_bedroom"
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:src="@drawable/ic_bedroom"
+          android:tint="@color/black"
           android:layout_marginLeft="5dp"
           android:layout_toRightOf="@id/txt_number_bed_room"/>
         <TextView
           android:id="@+id/txt_number_bath_rom"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="@color/colorGray"
+          android:textColor="@color/black"
           android:layout_toRightOf="@+id/image_bedroom"
           android:layout_marginLeft="15dp"
           android:textSize="15dp"
-          app:textInteger="@{property.num_of_bathrom}"/>
+          app:textInteger="@{property.num_of_bathroom}"/>
         <ImageView
           android:id="@+id/image_bathroom"
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:src="@drawable/ic_bathroom"
+          android:tint="@color/black"
           android:layout_marginLeft="5dp"
           android:layout_toRightOf="@id/txt_number_bath_rom"/>
         <TextView
-          android:id="@+id/txt_number_pack"
+          android:id="@+id/txt_number_park"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="@color/colorGray"
+          android:textColor="@color/black"
           android:layout_toRightOf="@+id/image_bathroom"
           android:layout_marginLeft="15dp"
           android:textSize="15dp"
-          app:textInteger="@{property.num_of_packing}"/>
+          app:textInteger="@{property.num_of_parking}"/>
         <ImageView
           android:id="@+id/image_pack"
           android:layout_width="20dp"
           android:layout_height="20dp"
           android:src="@drawable/ic_pack"
-          android:tint="@color/colorGray"
+          android:tint="@color/black"
           android:layout_marginLeft="5dp"
-          android:layout_toRightOf="@id/txt_number_pack"/>
+          android:layout_toRightOf="@id/txt_number_park"/>
       </RelativeLayout>
+    </RelativeLayout>
 
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+      <ImageView
+        android:id="@+id/image_contact"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/ic_inspection"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        />
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/image_contact"
+        android:text="@{property.time_contact}"
+        />
     </RelativeLayout>
   </LinearLayout>
 </android.support.v7.widget.CardView>

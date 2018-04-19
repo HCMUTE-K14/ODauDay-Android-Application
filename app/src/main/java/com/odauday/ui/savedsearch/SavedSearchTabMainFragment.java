@@ -100,7 +100,7 @@ public class SavedSearchTabMainFragment extends
         
         mRecentSearches=mPreferencesHelper.getList(PrefKey.RECENT_SEARCH,"");
        // mRecentSearches=null;
-        mSavedSearchViewModel.getSearchByUser("a88211ba-3077-40e2-9685-5ab450abb114");
+        mSavedSearchViewModel.getSearchByUser(mPreferencesHelper.get(PrefKey.USER_ID,""));
     }
     
     @Override
@@ -114,12 +114,12 @@ public class SavedSearchTabMainFragment extends
             if (resource != null) {
                 switch (resource.status) {
                     case ERROR:
-                        loading(false);
                         onFailure((Exception) resource.data);
+                        loading(false);
                         break;
                     case SUCCESS:
-                        loading(false);
                         onSuccess(resource.data);
+                        loading(false);
                         break;
                     case LOADING:
                         loading(true);
@@ -138,6 +138,9 @@ public class SavedSearchTabMainFragment extends
         
         mRecyclerViewSavedSearch=mBinding.get().recycleViewSavedSearch;
         mRecyclerViewRecentSearch=mBinding.get().recycleViewRecentSearch;
+        
+        mRecyclerViewRecentSearch.setNestedScrollingEnabled(false);
+        mRecyclerViewSavedSearch.setNestedScrollingEnabled(false);
         
         mRecyclerViewSavedSearch.setLayoutManager(new GridLayoutManager(getActivity(),1));
         mRecyclerViewRecentSearch.setLayoutManager(new GridLayoutManager(getActivity(),1));
