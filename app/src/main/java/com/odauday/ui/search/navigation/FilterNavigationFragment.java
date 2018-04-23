@@ -15,6 +15,7 @@ import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.TextAndMoreTextValue;
+import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
 import com.odauday.ui.search.common.view.FilterNumberPickerDialog.OnCompletePickedNumberListener;
 import com.odauday.ui.search.common.view.OnCompletePickedType;
 import com.odauday.ui.search.common.view.PickerMinMaxReturnObject;
@@ -24,6 +25,9 @@ import com.odauday.viewmodel.BaseViewModel;
 import com.pchmn.materialchips.model.ChipInterface;
 import java.util.List;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import timber.log.Timber;
 
 /**
@@ -47,6 +51,9 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Inject
     MapPreferenceHelper mMapPreferenceHelper;
     
+    @Inject
+    EventBus mBus;
+    
     private OnCompleteRefineFilter mOnCompleteRefineFilter;
     
     private SearchCriteria mSearchCriteria;
@@ -67,6 +74,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBus.register(this);
     }
     
     @Override
@@ -120,20 +128,23 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     
     @Override
     public void onDestroy() {
-        Timber.d("ON Destroy filter nav");
-        
+        mBus.unregister(this);
         super.onDestroy();
     }
     
     //====================== Implement method =========================//
     
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedUpdateCriteria(OnUpdateCriteriaEvent event) {
+        SearchCriteria searchCriteria = mSearchPropertyRepository.getCurrentSearchRequest()
+                  .getCriteria();
+
+        setSearchCriteria(searchCriteria);
+    }
+    
     @Override
     public void onCompletePickedNumber(int requestCode,
               PickerMinMaxReturnObject minMaxReturnObject) {
-        Timber.tag(TAG).d("REQUEST_CODE:" + requestCode);
-        Timber.tag(TAG).d("FROM:" + minMaxReturnObject.getValue().getMin());
-        Timber.tag(TAG).d("TO:" + minMaxReturnObject.getValue().getMax());
-        
         FilterOption option = FilterOption.getByRequestCode(requestCode);
         switch (option) {
             case PRICE:
@@ -257,6 +268,9 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
             TextAndMoreTextValue displayPrice = mSearchCriteria.getDisplay().getDisplayPrice();
             mBinding.get().filterPrice.setText(displayPrice);
         }
+        String displayLocation = mSearchCriteria.getDisplay().getDisplayLocation();
+        mBinding.get().filterLocation.setTextValue(displayLocation);
+        
         String displaySize = mSearchCriteria.getDisplay().getDisplaySize();
         mBinding.get().filterSize.setTextValue(displaySize);
         
@@ -267,7 +281,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         String displayBedroom = mSearchCriteria.getDisplay().getDisplayBedroom();
         mBinding.get().filterBedrooms.setTextValue(displayBedroom);
         
-        String displayBathroom = mSearchCriteria.getDisplay().getDisplaySize();
+        String displayBathroom = mSearchCriteria.getDisplay().getDisplayBathroom();
         mBinding.get().filterBathRooms.setTextValue(displayBathroom);
         
         String displayParking = mSearchCriteria.getDisplay().getDisplayParking();

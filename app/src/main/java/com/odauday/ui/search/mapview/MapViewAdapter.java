@@ -22,15 +22,15 @@ import java.util.Map;
  */
 public class MapViewAdapter {
     
-    private static final int WIDTH_MARKER = 60;
-    private static final int HEIGHT_MARKER = 60;
+    private static final int WIDTH_MARKER = 45;
+    private static final int HEIGHT_MARKER = 45;
     
-    private HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
-    private Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
-    private BitmapDescriptor mMarkSelectedBitmapDescriptor;
+    private final HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
+    private final Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
+    private final BitmapDescriptor mMarkSelectedBitmapDescriptor;
     
     private OnUpdatedListLocation mOnUpdatedListLocation;
-    private Context mContext;
+    private final Context mContext;
     
     public MapViewAdapter(Context context) {
         this.mContext = context;
@@ -85,7 +85,7 @@ public class MapViewAdapter {
     
     private BitmapDescriptor buildMarkSelectedBitmapDescriptor() {
         int resourceId = R.drawable.ic_map_pin_selected;
-        Bitmap resizeMarker = BitmapUtils.resize(mContext, resourceId, 140, WIDTH_MARKER);
+        Bitmap resizeMarker = BitmapUtils.resize(mContext, resourceId, 110, 45);
         
         return BitmapDescriptorFactory.fromBitmap(resizeMarker);
     }

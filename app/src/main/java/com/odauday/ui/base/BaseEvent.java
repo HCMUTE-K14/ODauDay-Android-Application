@@ -5,7 +5,7 @@ package com.odauday.ui.base;
  */
 public abstract class BaseEvent {
     
-    private int requestCode;
+    private final int requestCode;
     
     public BaseEvent(int requestCode) {
         this.requestCode = requestCode;

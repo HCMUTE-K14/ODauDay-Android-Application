@@ -7,14 +7,14 @@ import com.odauday.ui.base.BaseEvent;
 /**
  * Created by infamouSs on 4/15/18.
  */
-public class OnErrorDownloadProperty extends BaseEvent {
+public class OnErrorDownloadPropertyEvent extends BaseEvent {
     
     public static final int REQUEST_CODE = 91;
     
-    private BaseException exception;
-    private SearchPropertyState state;
+    private final BaseException exception;
+    private final SearchPropertyState state;
     
-    public OnErrorDownloadProperty(SearchPropertyState state, BaseException ex) {
+    public OnErrorDownloadPropertyEvent(SearchPropertyState state, BaseException ex) {
         super(REQUEST_CODE);
         this.exception = ex;
         this.state = state;

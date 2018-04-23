@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.odauday.utils.ObjectUtils;
 
 /**
  * Created by infamouSs on 4/1/18.
@@ -97,28 +98,15 @@ public class GeoLocation implements Parcelable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        
-        GeoLocation geoLocation = (GeoLocation) o;
-        
-        if (Double.compare(geoLocation.latitude, latitude) != 0) {
-            return false;
-        }
-        if (Double.compare(geoLocation.longitude, longitude) != 0) {
-            return false;
-        }
-        return name != null ? name.equals(geoLocation.name) : geoLocation.name == null;
+        GeoLocation that = (GeoLocation) o;
+        return Double.compare(that.latitude, latitude) == 0 &&
+               Double.compare(that.longitude, longitude) == 0;
     }
     
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(latitude);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(longitude);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        
+        return ObjectUtils.hash(latitude, longitude);
     }
     
     @Override

@@ -1,11 +1,14 @@
 package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
+import com.odauday.data.AutoCompletePlaceRepository;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.tag.RecentTagService;
+import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -42,6 +45,20 @@ public class RepositoryBuildersModule {
         return new SearchPropertyRepository(
                   eventBus,
                   searchService,
+                  schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    AutoCompletePlaceRepository provideAutoCompletePlaceRepository(
+              AutoCompletePlaceService autoCompletePlaceService,
+              RecentSearchPlaceService recentSearchPlaceService,
+              PreferencesHelper preferencesHelper,
+              SchedulersExecutor schedulersExecutor) {
+        return new AutoCompletePlaceRepository(
+                  autoCompletePlaceService,
+                  recentSearchPlaceService,
+                  preferencesHelper,
                   schedulersExecutor);
     }
     

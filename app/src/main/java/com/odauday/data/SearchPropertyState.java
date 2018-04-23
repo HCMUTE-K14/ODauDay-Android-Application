@@ -9,7 +9,7 @@ public enum SearchPropertyState {
     COMPLETE_SHOW_DATA(false),
     ERROR(false);
     
-    private boolean isShouldShowProgressBar;
+    private final boolean isShouldShowProgressBar;
     
     SearchPropertyState(boolean isShouldShowProgressBar) {
         this.isShouldShowProgressBar = isShouldShowProgressBar;

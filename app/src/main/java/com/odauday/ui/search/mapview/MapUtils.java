@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -28,6 +29,8 @@ public class MapUtils {
     
     public static final String[] LOCATION_PERMISSION = new String[]{
               Permission.ACCESS_COARSE_LOCATION, Permission.FINE_LOCATION};
+    private static final double SMALL_DISTANCE_THRESHOLD = 0.002d;
+    private static final double DISTANCE_THRESHOLD = 0.02d;
     
     public static CoreSearchRequest getCoreSearchRequestFromCurrentLocation(GoogleMap map,
               int orientation) {
@@ -39,7 +42,6 @@ public class MapUtils {
         GeoLocation geoLocationCenter = new GeoLocation(map.getCameraPosition().target);
         
         switch (orientation) {
-            
             case Configuration.ORIENTATION_LANDSCAPE:
                 GeoLocation geoLocationLeft = new GeoLocation(geoLocationCenter.getLatitude(),
                           left);
@@ -57,7 +59,7 @@ public class MapUtils {
         CircleOptions circleOptions = new CircleOptions()
                   .center(center)
                   .radius(radius)
-                  .strokeColor(Color.BLACK)
+                  .strokeColor(Color.RED)
                   .fillColor(0x30ff0000)
                   .strokeWidth(2);
         
@@ -105,16 +107,35 @@ public class MapUtils {
             String message = activity.getString(R.string.message_permission_location_request);
             String action = activity.getString(R.string.txt_ok);
             SnackBarUtils.showSnackBar(activity.findViewById(android.R.id.content), action, message,
-                      view -> {
-                          PermissionHelper.askForPermission(activity,
-                                    LOCATION_PERMISSION, permissionCallBack);
-                      });
+                      view -> PermissionHelper.askForPermission(activity,
+                                LOCATION_PERMISSION, permissionCallBack));
         } else {
             PermissionHelper
                       .askForPermission(activity,
                                 LOCATION_PERMISSION,
                                 permissionCallBack);
         }
+    }
+
+    
+    public static boolean isCamPositionEqual(CameraPosition cam1, CameraPosition cam2) {
+        if (cam1 == null || cam2 == null) {
+            return false;
+        }
+        if (cam1.equals(cam2)) {
+            return true;
+        }
+        if (cam1.tilt != cam2.tilt || cam1.bearing != cam2.bearing || cam1.zoom != cam2.zoom) {
+            return false;
+        }
+        double distanceThreshold =
+                  cam1.zoom > 15.0f ? SMALL_DISTANCE_THRESHOLD : DISTANCE_THRESHOLD;
+        if (Math.abs((cam1.target.latitude - cam2.target.latitude) * 10.0d) >= distanceThreshold ||
+            Math.abs((cam1.target.longitude - cam2.target.longitude) * 10.0d) >=
+            distanceThreshold) {
+            return false;
+        }
+        return true;
     }
     
     public static boolean isHasLocationPermission(Activity activity) {

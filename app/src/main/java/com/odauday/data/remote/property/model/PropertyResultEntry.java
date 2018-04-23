@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.odauday.model.Media;
+import com.odauday.model.Image;
 import com.odauday.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,10 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("type")
     @Expose
     private String searchType;
-    @SerializedName("num_of_bedrooms")
+    @SerializedName("num_of_bedroom")
     @Expose
     private int numOfBedRooms;
-    @SerializedName("num_of_bathrooms")
+    @SerializedName("num_of_bathroom")
     @Expose
     private int numOfBathRooms;
     @SerializedName("num_of_parking")
@@ -56,9 +56,9 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("is_visited")
     @Expose
     private boolean isVisited;
-    @SerializedName("media")
+    @SerializedName("images")
     @Expose
-    private List<Media> media = new ArrayList<>();
+    private List<Image> mImages = new ArrayList<>();
     
     public PropertyResultEntry() {
 
@@ -75,7 +75,7 @@ public class PropertyResultEntry implements Parcelable {
         location = in.readParcelable(GeoLocation.class.getClassLoader());
         isFavorite = in.readByte() != 0;
         isVisited = in.readByte() != 0;
-        media = in.createTypedArrayList(Media.CREATOR);
+        mImages = in.createTypedArrayList(Image.CREATOR);
     }
     
     public String getId() {
@@ -159,12 +159,12 @@ public class PropertyResultEntry implements Parcelable {
         this.searchType = searchType;
     }
     
-    public List<Media> getMedia() {
-        return media;
+    public List<Image> getImages() {
+        return mImages;
     }
     
-    public void setMedia(List<Media> media) {
-        this.media = media;
+    public void setImages(List<Image> images) {
+        this.mImages = images;
     }
     
     @Override
@@ -226,6 +226,6 @@ public class PropertyResultEntry implements Parcelable {
         parcel.writeParcelable(location, i);
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeByte((byte) (isVisited ? 1 : 0));
-        parcel.writeTypedList(media);
+        parcel.writeTypedList(mImages);
     }
 }

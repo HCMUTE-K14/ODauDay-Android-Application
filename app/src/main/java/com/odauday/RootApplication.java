@@ -2,6 +2,7 @@ package com.odauday;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.history.DaoSession;
@@ -24,23 +25,28 @@ import timber.log.Timber;
 
 public class RootApplication extends Application implements HasActivityInjector {
     
+    private static Context mContext;
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
-    
     @Inject
     DaoSession mDaoSession;
     
     @Inject
     PreferencesHelper mPreferencesHelper;
     
+    public static Context getContext() {
+        return mContext;
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
-        
+        RootApplication.mContext = getApplicationContext();
+
         if (AppConfig.isDebug()) {
             Timber.plant(new Timber.DebugTree());
         }
-        
+
         DaggerApplicationComponent
                   .builder()
                   .application(this)

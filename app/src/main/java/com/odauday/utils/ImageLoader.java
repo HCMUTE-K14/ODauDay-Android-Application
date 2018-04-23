@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class ImageLoader {
     
-    public static int[] PLACE_HOLDER = new int[]{
+    public static final int[] PLACE_HOLDER = new int[]{
               R.drawable.ic_gallery_placeholder1,
               R.drawable.ic_gallery_placeholder2,
               R.drawable.ic_gallery_placeholder3,

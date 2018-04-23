@@ -19,4 +19,5 @@ public class PrefKey {
     
     public static final String LAST_BOUNDS = "last_bounds";
     public static final String LAST_SEARCH_MODE = "last_search_mode";
+    public static final String MAP_UNLOCKED = "map_unlocked";
 }

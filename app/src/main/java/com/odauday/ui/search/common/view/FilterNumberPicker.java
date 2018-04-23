@@ -91,7 +91,7 @@ public class FilterNumberPicker extends FrameLayout implements OnClickListener {
     
     private void init(Context context) {
         View v = View.inflate(context, R.layout.layout_filter_picker, null);
-        this.mFilterPicker = (WheelView) v.findViewById(R.id.wheel_view);
+        this.mFilterPicker = v.findViewById(R.id.wheel_view);
         v.findViewById(R.id.img_arrow_up).setOnClickListener(this);
         v.findViewById(R.id.img_arrow_down).setOnClickListener(this);
         this.mFilterPicker.setCacheColorHint(-1);

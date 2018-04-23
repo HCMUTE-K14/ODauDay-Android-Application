@@ -5,12 +5,16 @@ import com.odauday.R;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseDialogFragment;
+import com.odauday.ui.search.SearchTabMainFragment;
+import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
 import com.odauday.ui.search.common.MinMaxObject;
+import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.SearchType;
 import com.odauday.ui.search.common.view.FilterNumberPickerDialog;
 import com.odauday.ui.search.common.view.propertydialog.PropertyTypeDialog;
 import com.odauday.ui.search.common.view.tagdialog.TagTypeDialog;
 import com.odauday.utils.TextUtils;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
 import io.reactivex.disposables.Disposable;
@@ -49,6 +53,13 @@ public class FilterNavigationViewModel extends BaseViewModel {
     
     public void setFragment(FilterNavigationFragment fragment) {
         mFragment = fragment;
+    }
+    
+    public void showAutoCompleteSearchPlace() {
+        ViewUtils.startActivity(mFragment.getActivity(), AutoCompletePlaceActivity.class);
+        if (mFragment.getParentFragment() != null) {
+            ((SearchTabMainFragment) mFragment.getParentFragment()).closeDrawer();
+        }
     }
     
     public void showTypePickerDialog(FilterOption option) {
@@ -123,15 +134,19 @@ public class FilterNavigationViewModel extends BaseViewModel {
                           mFragment.getString(R.string.txt_filter_price_rate));
                 
                 MinMaxObject<Integer> priceFromTo = mFragment.getSearchCriteria().getPrice();
-                
-                if (searchType == SearchType.BUY) {
-                    pd = initNumberPickerDialog(true, title, R.array.price_buy,
-                              0, priceFromTo.getMin(), priceFromTo.getMax(), true);
-                } else if (searchType == SearchType.RENT) {
-                    pd = initNumberPickerDialog(true, title, R.array.price_rent,
-                              0, priceFromTo.getMin(), priceFromTo.getMax(), true);
-                } else {
-                    pd = null;
+    
+                switch (searchType) {
+                    case BUY:
+                        pd = initNumberPickerDialog(true, title, R.array.price_buy,
+                                  0, priceFromTo.getMin(), priceFromTo.getMax(), true);
+                        break;
+                    case RENT:
+                        pd = initNumberPickerDialog(true, title, R.array.price_rent,
+                                  0, priceFromTo.getMin(), priceFromTo.getMax(), true);
+                        break;
+                    default:
+                        pd = null;
+                        break;
                 }
                 
                 break;
@@ -160,7 +175,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
                 break;
             case PARKING:
                 title = mFragment.getString(R.string.txt_filter_num_of_parking);
-                MinMaxObject<Integer> parkings = mFragment.getSearchCriteria().getBathrooms();
+                MinMaxObject<Integer> parkings = mFragment.getSearchCriteria().getParking();
                 
                 pd = initNumberPickerDialog(false, title, R.array.parking_count_int,
                           R.array.parking_count_string, parkings.getMin(), parkings.getMax(),
@@ -205,7 +220,6 @@ public class FilterNavigationViewModel extends BaseViewModel {
         mFragment.getMapPreferenceHelper().putLastSearchMode(searchType.getValue());
         mFragment.setSearchCriteria(mFragment.getMapPreferenceHelper()
                   .getRecentSearchCriteria(searchType.getValue()));
-        
     }
     
     private void resetViewWhenChangeSearchType(SearchType searchType) {
@@ -241,6 +255,12 @@ public class FilterNavigationViewModel extends BaseViewModel {
         mFragment.getBinding().get().btnMoreOptions.setText(show ? R.string.txt_filter_less_options
                   : R.string.txt_filter_more_options);
         
+    }
+    
+    public void resetFilter(View view) {
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setSearchType(mFragment.getSearchCriteria().getSearchType());
+        mFragment.setSearchCriteria(searchCriteria);
     }
     
     public void resetMoreOptions() {

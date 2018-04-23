@@ -157,7 +157,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
     
     @Override
     public void onScrollingStarted(WheelView wheel) {
-    
+
     }
     
     @Override

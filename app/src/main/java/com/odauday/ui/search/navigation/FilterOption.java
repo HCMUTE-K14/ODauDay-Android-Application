@@ -13,8 +13,8 @@ public enum FilterOption {
     PROPERTY_TYPE(6, "PROPERTY_TYPE"),
     TAGS(7, "TAGS");
     
-    private int mRequestCode;
-    private String mTag;
+    private final int mRequestCode;
+    private final String mTag;
     
     FilterOption(int requestCode, String tag) {
         this.mRequestCode = requestCode;

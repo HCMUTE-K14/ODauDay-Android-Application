@@ -12,7 +12,6 @@ import com.odauday.data.remote.user.model.AbstractAuthRequest;
 import com.odauday.data.remote.user.model.FacebookAuthRequest;
 import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.data.remote.user.model.LoginResponse;
-import com.odauday.data.remote.user.model.LoginType;
 import com.odauday.data.remote.user.model.NormalAuthRequest;
 import com.odauday.data.remote.user.model.RegisterRequest;
 import com.odauday.exception.ForgotPasswordException;
@@ -60,12 +59,15 @@ public class UserRepository implements Repository {
     
     public Single<User> login(AbstractAuthRequest request) {
         Single<JsonResponse<LoginResponse>> result;
-        if (request.getType() == LoginType.FACEBOOK) {
-            result = mPublicUserService.login((FacebookAuthRequest) request);
-        } else if (request.getType() == LoginType.NORMAL) {
-            result = mPublicUserService.login((NormalAuthRequest) request);
-        } else {
-            throw new LoginException("Invalid request");
+        switch (request.getType()) {
+            case FACEBOOK:
+                result = mPublicUserService.login((FacebookAuthRequest) request);
+                break;
+            case NORMAL:
+                result = mPublicUserService.login((NormalAuthRequest) request);
+                break;
+            default:
+                throw new LoginException("Invalid request");
         }
         
         Single<User> userSingle = result.map(response -> {

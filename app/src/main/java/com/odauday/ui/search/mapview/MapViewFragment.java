@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -22,10 +24,11 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -34,14 +37,19 @@ import com.odauday.R;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.autocompleteplace.model.AutoCompletePlace;
 import com.odauday.data.remote.property.model.CoreSearchRequest;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.di.Injectable;
+import com.odauday.ui.search.common.RxCameraIdleListener;
+import com.odauday.ui.search.common.RxCameraIdleListener.TriggerCameraIdle;
 import com.odauday.ui.search.common.SearchCriteria;
-import com.odauday.ui.search.common.event.NeedCloseVitalProperty;
-import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
+import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
+import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
+import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.mapview.MapOverlayView.MapOverlayListener;
 import com.odauday.ui.search.mapview.MapViewAdapter.OnUpdatedListLocation;
@@ -52,6 +60,7 @@ import com.odauday.utils.permissions.PermissionHelper;
 import dagger.android.support.AndroidSupportInjection;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,8 +73,10 @@ import timber.log.Timber;
 
 @SuppressLint("MissingPermission")
 public class MapViewFragment extends SupportMapFragment implements OnMapReadyCallback,
-                                                                   OnCameraIdleListener,
+          //                                                                   OnCameraIdleListener,
+                                                                   TriggerCameraIdle,
                                                                    OnMarkerClickListener,
+                                                                   OnMapClickListener,
                                                                    MapOverlayListener,
                                                                    ConnectionCallbacks,
                                                                    OnConnectionFailedListener,
@@ -75,6 +86,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public static final String TAG = MapViewFragment.class.getSimpleName();
     
     private static final float MIN_ZOOM_LEVEL = 5.45f;
+    private static final int DEBOUNCE_TIME = 500;
     
     @Inject
     MapPreferenceHelper mMapPreferenceHelper;
@@ -89,7 +101,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     private GoogleApiClient mLocationClient;
     
-    
+    private MapOverlayView mMapOverlayView;
     private MapFragmentClickCallBack mMapFragmentClickCallBack;
     
     private GeoLocation mLastGeoLocation;
@@ -100,8 +112,13 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     private MapViewAdapter mMapViewAdapter;
     
     private float mZoomLevel;
+    private RxCameraIdleListener mRxCameraIdleListener;
+    private boolean mIsSearchWithSuggestionLocation;
+    private AutoCompletePlace mAutoCompletePlace;
+    private boolean mMapUnlocked;
     
-    private PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
+    
+    private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
         public void onPermissionGranted() {
             mMap.setMyLocationEnabled(true);
@@ -118,15 +135,18 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     private GeoLocation mOpenedLocation;
     
     private boolean mIsShowVitalProperty;
+    private CameraPosition mLastCameraPosition;
+    private boolean mDistanceTooShort;
+    
     
     public static MapViewFragment newInstance() {
-
+        
         Bundle args = new Bundle();
         Timber.tag(TAG).d("New instance MapViewFragment");
-
+        
         MapViewFragment fragment = new MapViewFragment();
         fragment.setArguments(args);
-
+        
         return fragment;
     }
     
@@ -176,18 +196,14 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     }
     
     @Override
-    public void onActivityCreated(Bundle bundle) {
-        super.onActivityCreated(bundle);
-        this.getMapAsync(this);
-    }
-    
-    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        
+        mBus.register(this);
         mLastGeoLocation = mMapPreferenceHelper.getLastLocation();
         mZoomLevel = mMapPreferenceHelper.getLastZoomLevel();
         mLastBounds = mMapPreferenceHelper.getLastBounds();
+        
+        mMapUnlocked = mMapPreferenceHelper.getIsMapUnlocked();
         if (getActivity() != null) {
             this.mLocationClient = new Builder(getActivity())
                       .addApi(LocationServices.API)
@@ -206,12 +222,13 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         if (getActivity() == null) {
             return null;
         }
-        ViewGroup mapView = new FrameLayout(getActivity());
+        ViewGroup mapView = new MapViewContainer(getActivity());
         mapView.addView(super.onCreateView(layoutInflater, viewGroup, bundle));
-        MapOverlayView mapOverlay = new MapOverlayView((AppCompatActivity) getActivity());
-        mapOverlay.setMapOverlayListener(this);
-        mapView.addView(mapOverlay);
-        
+        mMapOverlayView = new MapOverlayView(getActivity());
+        mMapOverlayView.setMapOverlayListener(this);
+        mapView.addView(mMapOverlayView);
+        this.getMapAsync(this);
+        mMapOverlayView.getButtonLockMap().setChecked(mMapUnlocked);
         return mapView;
     }
     
@@ -226,22 +243,24 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public void onStart() {
         super.onStart();
         this.mLocationClient.connect();
-        mBus.register(this);
     }
     
     @Override
     public void onStop() {
         super.onStop();
         this.mLocationClient.disconnect();
-        mBus.unregister(this);
+        mRxCameraIdleListener.stop();
     }
     
     @Override
     public void onDestroy() {
         mMapViewAdapter = null;
         mLocationClient = null;
+        mMapMarkers = null;
+        mBus.unregister(this);
         super.onDestroy();
     }
+    
     
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -249,9 +268,14 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             return;
         }
         this.mMap = googleMap;
+        mRxCameraIdleListener = new RxCameraIdleListener(mMap, this);
+        
         mMap.setMinZoomPreference(MIN_ZOOM_LEVEL);
-        mMap.setOnCameraIdleListener(this);
+        
+        mRxCameraIdleListener.start();
+        
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
         
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -267,8 +291,45 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Override
     public void onCameraIdle() {
-        performSearch();
+        checkIsSearchWithSuggestion();
+        if (!isDetached() && !isHidden() && isAdded()) {
+            boolean insignificantMove;
+            CameraPosition currentCameraPosition = mMap.getCameraPosition();
+            insignificantMove =
+                      (MapUtils.isCamPositionEqual(currentCameraPosition,
+                                this.mLastCameraPosition) || this.mDistanceTooShort)
+                      &&
+                      MapUtils.isCamPositionEqual(currentCameraPosition,
+                                this.mLastCameraPosition);
+            if (!insignificantMove) {
+                //                    if (this.mMapUnlocked && !this.myIgnoreInitCameraChange) {
+                //                        closeOpenedMarker();
+                //                        onValidUserTriggeredMapMove();
+                //                    }
+                this.mLastCameraPosition = currentCameraPosition;
+                if (mMapUnlocked) {
+                    performSearch();
+                }
+            }
+        }
     }
+    
+    @Override
+    public void onMapClick(LatLng latLng) {
+        closeOpenedMarker();
+        closeVitals();
+        checkIsSearchWithSuggestion();
+    }
+    
+    public void checkIsSearchWithSuggestion() {
+        if (mAutoCompletePlace != null &&
+            MapUtils.isVisibleInBounds(mMap, mAutoCompletePlace.getLocation())) {
+            mIsSearchWithSuggestionLocation = true;
+        } else {
+            mIsSearchWithSuggestionLocation = false;
+        }
+    }
+    
     
     @Override
     public void onClickMyLocation() {
@@ -289,7 +350,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdatedSearchResult(OnCompleteDownloadProperty completeDownloadProperty) {
+    public void onUpdatedSearchResult(OnCompleteDownloadPropertyEvent completeDownloadProperty) {
         
         mMapViewAdapter.setData(completeDownloadProperty.getResult());
         closeOpenedMarker();
@@ -301,20 +362,47 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         performSearch();
     }
     
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedSuggestionPlace(OnSelectedPlaceEvent onSelectedPlaceEvent) {
+        new Handler().postDelayed(() -> {
+            AutoCompletePlace autoCompletePlace = onSelectedPlaceEvent.getData();
+            GeoLocation locationSelectedPlace = autoCompletePlace.getLocation();
+            MapUtils.moveMap(mMap, locationSelectedPlace.toLatLng(),
+                      MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
+            mSearchRepository.getCurrentSearchRequest().getCriteria().getDisplay()
+                      .setDisplayLocation(autoCompletePlace.getName());
+            
+            mAutoCompletePlace = autoCompletePlace;
+            mBus.post(new OnUpdateCriteriaEvent());
+            mIsSearchWithSuggestionLocation = true;
+        }, 1000);
+    }
+    
     
     @Override
     public void onClickMapLayer(int type) {
-        if (type == 0) {
-            this.mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        } else if (type == 1) {
-            this.mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        } else {
-            this.mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        switch (type) {
+            case 0:
+                this.mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case 1:
+                this.mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            default:
+                this.mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
         }
     }
     
     @Override
     public void onMapLockToggle(boolean isMapUnLocked) {
+        if (!isMapUnLocked) {
+            Toast.makeText(this.getContext(), R.string.txt_map_is_locked,
+                      Toast.LENGTH_SHORT).show();
+        }
+        mMapUnlocked = isMapUnLocked;
+        mMapPreferenceHelper.putIsMapUnlocked(mMapUnlocked);
+        mMapOverlayView.getButtonLockMap().setChecked(isMapUnLocked);
     }
     
     @Override
@@ -341,6 +429,12 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             this.mMapMarkers.put(mapDisplayItem, marker);
         }
         mBus.post(SearchPropertyState.COMPLETE_SHOW_DATA);
+        if (!mIsSearchWithSuggestionLocation) {
+            mSearchRepository.getCurrentSearchRequest().getCriteria().getDisplay()
+                      .setDisplayLocation(getString(R.string.txt_map_area));
+            mAutoCompletePlace = null;
+            mBus.post(new OnUpdateCriteriaEvent());
+        }
     }
     
     @Override
@@ -382,7 +476,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     }
     
     private void closeVitals() {
-        this.mBus.post(new NeedCloseVitalProperty());
+        this.mBus.post(new NeedCloseVitalPropertyEvent());
     }
     
     private void setSelectedMarker(Marker marker) {
@@ -394,13 +488,14 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             isSameMarker = true;
         }
         if (!isSameMarker) {
-            PropertyResultEntry entry = mMapViewAdapter
-                      .getEntriesAtLocation(marker.getPosition())
-                      .get(0);
+            List<PropertyResultEntry> entry = mMapViewAdapter
+                      .getEntriesAtLocation(marker.getPosition());
             
-            mMapFragmentClickCallBack.onMapPropertyClick(entry);
+            mMapFragmentClickCallBack.onMapPropertyClick(entry.get(0));
             mIsShowVitalProperty = true;
             
+            closeOpenedMarker();
+        } else {
             closeOpenedMarker();
         }
         setOpenedMarker(marker);
@@ -432,11 +527,9 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                                               MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
                                 }
                             })
-                  .addOnFailureListener(this.getActivity(), e -> {
-                      Toast.makeText(getActivity(), R.string.message_cannot_find_your_location,
-                                Toast.LENGTH_SHORT)
-                                .show();
-                  });
+                  .addOnFailureListener(this.getActivity(), e -> Toast.makeText(getActivity(), R.string.message_cannot_find_your_location,
+                            Toast.LENGTH_SHORT)
+                            .show());
     }
     
     private void showEnableGps() {
@@ -470,11 +563,13 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     private void performSearch() {
         SearchRequest searchRequest = makeSearchRequest();
         mSearchRepository.search(searchRequest);
-        
+        MapUtils.drawCircle(mMap, searchRequest.getCore().getCenter().toLatLng(),
+                  searchRequest.getCore().getRadius());
         saveStateSearch(searchRequest);
     }
     
     private void saveStateSearch(SearchRequest searchRequest) {
+        mSearchRepository.setCurrentSearchRequest(searchRequest);
         mMapPreferenceHelper.putLastLocation(searchRequest.getCore().getCenter());
         mMapPreferenceHelper.putLastZoomLevel(searchRequest.getZoom());
         mMapPreferenceHelper.putLastBounds(searchRequest.getCore().getBounds());
@@ -500,7 +595,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         mMapFragmentClickCallBack = mapFragmentClickCallBack;
     }
     
-    
     public interface MapFragmentClickCallBack {
         
         void onMapPropertyClick(PropertyResultEntry entry);
@@ -508,4 +602,41 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         //void on
     }
     
+    
+    private class MapViewContainer extends FrameLayout {
+        
+        float mFinalPosX = 0.0f;
+        float mFinalPosY = 0.0f;
+        float mInitPosX = 0.0f;
+        float mInitPosY = 0.0f;
+        
+        public MapViewContainer(Context context) {
+            super(context);
+        }
+        
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            if (MapViewFragment.this.mMap == null) {
+                return false;
+            }
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    this.mInitPosX = ev.getX();
+                    this.mInitPosY = ev.getY();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    this.mFinalPosX = ev.getX();
+                    this.mFinalPosY = ev.getY();
+                    if (Math.abs(this.mFinalPosX - this.mInitPosX) <= 50.0f &&
+                        Math.abs(this.mFinalPosY - this.mInitPosY) <= 50.0f) {
+                        MapViewFragment.this.mDistanceTooShort = true;
+                        break;
+                    }
+                    MapViewFragment.this.mDistanceTooShort = false;
+                    break;
+                default:
+                    break;
+            }
+            return super.onInterceptTouchEvent(ev);
+        }
+    }
 }

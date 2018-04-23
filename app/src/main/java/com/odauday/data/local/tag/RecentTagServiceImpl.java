@@ -2,6 +2,7 @@ package com.odauday.data.local.tag;
 
 import com.odauday.data.local.tag.RecentTagDao.Properties;
 import com.odauday.model.Tag;
+import com.odauday.utils.TextUtils;
 import io.reactivex.Single;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,9 @@ public class RecentTagServiceImpl implements RecentTagService {
     public Single<Long> save(List<RecentTag> recentTags) {
         return Single.fromCallable(() -> {
             for (RecentTag recentTag : recentTags) {
+                if (TextUtils.isEmpty(recentTag.getId())) {
+                    continue;
+                }
                 boolean isExists = mRecentTagDao
                                              .queryBuilder()
                                              .where(Properties.Id.eq(recentTag.getId()))

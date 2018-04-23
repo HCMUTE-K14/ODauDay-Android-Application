@@ -7,10 +7,9 @@ import com.odauday.R;
  */
 
 public enum SearchType {
-    
-    RENT(R.string.txt_rent, 0),
+    ALL(R.string.txt_all, 0),
     BUY(R.string.txt_buy, 1),
-    ALL(R.string.txt_all, 2);
+    RENT(R.string.txt_rent, 2);
     
     private final int mValue;
     private final int mResourceId;
@@ -23,10 +22,11 @@ public enum SearchType {
     public static SearchType getByValue(int value) {
         switch (value) {
             case 0:
-                return SearchType.RENT;
+                return SearchType.ALL;
             case 1:
                 return SearchType.BUY;
             case 2:
+                return SearchType.RENT;
             default:
                 return SearchType.ALL;
         }

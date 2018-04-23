@@ -126,7 +126,7 @@ public class APIHelper {
         
         return new OkHttpClient.Builder()
                   .cache(cache)
-                  //  .addInterceptor(logging)
+                  // .addInterceptor(logging)
                   .addInterceptor(interceptor)
                   .addInterceptor(languageInterceptor)
                   .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
@@ -143,9 +143,10 @@ public class APIHelper {
             gson = createDefaultGson();
         }
         
-        if (!NetworkUtils.isNetworkAvailable(mContext)) {
-            throw new NetworkException(mContext.getString(R.string.message_no_internet_access));
-        }
+        //        if (!NetworkUtils.isNetworkAvailable(mContext)) {
+        //            Timber.tag("Network").d(mContext.getString(R.string.message_no_internet_access));
+        //            return null;
+        //        }
         return new Retrofit.Builder()
                   .baseUrl(baseURL)
                   .client(client)

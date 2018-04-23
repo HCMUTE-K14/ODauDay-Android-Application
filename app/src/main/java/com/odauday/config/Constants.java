@@ -17,4 +17,9 @@ public class Constants {
     public static final String INTENT_EXTRA_SELECTED_TAG = "intent_extra_selected_tag";
     public static final String INTENT_EXTRA_RECENT_TAG = "intent_extra_recent_tag";
     public static final String INTENT_EXTRA_CURRENT_SEARCH_CRITERIA = "intent_extra_current_search_criteria";
+    
+    public static final String INTENT_EXTRA_SELECTED_SUGGESTION_PLACE = "intent_extra_selected_suggestion_place";
+    public static final String INTENT_EXTRA_SAVE_SEARCH_CRITERIA = "intent_extra_save_search_criteria";
+    public static final String INTENT_EXTRA_LATLNG_CENTER = "intent_extra_lat_lng_center";
+    
 }

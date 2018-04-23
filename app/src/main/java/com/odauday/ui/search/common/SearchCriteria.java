@@ -63,8 +63,8 @@ public class SearchCriteria implements Parcelable {
     
     public SearchCriteria() {
         this.searchType = SearchType.ALL.getValue();
-        this.price = new MinMaxObject<>(-1, -1);
-        this.size = new MinMaxObject<>(-1, -1);
+        this.price =
+                  this.size = new MinMaxObject<>(-1, -1);
         this.bedrooms = new MinMaxObject<>(-1, -1);
         this.bathrooms = new MinMaxObject<>(-1, -1);
         this.parking = new MinMaxObject<>(-1, -1);
@@ -86,13 +86,13 @@ public class SearchCriteria implements Parcelable {
     public int getSearchType() {
         return searchType;
     }
-    
+
     public SearchCriteria setSearchType(int searchType) {
         this.searchType = searchType;
-        
+
         return this;
     }
-    
+
     public MinMaxObject<Integer> getPrice() {
         return price;
     }
@@ -126,7 +126,7 @@ public class SearchCriteria implements Parcelable {
         
         return this;
     }
-    
+
     public SearchCriteria setPropertyTypeByListInteger(List<Integer> propertyType) {
         List<PropertyType> list = new ArrayList<>();
         for (int i : propertyType) {
@@ -134,38 +134,32 @@ public class SearchCriteria implements Parcelable {
         }
         return this.setPropertyType(list);
     }
-    
-    
+
+
     public MinMaxObject<Integer> getBedrooms() {
         return bedrooms;
     }
-    
-    public SearchCriteria setBedrooms(MinMaxObject<Integer> bedrooms) {
+
+    public void setBedrooms(MinMaxObject<Integer> bedrooms) {
         this.bedrooms = bedrooms;
-        
-        return this;
     }
     
     public MinMaxObject<Integer> getBathrooms() {
         return bathrooms;
     }
-    
-    public SearchCriteria setBathrooms(MinMaxObject<Integer> bathrooms) {
+
+    public void setBathrooms(MinMaxObject<Integer> bathrooms) {
         this.bathrooms = bathrooms;
-        
-        return this;
     }
     
     public MinMaxObject<Integer> getParking() {
         return parking;
     }
-    
-    public SearchCriteria setParking(MinMaxObject<Integer> parking) {
+
+    public void setParking(MinMaxObject<Integer> parking) {
         this.parking = parking;
-        
-        return this;
     }
-    
+
     public SearchCriteriaDisplay getDisplay() {
         return display;
     }
@@ -173,53 +167,86 @@ public class SearchCriteria implements Parcelable {
     public void setDisplay(SearchCriteriaDisplay display) {
         this.display = display;
     }
-    
-    
+
+
     @SuppressWarnings("unchecked")
     public SearchCriteria normalize() {
         SearchCriteria searchCriteria = this;
         
         SearchCriteria normalize = new SearchCriteria();
+        MinMaxObject<Integer> _price = null;
+        MinMaxObject<Integer> _size = null;
+        MinMaxObject<Integer> _bedrooms = null;
+        MinMaxObject<Integer> _bathrooms = null;
+        MinMaxObject<Integer> _parkings = null;
         
-        MinMaxObject<Integer> price = (MinMaxObject<Integer>) searchCriteria.price.normalize();
-        MinMaxObject<Integer> size = (MinMaxObject<Integer>) searchCriteria.size.normalize();
-        MinMaxObject<Integer> bedrooms = (MinMaxObject<Integer>) searchCriteria.bedrooms
-                  .normalize();
-        MinMaxObject<Integer> bathrooms = (MinMaxObject<Integer>) searchCriteria.bathrooms
-                  .normalize();
-        MinMaxObject<Integer> parkings = (MinMaxObject<Integer>) searchCriteria.parking.normalize();
+        if (searchCriteria.price != null) {
+            _price = (MinMaxObject<Integer>) searchCriteria.price.normalize();
+        }
         
-        List<Tag> tags;
+        if (searchCriteria.size != null) {
+            _size = (MinMaxObject<Integer>) searchCriteria.size.normalize();
+        }
         
-        if (searchCriteria.getTags() == null || searchCriteria.getTags().isEmpty()) {
-            tags = null;
-        } else {
-            tags = new ArrayList<>();
-            for (Tag tag : searchCriteria.getTags()) {
-                tags.add(new Tag(tag.getId()));
+        if (searchCriteria.bedrooms != null) {
+            _bedrooms = (MinMaxObject<Integer>) searchCriteria.bedrooms
+                      .normalize();
+        }
+        
+        if (searchCriteria.bathrooms != null) {
+            _bathrooms = (MinMaxObject<Integer>) searchCriteria.bathrooms
+                      .normalize();
+        }
+        
+        if (searchCriteria.parking != null) {
+            String minValueStr = String.valueOf(searchCriteria.parking.getMin());
+            String maxValueStr = String.valueOf(searchCriteria.parking.getMax());
+            
+            int minParking = Integer.valueOf(minValueStr.equals("null") ? "0" : minValueStr);
+            int maxParking = Integer.valueOf(maxValueStr.equals("null") ? "0" : maxValueStr);
+            
+            if (minParking == -1) {
+                _parkings = null;
+            } else {
+                _parkings = new MinMaxObject<>(minParking, null);
             }
         }
         
-        List<PropertyType> propertyTypes;
+        List<Tag> _tags;
+        
+        if (searchCriteria.getTags() == null) {
+            _tags = null;
+        } else {
+            if (searchCriteria.getTags().isEmpty()) {
+                _tags = null;
+            } else {
+                _tags = new ArrayList<>();
+                for (Tag tag : searchCriteria.getTags()) {
+                    _tags.add(new Tag(tag.getId(), null));
+                }
+            }
+        }
+        
+        List<PropertyType> _propertyTypes;
         
         if (searchCriteria.getPropertyType() == null ||
             searchCriteria.getPropertyType().isEmpty()) {
-            propertyTypes = null;
+            _propertyTypes = null;
         } else {
-            propertyTypes = new ArrayList<>(searchCriteria.getPropertyType());
+            _propertyTypes = new ArrayList<>(searchCriteria.getPropertyType());
         }
         
         normalize.setSearchType(searchCriteria.getSearchType());
-        normalize.setPrice(price);
-        normalize.setSize(size);
-        normalize.setBedrooms(bedrooms);
-        normalize.setBathrooms(bathrooms);
-        normalize.setParking(parkings);
-        normalize.setTags(tags);
-        normalize.setPropertyType(propertyTypes);
+        normalize.setPrice(_price);
+        normalize.setSize(_size);
+        normalize.setBedrooms(_bedrooms);
+        normalize.setBathrooms(_bathrooms);
+        normalize.setParking(_parkings);
+        normalize.setTags(_tags);
+        normalize.setPropertyType(_propertyTypes);
         normalize.setDisplay(null);
         
-        return searchCriteria;
+        return normalize;
     }
     
     @Override

@@ -46,17 +46,17 @@ public class WheelScroller {
     private final int MESSAGE_SCROLL = 0;
     private final int MESSAGE_JUSTIFY = 1;
     // Listener
-    private ScrollingListener listener;
+    private final ScrollingListener listener;
     // Context
-    private Context context;
+    private final Context context;
     // Scrolling
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
     private Scroller scroller;
     private int lastScrollY;
     private float lastTouchedY;
     private boolean isScrollingPerformed;
     // animation handler
-    private Handler animationHandler = new Handler(new Callback() {
+    private final Handler animationHandler = new Handler(new Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             scroller.computeScrollOffset();
@@ -84,7 +84,7 @@ public class WheelScroller {
         }
     });
     // gesture listener
-    private SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
+    private final SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             // Do scrolling in onTouchEvent() since onScroll() are not call immediately
             //  when user touch and move the wheel

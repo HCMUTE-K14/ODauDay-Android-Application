@@ -1,5 +1,6 @@
 package com.odauday.ui.search;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -7,23 +8,30 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 import com.odauday.MainActivity;
 import com.odauday.R;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
+import com.odauday.data.remote.property.model.SearchRequest;
+import com.odauday.data.remote.property.model.SearchResult;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
+import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
 import com.odauday.ui.search.common.SearchCriteria;
-import com.odauday.ui.search.common.event.NeedCloseVitalProperty;
-import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
-import com.odauday.ui.search.common.event.OnErrorDownloadProperty;
+import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
+import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.OnErrorDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.ReInitMapFragmentEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.common.view.InformationBar.InformationBarListener;
+import com.odauday.ui.search.common.view.LoadingFragment;
+import com.odauday.ui.search.common.view.LoadingFragment.LoadingFragmentListener;
+import com.odauday.ui.search.common.view.SavedSearchDialog;
+import com.odauday.ui.search.common.view.SavedSearchDialog.SaveSearchListener;
 import com.odauday.ui.search.common.view.VitalPropertyView;
 import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.ui.search.mapview.MapViewFragment.MapFragmentClickCallBack;
@@ -31,6 +39,8 @@ import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
+import com.odauday.utils.NetworkUtils;
+import com.odauday.utils.TextUtils;
 import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
@@ -49,7 +59,9 @@ import timber.log.Timber;
 public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMainBinding> implements
                                                                                           HasSupportFragmentInjector,
                                                                                           OnCompleteRefineFilter,
-                                                                                          MapFragmentClickCallBack {
+                                                                                          MapFragmentClickCallBack,
+                                                                                          SaveSearchListener,
+                                                                                          LoadingFragmentListener {
     
     
     //====================== Variable =========================//
@@ -83,6 +95,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         Bundle args = new Bundle();
         
         SearchTabMainFragment fragment = new SearchTabMainFragment();
+        Timber.d("New Instance searchRemote tab");
         fragment.setArguments(args);
         
         return fragment;
@@ -96,22 +109,25 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBus.register(this);
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+        mSearchTabViewModel.setSearchTabMainFragment(this);
         initBinding();
         setupToolBar(view);
         new Handler().postDelayed(() -> {
             setupFilterNavigation();
             getFilterNavigation().setOnCompleteRefineFilter(this);
         }, 10);
-        setupMapView();
-        getMapViewFragment().setMapFragmentClickCallBack(this);
+        
+        initMainLayout();
+        
         initVitalProperty();
     }
+    
     
     @Override
     public void onResume() {
@@ -130,25 +146,25 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     @Override
-    public void onStart() {
-        super.onStart();
-        mBus.register(this);
-    }
-    
-    @Override
-    public void onStop() {
-        super.onStop();
-        mBus.unregister(this);
-    }
-    
-    @Override
     public void onDestroy() {
+        mBus.unregister(this);
         super.onDestroy();
-        Timber.d("ON Destroy search tab");
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeStateWhenSearchProperty(SearchPropertyState state) {
+        String displayLocation = mSearchPropertyRepository
+                  .getCurrentSearchRequest()
+                  .getCriteria()
+                  .getDisplay()
+                  .getDisplayLocation();
+        
+        if (TextUtils.isEmpty(displayLocation)) {
+            updateTextSearchBar(getString(R.string.txt_map_area));
+        } else {
+            updateTextSearchBar(displayLocation);
+        }
+        
         if (state.isShouldShowProgressBar()) {
             mBinding.get().inforBar.showProgressBar();
             return;
@@ -157,17 +173,31 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         if (mBinding.get().inforBar.isShowErrorContainer()) {
             mBinding.get().inforBar.showHideErrorContainer(false);
         }
+        
+        if (mMapViewFragment.isVisible()) {
+            mBinding.get().inforBar.showHideButtonSort(false);
+        }
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onErrorSearchProperty(OnErrorDownloadProperty errorDownloadProperty) {
+    public void onErrorSearchProperty(OnErrorDownloadPropertyEvent errorDownloadProperty) {
+        mBinding.get().inforBar.setTextError(getString(R.string.message_cannot_connect_to_service));
         mBinding.get().inforBar.showHideErrorContainer(true);
     }
     
+    
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCompleteDownloadProperty(OnCompleteDownloadProperty onCompleteDownloadProperty) {
-        String textStatus = String.valueOf(onCompleteDownloadProperty.getResult().size());
-        mBinding.get().inforBar.setTextStatus(textStatus);
+    public void onCompleteDownloadProperty(
+              OnCompleteDownloadPropertyEvent onCompleteDownloadPropertyEvent) {
+        SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
+        SearchResult searchResult = onCompleteDownloadPropertyEvent.getSearchResult();
+        
+        mBinding.get().inforBar.updateWithSearchRequestAndSearchResult(searchRequest, searchResult);
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReInitMapFragment(ReInitMapFragmentEvent reInitMapFragmentEvent) {
+        initMainLayout();
     }
     
     @Override
@@ -190,34 +220,37 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNeedCloseVitalProperty(NeedCloseVitalProperty needCloseVitalProperty) {
-        View vitalPropertyContainer = getVitalPropertyContainer();
+    public void onNeedCloseVitalProperty(NeedCloseVitalPropertyEvent needCloseVitalPropertyEvent) {
+        View vitalPropertyContainer = mSearchTabViewModel.getVitalPropertyContainer();
         
         if (vitalPropertyContainer != null &&
             vitalPropertyContainer.getVisibility() == View.VISIBLE) {
-            showVitalProperty(false);
-            showBottomBar(true);
+            mSearchTabViewModel.showVitalProperty(false);
+            mSearchTabViewModel.showBottomBar(true);
         }
     }
     
+    
     @Override
     public void onMapPropertyClick(PropertyResultEntry entry) {
-        View vitalPropertyContainer = getVitalPropertyContainer();
+        View vitalPropertyContainer = mSearchTabViewModel.getVitalPropertyContainer();
         if (vitalPropertyContainer != null) {
             if (vitalPropertyContainer.getVisibility() != View.VISIBLE) {
-                showBottomBar(false);
-                showVitalProperty(true);
+                mSearchTabViewModel.showBottomBar(false);
+                mSearchTabViewModel.showVitalProperty(true);
             }
             mVitalPropertyView.setProperty(entry);
         }
     }
     
-    //====================== ViewBinding Method =========================//
+    @Override
+    public void onClickRetry() {
+        initMainLayout();
+    }
     
-    //====================== Contract Method =========================//
-    
-    //====================== Helper Method =========================//
-    
+    private void updateTextSearchBar(String text) {
+        mBinding.get().toolbar.searchBar.setText(text);
+    }
     
     private void initBinding() {
         
@@ -245,7 +278,18 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mBinding.get().inforBar.setListener(new InformationBarListener() {
             @Override
             public void onClickSaveSearch() {
-
+                SearchCriteria searchCriteria = mSearchPropertyRepository.getCurrentSearchRequest()
+                          .getCriteria();
+                GeoLocation center = mSearchPropertyRepository.getCurrentSearchRequest().getCore()
+                          .getCenter();
+                SavedSearchDialog searchDialog = SavedSearchDialog
+                          .newInstance(searchCriteria, center);
+                searchDialog.setSaveSearchListener(SearchTabMainFragment.this);
+                searchDialog.setTargetFragment(SearchTabMainFragment.this,
+                          SavedSearchDialog.REQUEST_CODE);
+                if (getFragmentManager() != null) {
+                    searchDialog.show(getFragmentManager(), TAG);
+                }
             }
             
             @Override
@@ -255,13 +299,29 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             
             @Override
             public void onClickReload() {
-                mBus.post(new ReloadSearchEvent());
+                if (mMapViewFragment != null && mMapViewFragment.isVisible()) {
+                    mBus.post(new ReloadSearchEvent());
+                    return;
+                }
+                mBus.post(new ReInitMapFragmentEvent());
             }
         });
     }
     
+    private void initMainLayout() {
+        if (NetworkUtils.isNetworkAvailable(this.getContext())) {
+            setupMapView();
+            getMapViewFragment().setMapFragmentClickCallBack(this);
+            mBinding.get().inforBar.showHideButtonSort(false);
+        } else {
+            setupLoadingFragment();
+            mBinding.get().inforBar.showHideErrorContainer(true);
+            mBinding.get().inforBar.showHideButtonSort(false);
+        }
+    }
+    
     private void initVitalProperty() {
-        if ((MainActivity) getActivity() != null) {
+        if (getActivity() != null) {
             mVitalPropertyView = new VitalPropertyView(this.getActivity());
             
             ((MainActivity) getActivity()).getBinding().vitalPropertyContainer
@@ -273,61 +333,12 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         }
     }
     
-    private View getVitalPropertyContainer() {
-        if (((MainActivity) getActivity()) != null) {
-            return ((MainActivity) getActivity()).getBinding().vitalPropertyContainer;
-        }
-        return null;
-    }
     
-    private View getBottomBar() {
-        if (((MainActivity) getActivity()) != null) {
-            return ((MainActivity) getActivity()).getBinding().bottomNavBar;
-        }
-        return null;
-    }
-    
-    private void showVitalProperty(boolean show) {
-        if ((MainActivity) getActivity() != null) {
-            View view = getVitalPropertyContainer();
-            if (view == null) {
-                return;
-            }
-            if (show) {
-                view.startAnimation(
-                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_up));
-                view.setVisibility(View.VISIBLE);
-            } else {
-                view.startAnimation(
-                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_down));
-                view.setVisibility(View.GONE);
-            }
-        }
-    }
-    
-    private void showBottomBar(boolean show) {
-        if ((MainActivity) getActivity() != null) {
-            View view = getBottomBar();
-            if (view == null) {
-                return;
-            }
-            if (show) {
-                view.startAnimation(
-                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_up));
-                view.setVisibility(View.VISIBLE);
-            } else {
-                view.startAnimation(
-                          AnimationUtils.loadAnimation(this.getContext(), R.anim.slide_down));
-                view.setVisibility(View.GONE);
-            }
-        }
-    }
-    
-    private void openDrawer() {
+    public void openDrawer() {
         mBinding.get().drawerLayout.openDrawer(Gravity.END);
     }
     
-    private void closeDrawer() {
+    public void closeDrawer() {
         mBinding.get().drawerLayout.closeDrawer(Gravity.END);
     }
     
@@ -340,11 +351,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             throw new NullPointerException("Fragment manager is null");
         }
         
-        if (mFilterNavigationFragment == null) {
-            mFilterNavigationFragment = FilterNavigationFragment
-                      .newInstance();
-        }
-        
+        mFilterNavigationFragment = FilterNavigationFragment
+                  .newInstance();
         getActivity().getSupportFragmentManager().beginTransaction()
                   .replace(R.id.filter_nav, mFilterNavigationFragment, FilterNavigationFragment.TAG)
                   .commit();
@@ -355,9 +363,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             throw new NullPointerException("Fragment manager is null");
         }
         
-        if (mMapViewFragment == null) {
-            mMapViewFragment = MapViewFragment.newInstance();
-        }
+        mMapViewFragment = MapViewFragment.newInstance();
         
         Runnable attachRunnableMapView = new AttachFragmentRunnable
                   .AttachFragmentBuilder()
@@ -365,19 +371,36 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                   .setFragmentManager(getActivity().getSupportFragmentManager())
                   .setContainerId(R.id.fragment_map_view)
                   .setFragment(mMapViewFragment)
-                  .setTagFragment(MapViewFragment.TAG)
                   .setAddToBackTrack(false)
-                  .setAnimationIn(android.R.anim.fade_in)
-                  .setAnimationOut(android.R.anim.fade_out)
                   .build();
         
         new Handler().postDelayed(attachRunnableMapView, 50);
     }
     
+    private void setupLoadingFragment() {
+        if (getActivity().getSupportFragmentManager() == null) {
+            throw new NullPointerException("Fragment manager is null");
+        }
+        LoadingFragment loadingFragment = LoadingFragment.newInstance();
+        loadingFragment.setLoadingFragmentListener(this);
+        
+        Runnable attachRunnableLoadingFragment = new AttachFragmentRunnable
+                  .AttachFragmentBuilder()
+                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+                  .setFragmentManager(getActivity().getSupportFragmentManager())
+                  .setContainerId(R.id.fragment_map_view)
+                  .setFragment(loadingFragment)
+                  .setAddToBackTrack(false)
+                  .build();
+        
+        new Handler().postDelayed(attachRunnableLoadingFragment, 50);
+    }
+    
     private void bindViewOnToolBar(View view) {
+        mBinding.get().toolbar.searchBar.setTypeface(null, Typeface.NORMAL);
         mBinding.get().toolbar.searchBar.setOnClickListener(
-                  viewSearchBar -> Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT)
-                            .show());
+                  viewSearchBar -> ViewUtils.startActivity(getActivity(),
+                            AutoCompletePlaceActivity.class));
         mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> openDrawer());
     }
     
@@ -398,5 +421,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         return mChildFragmentInjector;
     }
     
-    
+    @Override
+    public void onSaveSearch(SearchCriteria searchCriteria, GeoLocation location) {
+
+    }
 }

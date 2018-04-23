@@ -14,26 +14,20 @@ public class SearchCriteriaDisplay implements Parcelable {
         public SearchCriteriaDisplay createFromParcel(Parcel in) {
             return new SearchCriteriaDisplay(in);
         }
-        
+
         @Override
         public SearchCriteriaDisplay[] newArray(int size) {
             return new SearchCriteriaDisplay[size];
         }
     };
-
     private TextAndMoreTextValue displayPrice;
-
     private String displaySize;
-
     private TextAndMoreTextValue displayPropertyType;
-
     private String displayBedroom;
-
     private String displayBathroom;
-
     private String displayParking;
-
     private TextAndMoreTextValue displayTag;
+    private String displayLocation;
     
     public SearchCriteriaDisplay() {
 
@@ -47,6 +41,7 @@ public class SearchCriteriaDisplay implements Parcelable {
         displayBathroom = in.readString();
         displayParking = in.readString();
         displayTag = in.readParcelable(TextAndMoreTextValue.class.getClassLoader());
+        displayLocation = in.readString();
     }
     
     public TextAndMoreTextValue getDisplayPrice() {
@@ -106,21 +101,12 @@ public class SearchCriteriaDisplay implements Parcelable {
         this.displayTag = displayTag;
     }
     
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getDisplayLocation() {
+        return displayLocation;
     }
     
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        
-        parcel.writeParcelable(displayPrice, i);
-        parcel.writeString(displaySize);
-        parcel.writeParcelable(displayPropertyType, i);
-        parcel.writeString(displayBedroom);
-        parcel.writeString(displayBathroom);
-        parcel.writeString(displayParking);
-        parcel.writeParcelable(displayTag, i);
+    public void setDisplayLocation(String displayLocation) {
+        this.displayLocation = displayLocation;
     }
     
     @Override
@@ -134,5 +120,23 @@ public class SearchCriteriaDisplay implements Parcelable {
                ", displayParking='" + displayParking + '\'' +
                ", displayTag=" + displayTag +
                '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        
+        dest.writeParcelable(displayPrice, flags);
+        dest.writeString(displaySize);
+        dest.writeParcelable(displayPropertyType, flags);
+        dest.writeString(displayBedroom);
+        dest.writeString(displayBathroom);
+        dest.writeString(displayParking);
+        dest.writeParcelable(displayTag, flags);
+        dest.writeString(displayLocation);
     }
 }

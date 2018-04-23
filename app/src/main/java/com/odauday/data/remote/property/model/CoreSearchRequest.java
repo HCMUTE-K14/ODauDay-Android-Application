@@ -34,7 +34,7 @@ public class CoreSearchRequest {
         this.radius = calRadius();
     }
     
-    public CoreSearchRequest(GeoLocation end, GeoLocation center,
+    public CoreSearchRequest(GeoLocation center, GeoLocation end,
               LatLngBounds bounds) {
         this.end = end;
         this.center = center;
@@ -80,7 +80,7 @@ public class CoreSearchRequest {
                   GeoLocation.fromLatLng(bounds.northeast)
         };
     }
-
+    
     private double calRadius() {
         return NumberUtils.distanceBetween2Location(this.center, this.end);
     }

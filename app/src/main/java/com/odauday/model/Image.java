@@ -8,34 +8,34 @@ import java.util.Date;
 /**
  * Created by infamouSs on 4/18/18.
  */
-public class Media implements Parcelable {
+public class Image implements Parcelable {
     
-    public static final Creator<Media> CREATOR = new Creator<Media>() {
+    public static final Creator<Image> CREATOR = new Creator<Image>() {
         @Override
-        public Media createFromParcel(Parcel in) {
-            return new Media(in);
+        public Image createFromParcel(Parcel in) {
+            return new Image(in);
         }
 
         @Override
-        public Media[] newArray(int size) {
-            return new Media[size];
+        public Image[] newArray(int size) {
+            return new Image[size];
         }
     };
     private String id;
     private String url;
     private Date dateCreated;
     
-    public Media() {
+    public Image() {
 
     }
     
-    public Media(String id, String url, Date dateCreated) {
+    public Image(String id, String url, Date dateCreated) {
         this.id = id;
         this.url = url;
         this.dateCreated = dateCreated;
     }
     
-    protected Media(Parcel in) {
+    protected Image(Parcel in) {
         id = in.readString();
         url = in.readString();
     }
@@ -72,10 +72,10 @@ public class Media implements Parcelable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Media media = (Media) o;
-        return ObjectUtils.equals(id, media.id) &&
-               ObjectUtils.equals(url, media.url) &&
-               ObjectUtils.equals(dateCreated, media.dateCreated);
+        Image image = (Image) o;
+        return ObjectUtils.equals(id, image.id) &&
+               ObjectUtils.equals(url, image.url) &&
+               ObjectUtils.equals(dateCreated, image.dateCreated);
     }
     
     @Override
@@ -86,7 +86,7 @@ public class Media implements Parcelable {
     
     @Override
     public String toString() {
-        return "Media{" +
+        return "Image{" +
                "id='" + id + '\'' +
                ", url='" + url + '\'' +
                ", dateCreated=" + dateCreated +

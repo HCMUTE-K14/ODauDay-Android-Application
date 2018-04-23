@@ -27,7 +27,7 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
         if (data == null) {
             data = new ArrayList<>();
         }
-        
+        data.clear();
         data.addAll(_data);
         notifyDataSetChanged();
     }

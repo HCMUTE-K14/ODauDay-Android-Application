@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <plurals name="baths">
+    <item quantity="other">%s baths</item>
+    <item quantity="one">1 bath</item>
+  </plurals>
+  <plurals name="baths_snazzy">
+    <item quantity="other"> Baths</item>
+    <item quantity="one"> Bath</item>
+  </plurals>
+  <plurals name="beds">
+    <item quantity="other">%s beds</item>
+    <item quantity="one">1 bed</item>
+  </plurals>
+  <plurals name="beds_snazzy">
+    <item quantity="other"> Beds</item>
+    <item quantity="one"> Bed</item>
+  </plurals>
+  <plurals name="parking">
+    <item quantity="other">%s parking</item>
+  </plurals>
+  <plurals name="property_plural">
+    <item quantity="other">properties </item>
+    <item quantity="one">property </item>
+  </plurals>
+</resources>

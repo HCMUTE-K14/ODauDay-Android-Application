@@ -14,6 +14,9 @@ import retrofit2.http.POST;
  */
 public interface SearchService {
     
+    //    @POST(SEARCH_PROPERTY)
+    //    Single<JsonResponse<SearchResult>> searchRemote(@Body SearchRequest searchRequest);
+    
     @POST(SEARCH_PROPERTY)
     Single<JsonResponse<SearchResult>> search(@Body SearchRequest searchRequest);
 }

@@ -17,9 +17,7 @@ public class HistoryServiceImpl implements HistoryService {
     
     @Override
     public Single<Long> create(HistoryProperty historyProperty) {
-        return Single.fromCallable(() -> {
-            return mHistoryPropertyDao.insert(historyProperty);
-        });
+        return Single.fromCallable(() -> mHistoryPropertyDao.insert(historyProperty));
     }
     
     @Override
@@ -32,12 +30,10 @@ public class HistoryServiceImpl implements HistoryService {
     
     @Override
     public Single<List<HistoryProperty>> findHistoryByUserId(String userId) {
-        return Single.fromCallable(() -> {
-            return mHistoryPropertyDao
-                      .queryBuilder()
-                      .where(Properties.UserId.eq(userId))
-                      .list();
-        });
+        return Single.fromCallable(() -> mHistoryPropertyDao
+                  .queryBuilder()
+                  .where(Properties.UserId.eq(userId))
+                  .list());
     }
     
     @Override

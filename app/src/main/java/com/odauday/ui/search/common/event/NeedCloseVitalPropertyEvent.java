@@ -5,11 +5,11 @@ import com.odauday.ui.base.BaseEvent;
 /**
  * Created by infamouSs on 4/18/18.
  */
-public class NeedCloseVitalProperty extends BaseEvent {
+public class NeedCloseVitalPropertyEvent extends BaseEvent {
     
     public static final int REQUEST_CODE = 92;
     
-    public NeedCloseVitalProperty() {
+    public NeedCloseVitalPropertyEvent() {
         super(REQUEST_CODE);
     }
 }

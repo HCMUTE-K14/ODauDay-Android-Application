@@ -1,6 +1,7 @@
 package com.odauday.di.modules;
 
 import com.odauday.data.local.history.DaoSession;
+import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.tag.RecentTagDao;
 import dagger.Module;
 import dagger.Provides;
@@ -18,5 +19,9 @@ public class LocalDaoModule {
         return daoSession.getRecentTagDao();
     }
     
-    
+    @Provides
+    @Singleton
+    RecentSearchPlaceDao provideRecentSearchPlaceDao(DaoSession daoSession) {
+        return daoSession.getRecentSearchPlaceDao();
+    }
 }

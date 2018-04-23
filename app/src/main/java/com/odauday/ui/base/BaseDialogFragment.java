@@ -26,6 +26,7 @@ public class BaseDialogFragment extends DialogFragment {
     private static final float MATCH_PARENT_WIDTH = 400.0f;
     
     private Builder mDialogBuilder;
+
     private View mDialogView;
     private OnShowListener mOnShowListener;
     
@@ -34,6 +35,7 @@ public class BaseDialogFragment extends DialogFragment {
         super.onAttach(context);
         this.mDialogBuilder = setupDialog((AppCompatActivity) context);
     }
+    
     
     public Dialog create() {
         final Dialog dialogFragment = this.mDialogBuilder.create();

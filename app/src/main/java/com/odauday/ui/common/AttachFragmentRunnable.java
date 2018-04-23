@@ -14,14 +14,14 @@ public class AttachFragmentRunnable implements Runnable {
     public static final int TYPE_ADD = 0;
     public static final int TYPE_REPLACE = 1;
     
-    private int mContainerId;
-    private Fragment mFragment;
-    private FragmentManager mFragmentManager;
-    private String mTagFragment;
-    private int mTypeAttach;
-    private boolean mAddToBackTrack;
-    private int mAnimationIn;
-    private int mAnimationOut;
+    private final int mContainerId;
+    private final Fragment mFragment;
+    private final FragmentManager mFragmentManager;
+    private final String mTagFragment;
+    private final int mTypeAttach;
+    private final boolean mAddToBackTrack;
+    private final int mAnimationIn;
+    private final int mAnimationOut;
     
     
     public AttachFragmentRunnable(AttachFragmentBuilder builder) {
@@ -106,8 +106,8 @@ public class AttachFragmentRunnable implements Runnable {
             return this;
         }
         
-        public AttachFragmentBuilder setAddToBackTrack(boolean addtoBackTrack) {
-            mAddToBackTrack = addtoBackTrack;
+        public AttachFragmentBuilder setAddToBackTrack(boolean addToBackTrack) {
+            mAddToBackTrack = addToBackTrack;
             
             return this;
         }

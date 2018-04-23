@@ -63,7 +63,7 @@
       android:layout_height="match_parent"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:text="SAVE"
+      android:text="@string/txt_save_upper_case"
       android:textColor="@color/green"
       android:textSize="14sp" />
     <Button
@@ -73,14 +73,14 @@
       android:layout_height="match_parent"
       android:layout_toLeftOf="@id/btn_save_search"
       android:layout_toStartOf="@id/btn_save_search"
-      android:text="SORT"
+      android:text="@string/txt_sort_upper_cast"
       android:textColor="@color/green"
       android:textSize="14sp" />
   </RelativeLayout>
   <android.support.v4.widget.ContentLoadingProgressBar
     android:id="@+id/progress_bar_infor_bar"
     android:layout_width="match_parent"
-    android:layout_height="8dp"
+    android:layout_height="4dp"
     android:layout_gravity="center_vertical"
     android:indeterminate="true" />
 </ViewAnimator>

@@ -17,6 +17,8 @@ public class SearchRequest implements BaseRequest {
     
     @SerializedName("criteria")
     @Expose
+    private SearchCriteria criteriaNormalize;
+    
     private SearchCriteria criteria;
     
     @SerializedName("zoom")
@@ -24,12 +26,13 @@ public class SearchRequest implements BaseRequest {
     private float zoom;
     
     public SearchRequest() {
-    
+
     }
     
     public SearchRequest(CoreSearchRequest core, SearchCriteria criteria, float zoom) {
         this.core = core;
-        this.criteria = criteria.normalize();
+        this.criteria = criteria;
+        this.criteriaNormalize = criteria.normalize();
         this.zoom = zoom;
     }
     
@@ -58,8 +61,7 @@ public class SearchRequest implements BaseRequest {
     }
     
     public void setCriteria(SearchCriteria criteria) {
-        this.criteria = criteria.normalize();
+        this.criteriaNormalize = criteria.normalize();
+        this.criteria = criteria;
     }
-    
-    
 }

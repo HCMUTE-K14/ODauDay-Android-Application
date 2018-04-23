@@ -29,11 +29,11 @@ public class RecentTag {
         this.name = name;
         this.userId = userId;
     }
-    
+
     @Generated(hash = 713780027)
     public RecentTag() {
     }
-    
+
     public RecentTag(Tag tag, String userId) {
         this.id = tag.getId();
         this.name = tag.getName();

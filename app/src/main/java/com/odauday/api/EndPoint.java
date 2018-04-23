@@ -22,4 +22,6 @@ public class EndPoint {
     
     public static final String SEARCH_PROPERTY = "search";
     
+    public static final String AUTOCOMPLETE_PLACE = "auto-complete-place";
+    
 }

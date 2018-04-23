@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 public class MapPreferenceHelper {
     
-    public static float DEFAULT_ZOOM_LEVEL = 15.0f;
+    public static final float DEFAULT_ZOOM_LEVEL = 15.0f;
     
     private final PreferencesHelper mPreferencesHelper;
     
@@ -85,7 +85,6 @@ public class MapPreferenceHelper {
             
             return defaultSearchCriteria;
         }
-        
         return mGson.fromJson(str, SearchCriteria.class);
     }
     
@@ -95,6 +94,14 @@ public class MapPreferenceHelper {
     
     public int getLastSearchMode() {
         return mPreferencesHelper.get(PrefKey.LAST_SEARCH_MODE, SearchType.ALL.getValue());
+    }
+    
+    public void putIsMapUnlocked(boolean mapUnlocked) {
+        mPreferencesHelper.put(PrefKey.MAP_UNLOCKED, mapUnlocked);
+    }
+    
+    public boolean getIsMapUnlocked() {
+        return mPreferencesHelper.get(PrefKey.MAP_UNLOCKED, true);
     }
     
     public void putLastBounds(GeoLocation[] bounds) {

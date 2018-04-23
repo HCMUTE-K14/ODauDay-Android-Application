@@ -37,8 +37,8 @@
           <com.odauday.ui.search.common.view.FilterOptionLabelView
             android:id="@+id/filter_location"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
+            app:onToggle="@{() -> viewModel.showAutoCompleteSearchPlace()}"
             app:textHeader="@{@string/txt_filter_location}"
             app:textValue="@{@string/txt_map_area}" />
           <com.odauday.ui.search.common.view.FilterOptionLabelView
@@ -103,9 +103,18 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:onClick="@{viewModel::toggleMoreOptions}"
             android:text="@string/txt_filter_more_options"
+            android:textColor="@color/background_selector_toolbar"
+            android:textSize="16sp" />
+          <Button
+            android:id="@+id/btn_reset_filter"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{viewModel::resetFilter}"
+            android:text="@string/txt_reset_filter"
             android:textColor="@color/background_selector_toolbar"
             android:textSize="14sp" />
         </LinearLayout>

@@ -7,14 +7,16 @@ import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.data.remote.property.model.SearchResult;
 import com.odauday.exception.SearchException;
-import com.odauday.ui.search.common.event.OnCompleteDownloadProperty;
+import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.OnErrorDownloadPropertyEvent;
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Random;
 import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/6/18.
@@ -38,7 +40,6 @@ public class SearchPropertyRepository {
     
     private Single<SearchResult> callSearchAPI(SearchRequest searchRequest) {
         return mSearchService.search(searchRequest)
-                  .delay(10, TimeUnit.MINUTES)
                   .subscribeOn(mSchedulersExecutor.io())
                   .observeOn(mSchedulersExecutor.ui())
                   .map(response -> {
@@ -57,7 +58,6 @@ public class SearchPropertyRepository {
                   });
     }
     
-    
     public void search(SearchRequest searchRequest) {
         callSearchAPI(searchRequest)
                   .doOnSubscribe(running -> {
@@ -67,23 +67,22 @@ public class SearchPropertyRepository {
                   .subscribe(new DisposableSingleObserver<SearchResult>() {
                       @Override
                       public void onSuccess(SearchResult searchResult) {
-                          mBus.post(new OnCompleteDownloadProperty(
+                          mBus.post(new OnCompleteDownloadPropertyEvent(
                                     SearchPropertyState.COMPLETE_DOWNLOAD_DATA_FROM_SERVICE,
-                                    testResult()));
+                                    searchResult));
                       }
                       
                       @Override
                       public void onError(Throwable e) {
+                          Timber.d(e.getMessage());
                           //Post EVENT ERROR SEARCH
-                          //SearchException exception = new SearchException(e.getMessage());
-                          mBus.post(new OnCompleteDownloadProperty(
-                                    SearchPropertyState.COMPLETE_DOWNLOAD_DATA_FROM_SERVICE,
-                                    testResult()));
+                          SearchException exception = new SearchException(e.getMessage());
+                          mBus.post(new OnErrorDownloadPropertyEvent(SearchPropertyState.ERROR,
+                                    exception));
                       }
                   });
         
     }
-    
     
     public SearchRequest getCurrentSearchRequest() {
         return mSearchRequest;
@@ -129,7 +128,8 @@ public class SearchPropertyRepository {
         
         for (float i = 0.5f; i < 1; i += 0.005) {
             PropertyResultEntry _entry = new PropertyResultEntry();
-            _entry.setLocation(new GeoLocation(10.000000 + i, 106.000000 + i));
+            _entry.setLocation(
+                      new GeoLocation(10.000000 + new Random().nextFloat(), 106.000000 + i));
             _entry.setAddress("Address " + i);
             
             propertyResultEntries.add(_entry);

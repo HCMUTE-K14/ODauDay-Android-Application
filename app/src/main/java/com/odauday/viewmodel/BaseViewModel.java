@@ -19,7 +19,7 @@ public abstract class BaseViewModel extends ViewModel {
     }
     
     @Override
-    protected void onCleared() {
+    public void onCleared() {
         mCompositeDisposable.dispose();
         super.onCleared();
     }

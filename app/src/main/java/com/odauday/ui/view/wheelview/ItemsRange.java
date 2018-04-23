@@ -25,10 +25,10 @@ package com.odauday.ui.view.wheelview;
 public class ItemsRange {
     
     // First item number
-    private int first;
+    private final int first;
     
     // Items count
-    private int count;
+    private final int count;
     
     /**
      * Default constructor. Creates an empty range

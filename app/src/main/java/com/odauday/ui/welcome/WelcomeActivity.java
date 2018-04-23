@@ -16,7 +16,7 @@ import com.odauday.utils.permissions.PermissionHelper;
 
 public class WelcomeActivity extends AppCompatActivity {
     
-    private PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
+    private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
         public void onPermissionGranted() {
             runMainActivity();

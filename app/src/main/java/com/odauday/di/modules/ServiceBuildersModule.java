@@ -1,8 +1,12 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.place.RecentSearchPlaceDao;
+import com.odauday.data.local.place.RecentSearchPlaceService;
+import com.odauday.data.local.place.RecentSearchPlaceServiceImpl;
 import com.odauday.data.local.tag.RecentTagDao;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.local.tag.RecentTagServiceImpl;
+import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -36,12 +40,27 @@ public class ServiceBuildersModule {
         return retrofit.create(SearchService.class);
     }
     
+    @Provides
+    @Singleton
+    AutoCompletePlaceService provideAutoCompletePlaceService(
+              @Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(AutoCompletePlaceService.class);
+    }
+    
     //--------------------------LOCAL---------------------------//
     
     @Provides
     @Singleton
     RecentTagService provideRecentTagService(RecentTagDao recentTagDao) {
         return new RecentTagServiceImpl(recentTagDao);
+    }
+    
+    
+    @Provides
+    @Singleton
+    RecentSearchPlaceService provideRecentSearchPlaceService(
+              RecentSearchPlaceDao recentSearchPlaceDao) {
+        return new RecentSearchPlaceServiceImpl(recentSearchPlaceDao);
     }
     
 }

@@ -19,5 +19,6 @@
   <color name="transparent">#00ffffff</color>
   <item name="null_color" type="color">234234</item>
   <color name="green">#0ea800</color>
+  <color name="background_place_search">#eaebed</color>
 
 </resources>

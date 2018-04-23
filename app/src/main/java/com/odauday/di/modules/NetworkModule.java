@@ -119,6 +119,7 @@ public class NetworkModule {
         return mApiHelper.createRetrofit(baseURL,
                   client,
                   gson);
+        
     }
     
     @Provides

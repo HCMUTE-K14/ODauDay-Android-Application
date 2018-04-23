@@ -16,13 +16,13 @@ public class SearchResult implements BaseResponse {
     @Expose
     private long count;
     
-    @SerializedName("page")
+    @SerializedName("pages")
     @Expose
-    private int page;
+    private int pages;
     
-    @SerializedName("result")
+    @SerializedName("properties")
     @Expose
-    private List<PropertyResultEntry> result;
+    private List<PropertyResultEntry> properties;
     
     public SearchResult() {
 
@@ -31,8 +31,8 @@ public class SearchResult implements BaseResponse {
     public SearchResult(long count, int page,
               List<PropertyResultEntry> result) {
         this.count = count;
-        this.page = page;
-        this.result = result;
+        this.pages = page;
+        this.properties = result;
     }
     
     public long getCount() {
@@ -43,21 +43,21 @@ public class SearchResult implements BaseResponse {
         this.count = count;
     }
     
-    public int getPage() {
-        return page;
+    public int getPages() {
+        return pages;
     }
     
-    public void setPage(int page) {
-        this.page = page;
+    public void setPages(int page) {
+        this.pages = page;
     }
     
     public List<PropertyResultEntry> getResult() {
-        return result;
+        return properties;
     }
     
     public void setResult(
               List<PropertyResultEntry> result) {
-        this.result = result;
+        this.properties = result;
     }
     
     @Override
@@ -70,22 +70,22 @@ public class SearchResult implements BaseResponse {
         }
         SearchResult that = (SearchResult) o;
         return count == that.count &&
-               page == that.page &&
-               ObjectUtils.equals(result, that.result);
+               pages == that.pages &&
+               ObjectUtils.equals(properties, that.properties);
     }
     
     @Override
     public int hashCode() {
         
-        return ObjectUtils.hash(count, page, result);
+        return ObjectUtils.hash(count, pages, properties);
     }
     
     @Override
     public String toString() {
         return "SearchResult{" +
                "count=" + count +
-               ", page=" + page +
-               ", result=" + result +
+               ", pages=" + pages +
+               ", result=" + properties +
                '}';
     }
 }

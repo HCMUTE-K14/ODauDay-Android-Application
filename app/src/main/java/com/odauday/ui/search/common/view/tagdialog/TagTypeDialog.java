@@ -66,7 +66,7 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
         
         if (getArguments() == null) {
             throw new IllegalArgumentException(
-                      "Need EXTRA_INTENT_SECLTED_TAG && EXTRA_INTENT_RECENT_TAG");
+                      "Need EXTRA_INTENT_SELECTED_TAG && EXTRA_INTENT_RECENT_TAG");
         }
         
         List<Tag> selectedTags = getArguments()

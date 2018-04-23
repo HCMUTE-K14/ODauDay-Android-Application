@@ -8,6 +8,8 @@ import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
 import com.odauday.ui.savedsearch.SavedSearchProvider;
 import com.odauday.ui.search.SearchTabProvider;
+import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
+import com.odauday.ui.search.autocomplete.AutoCompletePlaceModule;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
@@ -36,6 +38,10 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = ForgotPasswordModule.class)
     @PerActivity
     abstract ForgotPasswordActivity bindForgotPasswordActivity();
+    
+    @ContributesAndroidInjector(modules = AutoCompletePlaceModule.class)
+    @PerActivity
+    abstract AutoCompletePlaceActivity bindAutoCompletePlaceActitivty();
     
     @ContributesAndroidInjector(modules = {
               SearchTabProvider.class,

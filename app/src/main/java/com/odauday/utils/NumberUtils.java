@@ -13,6 +13,6 @@ public class NumberUtils {
         android.location.Location pointA = a.toAndroidLocation();
         android.location.Location pointB = b.toAndroidLocation();
         
-        return pointA.distanceTo(pointB);
+        return pointA.distanceTo(pointB) * 0.001;
     }
 }

@@ -4,8 +4,6 @@
   android:id="@+id/main_layout"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:paddingTop="8dp"
-  android:paddingBottom="8dp"
   android:background="@drawable/list_item_selector"
   android:clickable="true">
 
