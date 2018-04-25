@@ -19,6 +19,7 @@ public class RxAutoCompleteSearchBox {
     private final OnSearchQuery mOnSearchQuery;
     
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    
     private Disposable mDisposable;
     
     public RxAutoCompleteSearchBox(EditText editText, OnSearchQuery onSearchQuery) {

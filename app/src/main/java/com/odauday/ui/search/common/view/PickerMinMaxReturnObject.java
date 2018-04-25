@@ -11,8 +11,7 @@ public class PickerMinMaxReturnObject {
     
     private MinMaxObject<String> display;
     private MinMaxObject<Integer> value;
-    
-    
+
     public PickerMinMaxReturnObject(MinMaxObject<String> display, MinMaxObject<Integer> value) {
         this.display = display;
         this.value = value;

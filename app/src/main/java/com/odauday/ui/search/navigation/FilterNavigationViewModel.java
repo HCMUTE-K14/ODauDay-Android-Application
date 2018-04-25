@@ -1,5 +1,7 @@
 package com.odauday.ui.search.navigation;
 
+import static com.odauday.config.AppConfig.RATE_VND;
+
 import android.view.View;
 import com.odauday.R;
 import com.odauday.data.RecentTagRepository;
@@ -11,6 +13,7 @@ import com.odauday.ui.search.common.MinMaxObject;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.SearchType;
 import com.odauday.ui.search.common.view.FilterNumberPickerDialog;
+import com.odauday.ui.search.common.view.PickerMinMaxReturnObject;
 import com.odauday.ui.search.common.view.propertydialog.PropertyTypeDialog;
 import com.odauday.ui.search.common.view.tagdialog.TagTypeDialog;
 import com.odauday.utils.TextUtils;
@@ -28,8 +31,14 @@ import timber.log.Timber;
  */
 public class FilterNavigationViewModel extends BaseViewModel {
     
+    public static final String TAG = FilterNavigationViewModel.class.getSimpleName();
+
+    public static final String TASK_CREATE_TAGS = "create_tag";
+    
     private final RecentTagRepository mRecentTagRepository;
+
     private FilterNavigationFragment mFragment;
+
     private boolean mIsShowMoreOptions = false;
     
     
@@ -41,8 +50,9 @@ public class FilterNavigationViewModel extends BaseViewModel {
     public void insertCurrentTags(List<Tag> tags) {
         Disposable disposable = mRecentTagRepository
                   .save(tags)
-                  .subscribe(success -> response.setValue(Resource.success(success)),
-                            error -> response.setValue(Resource.error(error)));
+                  .subscribe(success -> response
+                                      .setValue(Resource.success(TASK_CREATE_TAGS, success)),
+                            error -> response.setValue(Resource.error(TASK_CREATE_TAGS, error)));
         
         mCompositeDisposable.add(disposable);
     }
@@ -134,7 +144,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
                           mFragment.getString(R.string.txt_filter_price_rate));
                 
                 MinMaxObject<Integer> priceFromTo = mFragment.getSearchCriteria().getPrice();
-    
+                
                 switch (searchType) {
                     case BUY:
                         pd = initNumberPickerDialog(true, title, R.array.price_buy,
@@ -274,6 +284,59 @@ public class FilterNavigationViewModel extends BaseViewModel {
         if (mFragment.getOnCompleteRefineFilter() != null) {
             mFragment.getOnCompleteRefineFilter()
                       .onCompleteRefineFilter(mFragment.getSearchCriteria());
+        }
+    }
+    
+    public String getMaxMinText(FilterOption option, PickerMinMaxReturnObject object) {
+        String any = mFragment.getString(R.string.txt_any);
+        String orLess = mFragment.getString(R.string.txt_or_less);
+        String orMore = mFragment.getString(R.string.txt_or_more);
+        String displayMax = object.getDisplay().getMax();
+        String displayMin = object.getDisplay().getMin();
+        
+        if (option != FilterOption.PRICE) {
+            if (displayMax.equals(any) && displayMin.equals(any)) {
+                return any;
+            }
+            
+            if (displayMax.equals(displayMin)) {
+                return displayMin;
+            }
+            
+            if (option == FilterOption.PARKING) {
+                return object.getDisplay().getMin();
+            }
+            
+            if (displayMax.equals(any)) {
+                return TextUtils.build(displayMin, " ", orMore);
+            }
+            if (displayMin.equals(any)) {
+                return TextUtils.build(displayMax, " ", orLess);
+            }
+            
+            return object.displayToString();
+        } else {
+            long valueMin = Long.valueOf(object.getValue().getMin());
+            long valueMax = Long.valueOf(object.getValue().getMax());
+            
+            if (valueMax == valueMin && valueMin == 0) {
+                return any;
+            }
+            if (valueMax == valueMin) {
+                return TextUtils.formatIntToCurrency(valueMax * RATE_VND);
+            }
+            
+            if (valueMax == 0) {
+                return TextUtils
+                          .build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), " ", orMore);
+            }
+            if (valueMin == 0) {
+                return TextUtils
+                          .build(TextUtils.formatIntToCurrency(valueMax * RATE_VND), " ", orLess);
+            }
+            
+            return TextUtils.build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), "-",
+                      TextUtils.formatIntToCurrency(valueMax * RATE_VND));
         }
     }
 }

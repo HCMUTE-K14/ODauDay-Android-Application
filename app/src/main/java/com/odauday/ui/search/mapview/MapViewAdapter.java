@@ -5,10 +5,10 @@ import android.graphics.Bitmap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.odauday.R;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.utils.BitmapUtils;
+import com.odauday.utils.MapUtils;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,14 +27,14 @@ public class MapViewAdapter {
     
     private final HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
     private final Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
-    private final BitmapDescriptor mMarkSelectedBitmapDescriptor;
     
-    private OnUpdatedListLocation mOnUpdatedListLocation;
+    private final BitmapDescriptor mMarkSelectedBitmapDescriptor;
     private final Context mContext;
+    private OnUpdatedListLocation mOnUpdatedListLocation;
     
     public MapViewAdapter(Context context) {
         this.mContext = context;
-        mMarkSelectedBitmapDescriptor = buildMarkSelectedBitmapDescriptor();
+        mMarkSelectedBitmapDescriptor = MapUtils.buildMarkSelectedBitmapDescriptor(context);
     }
     
     
@@ -83,12 +83,6 @@ public class MapViewAdapter {
         return this.mMapDisplayItems.get(location);
     }
     
-    private BitmapDescriptor buildMarkSelectedBitmapDescriptor() {
-        int resourceId = R.drawable.ic_map_pin_selected;
-        Bitmap resizeMarker = BitmapUtils.resize(mContext, resourceId, 110, 45);
-        
-        return BitmapDescriptorFactory.fromBitmap(resizeMarker);
-    }
     
     public BitmapDescriptor getMarkSelectedBitmapDescriptor() {
         return mMarkSelectedBitmapDescriptor;

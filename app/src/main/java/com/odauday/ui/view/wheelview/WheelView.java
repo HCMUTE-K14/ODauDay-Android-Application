@@ -64,6 +64,12 @@ public class WheelView extends View {
      * Default count of visible items
      */
     private static final int DEF_VISIBLE_ITEMS = 5;
+    // Recycle
+    private final WheelRecycle recycle = new WheelRecycle(this);
+    // Listeners
+    private final List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
+    private final List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
+    private final List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
     // Cyclic
     boolean isCyclic = false;
     // Wheel Values
@@ -82,19 +88,22 @@ public class WheelView extends View {
     private int scrollingOffset;
     // Items layout
     private LinearLayout itemsLayout;
-    
     // The number of first item in layout
     private int firstItem;
-    
+    // Adapter listener
+    private final DataSetObserver dataObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            invalidateWheel(false);
+        }
+        
+        @Override
+        public void onInvalidated() {
+            invalidateWheel(true);
+        }
+    };
     // View adapter
     private WheelViewAdapter viewAdapter;
-    
-    // Recycle
-    private final WheelRecycle recycle = new WheelRecycle(this);
-    
-    // Listeners
-    private final List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
-    private final List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
     // Scrolling listener
     final WheelScroller.ScrollingListener scrollingListener = new WheelScroller.ScrollingListener() {
         public void onStarted() {
@@ -129,19 +138,6 @@ public class WheelView extends View {
             if (Math.abs(scrollingOffset) > WheelScroller.MIN_DELTA_FOR_SCROLLING) {
                 scroller.scroll(scrollingOffset, 0);
             }
-        }
-    };
-    private final List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
-    // Adapter listener
-    private final DataSetObserver dataObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            invalidateWheel(false);
-        }
-        
-        @Override
-        public void onInvalidated() {
-            invalidateWheel(true);
         }
     };
     

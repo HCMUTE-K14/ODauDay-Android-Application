@@ -22,8 +22,8 @@ public class FlatNavigationBar extends FrameLayout {
     
     private static final int MAX_NOTIFICATIONS_SHOWN = 99;
     
-    
     private BottomNavigationBar mBottomNavigationBar;
+
     private TextBadgeItem mAlertBubbleItem;
     
     public FlatNavigationBar(@NonNull Context context) {

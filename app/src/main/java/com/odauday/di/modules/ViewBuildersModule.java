@@ -3,6 +3,8 @@ package com.odauday.di.modules;
 import com.odauday.MainActivity;
 import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
+import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
+import com.odauday.ui.addeditproperty.AddEditPropertyModule;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
@@ -10,6 +12,8 @@ import com.odauday.ui.savedsearch.SavedSearchProvider;
 import com.odauday.ui.search.SearchTabProvider;
 import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
 import com.odauday.ui.search.autocomplete.AutoCompletePlaceModule;
+import com.odauday.ui.selectlocation.SelectLocationActivity;
+import com.odauday.ui.selectlocation.SelectLocationModule;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
@@ -30,7 +34,6 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract LoginActivity bindLoginActivity();
     
-    
     @ContributesAndroidInjector(modules = RegisterModule.class)
     @PerActivity
     abstract RegisterActivity bindRegisterActivity();
@@ -42,6 +45,14 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = AutoCompletePlaceModule.class)
     @PerActivity
     abstract AutoCompletePlaceActivity bindAutoCompletePlaceActitivty();
+    
+    @ContributesAndroidInjector(modules = AddEditPropertyModule.class)
+    @PerActivity
+    abstract AddEditPropertyActivity bindAddEditPropertyActivity();
+    
+    @ContributesAndroidInjector(modules = SelectLocationModule.class)
+    @PerActivity
+    abstract SelectLocationActivity bindSelectLocationActivity();
     
     @ContributesAndroidInjector(modules = {
               SearchTabProvider.class,

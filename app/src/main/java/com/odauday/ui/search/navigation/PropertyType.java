@@ -50,13 +50,16 @@ public enum PropertyType {
             case 5:
                 return PropertyType.LAND;
             default:
-                return null;
+                return PropertyType.APARTMENT;
         }
         
     }
     
     public static List<Integer> convertToArrayInt(List<PropertyType> list) {
         List<Integer> integers = new ArrayList<>();
+        if (list == null) {
+            return integers;
+        }
         if (list.isEmpty()) {
             return integers;
         }

@@ -16,9 +16,11 @@ public class RxCameraIdleListener {
     private static final int DEBOUNCE_TIME = 250;
     
     private final GoogleMap mMap;
+
     private final TriggerCameraIdle mTriggerCameraIdle;
     
     private final CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
     private Disposable mDisposable;
     
     public RxCameraIdleListener(GoogleMap map, TriggerCameraIdle cameraIdle) {
@@ -28,7 +30,8 @@ public class RxCameraIdleListener {
     
     private Disposable createCameraIdleDisposable() {
         
-        return Observable.<String>create(subscriber -> mMap.setOnCameraIdleListener(() -> subscriber.onNext("OK")))
+        return Observable.<String>create(
+                  subscriber -> mMap.setOnCameraIdleListener(() -> subscriber.onNext("OK")))
                   .throttleLast(DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
                   .subscribeOn(AndroidSchedulers.mainThread())
                   .observeOn(AndroidSchedulers.mainThread())

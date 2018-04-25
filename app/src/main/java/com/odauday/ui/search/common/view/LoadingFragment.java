@@ -19,9 +19,9 @@ public class LoadingFragment extends Fragment {
     private LoadingFragmentListener mLoadingFragmentListener;
     
     public static LoadingFragment newInstance() {
-
+        
         Bundle args = new Bundle();
-
+        
         LoadingFragment fragment = new LoadingFragment();
         fragment.setArguments(args);
         return fragment;

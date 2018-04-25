@@ -17,10 +17,10 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     
     private final FilterNumberPickerDialog mPickerDialog;
     private final LayoutInflater mLayoutInflater;
-    private int[] mDisplayIntegers;
-    private String[] mDisplayString;
     private final boolean mIsMinAdapter;
     private final boolean mIsUsingMinMax;
+    private int[] mDisplayIntegers;
+    private String[] mDisplayString;
     
     public WheelAdapterImpl(FilterNumberPickerDialog pickerDialog, String[] displayStrings,
               boolean isMinAdapter, boolean isUsingMinMax) {

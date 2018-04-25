@@ -37,9 +37,12 @@ public class AutoCompletePlaceActivity extends
     
     @Inject
     AutoCompletePlaceViewModel mAutoCompletePlaceViewModel;
+    
     @Inject
     EventBus mBus;
+    
     private RxAutoCompleteSearchBox mRxAutoCompleteSearchBox;
+    
     private AutoCompletePlaceAdapter mCompletePlaceAdapter;
     
     @Override
@@ -140,7 +143,7 @@ public class AutoCompletePlaceActivity extends
     
     @Override
     public void loading(boolean isLoading) {
-
+    
     }
     
     @Override

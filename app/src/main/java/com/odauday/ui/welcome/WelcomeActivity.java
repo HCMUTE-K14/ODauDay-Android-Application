@@ -5,7 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.odauday.MainActivity;
-import com.odauday.ui.search.mapview.MapUtils;
+import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
+import com.odauday.utils.MapUtils;
 import com.odauday.utils.ViewUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
@@ -44,6 +45,11 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
               @NonNull int[] grantResults) {
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    
+    private void runAddEditActivity() {
+        ViewUtils.startActivity(this, AddEditPropertyActivity.class);
+        finish();
     }
     
     private void runMainActivity() {

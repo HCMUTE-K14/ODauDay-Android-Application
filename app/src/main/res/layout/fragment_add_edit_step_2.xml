@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="38dp"
+      android:paddingLeft="30dp"
+      android:paddingRight="30dp"
+      android:orientation="vertical">
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+          android:id="@+id/txt_land_size"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_land_size"
+          android:inputType="number"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+          android:id="@+id/txt_bedroom"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_filter_num_of_bedroom"
+          android:inputType="number"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+          android:id="@+id/txt_bathroom"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_filter_num_of_bathroom"
+          android:inputType="number"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+          android:id="@+id/txt_parking"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_filter_num_of_parking"
+          android:inputType="number"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    <include
+      android:id="@+id/button_nav"
+      layout="@layout/include_button_navigation_add_edit_property" />
+  </LinearLayout>
+
+</layout>

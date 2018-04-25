@@ -13,11 +13,11 @@ import com.odauday.R;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
-import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.data.remote.property.model.SearchResult;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
+import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
 import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
@@ -95,7 +95,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         Bundle args = new Bundle();
         
         SearchTabMainFragment fragment = new SearchTabMainFragment();
-        Timber.d("New Instance searchRemote tab");
         fragment.setArguments(args);
         
         return fragment;
@@ -208,7 +207,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
     
     @Override
@@ -248,11 +247,21 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         initMainLayout();
     }
     
+    
+    @Override
+    public void onSaveSearch(String savedSearchName) {
+    
+    }
+    
     private void updateTextSearchBar(String text) {
         mBinding.get().toolbar.searchBar.setText(text);
     }
     
     private void initBinding() {
+        
+        mBinding.get().mainContent.addProperty.setOnClickListener(addProperty -> {
+            ViewUtils.startActivity(getActivity(), AddEditPropertyActivity.class);
+        });
         
         mBinding.get().btnMapList.setOnClickMapListListener(new OnClickMapListListener() {
             @Override
@@ -278,12 +287,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mBinding.get().inforBar.setListener(new InformationBarListener() {
             @Override
             public void onClickSaveSearch() {
-                SearchCriteria searchCriteria = mSearchPropertyRepository.getCurrentSearchRequest()
-                          .getCriteria();
-                GeoLocation center = mSearchPropertyRepository.getCurrentSearchRequest().getCore()
-                          .getCenter();
-                SavedSearchDialog searchDialog = SavedSearchDialog
-                          .newInstance(searchCriteria, center);
+                SavedSearchDialog searchDialog = SavedSearchDialog.newInstance();
                 searchDialog.setSaveSearchListener(SearchTabMainFragment.this);
                 searchDialog.setTargetFragment(SearchTabMainFragment.this,
                           SavedSearchDialog.REQUEST_CODE);
@@ -294,7 +298,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             
             @Override
             public void onCLickSort() {
-
+            
             }
             
             @Override
@@ -371,6 +375,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                   .setFragmentManager(getActivity().getSupportFragmentManager())
                   .setContainerId(R.id.fragment_map_view)
                   .setFragment(mMapViewFragment)
+                  .setAnimationIn(android.R.anim.fade_in)
+                  .setAnimationOut(android.R.anim.fade_out)
                   .setAddToBackTrack(false)
                   .build();
         
@@ -421,8 +427,4 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         return mChildFragmentInjector;
     }
     
-    @Override
-    public void onSaveSearch(SearchCriteria searchCriteria, GeoLocation location) {
-
-    }
 }

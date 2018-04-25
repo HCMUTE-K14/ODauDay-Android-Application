@@ -7,6 +7,7 @@ import com.odauday.data.local.tag.RecentTagDao;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.local.tag.RecentTagServiceImpl;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
+import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -45,6 +46,13 @@ public class ServiceBuildersModule {
     AutoCompletePlaceService provideAutoCompletePlaceService(
               @Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(AutoCompletePlaceService.class);
+    }
+    
+    @Provides
+    @Singleton
+    GeoInfoService provideGeoInfoService(
+              @Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(GeoInfoService.class);
     }
     
     //--------------------------LOCAL---------------------------//

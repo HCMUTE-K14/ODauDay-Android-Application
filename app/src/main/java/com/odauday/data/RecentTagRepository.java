@@ -19,7 +19,9 @@ import javax.inject.Inject;
 public class RecentTagRepository implements Repository {
     
     private final RecentTagService mRecentTagService;
+
     private final PreferencesHelper mPreferencesHelper;
+
     private final SchedulersExecutor mSchedulersExecutor;
     
     @Inject

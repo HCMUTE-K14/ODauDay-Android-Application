@@ -1,7 +1,5 @@
 package com.odauday.ui.search.navigation;
 
-import static com.odauday.config.AppConfig.RATE_VND;
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -112,10 +110,10 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
             if (resource != null) {
                 switch (resource.status) {
                     case ERROR:
-                        onFailure((Exception) resource.data);
+                        onErrorCreateTag((Exception) resource.data);
                         break;
                     case SUCCESS:
-                        onSuccess(resource.data);
+                        onSuccessCreateTag((long) (resource.data));
                         break;
                     case LOADING:
                         break;
@@ -138,7 +136,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     public void onNeedUpdateCriteria(OnUpdateCriteriaEvent event) {
         SearchCriteria searchCriteria = mSearchPropertyRepository.getCurrentSearchRequest()
                   .getCriteria();
-
+        
         setSearchCriteria(searchCriteria);
     }
     
@@ -149,7 +147,8 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         switch (option) {
             case PRICE:
                 mSearchCriteria.setPrice(minMaxReturnObject.getValue());
-                String textPrice = getMaxMinText(option, minMaxReturnObject);
+                String textPrice = mFilterNavigationViewModel
+                          .getMaxMinText(option, minMaxReturnObject);
                 if (textPrice.split("-").length == 2) {
                     String[] textPricePart = textPrice.split("-");
                     String text = TextUtils.build(
@@ -176,25 +175,29 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 break;
             case SIZE:
                 mSearchCriteria.setSize(minMaxReturnObject.getValue());
-                String textSize = getMaxMinText(option, minMaxReturnObject);
+                String textSize = mFilterNavigationViewModel
+                          .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterSize.setTextValue(textSize);
                 mSearchCriteria.getDisplay().setDisplaySize(textSize);
                 break;
             case BEDROOMS:
                 mSearchCriteria.setBedrooms(minMaxReturnObject.getValue());
-                String textBed = getMaxMinText(option, minMaxReturnObject);
+                String textBed = mFilterNavigationViewModel
+                          .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBedrooms.setTextValue(textBed);
                 mSearchCriteria.getDisplay().setDisplayBedroom(textBed);
                 break;
             case BATHROOMS:
                 mSearchCriteria.setBathrooms(minMaxReturnObject.getValue());
-                String textBath = getMaxMinText(option, minMaxReturnObject);
+                String textBath = mFilterNavigationViewModel
+                          .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBathRooms.setTextValue(textBath);
                 mSearchCriteria.getDisplay().setDisplayBathroom(textBath);
                 break;
             case PARKING:
                 mSearchCriteria.setParking(minMaxReturnObject.getValue());
-                String textPark = getMaxMinText(option, minMaxReturnObject);
+                String textPark = mFilterNavigationViewModel
+                          .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterParking.setTextValue(textPark);
                 mSearchCriteria.getDisplay().setDisplayParking(textPark);
                 break;
@@ -236,20 +239,14 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     }
     
     //====================== Contract method =========================//
+    
     @Override
-    public void loading(boolean isLoading) {
-
+    public void onSuccessCreateTag(long data) {
+        Timber.tag(TAG).i("Insert tags successfully");
     }
     
     @Override
-    public void onSuccess(Object object) {
-        if (object instanceof Long) {
-            Timber.tag(TAG).i("Insert tags successfully");
-        }
-    }
-    
-    @Override
-    public void onFailure(Exception ex) {
+    public void onErrorCreateTag(Exception ex) {
         Timber.tag(TAG).i(ex.getMessage());
     }
     //====================== Helper method =========================//
@@ -302,60 +299,6 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         mBinding.get().filterBathRooms.reset();
         mBinding.get().filterParking.reset();
         mBinding.get().filterTag.reset();
-    }
-    
-    
-    private String getMaxMinText(FilterOption option, PickerMinMaxReturnObject object) {
-        String any = getString(R.string.txt_any);
-        String orLess = getString(R.string.txt_or_less);
-        String orMore = getString(R.string.txt_or_more);
-        String displayMax = object.getDisplay().getMax();
-        String displayMin = object.getDisplay().getMin();
-        
-        if (option != FilterOption.PRICE) {
-            if (displayMax.equals(any) && displayMin.equals(any)) {
-                return any;
-            }
-            
-            if (displayMax.equals(displayMin)) {
-                return displayMin;
-            }
-            
-            if (option == FilterOption.PARKING) {
-                return object.getDisplay().getMin();
-            }
-            
-            if (displayMax.equals(any)) {
-                return TextUtils.build(displayMin, " ", orMore);
-            }
-            if (displayMin.equals(any)) {
-                return TextUtils.build(displayMax, " ", orLess);
-            }
-            
-            return object.displayToString();
-        } else {
-            long valueMin = Long.valueOf(object.getValue().getMin());
-            long valueMax = Long.valueOf(object.getValue().getMax());
-            
-            if (valueMax == valueMin && valueMin == 0) {
-                return any;
-            }
-            if (valueMax == valueMin) {
-                return TextUtils.formatIntToCurrency(valueMax * RATE_VND);
-            }
-            
-            if (valueMax == 0) {
-                return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), " ", orMore);
-            }
-            if (valueMin == 0) {
-                return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMax * RATE_VND), " ", orLess);
-            }
-            
-            return TextUtils.build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), "-",
-                      TextUtils.formatIntToCurrency(valueMax * RATE_VND));
-        }
     }
     
     public OnCompleteRefineFilter getOnCompleteRefineFilter() {

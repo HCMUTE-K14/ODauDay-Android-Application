@@ -26,7 +26,6 @@ public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseF
     //====================== Variable Method =========================//
     protected AutoClearedData<VB> mBinding;
     
-    
     //====================== Override Method =========================//
     
     @Nullable

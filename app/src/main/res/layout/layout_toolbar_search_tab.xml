@@ -51,8 +51,6 @@
         android:text="@string/txt_filter_all_case"
         android:textColor="@color/white" />
     </LinearLayout>
-
-
   </android.support.v7.widget.Toolbar>
 </layout>
 

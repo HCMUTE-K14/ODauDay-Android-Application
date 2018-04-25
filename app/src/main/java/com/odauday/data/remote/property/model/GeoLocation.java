@@ -45,8 +45,8 @@ public class GeoLocation implements Parcelable {
     }
     
     protected GeoLocation(Parcel in) {
-        latitude = in.readFloat();
-        longitude = in.readFloat();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
         name = in.readString();
     }
     

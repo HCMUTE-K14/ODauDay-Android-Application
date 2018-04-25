@@ -20,7 +20,9 @@
           android:id="@+id/infor_bar"
           android:layout_width="match_parent"
           android:layout_height="wrap_content" />
-        <include layout="@layout/layout_main_content_search_tab" />
+        <include
+          android:id="@+id/main_content"
+          layout="@layout/layout_main_content_search_tab" />
 
         <!--<include-->
         <!--android:id="@+id/loading_layout"-->
@@ -28,6 +30,7 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:visibility="gone" />-->
+
       </RelativeLayout>
       <com.odauday.ui.view.maplistbutton.MapListToggleButton
         android:id="@+id/btn_map_list"

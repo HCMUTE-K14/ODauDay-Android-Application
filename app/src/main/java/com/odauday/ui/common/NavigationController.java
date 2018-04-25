@@ -21,7 +21,9 @@ public class NavigationController {
     public static final long DELAY_ATTACH_FRAGMENT = 100;
     
     private final int mContainerId;
+    
     private final FragmentManager mFragmentManager;
+    
     private final Handler mHandler;
     
     @Inject

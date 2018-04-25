@@ -20,6 +20,4 @@ public class MainActivityModule {
     MainActivityViewModel provideMainActivityViewModel() {
         return new MainActivityViewModel();
     }
-    
-    
 }

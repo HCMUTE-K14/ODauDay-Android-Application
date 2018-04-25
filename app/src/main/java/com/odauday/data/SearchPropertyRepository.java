@@ -23,12 +23,12 @@ import timber.log.Timber;
  */
 
 public class SearchPropertyRepository {
-    
-    private final EventBus mBus;
+
     private final SearchService mSearchService;
+    private final EventBus mBus;
     private final SchedulersExecutor mSchedulersExecutor;
     private SearchRequest mSearchRequest;
-    
+
     @Inject
     public SearchPropertyRepository(EventBus eventBus,
               SearchService searchService,

@@ -29,14 +29,12 @@ import java.util.List;
  */
 public class WheelRecycle {
     
-    // Cached items
-    private List<View> items;
-    
-    // Cached empty items
-    private List<View> emptyItems;
-    
     // Wheel view
     private final WheelView wheel;
+    // Cached items
+    private List<View> items;
+    // Cached empty items
+    private List<View> emptyItems;
     
     /**
      * Constructor

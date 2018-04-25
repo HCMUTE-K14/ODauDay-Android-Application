@@ -18,25 +18,29 @@ public class AutoCompletePlace implements BaseResponse, Parcelable {
         public AutoCompletePlace createFromParcel(Parcel in) {
             return new AutoCompletePlace(in);
         }
-
+        
         @Override
         public AutoCompletePlace[] newArray(int size) {
             return new AutoCompletePlace[size];
         }
     };
+    
     @SerializedName("id")
     @Expose
     private String id;
+    
     @SerializedName("name")
     @Expose
     private String name;
+    
     @SerializedName("location")
     @Expose
     private GeoLocation location;
+    
     private boolean isSearched;
     
     public AutoCompletePlace() {
-
+    
     }
     
     public AutoCompletePlace(String id, String name,

@@ -105,5 +105,35 @@
   <string name="txt_map_is_locked">Map is locked</string>
   <string name="txt_save_search_heading">Save your search</string>
   <string name="txt_save">Save</string>
-
+  <string name="txt_back">Back</string>
+  <string name="txt_next">Next</string>
+  <string name="txt_address">Address</string>
+  <string name="txt_click_to_select_address">Tap to select address on map</string>
+  <string name="txt_click_to_select_property_type">Tap to select category</string>
+  <string name="txt_price">Price</string>
+  <string name="txt_phone_number">Phone Number</string>
+  <string name="txt_phone">Phone</string>
+  <string name="txt_add_property_step">Add Property (%1$s/%2$s)</string>
+  <string name="txt_land_size">Land size</string>
+  <string name="txt_description">Description</string>
+  <string name="txt_choose_image">Click to choose image</string>
+  <string name="txt_select_location">Select Location</string>
+  <string name="message_location_is_required">Address is required</string>
+  <string name="message_category_is_required">Category is required</string>
+  <string name="message_price_is_reuiqred">Price is required</string>
+  <string name="message_land_size_is_required">Land size is required</string>
+  <string name="message_bedroom_is_required">Bedroom is required</string>
+  <string name="message_bathroom_is_required">Bathroom is required</string>
+  <string name="message_parking_is_required">Parking is required</string>
+  <string name="txt_folder">Folder</string>
+  <string name="txt_tap_to_select_image">Tap to select image</string>
+  <string name="txt_no_album">No Album</string>
+  <string name="txt_selected_with_max_limit">%d selected</string>
+  <string name="txt_selected_with_limit">%1$d/%2$d selected</string>
+  <string name="action_sort_by">Sort By</string>
+  <string name="action_sort_a_z">A-Z</string>
+  <string name="action_sort_z_a">Z-A</string>
+  <string name="action_sort_date_added">Date Added</string>
+  <string name="message_permission_read_request">This app will need to read external storage to display image on your device</string>
+  <string name="txt_gallery">Gallery</string>
 </resources>

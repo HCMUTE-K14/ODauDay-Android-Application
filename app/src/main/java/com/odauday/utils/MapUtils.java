@@ -1,10 +1,17 @@
-package com.odauday.ui.search.mapview;
+package com.odauday.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Location;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -12,10 +19,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.odauday.R;
 import com.odauday.data.remote.property.model.CoreSearchRequest;
 import com.odauday.data.remote.property.model.GeoLocation;
-import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
 import com.odauday.utils.permissions.PermissionHelper.Permission;
@@ -29,7 +37,9 @@ public class MapUtils {
     
     public static final String[] LOCATION_PERMISSION = new String[]{
               Permission.ACCESS_COARSE_LOCATION, Permission.FINE_LOCATION};
+    
     private static final double SMALL_DISTANCE_THRESHOLD = 0.002d;
+    
     private static final double DISTANCE_THRESHOLD = 0.02d;
     
     public static CoreSearchRequest getCoreSearchRequestFromCurrentLocation(GoogleMap map,
@@ -100,6 +110,11 @@ public class MapUtils {
         return map.getProjection().getVisibleRegion().latLngBounds.contains(location.toLatLng());
     }
     
+    public static boolean isVisibleInBounds(GoogleMap map, LatLng location) {
+        return map.getProjection().getVisibleRegion().latLngBounds.contains(location);
+    }
+    
+    
     public static void requireLocationPermission(Activity activity,
               PermissionCallBack permissionCallBack) {
         if (PermissionHelper.shouldShowRequestPermissionRationale(activity,
@@ -116,7 +131,27 @@ public class MapUtils {
                                 permissionCallBack);
         }
     }
-
+    
+    public static BitmapDescriptor buildMarkSelectedBitmapDescriptor(Context context) {
+        int resourceId = R.drawable.ic_map_pin_selected_no_padding;
+        Bitmap resizeMarker = BitmapUtils.resize(context, resourceId, 110, 45);
+        
+        return BitmapDescriptorFactory.fromBitmap(resizeMarker);
+    }
+    
+    @SuppressLint("MissingPermission")
+    public static void moveToMyLocation(Activity context,
+              OnSuccessListener<Location> onSuccessListener, OnFailureListener onFailureListener) {
+        if (context == null) {
+            return;
+        }
+        LocationServices
+                  .getFusedLocationProviderClient(context)
+                  .getLastLocation()
+                  .addOnSuccessListener(context, onSuccessListener)
+                  .addOnFailureListener(onFailureListener);
+    }
+    
     
     public static boolean isCamPositionEqual(CameraPosition cam1, CameraPosition cam2) {
         if (cam1 == null || cam2 == null) {

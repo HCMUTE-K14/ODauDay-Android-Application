@@ -84,10 +84,6 @@ public class FilterOptionLabelView extends LinearLayout {
         return mTextViewValue;
     }
     
-    public void setTextValue(int value) {
-        mTextViewValue.setText(value);
-    }
-    
     public void setTextValue(String value) {
         if (TextUtils.isEmpty(value)) {
             if (this.getId() == R.id.filter_location) {
@@ -97,6 +93,10 @@ public class FilterOptionLabelView extends LinearLayout {
             }
             return;
         }
+        mTextViewValue.setText(value);
+    }
+    
+    public void setTextValue(int value) {
         mTextViewValue.setText(value);
     }
     

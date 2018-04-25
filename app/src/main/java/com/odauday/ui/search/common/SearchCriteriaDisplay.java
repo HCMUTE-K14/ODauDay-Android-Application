@@ -14,7 +14,7 @@ public class SearchCriteriaDisplay implements Parcelable {
         public SearchCriteriaDisplay createFromParcel(Parcel in) {
             return new SearchCriteriaDisplay(in);
         }
-
+        
         @Override
         public SearchCriteriaDisplay[] newArray(int size) {
             return new SearchCriteriaDisplay[size];
@@ -30,7 +30,7 @@ public class SearchCriteriaDisplay implements Parcelable {
     private String displayLocation;
     
     public SearchCriteriaDisplay() {
-
+    
     }
     
     protected SearchCriteriaDisplay(Parcel in) {

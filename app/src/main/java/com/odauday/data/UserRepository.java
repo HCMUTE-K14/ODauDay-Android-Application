@@ -33,6 +33,7 @@ public class UserRepository implements Repository {
     
     private final UserService.Public mPublicUserService;
     private final UserService.Protect mProtectUserService;
+
     private final PreferencesHelper mPreferencesHelper;
     
     private final SchedulersExecutor mSchedulersExecutor;

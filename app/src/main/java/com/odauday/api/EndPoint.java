@@ -24,4 +24,6 @@ public class EndPoint {
     
     public static final String AUTOCOMPLETE_PLACE = "auto-complete-place";
     
+    public static final String GEO_INFO = "geo-info";
+    
 }

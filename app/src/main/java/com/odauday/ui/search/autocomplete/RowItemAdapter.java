@@ -18,6 +18,7 @@ public class RowItemAdapter extends BaseAdapter<AutoCompletePlace, RowItemSearch
     
     
     private final OnClickItemSearchPlace mOnClickItemSearchPlace;
+    
     private final boolean mIsNeedShowRemoveButton;
     
     public RowItemAdapter(OnClickItemSearchPlace onClickItemSearchPlace,

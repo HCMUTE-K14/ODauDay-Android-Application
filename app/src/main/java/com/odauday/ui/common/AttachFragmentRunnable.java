@@ -15,12 +15,19 @@ public class AttachFragmentRunnable implements Runnable {
     public static final int TYPE_REPLACE = 1;
     
     private final int mContainerId;
+    
     private final Fragment mFragment;
+    
     private final FragmentManager mFragmentManager;
+    
     private final String mTagFragment;
+    
     private final int mTypeAttach;
+    
     private final boolean mAddToBackTrack;
+    
     private final int mAnimationIn;
+    
     private final int mAnimationOut;
     
     
@@ -51,15 +58,15 @@ public class AttachFragmentRunnable implements Runnable {
         
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         
+        if (mAnimationIn != 0 && mAnimationOut != 0) {
+            transaction.setCustomAnimations(mAnimationIn, mAnimationOut);
+        }
+        
         if (mTypeAttach == TYPE_ADD) {
             transaction.add(mContainerId, mFragment, mTagFragment);
             
         } else if (mTypeAttach == TYPE_REPLACE) {
             transaction.replace(mContainerId, mFragment, mTagFragment);
-        }
-        
-        if (mAnimationIn != 0 && mAnimationOut != 0) {
-            transaction.setCustomAnimations(mAnimationIn, mAnimationOut);
         }
         
         if (mAddToBackTrack) {

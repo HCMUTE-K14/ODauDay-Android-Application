@@ -18,13 +18,13 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import java.util.Stack;
 import javax.inject.Inject;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import timber.log.Timber;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
                                                                         HasSupportFragmentInjector {
     
+    final Stack<String> mTabStack = new Stack<>();
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
     
@@ -33,12 +33,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     @Inject
     MainActivityViewModel mMainActivityViewModel;
-    
-    @Inject
-    EventBus mBus;
-    
-    final Stack<String> mTabStack = new Stack<>();
-    
+
     protected int getLayoutId() {
         return R.layout.activity_main;
     }

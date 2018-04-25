@@ -10,6 +10,9 @@ import android.support.annotation.Nullable;
 public class Resource<T> {
     
     @NonNull
+    public final String task;
+    
+    @NonNull
     public final Status status;
     
     @Nullable
@@ -18,30 +21,32 @@ public class Resource<T> {
     @Nullable
     public final T data;
     
-    public Resource(@NonNull Status status, @Nullable T data, @Nullable String message) {
+    public Resource(@NonNull Status status, @NonNull String task, @Nullable T data,
+              @Nullable String message) {
         this.status = status;
         this.data = data;
+        this.task = task;
         this.message = message;
     }
     
-    public static <T> Resource<T> success(@Nullable T data) {
-        return new Resource<>(Status.SUCCESS, data, null);
+    public static <T> Resource<T> success(String task, @Nullable T data) {
+        return new Resource<>(Status.SUCCESS, task, data, null);
     }
     
-    public static <T> Resource<T> error(String msg, @Nullable T data) {
-        return new Resource<>(Status.ERROR, data, msg);
+    public static <T> Resource<T> error(String task, String msg, @Nullable T data) {
+        return new Resource<>(Status.ERROR, task, data, msg);
     }
     
-    public static Resource error(Throwable ex) {
-        return new Resource<>(Status.ERROR, ex, ex.getMessage());
+    public static Resource error(String task, Throwable ex) {
+        return new Resource<>(Status.ERROR, task, ex, ex.getMessage());
     }
     
-    public static Resource error(Exception ex) {
-        return new Resource<>(Status.ERROR, ex, ex.getMessage());
+    public static Resource error(String task, Exception ex) {
+        return new Resource<>(Status.ERROR, task, ex, ex.getMessage());
     }
     
     public static <T> Resource<T> loading(@Nullable T data) {
-        return new Resource<>(Status.LOADING, data, null);
+        return new Resource<>(Status.LOADING, "loading", data, null);
     }
     
     @Override

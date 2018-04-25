@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="38dp">
+      <Button
+        android:id="@+id/btn_choose_image"
+        style="@style/Widget.Button.Flat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/txt_choose_image"
+        android:textColor="@color/colorPrimaryDark" />
+      <ImageView
+        android:id="@+id/no_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/btn_choose_image"
+        android:contentDescription="@string/content_description_default"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_select_image" />
+      <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_choose_image"
+        android:visibility="gone" />
+    </RelativeLayout>
+    <include
+      android:id="@+id/button_nav"
+      layout="@layout/include_button_navigation_add_edit_property" />
+  </LinearLayout>
+</layout>

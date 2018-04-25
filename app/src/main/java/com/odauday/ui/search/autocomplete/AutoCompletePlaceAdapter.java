@@ -17,6 +17,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
     
     private List<AutoCompletePlace> mRecentSearches;
     private List<AutoCompletePlace> mSuggestedLocationList;
+
     private OnClickItemSearchPlace mOnClickItemSearchPlace;
     
     public AutoCompletePlaceAdapter(OnClickItemSearchPlace onClickItemSearchPlace) {

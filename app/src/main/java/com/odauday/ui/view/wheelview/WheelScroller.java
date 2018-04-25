@@ -53,6 +53,23 @@ public class WheelScroller {
     private final GestureDetector gestureDetector;
     private Scroller scroller;
     private int lastScrollY;
+    // gesture listener
+    private final SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            // Do scrolling in onTouchEvent() since onScroll() are not call immediately
+            //  when user touch and move the wheel
+            return true;
+        }
+
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            lastScrollY = 0;
+            final int maxY = 0x7FFFFFFF;
+            final int minY = -maxY;
+            scroller.fling(0, lastScrollY, 0, (int) -velocityY, 0, 0, minY, maxY);
+            setNextMessage(MESSAGE_SCROLL);
+            return true;
+        }
+    };
     private float lastTouchedY;
     private boolean isScrollingPerformed;
     // animation handler
@@ -66,7 +83,7 @@ public class WheelScroller {
             if (delta != 0) {
                 listener.onScroll(delta);
             }
-            
+
             // scrolling is not finished when it comes to final Y
             // so, finish it manually
             if (Math.abs(currY - scroller.getFinalY()) < MIN_DELTA_FOR_SCROLLING) {
@@ -83,23 +100,6 @@ public class WheelScroller {
             return true;
         }
     });
-    // gesture listener
-    private final SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            // Do scrolling in onTouchEvent() since onScroll() are not call immediately
-            //  when user touch and move the wheel
-            return true;
-        }
-        
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            lastScrollY = 0;
-            final int maxY = 0x7FFFFFFF;
-            final int minY = -maxY;
-            scroller.fling(0, lastScrollY, 0, (int) -velocityY, 0, 0, minY, maxY);
-            setNextMessage(MESSAGE_SCROLL);
-            return true;
-        }
-    };
     
     /**
      * Constructor

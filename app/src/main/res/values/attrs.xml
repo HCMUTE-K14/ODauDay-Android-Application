@@ -8,5 +8,8 @@
     <attr format="color" name="civ_fill_color" />
     <attr format="color" name="civ_circle_background_color" />
   </declare-styleable>
-
+  <declare-styleable name="CurrencyEditText">
+    <attr name="allow_negative_values" format="boolean" />
+    <attr name="decimal_digits" format="integer" />
+  </declare-styleable>
 </resources>

@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 public class ForgotPasswordViewModel extends BaseViewModel {
     
+    public static final String TASK_FORGOTPASSWORD = "forgotpassword";
     private final UserRepository mUserRepository;
     
     @Inject
@@ -25,8 +26,10 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         
         Disposable disposable = mUserRepository.forgotPassword(request)
                   .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
-                  .subscribe(success -> response.setValue(Resource.success(success)),
-                            error -> response.setValue(Resource.error(error)));
+                  .subscribe(
+                            success -> response
+                                      .setValue(Resource.success(TASK_FORGOTPASSWORD, success)),
+                            error -> response.setValue(Resource.error(TASK_FORGOTPASSWORD, error)));
         
         mCompositeDisposable.add(disposable);
     }

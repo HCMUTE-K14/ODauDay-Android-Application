@@ -2,6 +2,7 @@ package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.AutoCompletePlaceRepository;
+import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.UserRepository;
@@ -9,6 +10,7 @@ import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
+import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -60,6 +62,13 @@ public class RepositoryBuildersModule {
                   recentSearchPlaceService,
                   preferencesHelper,
                   schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    GeoInfoRepository provideGeoInfoRepository(GeoInfoService geoInfoService,
+              SchedulersExecutor schedulersExecutor) {
+        return new GeoInfoRepository(geoInfoService, schedulersExecutor);
     }
     
     //--------------------------LOCAL---------------------------//

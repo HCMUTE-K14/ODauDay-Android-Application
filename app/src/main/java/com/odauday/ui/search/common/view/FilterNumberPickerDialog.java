@@ -22,6 +22,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
     
     public boolean mHasToWheel;
     public boolean mIsCurrency;
+
     public FilterNumberPicker mFilterNumberPickerFrom;
     public FilterNumberPicker mFilterNumberPickerTo;
     

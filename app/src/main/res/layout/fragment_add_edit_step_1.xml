@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+    <LinearLayout
+      android:id="@+id/content_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="38dp"
+      android:paddingLeft="30dp"
+      android:paddingRight="30dp"
+      android:focusable="true"
+      android:orientation="vertical">
+      <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_vertical">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:text="Type"
+          android:textSize="18sp" />
+        <RadioGroup
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:gravity="center"
+          android:orientation="horizontal">
+
+          <RadioButton
+            android:id="@+id/radio_btn_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/txt_buy"
+            android:textSize="16sp" />
+
+          <RadioButton
+            android:id="@+id/radio_btn_rent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/txt_rent"
+            android:textSize="16sp" />
+        </RadioGroup>
+      </RelativeLayout>
+
+      <EditText
+        android:id="@+id/select_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:focusable="false"
+        android:hint="@string/txt_click_to_select_address"
+        android:inputType="text"
+        android:textColor="#303030"
+        android:textSize="16sp" />
+      <EditText
+        android:id="@+id/select_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:focusable="false"
+        android:hint="@string/txt_click_to_select_property_type"
+        android:inputType="text"
+        android:onClick="openChoosePropertyTypeDialog"
+        android:textColor="#303030"
+        android:textSize="16sp" />
+      <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp">
+
+        <com.odauday.ui.view.currencyedittext.CurrencyEditText
+          android:id="@+id/txt_price"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_price"
+          android:inputType="textEmailAddress"
+          android:textColor="#303030"
+          android:textSize="16sp"
+          app:decimal_digits="0" />
+      </android.support.design.widget.TextInputLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/txt_phone"
+          android:textSize="16sp" />
+        <com.odauday.ui.view.RowItemView
+          android:id="@+id/phone_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/txt_email"
+          android:textSize="16sp" />
+        <com.odauday.ui.view.RowItemView
+          android:id="@+id/email_container"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+      </LinearLayout>
+      <include
+        android:id="@+id/button_nav"
+        layout="@layout/include_button_navigation_add_edit_property" />
+    </LinearLayout>
+  </ScrollView>
+
+</layout>

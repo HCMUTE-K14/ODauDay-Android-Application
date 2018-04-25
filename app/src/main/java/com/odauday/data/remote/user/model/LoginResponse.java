@@ -15,7 +15,7 @@ public class LoginResponse implements BaseResponse {
     private String accessToken;
     
     public LoginResponse() {
-
+    
     }
     
     

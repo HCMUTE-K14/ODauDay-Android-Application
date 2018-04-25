@@ -53,6 +53,7 @@ import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.mapview.MapOverlayView.MapOverlayListener;
 import com.odauday.ui.search.mapview.MapViewAdapter.OnUpdatedListLocation;
+import com.odauday.utils.MapUtils;
 import com.odauday.utils.NetworkUtils;
 import com.odauday.utils.ViewUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
@@ -85,7 +86,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     public static final String TAG = MapViewFragment.class.getSimpleName();
     
-    private static final float MIN_ZOOM_LEVEL = 5.45f;
+    public static final float MIN_ZOOM_LEVEL = 5.45f;
     private static final int DEBOUNCE_TIME = 500;
     
     @Inject
@@ -98,26 +99,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     EventBus mBus;
     
     private GoogleMap mMap;
-    
-    private GoogleApiClient mLocationClient;
-    
-    private MapOverlayView mMapOverlayView;
-    private MapFragmentClickCallBack mMapFragmentClickCallBack;
-    
-    private GeoLocation mLastGeoLocation;
-    private GeoLocation[] mLastBounds;
-    
-    private HashMap<GeoLocation, Marker> mMapMarkers = new HashMap<>();
-    private Collection<GeoLocation> mPendingToShowLocations;
-    private MapViewAdapter mMapViewAdapter;
-    
-    private float mZoomLevel;
-    private RxCameraIdleListener mRxCameraIdleListener;
-    private boolean mIsSearchWithSuggestionLocation;
-    private AutoCompletePlace mAutoCompletePlace;
-    private boolean mMapUnlocked;
-    
-    
     private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
         public void onPermissionGranted() {
@@ -127,10 +108,22 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         
         @Override
         public void onPermissionDenied() {
-
+        
         }
     };
-    
+    private GoogleApiClient mLocationClient;
+    private MapOverlayView mMapOverlayView;
+    private MapFragmentClickCallBack mMapFragmentClickCallBack;
+    private GeoLocation mLastGeoLocation;
+    private GeoLocation[] mLastBounds;
+    private HashMap<GeoLocation, Marker> mMapMarkers = new HashMap<>();
+    private Collection<GeoLocation> mPendingToShowLocations;
+    private MapViewAdapter mMapViewAdapter;
+    private float mZoomLevel;
+    private RxCameraIdleListener mRxCameraIdleListener;
+    private boolean mIsSearchWithSuggestionLocation;
+    private AutoCompletePlace mAutoCompletePlace;
+    private boolean mMapUnlocked;
     private Marker mOpenedMarker;
     private GeoLocation mOpenedLocation;
     
@@ -454,12 +447,12 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+    
     }
     
     @Override
     public void onConnectionSuspended(int i) {
-
+    
     }
     
     @Override
@@ -510,26 +503,19 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         this.mOpenedLocation = GeoLocation.fromLatLng(this.mOpenedMarker.getPosition());
     }
     
-    private void moveToMyLocation() {
-        if (getActivity() == null) {
-            return;
-        }
-        LocationServices
-                  .getFusedLocationProviderClient(getActivity())
-                  .getLastLocation()
-                  .addOnSuccessListener(this.getActivity(),
-                            location -> {
-                                if (location == null) {
-                                    showEnableGps();
-                                } else {
-                                    MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
-                                                        location.getLongitude()),
-                                              MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
-                                }
-                            })
-                  .addOnFailureListener(this.getActivity(), e -> Toast.makeText(getActivity(), R.string.message_cannot_find_your_location,
-                            Toast.LENGTH_SHORT)
-                            .show());
+    public void moveToMyLocation() {
+        MapUtils.moveToMyLocation(getActivity(), location -> {
+            if (location == null) {
+                showEnableGps();
+            } else {
+                MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
+                                    location.getLongitude()),
+                          MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
+            }
+        }, e -> Toast.makeText(getActivity(),
+                  R.string.message_cannot_find_your_location,
+                  Toast.LENGTH_SHORT)
+                  .show());
     }
     
     private void showEnableGps() {
@@ -555,7 +541,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                                           mLastBounds[1].toLatLng()),
                                 0));
         } catch (Exception ignored) {
-
+        
         }
     }
     

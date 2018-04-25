@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 public class RegisterViewModel extends BaseViewModel {
     
+    public static final String TASK_REGISTER = "register";
     private final UserRepository mUserRepository;
     
     @Inject
@@ -25,8 +26,8 @@ public class RegisterViewModel extends BaseViewModel {
         
         Disposable disposable = mUserRepository.register(request)
                   .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
-                  .subscribe(success -> response.setValue(Resource.success(success)),
-                            error -> response.setValue(Resource.error(error)));
+                  .subscribe(success -> response.setValue(Resource.success(TASK_REGISTER, success)),
+                            error -> response.setValue(Resource.error(TASK_REGISTER, error)));
         
         mCompositeDisposable.add(disposable);
     }

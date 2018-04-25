@@ -14,8 +14,7 @@ public enum MarkerType {
     
     
     private int resourceId;
-    
-    
+
     MarkerType(int resourceId) {
         this.resourceId = resourceId;
     }

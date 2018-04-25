@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 public class LoginViewModel extends BaseViewModel {
     
+    public static final String TASK_LOGIN = "login";
     private final UserRepository mUserRepository;
     
     @Inject
@@ -25,8 +26,8 @@ public class LoginViewModel extends BaseViewModel {
         
         Disposable disposable = mUserRepository.login(request)
                   .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
-                  .subscribe(success -> response.setValue(Resource.success("")),
-                            error -> response.setValue(Resource.error(error)));
+                  .subscribe(success -> response.setValue(Resource.success(TASK_LOGIN, "")),
+                            error -> response.setValue(Resource.error(TASK_LOGIN, error)));
         
         mCompositeDisposable.add(disposable);
     }

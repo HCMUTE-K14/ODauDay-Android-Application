@@ -20,8 +20,11 @@ import javax.inject.Inject;
 public class AutoCompletePlaceRepository implements Repository {
     
     private final AutoCompletePlaceService mAutoCompletePlaceService;
-    private final SchedulersExecutor mSchedulersExecutor;
+    
     private final RecentSearchPlaceService mRecentSearchPlaceService;
+    
+    private final SchedulersExecutor mSchedulersExecutor;
+    
     private final PreferencesHelper mPreferencesHelper;
     
     @Inject

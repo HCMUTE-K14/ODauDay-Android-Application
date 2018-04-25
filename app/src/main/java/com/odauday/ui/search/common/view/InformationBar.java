@@ -37,7 +37,9 @@ import java.util.concurrent.TimeUnit;
 public class InformationBar extends LinearLayout {
     
     private static final int DEBOUNCE_TIMEOUT = 500;
+    
     private InformationBarListener mListener;
+    
     private boolean mIsShowErrorContainer = false;
     
     public InformationBar(Context context) {
