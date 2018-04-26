@@ -16,7 +16,7 @@ public class AppConfig {
     
     public static final int RATE_VND = 1000;
     
-    public static final GeoLocation DEFAULT_GEO_LOCATION = new GeoLocation(10.780300f, 106.660862f);
+    public static final GeoLocation DEFAULT_GEO_LOCATION = new GeoLocation(16.158653, 107.476252);
     
     public static final int THREAD_POOL = 2;
     

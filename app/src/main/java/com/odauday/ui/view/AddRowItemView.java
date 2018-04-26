@@ -9,7 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.odauday.R;
+import com.odauday.ui.addeditproperty.step1.PhoneAndEmailEnum;
 import com.odauday.utils.ImageLoader;
+import com.odauday.utils.ValidationHelper;
 
 /**
  * Created by infamouSs on 4/24/18.
@@ -46,6 +48,19 @@ public class AddRowItemView extends LinearLayout {
     
     public ImageView getPlusOrMinusBtn() {
         return getRootView().findViewById(R.id.plus_or_minus_btn);
+    }
+    
+    public boolean isValid(int type) {
+        if (type == PhoneAndEmailEnum.EMAIL.getId()) {
+            
+            String email = getTextView().getText().toString();
+            return !ValidationHelper.isEmail(email);
+        } else if (type == PhoneAndEmailEnum.PHONE.getId()) {
+            String phone = getTextView().getText().toString();
+            return !ValidationHelper.isPhoneNumber(phone);
+        } else {
+            return false;
+        }
     }
     
     public ImageView getImageView() {

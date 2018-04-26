@@ -65,6 +65,7 @@ public class SearchTypeChooser extends LinearLayout {
     
     private void setupSpinner(Context context) {
         List<String> searchTypes = getSearchTypes(context);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                   android.R.layout.simple_spinner_item,
                   searchTypes);
@@ -81,7 +82,7 @@ public class SearchTypeChooser extends LinearLayout {
             
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+            
             }
         });
         mSpinner.setSelection(SearchType.ALL.getValue());

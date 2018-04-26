@@ -13,6 +13,7 @@ import com.odauday.ui.addeditproperty.step1.OnCompleteStep1Event;
 import com.odauday.ui.addeditproperty.step1.Step1Fragment;
 import com.odauday.ui.addeditproperty.step2.OnCompleteStep2Event;
 import com.odauday.ui.addeditproperty.step2.Step2Fragment;
+import com.odauday.ui.addeditproperty.step3.OnCompleteStep3Event;
 import com.odauday.ui.addeditproperty.step3.Step3Fragment;
 import com.odauday.ui.addeditproperty.step4.Step4Fragment;
 import com.odauday.ui.base.BaseMVVMActivity;
@@ -121,7 +122,7 @@ public class AddEditPropertyActivity extends
         return super.onOptionsItemSelected(item);
     }
     
-    @Subscribe()
+    @Subscribe
     public void onCompleteStep1(OnCompleteStep1Event event) {
         MyProperty property = event.getData();
         
@@ -134,7 +135,7 @@ public class AddEditPropertyActivity extends
         mCurrentProperty.setCategories(property.getCategories());
     }
     
-    @Subscribe()
+    @Subscribe
     public void onCompleteStep2(OnCompleteStep2Event event) {
         MyProperty property = event.getData();
         
@@ -143,6 +144,15 @@ public class AddEditPropertyActivity extends
         mCurrentProperty.setNumOfBathRoom(property.getNumOfBathRoom());
         mCurrentProperty.setNumOfParking(property.getNumOfParking());
     }
+    
+    @Subscribe
+    public void onCompleteStep3(OnCompleteStep3Event event) {
+        MyProperty property = event.getData();
+        
+        mCurrentProperty.setDescription(property.getDescription());
+        mCurrentProperty.setTags(property.getTags());
+    }
+    
     
     
     @Override

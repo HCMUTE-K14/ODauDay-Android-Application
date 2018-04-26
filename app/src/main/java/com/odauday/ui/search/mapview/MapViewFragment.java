@@ -74,7 +74,6 @@ import timber.log.Timber;
 
 @SuppressLint("MissingPermission")
 public class MapViewFragment extends SupportMapFragment implements OnMapReadyCallback,
-          //                                                                   OnCameraIdleListener,
                                                                    TriggerCameraIdle,
                                                                    OnMarkerClickListener,
                                                                    OnMapClickListener,

@@ -29,6 +29,7 @@ android {
 
         buildConfigField "String", "BASE_URL", "\"${getProperty("local.properties", "base_url")}\""
         buildConfigField "String", "API_KEY", "\"${getProperty("local.properties", "api_key")}\""
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -121,7 +122,7 @@ dependencies {
 
     implementation "org.greenrobot:eventbus:${eventBusVersion}"
     implementation "com.jakewharton.rxbinding2:rxbinding:${rxViewBindingVersion}"
-
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:1.12.0'
 
 
     testImplementation 'junit:junit:4.12'

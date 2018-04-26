@@ -9,6 +9,12 @@ import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.Builder;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -20,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.odauday.R;
+import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.MapPreferenceHelper;
 import com.odauday.databinding.ActivitySelectLocationBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
@@ -42,7 +49,9 @@ public class SelectLocationActivity extends
                                                                                     OnCameraIdleListener,
                                                                                     OnMyLocationClickListener,
                                                                                     OnMarkerClickListener,
-                                                                                    SelectLocationContract {
+                                                                                    SelectLocationContract,
+                                                                                    ConnectionCallbacks,
+                                                                                    OnConnectionFailedListener {
     
     public static final String TAG = SelectLocationActivity.class.getSimpleName();
     public static final String EXTRA_ADDRESS_AND_LOCATION = "extra_address_and_location";
@@ -56,6 +65,10 @@ public class SelectLocationActivity extends
     @Inject
     SelectLocationViewModel mSelectLocationViewModel;
     
+    private Marker mCurrentMarker;
+    
+    private GoogleApiClient mLocationClient;
+    
     private AddressAndLocationObject mAddressAndLocationObject;
     
     private AddressAndLocationObject mLastLocation;
@@ -68,7 +81,8 @@ public class SelectLocationActivity extends
         
         @Override
         public void onPermissionDenied() {
-        
+            Toast.makeText(SelectLocationActivity.this,
+                      R.string.message_permission_location_request, Toast.LENGTH_SHORT).show();
         }
     };
     
@@ -83,6 +97,12 @@ public class SelectLocationActivity extends
         if (getIntent() != null) {
             mLastLocation = getIntent().getParcelableExtra(EXTRA_LAST_LOCATION);
         }
+        
+        this.mLocationClient = new Builder(this)
+                  .addApi(LocationServices.API)
+                  .addConnectionCallbacks(this)
+                  .addOnConnectionFailedListener(this)
+                  .build();
         initToolBar();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                   .findFragmentById(R.id.map);
@@ -166,7 +186,7 @@ public class SelectLocationActivity extends
     public void onMapReady(GoogleMap googleMap) {
         if (googleMap != null) {
             mMap = googleMap;
-            
+            mLocationClient.connect();
             mMap.setMinZoomPreference(MapViewFragment.MIN_ZOOM_LEVEL);
             mMap.setOnMapClickListener(this);
             mMap.setOnMarkerClickListener(this);
@@ -196,11 +216,15 @@ public class SelectLocationActivity extends
         
         MapUtils.moveToMyLocation(this,
                   location -> {
-                      MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
-                                          location.getLongitude()),
-                                MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
+                      if (location != null) {
+                          MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
+                                              location.getLongitude()),
+                                    MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
+                      }
                   },
                   e -> {
+                      MapUtils.moveMap(mMap, AppConfig.DEFAULT_GEO_LOCATION.toLatLng(),
+                                MapViewFragment.MIN_ZOOM_LEVEL, true);
                       Toast.makeText(this,
                                 R.string.message_cannot_find_your_location,
                                 Toast.LENGTH_SHORT)
@@ -208,9 +232,12 @@ public class SelectLocationActivity extends
                   });
     }
     
+    
     @Override
     public void onMapClick(LatLng latLng) {
         mMap.clear();
+        MarkerOptions markerOptions = createMakerOptionAtLocation(latLng);
+        mCurrentMarker = mMap.addMarker(markerOptions);
         search(latLng);
     }
     
@@ -229,30 +256,44 @@ public class SelectLocationActivity extends
     public void onMyLocationClick(@NonNull Location location) {
         mMap.clear();
         LatLng thatMyLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = createMakerOptionAtLocation(thatMyLocation);
+        mCurrentMarker = mMap.addMarker(markerOptions);
         search(thatMyLocation);
     }
     
     @Override
     public void onSuccessGetInfoLocation(AddressAndLocationObject object) {
-        MarkerOptions markerOptions = createMakerOptionAtLocation(object.getLocation());
-        markerOptions.title(object.getAddress());
-        Marker marker = mMap.addMarker(markerOptions);
+        mCurrentMarker.setTitle(object.getAddress());
         mAddressAndLocationObject = object;
-        marker.showInfoWindow();
+        mCurrentMarker.showInfoWindow();
     }
     
     private MarkerOptions createMakerOptionAtLocation(LatLng latLng) {
         return new MarkerOptions()
                   .position(latLng)
-                  .icon(MapUtils.buildMarkSelectedBitmapDescriptor(this));
+                  .icon(MapUtils.buildMarkSelectedBitmapDescriptorNoPadding(this));
     }
     
     @Override
     public void onErrorGetInfoLocation(Exception ex) {
-    
     }
     
     private void search(LatLng location) {
         mSelectLocationViewModel.search(location);
+    }
+    
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+    
+    }
+    
+    @Override
+    public void onConnectionSuspended(int i) {
+    
+    }
+    
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    
     }
 }

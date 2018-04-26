@@ -1,10 +1,12 @@
 package com.odauday.ui.addeditproperty.step4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import com.esafirm.imagepicker.features.ImagePicker;
 import com.odauday.R;
 import com.odauday.databinding.FragmentAddEditStep4Binding;
 import com.odauday.model.MyProperty;
@@ -19,6 +21,8 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     
     
     public static final String TAG = Step4Fragment.class.getSimpleName();
+    private static final int LIMIT_IMAGE = 6;
+    private static final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     
     public static final int STEP = 4;
     
@@ -62,13 +66,19 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
         mNextButton.setText(R.string.txt_done);
         
         mBinding.get().btnChooseImage.setOnClickListener(chooseImage -> {
-//            GalleryLoader.create(this)
-//                      .setMode(GalleryLoader.MODE_MULTIPLE)
-//                      .setFolderMode(true)
-//                      .setLimit(9)
-//                      .setSelectedImage(mSelectedImages)
-//                      .start(GalleryLoader.REQUEST_GALLERY_LOADER);
+            ImagePicker.create(this)
+                      .folderMode(true)
+                      .theme(R.style.AppTheme)
+                      .limit(LIMIT_IMAGE)
+                      .start(REQUEST_CODE_CHOOSE_IMAGE);
         });
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CHOOSE_IMAGE && data != null) {
+        
+        }
     }
     
     @Override

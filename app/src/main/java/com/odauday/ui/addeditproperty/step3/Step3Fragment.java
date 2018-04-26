@@ -9,7 +9,6 @@ import com.odauday.databinding.FragmentAddEditStep3Binding;
 import com.odauday.model.MyProperty;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.BaseStepFragment;
-import com.odauday.utils.TextUtils;
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -76,15 +75,6 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
         EventBus.getDefault().post(new OnCompleteStep3Event(mProperty));
         mNavigationStepListener.navigate(getStep(), getNextStep());
     }
-    
-    private boolean isSelectDescription() {
-        return !TextUtils.isEmpty(mBinding.get().txtDescription.getText().toString());
-    }
-    
-    private boolean isSelectTag() {
-        return !TextUtils.isEmpty(mBinding.get().txtTags.getText().toString());
-    }
-    
     
     @Override
     public int getStep() {

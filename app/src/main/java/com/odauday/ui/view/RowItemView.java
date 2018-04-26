@@ -63,7 +63,7 @@ public class RowItemView extends LinearLayout {
             List<MyEmail> emails = new ArrayList<>();
             for (int i = 0; i < sizeView; i++) {
                 AddRowItemView addRowItemView = (AddRowItemView) mRowItemContainer.getChildAt(i);
-                if (addRowItemView != null) {
+                if (addRowItemView != null && addRowItemView.isValid(type)) {
                     String value = addRowItemView.getTextView().getText().toString();
                     emails.add(new MyEmail("", value));
                 }
@@ -73,7 +73,7 @@ public class RowItemView extends LinearLayout {
             List<MyPhone> phones = new ArrayList<>();
             for (int i = 0; i < sizeView; i++) {
                 AddRowItemView addRowItemView = (AddRowItemView) mRowItemContainer.getChildAt(i);
-                if (addRowItemView != null) {
+                if (addRowItemView != null && addRowItemView.isValid(type)) {
                     String value = addRowItemView.getTextView().getText().toString();
                     phones.add(new MyPhone("", value));
                 }

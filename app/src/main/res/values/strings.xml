@@ -136,4 +136,5 @@
   <string name="action_sort_date_added">Date Added</string>
   <string name="message_permission_read_request">This app will need to read external storage to display image on your device</string>
   <string name="txt_gallery">Gallery</string>
+  <string name="message_phone_is_required">Phone is required</string>
 </resources>

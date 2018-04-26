@@ -34,7 +34,7 @@ public class MapViewAdapter {
     
     public MapViewAdapter(Context context) {
         this.mContext = context;
-        mMarkSelectedBitmapDescriptor = MapUtils.buildMarkSelectedBitmapDescriptor(context);
+        mMarkSelectedBitmapDescriptor = MapUtils.buildMarkSelectedBitmapDescriptorWithPadding(context);
     }
     
     

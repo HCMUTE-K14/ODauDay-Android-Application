@@ -27,7 +27,6 @@ import com.odauday.ui.view.RowItemView.RowAddedCallBack;
 import com.odauday.utils.TextUtils;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/24/18.
@@ -98,38 +97,11 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     
     @SuppressWarnings("unchecked")
     public void onNextStep(View view) {
-        boolean flag = true;
+        boolean isValidate = validate();
         
-        boolean isValidSelectLocation = isSelectedLocation();
-        
-        if (!isValidSelectLocation) {
-            mBinding.get().selectLocation
-                      .setError(getString(R.string.message_location_is_required));
-            mBinding.get().selectLocation.requestFocus();
-            Toast.makeText(this.getContext(), R.string.message_location_is_required,
-                      Toast.LENGTH_SHORT).show();
+        if (!isValidate) {
             return;
         }
-        
-        boolean isValidSelectCategory = isSelectedCategory();
-        
-        if (!isValidSelectCategory) {
-            mBinding.get().selectCategory
-                      .setError(getString(R.string.message_category_is_required));
-            mBinding.get().selectCategory.requestFocus();
-            Toast.makeText(this.getContext(), R.string.message_category_is_required,
-                      Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
-        boolean isValidPrice = isSelectedPrice();
-        
-        if (!isValidPrice) {
-            mBinding.get().txtPrice.setError(getString(R.string.message_price_is_reuiqred));
-            mBinding.get().selectCategory.requestFocus();
-            return;
-        }
-        mProperty.setPrice(mBinding.get().txtPrice.getRawValue().doubleValue());
         
         String typeId = null;
         if (mBinding.get().radioBtnBuy.isChecked()) {
@@ -138,18 +110,61 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
             typeId = "RENT";
         }
         
-        
         mProperty.setEmails((List<MyEmail>) mBinding.get().emailContainer
                   .getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
         mProperty.setPhones((List<MyPhone>) mBinding.get().phoneContainer
                   .getRawValue(PhoneAndEmailEnum.PHONE.getId()));
         
         mProperty.setType_id(typeId);
-        Timber.d(mProperty.toString());
-    
+        
         EventBus.getDefault().post(new OnCompleteStep1Event(mProperty));
         
         mNavigationStepListener.navigate(getStep(), getNextStep());
+    }
+    
+    @SuppressWarnings("unchecked")
+    private boolean validate() {
+        if (!isSelectedLocation()) {
+            mBinding.get().selectLocation
+                      .setError(getString(R.string.message_location_is_required));
+            mBinding.get().selectLocation.requestFocus();
+            Toast.makeText(this.getContext(), R.string.message_location_is_required,
+                      Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!isSelectedCategory()) {
+            mBinding.get().selectCategory
+                      .setError(getString(R.string.message_category_is_required));
+            mBinding.get().selectCategory.requestFocus();
+            Toast.makeText(this.getContext(), R.string.message_category_is_required,
+                      Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!isSelectedPrice()) {
+            mBinding.get().txtPrice.setError(getString(R.string.message_price_is_reuiqred));
+            mBinding.get().selectCategory.requestFocus();
+            return false;
+        }
+        
+        List<MyEmail> listEmail = mBinding.get().emailContainer
+                  .getRawValue(PhoneAndEmailEnum.EMAIL.getId());
+        
+        if (listEmail.isEmpty()) {
+            Toast.makeText(this.getContext(), R.string.message_email_is_required,
+                      Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        
+        List<MyPhone> listPhones = mBinding.get().phoneContainer
+                  .getRawValue(PhoneAndEmailEnum.PHONE.getId());
+        
+        if (listPhones.isEmpty()) {
+            Toast.makeText(this.getContext(), R.string.message_phone_is_required,
+                      Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        
+        return true;
     }
     
     private boolean isSelectedLocation() {
@@ -163,7 +178,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     }
     
     private boolean isSelectedPrice() {
-        return true;
+        return mBinding.get().txtPrice.getRawValue().doubleValue() > 0;
     }
     
     private void initListener() {
@@ -175,7 +190,6 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     public void openActivitySelectAddress(View view) {
         Intent intent = new Intent(this.getContext(), SelectLocationActivity.class);
         if (mProperty.getLocation() != null) {
-            Timber.d(mProperty.getLocation().toString());
             intent.putExtra(SelectLocationActivity.EXTRA_LAST_LOCATION,
                       new AddressAndLocationObject(mProperty.getAddress(),
                                 mProperty.getLocation().toLatLng()));

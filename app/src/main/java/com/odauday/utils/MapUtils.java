@@ -132,8 +132,15 @@ public class MapUtils {
         }
     }
     
-    public static BitmapDescriptor buildMarkSelectedBitmapDescriptor(Context context) {
+    public static BitmapDescriptor buildMarkSelectedBitmapDescriptorNoPadding(Context context) {
         int resourceId = R.drawable.ic_map_pin_selected_no_padding;
+        Bitmap resizeMarker = BitmapUtils.resize(context, resourceId, 110, 45);
+        
+        return BitmapDescriptorFactory.fromBitmap(resizeMarker);
+    }
+    
+    public static BitmapDescriptor buildMarkSelectedBitmapDescriptorWithPadding(Context context) {
+        int resourceId = R.drawable.ic_map_pin_selected;
         Bitmap resizeMarker = BitmapUtils.resize(context, resourceId, 110, 45);
         
         return BitmapDescriptorFactory.fromBitmap(resizeMarker);
