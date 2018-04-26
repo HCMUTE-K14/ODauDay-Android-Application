@@ -176,7 +176,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     private void bindViewOnToolBar(View view) {
         mBinding.get().toolbar.searchBar.setOnClickListener(viewSearchBar -> {
-            Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "SavedSearch bar", Toast.LENGTH_SHORT).show();
         });
         mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> {
             openDrawer();

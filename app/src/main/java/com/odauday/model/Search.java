@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by kunsubin on 4/9/2018.
  */
 
-public class Search {
+public class SavedSearch {
     @SerializedName("id")
     @Expose
     private String id;
@@ -18,27 +18,27 @@ public class Search {
     
     @SerializedName("latitude")
     @Expose
-    private float latitude;
+    private double latitude;
     
     @SerializedName("longitude")
     @Expose
-    private float longitude;
+    private double longitude;
     
     @SerializedName("latitude_ns")
     @Expose
-    private float latitude_ns;
+    private double latitude_ns;
     
     @SerializedName("longitude_ns")
     @Expose
-    private float longitude_ns;
+    private double longitude_ns;
     
     @SerializedName("latitude_sw")
     @Expose
-    private float latitude_sw;
+    private double latitude_sw;
     
     @SerializedName("longitude_sw")
     @Expose
-    private float longitude_sw;
+    private double longitude_sw;
     
     @SerializedName("date_created")
     @Expose
@@ -52,20 +52,60 @@ public class Search {
         this.id = id;
     }
     
-    public float getLatitude() {
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public double getLatitude() {
         return latitude;
     }
     
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
     
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
     
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+    
+    public double getLatitude_ns() {
+        return latitude_ns;
+    }
+    
+    public void setLatitude_ns(double latitude_ns) {
+        this.latitude_ns = latitude_ns;
+    }
+    
+    public double getLongitude_ns() {
+        return longitude_ns;
+    }
+    
+    public void setLongitude_ns(double longitude_ns) {
+        this.longitude_ns = longitude_ns;
+    }
+    
+    public double getLatitude_sw() {
+        return latitude_sw;
+    }
+    
+    public void setLatitude_sw(double latitude_sw) {
+        this.latitude_sw = latitude_sw;
+    }
+    
+    public double getLongitude_sw() {
+        return longitude_sw;
+    }
+    
+    public void setLongitude_sw(double longitude_sw) {
+        this.longitude_sw = longitude_sw;
     }
     
     public String getDate_created() {
@@ -76,49 +116,9 @@ public class Search {
         this.date_created = date_created;
     }
     
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public float getLatitude_ns() {
-        return latitude_ns;
-    }
-    
-    public void setLatitude_ns(float latitude_ns) {
-        this.latitude_ns = latitude_ns;
-    }
-    
-    public float getLongitude_ns() {
-        return longitude_ns;
-    }
-    
-    public void setLongitude_ns(float longitude_ns) {
-        this.longitude_ns = longitude_ns;
-    }
-    
-    public float getLatitude_sw() {
-        return latitude_sw;
-    }
-    
-    public void setLatitude_sw(float latitude_sw) {
-        this.latitude_sw = latitude_sw;
-    }
-    
-    public float getLongitude_sw() {
-        return longitude_sw;
-    }
-    
-    public void setLongitude_sw(float longitude_sw) {
-        this.longitude_sw = longitude_sw;
-    }
-    
     @Override
     public String toString() {
-        return "Search{" +
+        return "SavedSearch{" +
                "id='" + id + '\'' +
                ", latitude='" + latitude + '\'' +
                ", longitude='" + longitude + '\'' +
