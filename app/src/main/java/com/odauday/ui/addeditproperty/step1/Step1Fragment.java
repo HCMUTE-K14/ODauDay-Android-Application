@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.EditText;
 import com.odauday.R;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.databinding.FragmentAddEditStep1Binding;
@@ -23,9 +23,12 @@ import com.odauday.ui.search.navigation.PropertyType;
 import com.odauday.ui.selectlocation.AddressAndLocationObject;
 import com.odauday.ui.selectlocation.OnCompleteSelectLocationEvent;
 import com.odauday.ui.selectlocation.SelectLocationActivity;
+import com.odauday.ui.view.RowItemView;
 import com.odauday.ui.view.RowItemView.RowAddedCallBack;
-import com.odauday.utils.TextUtils;
+import com.odauday.ui.view.currencyedittext.CurrencyEditText;
+import com.odauday.viewmodel.BaseViewModel;
 import java.util.List;
+import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -49,7 +52,13 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         return fragment;
     }
     
+    
+    @Inject
+    EventBus mBus;
+    
     private MyProperty mProperty;
+    
+    private Step1Helper mStep1Helper;
     
     @Override
     public int getLayoutId() {
@@ -65,6 +74,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         if (mProperty == null) {
             mProperty = new MyProperty();
         }
+        mStep1Helper = new Step1Helper();
     }
     
     @Override
@@ -88,16 +98,18 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         super.onDestroy();
     }
     
-    @Override
-    public void initNextBackListener() {
-        if (getNextButton() != null) {
-            getNextButton().setOnClickListener(this::onNextStep);
-        }
-    }
-    
     @SuppressWarnings("unchecked")
+    @Override
     public void onNextStep(View view) {
-        boolean isValidate = validate();
+        EditText selectLocation = mBinding.get().selectLocation;
+        EditText selectCategory = mBinding.get().selectCategory;
+        CurrencyEditText txtPrice = mBinding.get().txtPrice;
+        RowItemView phoneContainer = mBinding.get().phoneContainer;
+        RowItemView emailContainer = mBinding.get().emailContainer;
+        
+        boolean isValidate = mStep1Helper
+                  .validate(selectLocation, selectCategory, txtPrice, phoneContainer,
+                            emailContainer, mProperty);
         
         if (!isValidate) {
             return;
@@ -110,75 +122,58 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
             typeId = "RENT";
         }
         
-        mProperty.setEmails((List<MyEmail>) mBinding.get().emailContainer
-                  .getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
-        mProperty.setPhones((List<MyPhone>) mBinding.get().phoneContainer
-                  .getRawValue(PhoneAndEmailEnum.PHONE.getId()));
+        mProperty.setPrice(txtPrice.getRawValue().doubleValue());
+        
+        mProperty.setEmails(
+                  (List<MyEmail>) emailContainer.getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
+        mProperty.setPhones(
+                  (List<MyPhone>) phoneContainer.getRawValue(PhoneAndEmailEnum.PHONE.getId()));
         
         mProperty.setType_id(typeId);
         
-        EventBus.getDefault().post(new OnCompleteStep1Event(mProperty));
+        mBus.post(new OnCompleteStep1Event(mProperty));
         
         mNavigationStepListener.navigate(getStep(), getNextStep());
     }
     
+    @Override
+    public int getStep() {
+        return STEP;
+    }
+    
+    @Override
+    public int getBackStep() {
+        return -1;
+    }
+    
+    @Override
+    public void rowItemAddedCallBack() {
+        mBinding.get().scrollView
+                  .postDelayed(() -> mBinding.get().scrollView.fullScroll(View.FOCUS_DOWN), 100);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OnCompleteSelectLocationEvent.REQUEST_CODE && resultCode ==
+                                                                         Activity.RESULT_OK &&
+            data != null) {
+            
+            AddressAndLocationObject addressAndLocationObject = data
+                      .getParcelableExtra(SelectLocationActivity.EXTRA_ADDRESS_AND_LOCATION);
+            
+            updateSelectLocation(addressAndLocationObject);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
-    private boolean validate() {
-        if (!isSelectedLocation()) {
-            mBinding.get().selectLocation
-                      .setError(getString(R.string.message_location_is_required));
-            mBinding.get().selectLocation.requestFocus();
-            Toast.makeText(this.getContext(), R.string.message_location_is_required,
-                      Toast.LENGTH_SHORT).show();
-            return false;
+    @Override
+    public void onCompletePickedType(int requestCode, Object value) {
+        if (requestCode == FilterOption.PROPERTY_TYPE.getRequestCode()) {
+            List<Integer> integerList = (List<Integer>) value;
+            mProperty.setCategoriesByIntegerList(integerList);
+            String text = buildStringCategory(integerList);
+            mBinding.get().selectCategory.setText(text);
         }
-        if (!isSelectedCategory()) {
-            mBinding.get().selectCategory
-                      .setError(getString(R.string.message_category_is_required));
-            mBinding.get().selectCategory.requestFocus();
-            Toast.makeText(this.getContext(), R.string.message_category_is_required,
-                      Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!isSelectedPrice()) {
-            mBinding.get().txtPrice.setError(getString(R.string.message_price_is_reuiqred));
-            mBinding.get().selectCategory.requestFocus();
-            return false;
-        }
-        
-        List<MyEmail> listEmail = mBinding.get().emailContainer
-                  .getRawValue(PhoneAndEmailEnum.EMAIL.getId());
-        
-        if (listEmail.isEmpty()) {
-            Toast.makeText(this.getContext(), R.string.message_email_is_required,
-                      Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        
-        List<MyPhone> listPhones = mBinding.get().phoneContainer
-                  .getRawValue(PhoneAndEmailEnum.PHONE.getId());
-        
-        if (listPhones.isEmpty()) {
-            Toast.makeText(this.getContext(), R.string.message_phone_is_required,
-                      Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private boolean isSelectedLocation() {
-        return !TextUtils.isEmpty(mBinding.get().selectLocation.getText().toString()) &&
-               mProperty.getLocation() != null;
-    }
-    
-    private boolean isSelectedCategory() {
-        return !TextUtils.isEmpty(mBinding.get().selectCategory.getText().toString()) &&
-               mProperty.getCategories() != null;
-    }
-    
-    private boolean isSelectedPrice() {
-        return mBinding.get().txtPrice.getRawValue().doubleValue() > 0;
     }
     
     private void initListener() {
@@ -195,24 +190,8 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
                                 mProperty.getLocation().toLatLng()));
         }
         this.startActivityForResult(intent, OnCompleteSelectLocationEvent.REQUEST_CODE);
-        
-        //
-        //        ViewUtils.startActivityForResult(getActivity(), SelectLocationActivity.class,
-        //                  OnCompleteSelectLocationEvent.REQUEST_CODE);
     }
     
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == OnCompleteSelectLocationEvent.REQUEST_CODE && resultCode ==
-                                                                         Activity.RESULT_OK &&
-            data != null) {
-            
-            AddressAndLocationObject addressAndLocationObject = data
-                      .getParcelableExtra(SelectLocationActivity.EXTRA_ADDRESS_AND_LOCATION);
-            
-            updateSelectLocation(addressAndLocationObject);
-        }
-    }
     
     private void updateSelectLocation(AddressAndLocationObject object) {
         mProperty.setAddress(object.getAddress());
@@ -237,47 +216,17 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         dialog.show(getFragmentManager(), FilterOption.PROPERTY_TYPE.getTag());
     }
     
-    @Override
-    public int getStep() {
-        return STEP;
-    }
-    
-    @Override
-    public int getBackStep() {
-        return -1;
-    }
     
     private void addRow(PhoneAndEmailEnum type) {
-        switch (type) {
-            case EMAIL:
-                this.mBinding.get().emailContainer
-                          .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
-                break;
-            case PHONE:
-                this.mBinding.get().phoneContainer
-                          .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
-                break;
-            default:
-                break;
+        if (type == PhoneAndEmailEnum.EMAIL) {
+            this.mBinding.get().emailContainer
+                      .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
+        } else {
+            this.mBinding.get().phoneContainer
+                      .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
         }
     }
     
-    @Override
-    public void rowItemAddedCallBack() {
-        mBinding.get().scrollView
-                  .postDelayed(() -> mBinding.get().scrollView.fullScroll(View.FOCUS_DOWN), 100);
-    }
-    
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onCompletePickedType(int requestCode, Object value) {
-        if (requestCode == FilterOption.PROPERTY_TYPE.getRequestCode()) {
-            List<Integer> integerList = (List<Integer>) value;
-            mProperty.setCategoriesByIntegerList(integerList);
-            String text = buildStringCategory(integerList);
-            mBinding.get().selectCategory.setText(text);
-        }
-    }
     
     private String buildStringCategory(List<Integer> list) {
         StringBuilder builder = new StringBuilder();
@@ -292,5 +241,15 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         }
         
         return builder.toString();
+    }
+    
+    @Override
+    protected BaseViewModel getViewModel(String tag) {
+        return null;
+    }
+    
+    @Override
+    protected void processingTaskFromViewModel() {
+    
     }
 }

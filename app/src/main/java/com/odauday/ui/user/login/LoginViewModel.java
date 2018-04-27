@@ -1,5 +1,7 @@
 package com.odauday.ui.user.login;
 
+import static com.odauday.config.Constants.Task.TASK_LOGIN;
+
 import com.odauday.data.UserRepository;
 import com.odauday.data.remote.user.model.AbstractAuthRequest;
 import com.odauday.viewmodel.BaseViewModel;
@@ -13,7 +15,6 @@ import javax.inject.Inject;
 
 public class LoginViewModel extends BaseViewModel {
     
-    public static final String TASK_LOGIN = "login";
     private final UserRepository mUserRepository;
     
     @Inject

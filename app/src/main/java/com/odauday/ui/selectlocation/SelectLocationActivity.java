@@ -1,5 +1,7 @@
 package com.odauday.ui.selectlocation;
 
+import static com.odauday.config.Constants.Task.TASK_SEARCH_GEO_INFO;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
@@ -36,7 +38,6 @@ import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/25/18.
@@ -123,15 +124,18 @@ public class SelectLocationActivity extends
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        
+        mBinding.includeToolbar.image.setVisibility(View.VISIBLE);
         mBinding.includeToolbar.btnDone.setVisibility(View.VISIBLE);
         mBinding.includeToolbar.btnDone.setOnClickListener(done -> {
             if (mAddressAndLocationObject != null) {
                 Intent intent = new Intent();
-                Timber.d(mAddressAndLocationObject.getLocation().toString());
                 intent.putExtra(EXTRA_ADDRESS_AND_LOCATION, mAddressAndLocationObject);
                 setResult(RESULT_OK, intent);
                 finish();
+            } else {
+                Toast.makeText(this, R.string.message_cannot_find_that_location_please_try_later,
+                          Toast.LENGTH_SHORT)
+                          .show();
             }
         });
     }
@@ -159,12 +163,12 @@ public class SelectLocationActivity extends
             if (resource != null) {
                 switch (resource.status) {
                     case ERROR:
-                        if (resource.task.equals(SelectLocationViewModel.TASK_SEARCH_GEO_INFO)) {
+                        if (resource.task.equals(TASK_SEARCH_GEO_INFO)) {
                             onErrorGetInfoLocation((Exception) resource.data);
                         }
                         break;
                     case SUCCESS:
-                        if (resource.task.equals(SelectLocationViewModel.TASK_SEARCH_GEO_INFO)) {
+                        if (resource.task.equals(TASK_SEARCH_GEO_INFO)) {
                             onSuccessGetInfoLocation((AddressAndLocationObject) resource.data);
                         }
                         break;

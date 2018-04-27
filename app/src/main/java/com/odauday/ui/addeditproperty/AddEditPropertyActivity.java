@@ -18,6 +18,9 @@ import com.odauday.ui.addeditproperty.step3.Step3Fragment;
 import com.odauday.ui.addeditproperty.step4.Step4Fragment;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.viewmodel.BaseViewModel;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import java.util.Stack;
 import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
@@ -29,14 +32,15 @@ import timber.log.Timber;
  */
 public class AddEditPropertyActivity extends
                                      BaseMVVMActivity<ActivityAddEditPropertyBinding> implements
-                                                                                      NavigationStepListener {
+                                                                                      NavigationStepListener,
+                                                                                      HasSupportFragmentInjector {
     
     public static final int NUM_OF_STEP = 4;
     
     public static final String EXTRA_PROPERTY = "extra_property";
     
     @Inject
-    EventBus mBus;
+    DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
     
     private Step1Fragment mStep1Fragment;
     
@@ -68,9 +72,7 @@ public class AddEditPropertyActivity extends
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mBus == null) {
-            Timber.d("BUS is NULL");
-        }
+        Timber.d(mCurrentProperty == null ? "NULL" : "NOT NULL");
         EventBus.getDefault().register(this);
         
         init();
@@ -125,24 +127,26 @@ public class AddEditPropertyActivity extends
     @Subscribe
     public void onCompleteStep1(OnCompleteStep1Event event) {
         MyProperty property = event.getData();
-        
-        mCurrentProperty.setType_id(property.getType_id());
-        mCurrentProperty.setPrice(property.getPrice());
-        mCurrentProperty.setLocation(property.getLocation());
-        mCurrentProperty.setAddress(property.getAddress());
-        mCurrentProperty.setEmails(property.getEmails());
-        mCurrentProperty.setPhones(property.getPhones());
-        mCurrentProperty.setCategories(property.getCategories());
+        if (mCurrentProperty != null) {
+            mCurrentProperty.setType_id(property.getType_id());
+            mCurrentProperty.setPrice(property.getPrice());
+            mCurrentProperty.setLocation(property.getLocation());
+            mCurrentProperty.setAddress(property.getAddress());
+            mCurrentProperty.setEmails(property.getEmails());
+            mCurrentProperty.setPhones(property.getPhones());
+            mCurrentProperty.setCategories(property.getCategories());
+        }
     }
     
     @Subscribe
     public void onCompleteStep2(OnCompleteStep2Event event) {
         MyProperty property = event.getData();
-        
-        mCurrentProperty.setSize(property.getSize());
-        mCurrentProperty.setNumOfBedRoom(property.getNumOfBedRoom());
-        mCurrentProperty.setNumOfBathRoom(property.getNumOfBathRoom());
-        mCurrentProperty.setNumOfParking(property.getNumOfParking());
+        if (mCurrentProperty != null) {
+            mCurrentProperty.setSize(property.getSize());
+            mCurrentProperty.setNumOfBedRoom(property.getNumOfBedRoom());
+            mCurrentProperty.setNumOfBathRoom(property.getNumOfBathRoom());
+            mCurrentProperty.setNumOfParking(property.getNumOfParking());
+        }
     }
     
     @Subscribe
@@ -152,7 +156,6 @@ public class AddEditPropertyActivity extends
         mCurrentProperty.setDescription(property.getDescription());
         mCurrentProperty.setTags(property.getTags());
     }
-    
     
     
     @Override
@@ -220,7 +223,8 @@ public class AddEditPropertyActivity extends
     private void getProperty() {
         if (getIntent() != null) {
             mCurrentProperty = getIntent().getParcelableExtra(EXTRA_PROPERTY);
-        } else {
+        }
+        if (mCurrentProperty == null) {
             mCurrentProperty = new MyProperty();
         }
     }
@@ -267,5 +271,10 @@ public class AddEditPropertyActivity extends
         
         mBinding.includeToolbar.title
                   .setText(title);
+    }
+    
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return mFragmentDispatchingAndroidInjector;
     }
 }

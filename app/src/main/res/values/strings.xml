@@ -137,4 +137,6 @@
   <string name="message_permission_read_request">This app will need to read external storage to display image on your device</string>
   <string name="txt_gallery">Gallery</string>
   <string name="message_phone_is_required">Phone is required</string>
+  <string name="message_phone_is_invalid">Phone number is invalid</string>
+  <string name="message_cannot_find_that_location_please_try_later">Can not find that location. Please try later !</string>
 </resources>

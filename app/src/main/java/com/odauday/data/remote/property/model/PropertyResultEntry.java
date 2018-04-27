@@ -20,7 +20,7 @@ public class PropertyResultEntry implements Parcelable {
         public PropertyResultEntry createFromParcel(Parcel in) {
             return new PropertyResultEntry(in);
         }
-
+        
         @Override
         public PropertyResultEntry[] newArray(int size) {
             return new PropertyResultEntry[size];
@@ -61,7 +61,7 @@ public class PropertyResultEntry implements Parcelable {
     private List<Image> mImages = new ArrayList<>();
     
     public PropertyResultEntry() {
-
+    
     }
     
     protected PropertyResultEntry(Parcel in) {

@@ -12,6 +12,8 @@ import com.odauday.databinding.FragmentAddEditStep4Binding;
 import com.odauday.model.MyProperty;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.BaseStepFragment;
+import com.odauday.viewmodel.BaseViewModel;
+import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -21,18 +23,11 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     
     
     public static final String TAG = Step4Fragment.class.getSimpleName();
-    private static final int LIMIT_IMAGE = 6;
-    private static final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     
     public static final int STEP = 4;
     
-    private MyProperty mProperty;
-    
-    
-    @Override
-    public int getLayoutId() {
-        return R.layout.fragment_add_edit_step_4;
-    }
+    private static final int LIMIT_IMAGE = 6;
+    private static final int REQUEST_CODE_CHOOSE_IMAGE = 1;
     
     public static Step4Fragment newInstance(MyProperty myProperty) {
         
@@ -44,6 +39,17 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
         fragment.setArguments(args);
         return fragment;
     }
+    
+    @Inject
+    EventBus mBus;
+    
+    private MyProperty mProperty;
+    
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_add_edit_step_4;
+    }
+    
     
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +68,9 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
         mBackButton = mBinding.get().buttonNav.btnBackStep;
         super.onViewCreated(view, savedInstanceState);
         
-        mNextButton.setTextColor(ContextCompat.getColor(getContext(), R.color.alert_red));
+        if (getContext() != null) {
+            mNextButton.setTextColor(ContextCompat.getColor(getContext(), R.color.alert_red));
+        }
         mNextButton.setText(R.string.txt_done);
         
         mBinding.get().btnChooseImage.setOnClickListener(chooseImage -> {
@@ -82,22 +90,9 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     }
     
     @Override
-    public void initNextBackListener() {
-        if (getBackButton() != null) {
-            getBackButton().setOnClickListener(backButton -> {
-                mNavigationStepListener.navigate(getStep(), getBackStep());
-            });
-        }
-        if (getNextButton() != null) {
-            getNextButton().setOnClickListener(backButton -> {
-                mNavigationStepListener.navigate(getStep(), getNextStep());
-            });
-        }
-    }
-    
     public void onNextStep(View view) {
         
-        EventBus.getDefault().post(new OnCompleteStep4Event(mProperty));
+        mBus.post(new OnCompleteStep4Event(mProperty));
         mNavigationStepListener.navigate(getStep(), getNextStep());
     }
     
@@ -109,5 +104,15 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     @Override
     public int getNextStep() {
         return -1;
+    }
+    
+    @Override
+    protected BaseViewModel getViewModel(String tag) {
+        return null;
+    }
+    
+    @Override
+    protected void processingTaskFromViewModel() {
+    
     }
 }

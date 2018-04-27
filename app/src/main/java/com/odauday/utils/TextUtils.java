@@ -5,6 +5,7 @@ import com.odauday.RootApplication;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -21,6 +22,10 @@ public class TextUtils {
     private static final String[] SHORT_MONEY = new String[]{" Ngàn", " Triệu", " Tỷ", " Trăm tỷ"};
     private static final String CURRENCY = " VND ";
     
+    
+    public static String generatorUUID() {
+        return UUID.randomUUID().toString();
+    }
     
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;

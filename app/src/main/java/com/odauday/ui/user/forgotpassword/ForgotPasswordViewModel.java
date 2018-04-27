@@ -1,5 +1,7 @@
 package com.odauday.ui.user.forgotpassword;
 
+import static com.odauday.config.Constants.Task.TASK_FORGOTPASSWORD;
+
 import com.odauday.data.UserRepository;
 import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.viewmodel.BaseViewModel;
@@ -13,7 +15,6 @@ import javax.inject.Inject;
 
 public class ForgotPasswordViewModel extends BaseViewModel {
     
-    public static final String TASK_FORGOTPASSWORD = "forgotpassword";
     private final UserRepository mUserRepository;
     
     @Inject

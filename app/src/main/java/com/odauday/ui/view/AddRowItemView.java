@@ -18,6 +18,7 @@ import com.odauday.utils.ValidationHelper;
  */
 public class AddRowItemView extends LinearLayout {
     
+    EditText mEditText;
     
     public AddRowItemView(Context context) {
         super(context);
@@ -44,6 +45,8 @@ public class AddRowItemView extends LinearLayout {
         }
         View rootView = inflater.inflate(R.layout.layout_add_row_view, this, true);
         
+        mEditText = rootView.findViewById(R.id.txt_title);
+        
     }
     
     public ImageView getPlusOrMinusBtn() {
@@ -51,13 +54,13 @@ public class AddRowItemView extends LinearLayout {
     }
     
     public boolean isValid(int type) {
+        String textValue = getTextView().getText().toString();
         if (type == PhoneAndEmailEnum.EMAIL.getId()) {
-            
             String email = getTextView().getText().toString();
-            return !ValidationHelper.isEmail(email);
+            return ValidationHelper.isEmail(email);
         } else if (type == PhoneAndEmailEnum.PHONE.getId()) {
             String phone = getTextView().getText().toString();
-            return !ValidationHelper.isPhoneNumber(phone);
+            return ValidationHelper.isPhoneNumber(phone);
         } else {
             return false;
         }
@@ -68,7 +71,7 @@ public class AddRowItemView extends LinearLayout {
     }
     
     public EditText getTextView() {
-        return getRootView().findViewById(R.id.txt_title);
+        return mEditText;
     }
     
     public void setTypeText(int type) {
