@@ -32,7 +32,8 @@ public class ImageLoader {
                   .load(image)
                   .apply(new RequestOptions()
                             .placeholder(placeHolder)
-                            .error(placeHolder))
+                            .error(placeHolder)
+                            .dontAnimate())
                   .into(imageView);
     }
     
