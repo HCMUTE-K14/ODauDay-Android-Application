@@ -264,7 +264,7 @@ public class FavoriteTabMainFragment extends
             case ALL:
                 break;
             case BUY:
-                list = getList(list, Type.SELL);
+                list = getList(list, Type.BUY);
                 break;
             case RENT:
                 list = getList(list, Type.RENT);
@@ -390,15 +390,11 @@ public class FavoriteTabMainFragment extends
         }
         Timber.tag(TAG).d(ex.getMessage());
         
-        String message;
         if (ex instanceof RetrofitException) {
-            message = getString(R.string.message_service_unavailable);
             mBinding.get().recycleViewFavorite.setAdapter(mServiceUnavailableAdapter);
         } else {
-            message = getString(R.string.empty_favorite);
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
-        SnackBarUtils.showSnackBar(mBinding.get().shortlist, message);
     }
     
     @Override

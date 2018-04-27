@@ -2,6 +2,8 @@ package com.odauday.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.odauday.utils.ObjectUtils;
 import java.util.Date;
 
@@ -21,8 +23,16 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
+    @SerializedName("id")
+    @Expose
     private String id;
+    
+    @SerializedName("url")
+    @Expose
     private String url;
+    
+    @SerializedName("date_created")
+    @Expose
     private Date dateCreated;
     
     public Image() {

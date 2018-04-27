@@ -6,6 +6,6 @@ package com.odauday.config;
 
 public class Type {
     
-    public static final String SELL = "SELL";
+    public static final String BUY = "BUY";
     public static final String RENT = "RENT";
 }

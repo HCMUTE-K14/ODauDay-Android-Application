@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.config.Type;
 import com.odauday.model.Image;
 import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.TextUtils.Locale;
@@ -80,7 +81,19 @@ public class BindingAdapterUtils {
             .getIdentifier(icon_name, "drawable", context.getPackageName());
         view.setImageDrawable(context.getResources().getDrawable(resID));
     }
-    
+    @BindingAdapter("setTypeProperty")
+    public static void setTypeProperty(TextView view,String type){
+        switch (type){
+            case Type.BUY:
+                view.setText(view.getContext().getString(R.string.sell));
+                break;
+            case Type.RENT:
+                view.setText(type);
+                break;
+                default:
+                    break;
+        }
+    }
     @BindingAdapter("activeProperty")
     public static void activeProperty(TextView view, String status) {
         switch (status) {

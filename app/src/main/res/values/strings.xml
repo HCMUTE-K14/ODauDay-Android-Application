@@ -205,4 +205,5 @@
   <string name="cannot_clear_history">Cannot clear history</string>
   <string name="logout_user">Are you logout?</string>
   <string name="logout_user_success">Logout account success</string>
+  <string name="sell">SELL</string>
 </resources>

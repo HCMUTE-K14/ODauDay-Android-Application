@@ -51,9 +51,10 @@
           android:id="@+id/image_more"
           android:layout_width="30dp"
           android:layout_height="25dp"
+          android:tint="@color/colorGray"
           android:layout_alignParentRight="true"
           android:onClick="@{(view)->handler.onClickMoreMenu(view,search)}"
-          android:src="@drawable/ic_nav_bar_more_vertical" />
+          android:src="@drawable/ic_menu" />
       </RelativeLayout>
       <RelativeLayout
 
