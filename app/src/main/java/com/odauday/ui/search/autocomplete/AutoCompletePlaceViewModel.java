@@ -1,5 +1,7 @@
 package com.odauday.ui.search.autocomplete;
 
+import static com.odauday.config.Constants.Task.TASK_SEARCH;
+
 import com.odauday.data.AutoCompletePlaceRepository;
 import com.odauday.data.remote.autocompleteplace.model.AutoCompletePlace;
 import com.odauday.viewmodel.BaseViewModel;
@@ -14,7 +16,6 @@ import timber.log.Timber;
 public class AutoCompletePlaceViewModel extends BaseViewModel {
     
     public static final String TAG = AutoCompletePlaceViewModel.class.getSimpleName();
-    public static final String TASK_SEARCH = "search";
     
     private final AutoCompletePlaceRepository mAutoCompletePlaceRepository;
     

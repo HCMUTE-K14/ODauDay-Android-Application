@@ -25,6 +25,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
                                                                         HasSupportFragmentInjector {
     
     final Stack<String> mTabStack = new Stack<>();
+    
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
     

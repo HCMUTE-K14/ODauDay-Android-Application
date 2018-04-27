@@ -6,12 +6,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.odauday.R;
 import com.odauday.model.MyEmail;
 import com.odauday.model.MyPhone;
 import com.odauday.ui.addeditproperty.step1.PhoneAndEmailEnum;
+import com.odauday.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,15 +59,29 @@ public class RowItemView extends LinearLayout {
     }
     
     public List getRawValue(int type) {
-        int sizeView = mRowItemContainer.getChildCount();
-        
+        int sizeView = getItemCount();
         if (type == PhoneAndEmailEnum.EMAIL.getId()) {
             List<MyEmail> emails = new ArrayList<>();
+            
             for (int i = 0; i < sizeView; i++) {
                 AddRowItemView addRowItemView = (AddRowItemView) mRowItemContainer.getChildAt(i);
-                if (addRowItemView != null && addRowItemView.isValid(type)) {
-                    String value = addRowItemView.getTextView().getText().toString();
-                    emails.add(new MyEmail("", value));
+                if (sizeView == 1) {
+                    if (addRowItemView != null) {
+                        String value = getTextValueFromAddRowItemView(addRowItemView);
+                        emails.add(createEmail(value));
+                    } else {
+                        return emails;
+                    }
+                } else {
+                    if (addRowItemView != null && addRowItemView.isValid(type)) {
+                        String value = getTextValueFromAddRowItemView(addRowItemView);
+                        emails.add(createEmail(value));
+                    } else {
+                        if (addRowItemView != null) {
+                            addRowItemView.getTextView().setError(getContext()
+                                      .getString(R.string.message_email_is_invalid));
+                        }
+                    }
                 }
             }
             return emails;
@@ -74,14 +90,35 @@ public class RowItemView extends LinearLayout {
             for (int i = 0; i < sizeView; i++) {
                 AddRowItemView addRowItemView = (AddRowItemView) mRowItemContainer.getChildAt(i);
                 if (addRowItemView != null && addRowItemView.isValid(type)) {
-                    String value = addRowItemView.getTextView().getText().toString();
-                    phones.add(new MyPhone("", value));
+                    String value = getTextValueFromAddRowItemView(addRowItemView);
+                    phones.add(createPhone(value));
+                } else {
+                    if (addRowItemView != null) {
+                        addRowItemView.getTextView().setError(getContext()
+                                  .getString(R.string.message_phone_is_invalid));
+                    }
                 }
             }
             return phones;
         } else {
             return null;
         }
+    }
+    
+    private String getTextValueFromAddRowItemView(AddRowItemView view) {
+        return view.getTextView().getText().toString();
+    }
+    
+    private MyEmail createEmail(String email) {
+        return new MyEmail(TextUtils.generatorUUID(), email);
+    }
+    
+    private MyPhone createPhone(String phone) {
+        return new MyPhone(TextUtils.generatorUUID(), phone);
+    }
+    
+    public int getItemCount() {
+        return mRowItemContainer.getChildCount();
     }
     
     public void init(Context context) {
@@ -109,7 +146,8 @@ public class RowItemView extends LinearLayout {
         row.setImage(mImageUrl);
         row.setPlusOrMinusButtonTag(10);
         row.getPlusOrMinusBtn()
-                  .setOnClickListener(new AddClickListener(row.getPlusOrMinusBtn(), row));
+                  .setOnClickListener(
+                            new AddClickListener(row.getPlusOrMinusBtn(), row.getTextView(), row));
         
         mRowItemContainer.addView(row);
     }
@@ -123,20 +161,25 @@ public class RowItemView extends LinearLayout {
         
         private ImageView mImageView;
         private View mLayout;
+        private EditText mEditText;
         
-        public AddClickListener(ImageView imageView, View layout) {
+        public AddClickListener(ImageView imageView, EditText editText, View layout) {
             this.mImageView = imageView;
             this.mLayout = layout;
+            this.mEditText = editText;
         }
         
         @Override
         public void onClick(View v) {
+            String text = mEditText.getText().toString();
             if ((Integer) mImageView.getTag() == 10) {
-                addRow(getContext(), mTypeInput, mText, mImageUrl, mRowAddedCallBack);
-                mImageView.setImageDrawable(
-                          ContextCompat.getDrawable(getContext(), R.drawable.ic_minus_gray));
-                mImageView.setTag(100);
-                mRowAddedCallBack.rowItemAddedCallBack();
+                if (!TextUtils.isEmpty(text)) {
+                    addRow(getContext(), mTypeInput, mText, mImageUrl, mRowAddedCallBack);
+                    mImageView.setImageDrawable(
+                              ContextCompat.getDrawable(getContext(), R.drawable.ic_minus_gray));
+                    mImageView.setTag(100);
+                    mRowAddedCallBack.rowItemAddedCallBack();
+                }
                 return;
             }
             mRowItemContainer.removeView(mLayout);

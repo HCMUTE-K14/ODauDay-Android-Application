@@ -10,6 +10,8 @@ import com.odauday.model.MyProperty;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.BaseStepFragment;
 import com.odauday.utils.TextUtils;
+import com.odauday.viewmodel.BaseViewModel;
+import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -21,9 +23,6 @@ public class Step2Fragment extends BaseStepFragment<FragmentAddEditStep2Binding>
     
     public static final int STEP = 2;
     
-    private MyProperty mProperty;
-    
-    
     public static Step2Fragment newInstance(MyProperty myProperty) {
         
         Bundle args = new Bundle();
@@ -34,6 +33,11 @@ public class Step2Fragment extends BaseStepFragment<FragmentAddEditStep2Binding>
         fragment.setArguments(args);
         return fragment;
     }
+    
+    @Inject
+    EventBus mBus;
+    
+    private MyProperty mProperty;
     
     @Override
     public int getLayoutId() {
@@ -59,17 +63,6 @@ public class Step2Fragment extends BaseStepFragment<FragmentAddEditStep2Binding>
     }
     
     @Override
-    public void initNextBackListener() {
-        if (getBackButton() != null) {
-            getBackButton().setOnClickListener(backButton -> {
-                mNavigationStepListener.navigate(getStep(), getBackStep());
-            });
-        }
-        if (getNextButton() != null) {
-            getNextButton().setOnClickListener(this::onNextStep);
-        }
-    }
-    
     public void onNextStep(View view) {
         
         if (!isSelectLandSize()) {
@@ -107,7 +100,7 @@ public class Step2Fragment extends BaseStepFragment<FragmentAddEditStep2Binding>
                   Integer.valueOf(mBinding.get().txtBathroom.getText().toString()));
         mProperty.setNumOfParking(Integer.valueOf(mBinding.get().txtParking.getText().toString()));
         
-        EventBus.getDefault().post(new OnCompleteStep2Event(mProperty));
+        mBus.post(new OnCompleteStep2Event(mProperty));
         
         mNavigationStepListener.navigate(getStep(), getNextStep());
         
@@ -129,9 +122,18 @@ public class Step2Fragment extends BaseStepFragment<FragmentAddEditStep2Binding>
         return !TextUtils.isEmpty(mBinding.get().txtParking.getText().toString());
     }
     
-    
     @Override
     public int getStep() {
         return STEP;
+    }
+    
+    @Override
+    protected BaseViewModel getViewModel(String tag) {
+        return null;
+    }
+    
+    @Override
+    protected void processingTaskFromViewModel() {
+    
     }
 }

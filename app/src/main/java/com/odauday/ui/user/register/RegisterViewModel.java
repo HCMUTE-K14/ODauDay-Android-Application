@@ -1,5 +1,7 @@
 package com.odauday.ui.user.register;
 
+import static com.odauday.config.Constants.Task.TASK_REGISTER;
+
 import com.odauday.data.UserRepository;
 import com.odauday.data.remote.user.model.RegisterRequest;
 import com.odauday.viewmodel.BaseViewModel;
@@ -13,7 +15,6 @@ import javax.inject.Inject;
 
 public class RegisterViewModel extends BaseViewModel {
     
-    public static final String TASK_REGISTER = "register";
     private final UserRepository mUserRepository;
     
     @Inject

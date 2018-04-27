@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.odauday.ui.base.BaseFragment;
+import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AutoClearedData;
 
 /**
  * Created by infamouSs on 4/25/18.
  */
-public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseFragment {
+public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseMVVMFragment<VB> {
     
     protected AutoClearedData<VB> mBinding;
     
@@ -43,7 +43,14 @@ public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseF
         initNextBackListener();
     }
     
-    public abstract void initNextBackListener();
+    public void initNextBackListener() {
+        if (getNextButton() != null) {
+            getNextButton().setOnClickListener(this::onNextStep);
+        }
+        if (getBackButton() != null) {
+            getBackButton().setOnClickListener(this::onBackStep);
+        }
+    }
     
     public AutoClearedData<VB> getBinding() {
         return mBinding;
@@ -65,6 +72,12 @@ public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseF
     
     public Button getNextButton() {
         return mNextButton;
+    }
+    
+    public abstract void onNextStep(View view);
+    
+    public void onBackStep(View view) {
+        mNavigationStepListener.navigate(getStep(), getBackStep());
     }
     
     public void setNavigationStepListener(

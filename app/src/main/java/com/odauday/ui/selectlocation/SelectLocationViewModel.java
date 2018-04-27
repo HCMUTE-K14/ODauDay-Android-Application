@@ -1,5 +1,7 @@
 package com.odauday.ui.selectlocation;
 
+import static com.odauday.config.Constants.Task.TASK_SEARCH_GEO_INFO;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.remote.property.model.GeoLocation;
@@ -14,7 +16,6 @@ import javax.inject.Inject;
 public class SelectLocationViewModel extends BaseViewModel {
     
     private final GeoInfoRepository mGeoInfoRepository;
-    public static final String TASK_SEARCH_GEO_INFO = "search_geo_info";
     
     @Inject
     public SelectLocationViewModel(GeoInfoRepository geoInfoRepository) {

@@ -4,6 +4,7 @@ import static com.odauday.config.AppConfig.RATE_VND;
 
 import android.view.View;
 import com.odauday.R;
+import com.odauday.config.Constants.Task;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseDialogFragment;
@@ -24,7 +25,6 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/3/2018.
@@ -32,13 +32,12 @@ import timber.log.Timber;
 public class FilterNavigationViewModel extends BaseViewModel {
     
     public static final String TAG = FilterNavigationViewModel.class.getSimpleName();
-
-    public static final String TASK_CREATE_TAGS = "create_tag";
+    
     
     private final RecentTagRepository mRecentTagRepository;
-
+    
     private FilterNavigationFragment mFragment;
-
+    
     private boolean mIsShowMoreOptions = false;
     
     
@@ -51,8 +50,8 @@ public class FilterNavigationViewModel extends BaseViewModel {
         Disposable disposable = mRecentTagRepository
                   .save(tags)
                   .subscribe(success -> response
-                                      .setValue(Resource.success(TASK_CREATE_TAGS, success)),
-                            error -> response.setValue(Resource.error(TASK_CREATE_TAGS, error)));
+                                      .setValue(Resource.success(Task.TASK_CREATE_TAGS, success)),
+                            error -> response.setValue(Resource.error(Task.TASK_CREATE_TAGS, error)));
         
         mCompositeDisposable.add(disposable);
     }
@@ -88,12 +87,9 @@ public class FilterNavigationViewModel extends BaseViewModel {
                           .subscribe(success -> {
                               recentTags.addAll(success);
                               List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
-                              Timber.d(recentTags.toString());
                               openTagTypeDialog(selectedTag, recentTags);
                           }, error -> {
                               List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
-                              Timber.d(error.getCause());
-                              
                               openTagTypeDialog(selectedTag, recentTags);
                           });
                 break;

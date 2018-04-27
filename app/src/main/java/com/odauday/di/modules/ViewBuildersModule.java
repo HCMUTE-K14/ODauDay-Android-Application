@@ -5,6 +5,10 @@ import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.AddEditPropertyModule;
+import com.odauday.ui.addeditproperty.step1.Step1Provider;
+import com.odauday.ui.addeditproperty.step2.Step2Provider;
+import com.odauday.ui.addeditproperty.step3.Step3Provider;
+import com.odauday.ui.addeditproperty.step4.Step4Provider;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
@@ -46,7 +50,13 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract AutoCompletePlaceActivity bindAutoCompletePlaceActitivty();
     
-    @ContributesAndroidInjector(modules = AddEditPropertyModule.class)
+    @ContributesAndroidInjector(modules = {
+              AddEditPropertyModule.class,
+              Step1Provider.class,
+              Step2Provider.class,
+              Step3Provider.class,
+              Step4Provider.class
+    })
     @PerActivity
     abstract AddEditPropertyActivity bindAddEditPropertyActivity();
     
