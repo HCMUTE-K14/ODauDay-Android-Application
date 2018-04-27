@@ -39,7 +39,7 @@ public class LoginResponse implements BaseResponse {
         LoginResponse that = (LoginResponse) o;
         
         return accessToken != null ? accessToken.equals(that.accessToken)
-                  : that.accessToken == null;
+            : that.accessToken == null;
     }
     
     @Override

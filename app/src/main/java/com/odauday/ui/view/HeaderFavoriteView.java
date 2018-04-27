@@ -140,6 +140,26 @@ public class HeaderFavoriteView extends RelativeLayout {
         this.mTextViewFilter.setText(textViewFilter);
     }
     
+    public interface OnClickShareListener {
+        
+        void onClick(View view);
+    }
+    
+    public interface OnClickMapListener {
+        
+        void onClick(View view);
+    }
+    
+    public interface OnItemClickMenuSort {
+        
+        void onClickItemMenuSort(MenuItem item);
+    }
+    
+    public interface OnItemClickMenuFilter {
+        
+        void onClickItemMenuFilter(MenuItem item);
+    }
+    
     public static class Builder {
         
         private Context mContext;
@@ -189,25 +209,5 @@ public class HeaderFavoriteView extends RelativeLayout {
             headerFavoriteView.setOnItemClickMenuFilter(mOnItemClickMenuFilter);
             return headerFavoriteView;
         }
-    }
-    
-    public interface OnClickShareListener {
-        
-        void onClick(View view);
-    }
-    
-    public interface OnClickMapListener {
-        
-        void onClick(View view);
-    }
-    
-    public interface OnItemClickMenuSort {
-        
-        void onClickItemMenuSort(MenuItem item);
-    }
-    
-    public interface OnItemClickMenuFilter {
-        
-        void onClickItemMenuFilter(MenuItem item);
     }
 }

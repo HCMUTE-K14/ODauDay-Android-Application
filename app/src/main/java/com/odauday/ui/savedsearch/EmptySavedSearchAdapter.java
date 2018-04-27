@@ -11,13 +11,13 @@ import com.odauday.ui.savedsearch.EmptySavedSearchAdapter.EmptyViewHolder;
  * Created by kunsubin on 4/10/2018.
  */
 
-public class EmptySavedSearchAdapter extends RecyclerView.Adapter<EmptyViewHolder>{
+public class EmptySavedSearchAdapter extends RecyclerView.Adapter<EmptyViewHolder> {
     
     @Override
     public EmptyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.layout_empty_saved_search, parent, false);
-    
+        
         return new EmptyViewHolder(view);
     }
     
@@ -31,7 +31,8 @@ public class EmptySavedSearchAdapter extends RecyclerView.Adapter<EmptyViewHolde
         return 1;
     }
     
-    public class EmptyViewHolder extends RecyclerView.ViewHolder{
+    public class EmptyViewHolder extends RecyclerView.ViewHolder {
+        
         public EmptyViewHolder(View itemView) {
             super(itemView);
         }

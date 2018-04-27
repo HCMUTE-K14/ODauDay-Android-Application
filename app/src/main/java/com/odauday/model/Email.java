@@ -4,12 +4,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-
 /**
  * Created by kunsubin on 3/30/2018.
  */
 
 public class Email {
+    
     @SerializedName("id")
     @Expose
     private String id;

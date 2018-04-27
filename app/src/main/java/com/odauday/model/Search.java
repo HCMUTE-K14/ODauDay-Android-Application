@@ -7,7 +7,8 @@ import com.google.gson.annotations.SerializedName;
  * Created by kunsubin on 4/9/2018.
  */
 
-public class SavedSearch {
+public class Search {
+    
     @SerializedName("id")
     @Expose
     private String id;
@@ -118,7 +119,7 @@ public class SavedSearch {
     
     @Override
     public String toString() {
-        return "SavedSearch{" +
+        return "Search{" +
                "id='" + id + '\'' +
                ", latitude='" + latitude + '\'' +
                ", longitude='" + longitude + '\'' +

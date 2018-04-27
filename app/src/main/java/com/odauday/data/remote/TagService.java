@@ -19,16 +19,22 @@ import retrofit2.http.Query;
  */
 
 public interface TagService {
-    interface Public{
+
+    interface Public {
+
         @GET(TAG)
         Single<JsonResponse<List<Tag>>> getAllTag();
     }
-    interface Protect{
+
+    interface Protect {
+
         @POST(TAG)
         Single<JsonResponse<MessageResponse>> createTag(@Body Tag request);
+
         @PUT(TAG)
         Single<JsonResponse<MessageResponse>> updateTag(@Body Tag request);
+
         @DELETE(TAG)
-        Single<JsonResponse<MessageResponse>> deleteTag(@Query("id")String id);
+        Single<JsonResponse<MessageResponse>> deleteTag(@Query("id") String id);
     }
 }

@@ -4,9 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.TagItemBinding;
 import com.odauday.model.Tag;
@@ -17,12 +14,13 @@ import timber.log.Timber;
  * Created by kunsubin on 4/3/2018.
  */
 
-public class TagAdapter extends BaseAdapter<Tag,TagItemBinding> {
+public class TagAdapter extends BaseAdapter<Tag, TagItemBinding> {
     
     @Override
     protected TagItemBinding createBinding(ViewGroup parent) {
-        TagItemBinding itemBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                  R.layout.tag_item,parent,false);
+        TagItemBinding itemBinding = DataBindingUtil
+            .inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.tag_item, parent, false);
         return itemBinding;
     }
     
@@ -30,7 +28,7 @@ public class TagAdapter extends BaseAdapter<Tag,TagItemBinding> {
     protected void bind(TagItemBinding binding, Tag item) {
         binding.setTag(item);
         binding.setHandler(this);
-       
+        
     }
     
     @Override
@@ -42,8 +40,9 @@ public class TagAdapter extends BaseAdapter<Tag,TagItemBinding> {
     protected boolean areContentsTheSame(Tag oldItem, Tag newItem) {
         return oldItem.equals(newItem);
     }
-     public void onClickTag(Tag tag){
-         Log.d("Lng","sdkfjdsf");
+    
+    public void onClickTag(Tag tag) {
+        Log.d("Lng", "sdkfjdsf");
         Timber.tag("Song song ki").d(tag.getName());
     }
 }

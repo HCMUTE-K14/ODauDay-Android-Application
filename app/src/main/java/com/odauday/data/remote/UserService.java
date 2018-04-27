@@ -52,7 +52,7 @@ public interface UserService {
         
         @PUT(USERS + "/{id}")
         Single<JsonResponse<MessageResponse>> updateProfile(@Path("id") String userId,
-                  @Body User user);
+            @Body User user);
         
         @PUT(CHANGE_PASSWORD)
         Single<JsonResponse<MessageResponse>> changePassword(@Body ChangePasswordRequest request);

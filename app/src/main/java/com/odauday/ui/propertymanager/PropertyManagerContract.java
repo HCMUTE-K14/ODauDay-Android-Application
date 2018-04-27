@@ -7,6 +7,8 @@ import com.odauday.ui.base.BaseContract;
  */
 
 public interface PropertyManagerContract extends BaseContract {
+    
     void onSuccessDeleteProperty(Object object);
+    
     void onErrorDeleteProperty(Object object);
 }

@@ -20,13 +20,14 @@ import timber.log.Timber;
  */
 
 public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesBinding> {
-    private static final String TAG=RecentSearchAdapter.class.getSimpleName();
+    
+    private static final String TAG = RecentSearchAdapter.class.getSimpleName();
     private PopupMenu mPopupMenu;
     private Context mContext;
     private OnClickRemoveRecentSearches mOnClickRemoveRecentSearches;
     
     public RecentSearchAdapter(Context context) {
-        this.mContext=context;
+        this.mContext = context;
     }
     
     @Override
@@ -82,10 +83,13 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     private void handlerSearch(Search search) {
         mOnClickRemoveRecentSearches.ClickRemoveRecentSearch(search);
     }
+    
     public void onClickRecentSearch(Search search) {
         Timber.tag(TAG).d("Click: " + search.getName());
     }
-    public interface OnClickRemoveRecentSearches{
+    
+    public interface OnClickRemoveRecentSearches {
+        
         void ClickRemoveRecentSearch(Search search);
     }
 }

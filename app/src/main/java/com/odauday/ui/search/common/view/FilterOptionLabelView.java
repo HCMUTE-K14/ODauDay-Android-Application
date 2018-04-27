@@ -33,7 +33,7 @@ public class FilterOptionLabelView extends LinearLayout {
     }
     
     public FilterOptionLabelView(Context context,
-              @Nullable AttributeSet attrs) {
+        @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
@@ -45,7 +45,7 @@ public class FilterOptionLabelView extends LinearLayout {
     
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }

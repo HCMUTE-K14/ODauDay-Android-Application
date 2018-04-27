@@ -10,34 +10,34 @@
       <RelativeLayout
         android:id="@+id/profile_user"
         android:layout_width="match_parent"
-        android:background="@color/background_gray_white"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        android:background="@color/background_gray_white">
         <com.odauday.ui.view.CircleImageView
           android:id="@+id/avatar"
           android:layout_width="80dp"
           android:layout_height="80dp"
           android:layout_marginTop="10dp"
-          android:src="@drawable/user_default"
-          android:layout_centerHorizontal="true"/>
+          android:layout_centerHorizontal="true"
+          android:src="@drawable/user_default" />
         <TextView
           android:id="@+id/txt_user_name"
+          android:textStyle="bold"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@id/avatar"
           android:layout_marginTop="10dp"
-          android:textStyle="bold"
-          android:textColor="@color/colorGray"
-          android:textSize="15dp"
+          android:layout_below="@id/avatar"
           android:layout_centerHorizontal="true"
-          android:text="Quoc Ky"/>
+          android:text="Quoc Ky"
+          android:textColor="@color/colorGray"
+          android:textSize="15dp" />
         <TextView
           android:id="@+id/txt_email"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@id/txt_user_name"
           android:layout_marginTop="5dp"
+          android:layout_below="@id/txt_user_name"
           android:layout_centerHorizontal="true"
-          android:text="kunsubin96@gmail.com"/>
+          android:text="kunsubin96@gmail.com" />
 
       </RelativeLayout>
 
@@ -55,15 +55,15 @@
           android:id="@+id/txt_version"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
           android:layout_below="@+id/recycle_view_more"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="10dp"
-          android:text="@string/txt_version"/>
+          android:text="@string/txt_version" />
         <ImageView
           android:layout_width="match_parent"
           android:layout_height="150dp"
-          android:src="@drawable/ic_more_menu"
-          android:layout_below="@id/txt_version"/>
+          android:layout_below="@id/txt_version"
+          android:src="@drawable/ic_more_menu" />
 
       </RelativeLayout>
 

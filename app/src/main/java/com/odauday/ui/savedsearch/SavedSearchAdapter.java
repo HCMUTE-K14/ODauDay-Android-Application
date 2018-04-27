@@ -11,7 +11,6 @@ import com.odauday.R;
 import com.odauday.databinding.ItemSavedSearchBinding;
 import com.odauday.model.Search;
 import com.odauday.ui.base.BaseAdapter;
-import com.odauday.ui.savedsearch.RecentSearchAdapter.OnClickRemoveRecentSearches;
 import com.odauday.ui.view.NotificationView;
 import com.odauday.ui.view.NotificationView.OnClickNotificationListener;
 import java.util.ArrayList;
@@ -25,10 +24,21 @@ import timber.log.Timber;
 public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBinding> {
     
     private static final String TAG = SavedSearchAdapter.class.getSimpleName();
-    
+    NotificationView.OnClickNotificationListener<Search> mSearchOnClickNotificationListener = new OnClickNotificationListener<Search>() {
+        @Override
+        public void onNotification(Search item) {
+            Timber.tag(TAG).d("On: " + item.getName());
+        }
+        
+        @Override
+        public void offNotification(Search item) {
+            Timber.tag(TAG).d("Off: " + item.getName());
+        }
+    };
     private PopupMenu mPopupMenu;
     private Context mContext;
     private OnClickRemoveSavedSearches mOnClickRemoveSavedSearches;
+    
     public SavedSearchAdapter(Context context) {
         this.mContext = context;
     }
@@ -96,18 +106,9 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     public void onClickSavedSearch(Search search) {
         Timber.tag(TAG).d("Click: " + search.getName());
     }
-    NotificationView.OnClickNotificationListener<Search> mSearchOnClickNotificationListener = new OnClickNotificationListener<Search>() {
-        @Override
-        public void onNotification(Search item) {
-            Timber.tag(TAG).d("On: " + item.getName());
-        }
+    
+    public interface OnClickRemoveSavedSearches {
         
-        @Override
-        public void offNotification(Search item) {
-            Timber.tag(TAG).d("Off: " + item.getName());
-        }
-    };
-    public interface OnClickRemoveSavedSearches{
         void onClickRemoveSavedSearches(Search search);
     }
 }

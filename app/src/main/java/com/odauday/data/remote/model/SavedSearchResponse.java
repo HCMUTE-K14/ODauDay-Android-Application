@@ -9,7 +9,8 @@ import java.util.List;
  * Created by kunsubin on 4/9/2018.
  */
 
-public class SearchResponse {
+public class SavedSearchResponse {
+    
     @SerializedName("id")
     @Expose
     private String id;
@@ -36,7 +37,7 @@ public class SearchResponse {
     
     @Override
     public String toString() {
-        return "SearchResponse{" +
+        return "SavedSearchResponse{" +
                "id='" + id + '\'' +
                ", mSearches=" + mSearches +
                '}';

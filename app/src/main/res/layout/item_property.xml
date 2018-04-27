@@ -4,170 +4,164 @@
   <data>
     <variable
       name="property"
-      type="com.odauday.model.Property"/>
+      type="com.odauday.model.Property" />
     <variable
       name="handler"
-      type="com.odauday.ui.favorite.FavoriteAdapter"/>
+      type="com.odauday.ui.favorite.FavoriteAdapter" />
   </data>
-<android.support.v7.widget.CardView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="?android:attr/selectableItemBackground"
-  android:layout_marginTop="10dp"
-  android:layout_marginBottom="5dp">
-  <LinearLayout
+  <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:onClick="@{()->handler.onClickProperty(property)}">
-    <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="250dp"
-      android:background="@color/gray">
-      <ImageView
-        android:id="@+id/image_room"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        app:loadImageMainPropertyInListImage="@{property.images}"
-        android:src="@color/colorGray" />
-      <RelativeLayout
-        android:id="@+id/relative_type"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary">
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:gravity="center"
-          android:textColor="@color/white"
-          android:textStyle="bold"
-          android:text="@{property.type_id}"
-          />
-      </RelativeLayout>
-      <TextView
-        android:id="@+id/txt_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentBottom="true"
-        android:textSize="25dp"
-        android:text="sdfdsfdsf"
-        app:textDoublePrice="@{property.price}"/>
-      <com.odauday.ui.view.StarView
-        android:id="@+id/star_view"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:onClick="@{(view)->handler.onClickFavorite(view,property)}"
-        />
-    </RelativeLayout>
-
-    <RelativeLayout
-      android:id="@+id/relative_info"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-      <TextView
-        android:id="@+id/txt_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{property.name}"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-
-        />
-      <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txt_address"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp">
-        <TextView
-          android:id="@+id/txt_number_bed_room"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/black"
-          android:textSize="15dp"
-          app:textInteger="@{property.num_of_bedroom}"/>
-        <ImageView
-          android:id="@+id/image_bedroom"
-          android:layout_width="20dp"
-          android:layout_height="20dp"
-          android:src="@drawable/ic_bedroom"
-          android:tint="@color/black"
-          android:layout_marginLeft="5dp"
-          android:layout_toRightOf="@id/txt_number_bed_room"/>
-        <TextView
-          android:id="@+id/txt_number_bath_rom"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/black"
-          android:layout_toRightOf="@+id/image_bedroom"
-          android:layout_marginLeft="15dp"
-          android:textSize="15dp"
-          app:textInteger="@{property.num_of_bathroom}"/>
-        <ImageView
-          android:id="@+id/image_bathroom"
-          android:layout_width="20dp"
-          android:layout_height="20dp"
-          android:src="@drawable/ic_bathroom"
-          android:tint="@color/black"
-          android:layout_marginLeft="5dp"
-          android:layout_toRightOf="@id/txt_number_bath_rom"/>
-        <TextView
-          android:id="@+id/txt_number_park"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textColor="@color/black"
-          android:layout_toRightOf="@+id/image_bathroom"
-          android:layout_marginLeft="15dp"
-          android:textSize="15dp"
-          app:textInteger="@{property.num_of_parking}"/>
-        <ImageView
-          android:id="@+id/image_pack"
-          android:layout_width="20dp"
-          android:layout_height="20dp"
-          android:src="@drawable/ic_pack"
-          android:tint="@color/black"
-          android:layout_marginLeft="5dp"
-          android:layout_toRightOf="@id/txt_number_park"/>
-      </RelativeLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:background="?android:attr/selectableItemBackground">
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      >
-      <ImageView
-        android:id="@+id/image_contact"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="15dp"
-        android:src="@drawable/ic_inspection"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        />
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/image_contact"
-        android:text="@{property.time_contact}"
-        />
-    </RelativeLayout>
-  </LinearLayout>
-</android.support.v7.widget.CardView>
+      android:onClick="@{()->handler.onClickProperty(property)}"
+      android:orientation="vertical">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@color/gray">
+        <ImageView
+          android:id="@+id/image_room"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_alignParentTop="true"
+          android:scaleType="centerCrop"
+          android:src="@color/colorGray"
+          app:loadImageMainPropertyInListImage="@{property.images}" />
+        <RelativeLayout
+          android:id="@+id/relative_type"
+          android:layout_width="50dp"
+          android:layout_height="30dp"
+          android:layout_marginBottom="50dp"
+          android:layout_alignParentBottom="true"
+          android:background="@color/colorPrimary">
+          <TextView
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@{property.type_id}"
+            android:textColor="@color/white" />
+        </RelativeLayout>
+        <TextView
+          android:id="@+id/txt_price"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="10dp"
+          android:layout_marginLeft="20dp"
+          android:layout_alignParentBottom="true"
+          android:textColor="@color/white"
+          android:textSize="25dp"
+          app:textDoublePrice="@{property.price}" />
+        <com.odauday.ui.view.StarView
+          android:id="@+id/star_view"
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_marginTop="10dp"
+          android:layout_marginRight="10dp"
+          android:layout_alignParentRight="true"
+          android:onClick="@{(view)->handler.onClickFavorite(view,property)}" />
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:id="@+id/relative_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+          android:id="@+id/txt_address"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="5dp"
+          android:layout_marginLeft="20dp"
+          android:text="@{property.address}"
+          android:textColor="@color/black"
+          android:textSize="18dp"
+
+          />
+        <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="5dp"
+          android:layout_marginBottom="5dp"
+          android:layout_marginLeft="20dp"
+          android:layout_below="@id/txt_address">
+          <TextView
+            android:id="@+id/txt_number_bed_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            app:textInteger="@{property.num_of_bedroom}" />
+          <ImageView
+            android:id="@+id/image_bedroom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/txt_number_bed_room"
+            android:src="@drawable/ic_bedroom"
+            android:tint="@color/black" />
+          <TextView
+            android:id="@+id/txt_number_bath_rom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/image_bedroom"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            app:textInteger="@{property.num_of_bathroom}" />
+          <ImageView
+            android:id="@+id/image_bathroom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/txt_number_bath_rom"
+            android:src="@drawable/ic_bathroom"
+            android:tint="@color/black" />
+          <TextView
+            android:id="@+id/txt_number_park"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/image_bathroom"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            app:textInteger="@{property.num_of_parking}" />
+          <ImageView
+            android:id="@+id/image_pack"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/txt_number_park"
+            android:src="@drawable/ic_pack"
+            android:tint="@color/black" />
+        </RelativeLayout>
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+          android:id="@+id/image_contact"
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_marginTop="5dp"
+          android:layout_marginBottom="5dp"
+          android:layout_marginLeft="15dp"
+          android:src="@drawable/ic_inspection" />
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="5dp"
+          android:layout_marginLeft="5dp"
+          android:layout_toRightOf="@+id/image_contact"
+          android:text="@{property.time_contact}" />
+      </RelativeLayout>
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
 </layout>

@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Favorite {
+    
     @SerializedName("user_id")
     @Expose
     private String userId;

@@ -1,11 +1,11 @@
 package com.odauday.di.modules;
 
 import com.odauday.data.remote.FavoriteService;
+import com.odauday.data.remote.HistoryService;
 import com.odauday.data.remote.PropertyService;
-import com.odauday.data.remote.SearchService;
+import com.odauday.data.remote.SavedSearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.UserService;
-import com.odauday.model.Favorite;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -45,24 +45,33 @@ public class ServiceBuildersModule {
     
     @Provides
     @Singleton
-    FavoriteService provideFavoriteService(@Named("protectRetrofit") Retrofit retrofit){
+    FavoriteService provideFavoriteService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(FavoriteService.class);
-    }
-
-    @Provides
-    @Singleton
-    SearchService provideSearchService(@Named("protectRetrofit") Retrofit retrofit){
-        return  retrofit.create(SearchService.class);
     }
     
     @Provides
     @Singleton
-    PropertyService.Public providePublicPropertyService(@Named("publicRetrofit") Retrofit retrofit) {
-        return retrofit.create(PropertyService.Public.class);
+    SavedSearchService provideSearchService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(SavedSearchService.class);
     }
+    
     @Provides
     @Singleton
-    PropertyService.Protect provideProtectPropertyService(@Named("protectRetrofit") Retrofit retrofit) {
+    PropertyService.Public providePublicPropertyService(
+        @Named("publicRetrofit") Retrofit retrofit) {
+        return retrofit.create(PropertyService.Public.class);
+    }
+    
+    @Provides
+    @Singleton
+    PropertyService.Protect provideProtectPropertyService(
+        @Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(PropertyService.Protect.class);
+    }
+    
+    @Provides
+    @Singleton
+    HistoryService provideHistoryService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(HistoryService.class);
     }
 }

@@ -11,12 +11,16 @@ import dagger.Provides;
  */
 @Module
 public class PropertyManagerModule {
+    
     @Provides
-    ViewModelProvider.Factory mainViewModelProvider(PropertyManagerViewModel propertyManagerViewModel) {
+    ViewModelProvider.Factory mainViewModelProvider(
+        PropertyManagerViewModel propertyManagerViewModel) {
         return new ViewModelFactory<>(propertyManagerViewModel);
     }
+    
     @Provides
-    PropertyManagerViewModel providePropertyManagerViewModel(PropertyRepository propertyRepository) {
+    PropertyManagerViewModel providePropertyManagerViewModel(
+        PropertyRepository propertyRepository) {
         return new PropertyManagerViewModel(propertyRepository);
     }
 }

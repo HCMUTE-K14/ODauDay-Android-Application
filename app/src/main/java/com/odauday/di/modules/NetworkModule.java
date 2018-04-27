@@ -49,7 +49,7 @@ public class NetworkModule {
     @Singleton
     @Named("protectInterceptor")
     Interceptor provideProtectInterceptor(
-              @Named("protectApiHeader") ProtectApiHeader protectApiHeader) {
+        @Named("protectApiHeader") ProtectApiHeader protectApiHeader) {
         return mApiHelper.createInterceptor(protectApiHeader);
     }
     
@@ -57,7 +57,7 @@ public class NetworkModule {
     @Singleton
     @Named("publicInterceptor")
     Interceptor providePublicInterceptor(
-              @Named("publicApiHeader") PublicApiHeader publicApiHeader) {
+        @Named("publicApiHeader") PublicApiHeader publicApiHeader) {
         return mApiHelper.createInterceptor(publicApiHeader);
     }
     
@@ -65,8 +65,8 @@ public class NetworkModule {
     @Singleton
     @Named("protectHttpClient")
     OkHttpClient provideProtectHttpClient(
-              Cache cache,
-              @Named("protectInterceptor") Interceptor protectInterceptor) {
+        Cache cache,
+        @Named("protectInterceptor") Interceptor protectInterceptor) {
         return mApiHelper.createClient(cache, protectInterceptor);
     }
     
@@ -74,8 +74,8 @@ public class NetworkModule {
     @Singleton
     @Named("publicHttpClient")
     OkHttpClient providePublicHttpClient(
-              Cache cache,
-              @Named("publicInterceptor") Interceptor publicInterceptor) {
+        Cache cache,
+        @Named("publicInterceptor") Interceptor publicInterceptor) {
         return mApiHelper.createClient(cache, publicInterceptor);
     }
     
@@ -83,9 +83,9 @@ public class NetworkModule {
     @Singleton
     @Named("protectRetrofit")
     Retrofit provideProtectRetrofit(
-              @Named("baseURL") String baseURL,
-              @Named("protectHttpClient") OkHttpClient client,
-              Gson gson) {
+        @Named("baseURL") String baseURL,
+        @Named("protectHttpClient") OkHttpClient client,
+        Gson gson) {
         return mApiHelper.createRetrofit(baseURL, client, gson);
     }
     
@@ -93,22 +93,22 @@ public class NetworkModule {
     @Singleton
     @Named("defaultRetrofit")
     Retrofit provideDefaultRetrofit(
-              @Named("baseURL") String baseURL,
-              Cache cache,
-              Gson gson) {
+        @Named("baseURL") String baseURL,
+        Cache cache,
+        Gson gson) {
         OkHttpClient client = mApiHelper.createClient(cache, mApiHelper.createDefaultInterceptor());
         return mApiHelper.createRetrofit(baseURL,
-                  client,
-                  gson);
+            client,
+            gson);
     }
     
     @Provides
     @Singleton
     @Named("publicRetrofit")
     Retrofit providePublicRetrofit(
-              @Named("baseURL") String baseURL,
-              @Named("publicHttpClient") OkHttpClient client,
-              Gson gson) {
+        @Named("baseURL") String baseURL,
+        @Named("publicHttpClient") OkHttpClient client,
+        Gson gson) {
         return mApiHelper.createRetrofit(baseURL, client, gson);
     }
 }

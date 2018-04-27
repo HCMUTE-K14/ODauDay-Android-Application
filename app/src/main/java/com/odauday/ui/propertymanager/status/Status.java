@@ -5,7 +5,8 @@ package com.odauday.ui.propertymanager.status;
  */
 
 public class Status {
-    public static final String CONFIRMED="confirmed";
-    public static final String UN_CONFIRMED="unconfirmed";
-    public static final String ENDED="ended";
+
+    public static final String ACTIVE = "active";
+    public static final String PENDING = "pending";
+    public static final String EXPIRED = "expired";
 }

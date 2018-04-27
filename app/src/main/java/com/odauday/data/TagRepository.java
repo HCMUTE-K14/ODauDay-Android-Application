@@ -26,7 +26,7 @@ public class TagRepository implements Repository {
     
     @Inject
     public TagRepository(Public publicTagService,
-              Protect protectTagService, SchedulersExecutor schedulersExecutor) {
+        Protect protectTagService, SchedulersExecutor schedulersExecutor) {
         mPublicTagService = publicTagService;
         mProtectTagService = protectTagService;
         mSchedulersExecutor = schedulersExecutor;
@@ -35,82 +35,85 @@ public class TagRepository implements Repository {
     public Single<List<Tag>> getAllTag() {
         Single<JsonResponse<List<Tag>>> result = mPublicTagService.getAllTag();
         return result
-                  .map(response -> {
-                      try {
-                          if(response.isSuccess()){
-                              return response.getData();
-                          }
-                          throw new TagException(response.getErrors());
-                          
-                      } catch (Exception ex) {
-                            if(ex instanceof TagException){
-                                throw ex;
-                            }
-                            throw new TagException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new TagException(response.getErrors());
+                    
+                } catch (Exception ex) {
+                    if (ex instanceof TagException) {
+                        throw ex;
+                    }
+                    throw new TagException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
-    public Single<MessageResponse> createTag(Tag tag){
-        Single<JsonResponse<MessageResponse>> result=mProtectTagService.createTag(tag);
+    
+    public Single<MessageResponse> createTag(Tag tag) {
+        Single<JsonResponse<MessageResponse>> result = mProtectTagService.createTag(tag);
         return result
-                  .map(response->{
-                      try {
-                          if(response.isSuccess()){
-                              return response.getData();
-                          }
-                          throw new TagException(response.getErrors());
-        
-                      } catch (Exception ex) {
-                          if(ex instanceof TagException){
-                              throw ex;
-                          }
-                          throw new TagException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new TagException(response.getErrors());
+                    
+                } catch (Exception ex) {
+                    if (ex instanceof TagException) {
+                        throw ex;
+                    }
+                    throw new TagException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
-    public Single<MessageResponse> updateTag(Tag tag){
-        Single<JsonResponse<MessageResponse>> result=mProtectTagService.updateTag(tag);
+    
+    public Single<MessageResponse> updateTag(Tag tag) {
+        Single<JsonResponse<MessageResponse>> result = mProtectTagService.updateTag(tag);
         return result
-                  .map(response->{
-                      try {
-                          if(response.isSuccess()){
-                              return response.getData();
-                          }
-                          throw new TagException(response.getErrors());
-                      
-                      } catch (Exception ex) {
-                          if(ex instanceof TagException){
-                              throw ex;
-                          }
-                          throw new TagException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new TagException(response.getErrors());
+                    
+                } catch (Exception ex) {
+                    if (ex instanceof TagException) {
+                        throw ex;
+                    }
+                    throw new TagException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
-    public  Single<MessageResponse> deleteTag(String id){
-        Single<JsonResponse<MessageResponse>> result=mProtectTagService.deleteTag(id);
+    
+    public Single<MessageResponse> deleteTag(String id) {
+        Single<JsonResponse<MessageResponse>> result = mProtectTagService.deleteTag(id);
         return result
-                  .map(response->{
-                      try {
-                          if(response.isSuccess()){
-                              return response.getData();
-                          }
-                          throw new TagException(response.getErrors());
-                      
-                      } catch (Exception ex) {
-                          if(ex instanceof TagException){
-                              throw ex;
-                          }
-                          throw new TagException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new TagException(response.getErrors());
+                    
+                } catch (Exception ex) {
+                    if (ex instanceof TagException) {
+                        throw ex;
+                    }
+                    throw new TagException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     public Public getPublicTagService() {

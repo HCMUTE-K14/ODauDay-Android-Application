@@ -40,10 +40,10 @@ public class UserRepository implements Repository {
     
     @Inject
     public UserRepository(
-              UserService.Public publicUserService,
-              UserService.Protect protectUserService,
-              PreferencesHelper preferencesHelper,
-              SchedulersExecutor schedulersExecutor) {
+        UserService.Public publicUserService,
+        UserService.Protect protectUserService,
+        PreferencesHelper preferencesHelper,
+        SchedulersExecutor schedulersExecutor) {
         
         this.mPublicUserService = publicUserService;
         this.mProtectUserService = protectUserService;
@@ -54,8 +54,8 @@ public class UserRepository implements Repository {
     
     public Single<JsonResponse<MessageResponse>> test(SearchCriteria searchCriteria) {
         return mPublicUserService.test(searchCriteria)
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     public Single<User> login(AbstractAuthRequest request) {
@@ -77,7 +77,7 @@ public class UserRepository implements Repository {
                     
                     mPreferencesHelper.put(PrefKey.ACCESS_TOKEN, accessToken);
                     mPreferencesHelper
-                              .put(PrefKey.CURRENT_USER, JwtUtils.toJson(userFromJwt, User.class));
+                        .put(PrefKey.CURRENT_USER, JwtUtils.toJson(userFromJwt, User.class));
                     
                     return userFromJwt;
                 } else {
@@ -92,8 +92,8 @@ public class UserRepository implements Repository {
         });
         
         return userSingle
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
         
     }
     
@@ -101,45 +101,45 @@ public class UserRepository implements Repository {
         Single<JsonResponse<MessageResponse>> result = mPublicUserService.register(request);
         
         return result
-                  .map(response -> {
-                      try {
-                          if (response.isSuccess()) {
-                              return response.getData();
-                          } else {
-                              throw new RegisterException(response.getErrors());
-                          }
-                      } catch (Exception ex) {
-                          if (ex instanceof RegisterException) {
-                              throw ex;
-                          }
-                          throw new RegisterException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    } else {
+                        throw new RegisterException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof RegisterException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     public Single<MessageResponse> forgotPassword(ForgotPasswordRequest request) {
         Single<JsonResponse<MessageResponse>> result = mPublicUserService.forgotPassword(request);
         
         return result
-                  .map(response -> {
-                      try {
-                          if (response.isSuccess()) {
-                              Timber.d(response.getData().toString());
-                              return response.getData();
-                          } else {
-                              throw new ForgotPasswordException(response.getErrors());
-                          }
-                      } catch (Exception ex) {
-                          if (ex instanceof ForgotPasswordException) {
-                              throw ex;
-                          }
-                          throw new RegisterException(ex.getMessage());
-                      }
-                  })
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        Timber.d(response.getData().toString());
+                        return response.getData();
+                    } else {
+                        throw new ForgotPasswordException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof ForgotPasswordException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     private User decodeUserAccessToken(String accessToken) throws Exception {

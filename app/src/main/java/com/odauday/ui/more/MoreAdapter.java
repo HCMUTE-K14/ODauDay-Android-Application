@@ -15,13 +15,15 @@ import timber.log.Timber;
  */
 
 public class MoreAdapter extends BaseAdapter<MenuItemMore, ItemMoreMenuBinding> {
-    private static final String TAG=MoreAdapter.class.getSimpleName();
+    
+    private static final String TAG = MoreAdapter.class.getSimpleName();
     private OnClickMenuMoreListener mOnClickMenuMoreListener;
+    
     @Override
     protected ItemMoreMenuBinding createBinding(ViewGroup parent) {
-        ItemMoreMenuBinding itemMoreMenuBinding= DataBindingUtil.inflate(
+        ItemMoreMenuBinding itemMoreMenuBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.getContext()),
-            R.layout.item_more_menu,parent,false);
+            R.layout.item_more_menu, parent, false);
         return itemMoreMenuBinding;
     }
     
@@ -30,10 +32,11 @@ public class MoreAdapter extends BaseAdapter<MenuItemMore, ItemMoreMenuBinding> 
         binding.setItem(item);
         binding.setHandler(this);
     }
+    
     @Override
     public void setData(List<MenuItemMore> _data) {
-        if(data==null){
-            data=new ArrayList<>();
+        if (data == null) {
+            data = new ArrayList<>();
         }
         data.clear();
         data.addAll(_data);
@@ -44,6 +47,7 @@ public class MoreAdapter extends BaseAdapter<MenuItemMore, ItemMoreMenuBinding> 
     protected boolean areItemsTheSame(MenuItemMore oldItem, MenuItemMore newItem) {
         return oldItem.getId().equals(newItem.getId());
     }
+    
     @Override
     protected boolean areContentsTheSame(MenuItemMore oldItem, MenuItemMore newItem) {
         return oldItem.equals(newItem);
@@ -54,14 +58,16 @@ public class MoreAdapter extends BaseAdapter<MenuItemMore, ItemMoreMenuBinding> 
         mOnClickMenuMoreListener = onClickMenuMoreListener;
     }
     
-    public void onClickMenuItem(MenuItemMore item){
-        Timber.tag(TAG).d("Click:"+item.getName());
-        if(mOnClickMenuMoreListener!=null){
+    public void onClickMenuItem(MenuItemMore item) {
+        Timber.tag(TAG).d("Click:" + item.getName());
+        if (mOnClickMenuMoreListener != null) {
             mOnClickMenuMoreListener.onClickItemMenu(item);
         }
         
     }
-    public interface OnClickMenuMoreListener{
+    
+    public interface OnClickMenuMoreListener {
+        
         void onClickItemMenu(MenuItemMore item);
     }
 }

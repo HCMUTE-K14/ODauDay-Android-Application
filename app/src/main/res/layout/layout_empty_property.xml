@@ -10,15 +10,14 @@
     android:layout_height="300dp"
     android:layout_marginTop="50dp"
     android:layout_centerHorizontal="true"
-    android:src="@drawable/icon_shortlists"/>
+    android:src="@drawable/icon_shortlists" />
   <TextView
     android:id="@+id/txt_empty_shortlist"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@id/image_shortlist"
+    android:layout_centerHorizontal="true"
     android:text="@string/txt_empty_property"
     android:textColor="@color/colorGray"
-    android:layout_centerHorizontal="true"
-    android:textSize="25dp"
-    />
+    android:textSize="25dp" />
 </RelativeLayout>

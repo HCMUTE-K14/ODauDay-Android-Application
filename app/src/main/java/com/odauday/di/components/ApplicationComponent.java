@@ -18,12 +18,12 @@ import javax.inject.Singleton;
 @PerApplication
 @Singleton
 @Component(modules = {
-          AndroidSupportInjectionModule.class,
-          ApplicationModule.class,
-          NetworkModule.class,
-          ServiceBuildersModule.class,
-          RepositoryBuildersModule.class,
-          ViewBuildersModule.class})
+    AndroidSupportInjectionModule.class,
+    ApplicationModule.class,
+    NetworkModule.class,
+    ServiceBuildersModule.class,
+    RepositoryBuildersModule.class,
+    ViewBuildersModule.class})
 public interface ApplicationComponent {
     
     void inject(RootApplication app);

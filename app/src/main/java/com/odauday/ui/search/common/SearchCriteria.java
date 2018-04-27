@@ -56,15 +56,15 @@ public class SearchCriteria implements Parcelable {
     private MinMaxObject<Integer> parking;
     
     public SearchCriteria() {
-    
+
     }
     
     public SearchCriteria(int searchType, Point location, double radius,
-              MinMaxObject<Double> price,
-              MinMaxObject<Double> size, List<String> propertyType,
-              MinMaxObject<Integer> bedrooms,
-              MinMaxObject<Integer> bathrooms,
-              MinMaxObject<Integer> parking) {
+        MinMaxObject<Double> price,
+        MinMaxObject<Double> size, List<String> propertyType,
+        MinMaxObject<Integer> bedrooms,
+        MinMaxObject<Integer> bathrooms,
+        MinMaxObject<Integer> parking) {
         this.searchType = searchType;
         this.location = location;
         this.radius = radius;

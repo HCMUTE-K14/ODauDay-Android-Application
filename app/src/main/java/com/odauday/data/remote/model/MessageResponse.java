@@ -17,7 +17,7 @@ public class MessageResponse implements BaseResponse {
     
     
     public MessageResponse() {
-
+    
     }
     
     public MessageResponse(String message) {

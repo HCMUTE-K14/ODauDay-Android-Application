@@ -11,6 +11,8 @@ import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.propertymanager.PropertyManagerModule;
 import com.odauday.ui.savedsearch.SavedSearchProvider;
 import com.odauday.ui.search.SearchTabProvider;
+import com.odauday.ui.settings.ActivitySettings;
+import com.odauday.ui.settings.SettingsModule;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
@@ -43,7 +45,7 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract ForgotPasswordActivity bindForgotPasswordActivity();
     
-
+    
     @ContributesAndroidInjector(modules = TagModule.class)
     @PerActivity
     abstract ActivityDemo bindActivityDemo();
@@ -51,14 +53,14 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = TagModule.class)
     @PerFragment
     abstract FragmentDemo bindFragmentDemo();
-
+    
     @ContributesAndroidInjector(modules = {
-              SearchTabProvider.class,
-              AlertTabProvider.class,
-              FavoriteTabProvider.class,
-              SavedSearchProvider.class,
-              MoreTabProvider.class,
-              MainActivityModule.class
+        SearchTabProvider.class,
+        AlertTabProvider.class,
+        FavoriteTabProvider.class,
+        SavedSearchProvider.class,
+        MoreTabProvider.class,
+        MainActivityModule.class
     })
     @PerActivity
     abstract MainActivity bindMainActivity();
@@ -66,4 +68,8 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = PropertyManagerModule.class)
     @PerActivity
     abstract ActivityPropertyManager provideActivityPropertyManager();
+    
+    @ContributesAndroidInjector(modules = SettingsModule.class)
+    @PerActivity
+    abstract ActivitySettings provideActivitySettings();
 }

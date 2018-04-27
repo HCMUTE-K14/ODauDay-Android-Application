@@ -1,6 +1,6 @@
 package com.odauday.ui.savedsearch;
 
-import com.odauday.data.SearchRepository;
+import com.odauday.data.SavedSearchRepository;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
 import io.reactivex.disposables.Disposable;
@@ -11,15 +11,16 @@ import javax.inject.Inject;
  */
 
 public class SavedSearchViewModel extends BaseViewModel {
-    private SearchRepository mSearchRepository;
+    
+    private SavedSearchRepository mSavedSearchRepository;
     
     @Inject
-    public SavedSearchViewModel(SearchRepository searchRepository) {
-        mSearchRepository = searchRepository;
+    public SavedSearchViewModel(SavedSearchRepository savedSearchRepository) {
+        mSavedSearchRepository = savedSearchRepository;
     }
     
-    public void getSearchByUser(String userId){
-        Disposable disposable=mSearchRepository.getSearchByUser(userId)
+    public void getSearchByUser(String userId) {
+        Disposable disposable = mSavedSearchRepository.getSearchByUser(userId)
             .doOnSubscribe(onSubscribe -> {
                 response.setValue(Resource.loading(null));
             })
@@ -31,8 +32,9 @@ public class SavedSearchViewModel extends BaseViewModel {
         
         mCompositeDisposable.add(disposable);
     }
-    public void removeSearch(String search_id){
-        Disposable disposable=mSearchRepository.removeSearch(search_id)
+    
+    public void removeSearch(String search_id) {
+        Disposable disposable = mSavedSearchRepository.removeSearch(search_id)
             .doOnSubscribe(onSubscribe -> {
                 response.setValue(Resource.loading(null));
             })

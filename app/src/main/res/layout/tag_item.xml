@@ -6,45 +6,43 @@
       type="com.odauday.model.Tag" />
     <variable
       name="handler"
-      type="com.odauday.ui.user.tag.TagAdapter"/>
+      type="com.odauday.ui.user.tag.TagAdapter" />
   </data>
-<android.support.v7.widget.CardView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_marginBottom="5dp"
-  >
-  <RelativeLayout
+  <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="@{() -> handler.onClickTag(tag)}">
-    <TextView
-      android:id="@+id/txt_id"
-      android:layout_width="wrap_content"
+    android:layout_marginBottom="5dp">
+    <RelativeLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="30dp"
-      android:textSize="20dp"
-      android:textStyle="bold"
-      android:text="@{tag.id}"/>
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="30dp"
-      android:textSize="17dp"
-      android:layout_below="@id/txt_id"
-      android:text="@{tag.name}"/>
-    <ImageView
-      android:id="@+id/image_star"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      android:src="@drawable/ic_star"
-      android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true"
-      />
-    <EditText
-      android:layout_width="100dp"
-      android:layout_height="50dp"
-      android:maxLines="1"
-      android:text="sdfdsfdsfdsfdsfdsfddfdfdfdfdfdfdsfdsfdsfdsfdsfd"/>
-  </RelativeLayout>
-</android.support.v7.widget.CardView>
+      android:onClick="@{() -> handler.onClickTag(tag)}">
+      <TextView
+        android:id="@+id/txt_id"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="@{tag.id}"
+        android:textSize="20dp" />
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@id/txt_id"
+        android:text="@{tag.name}"
+        android:textSize="17dp" />
+      <ImageView
+        android:id="@+id/image_star"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_star" />
+      <EditText
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:maxLines="1"
+        android:text="sdfdsfdsfdsfdsfdsfddfdfdfdfdfdfdsfdsfdsfdsfdsfd" />
+    </RelativeLayout>
+  </android.support.v7.widget.CardView>
 </layout>

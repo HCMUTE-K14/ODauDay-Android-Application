@@ -15,9 +15,9 @@ public class Property {
     @Expose
     private String id;
     
-    @SerializedName("name")
+    @SerializedName("address")
     @Expose
-    private String name;
+    private String address;
     
     @SerializedName("code")
     @Expose
@@ -25,11 +25,11 @@ public class Property {
     
     @SerializedName("latitude")
     @Expose
-    private Float latitude;
+    private double latitude;
     
     @SerializedName("longitude")
     @Expose
-    private Float longitude;
+    private double longitude;
     
     @SerializedName("postcode")
     @Expose
@@ -95,7 +95,7 @@ public class Property {
     @Expose
     private List<Tag> mTags;
     
-    @SerializedName("categorys")
+    @SerializedName("categories")
     @Expose
     private List<Category> mCategories;
     
@@ -112,12 +112,12 @@ public class Property {
         this.id = id;
     }
     
-    public String getName() {
-        return name;
+    public String getAddress() {
+        return address;
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public void setAddress(String address) {
+        this.address = address;
     }
     
     public String getCode() {
@@ -128,19 +128,19 @@ public class Property {
         this.code = code;
     }
     
-    public Float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
     
-    public void setLatitude(Float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
     
-    public Float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
     
-    public void setLongitude(Float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
     
@@ -292,7 +292,7 @@ public class Property {
     public String toString() {
         return "Property{" +
                "id='" + id + '\'' +
-               ", name='" + name + '\'' +
+               ", name='" + address + '\'' +
                ", code='" + code + '\'' +
                ", latitude=" + latitude +
                ", longitude=" + longitude +
@@ -315,14 +315,16 @@ public class Property {
                '}';
     }
     
-    public class Favorite{
+    public class Favorite {
+        
         @SerializedName("date_created")
         @Expose
         private Date date_created;
+        
         public Date getDate_created() {
             return date_created;
         }
-    
+        
         public void setDate_created(Date date_created) {
             this.date_created = date_created;
         }

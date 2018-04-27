@@ -7,7 +7,7 @@ import java.util.List;
  * Created by kunsubin on 4/4/2018.
  */
 
-public class FavoriteException  extends BaseException{
+public class FavoriteException extends BaseException {
     
     public FavoriteException(List<ErrorResponse> errors) {
         super(errors);

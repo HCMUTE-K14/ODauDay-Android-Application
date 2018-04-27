@@ -21,10 +21,6 @@ public class StarView<T> extends RelativeLayout {
     private OnClickStarListener mOnClickStarListener;
     private Animation mAnimationRight;
     private Animation mAnimationLeft;
-    enum STATUS {
-        CHECK, UN_CHECK
-    }
-    
     private STATUS mSTATUS = STATUS.UN_CHECK;
     
     public StarView(Context context) {
@@ -68,22 +64,26 @@ public class StarView<T> extends RelativeLayout {
         switch (mSTATUS) {
             case CHECK:
                 mImageView.startAnimation(mAnimationLeft);
-                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_listing_shortlist_no_padding));
+                mImageView.setImageDrawable(
+                    context.getResources().getDrawable(R.drawable.ic_listing_shortlist_no_padding));
                 mSTATUS = STATUS.UN_CHECK;
                 break;
             case UN_CHECK:
                 mImageView.startAnimation(mAnimationRight);
-                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_listing_shortlist_selected_no_padding));
+                mImageView.setImageDrawable(context.getResources()
+                    .getDrawable(R.drawable.ic_listing_shortlist_selected_no_padding));
                 mSTATUS = STATUS.CHECK;
                 break;
             default:
                 break;
         }
     }
+    
     public void setSTATUS(STATUS STATUS) {
         this.mSTATUS = STATUS;
         changeStatus(getContext());
     }
+    
     public void addOnClick(T item) {
         if (mSTATUS == STATUS.CHECK) {
             mOnClickStarListener.onUnCheckStar(item);
@@ -96,8 +96,13 @@ public class StarView<T> extends RelativeLayout {
             return;
         }
     }
+    
     public void setOnClickStarListener(OnClickStarListener onClickStarListener) {
         mOnClickStarListener = onClickStarListener;
+    }
+    
+    enum STATUS {
+        CHECK, UN_CHECK
     }
     
     public interface OnClickStarListener<T> {

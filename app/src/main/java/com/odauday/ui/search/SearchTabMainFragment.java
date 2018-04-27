@@ -130,7 +130,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 if (newState == DrawerLayout.STATE_SETTLING) {
                     if (((MainActivity) getActivity()) != null) {
                         boolean isDrawerOpen = mBinding.get().drawerLayout
-                                  .isDrawerVisible(Gravity.END);
+                            .isDrawerVisible(Gravity.END);
                         if (!isDrawerOpen) {
                             ((MainActivity) getActivity()).toggleBottomBar(false);
                             mIsBottomBarHide = false;
@@ -162,21 +162,21 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             throw new NullPointerException("Fragment manager is null");
         }
         Runnable runnableAttachFilterFragment = new AttachFragmentRunnable.AttachFragmentBuilder()
-                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-                  .setFragmentManager(getActivity().getSupportFragmentManager())
-                  .setFragment(FilterNavigationFragment.newInstance())
-                  .setTagFragment(FilterNavigationFragment.TAG)
-                  .setContainerId(R.id.filter_nav)
-                  .build();
+            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+            .setFragmentManager(getActivity().getSupportFragmentManager())
+            .setFragment(FilterNavigationFragment.newInstance())
+            .setTagFragment(FilterNavigationFragment.TAG)
+            .setContainerId(R.id.filter_nav)
+            .build();
         
         new Handler().postDelayed(runnableAttachFilterFragment,
-                  NavigationController.DELAY_ATTACH_FRAGMENT);
+            NavigationController.DELAY_ATTACH_FRAGMENT);
         
     }
     
     private void bindViewOnToolBar(View view) {
         mBinding.get().toolbar.searchBar.setOnClickListener(viewSearchBar -> {
-            Toast.makeText(getContext(), "SavedSearch bar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Search bar", Toast.LENGTH_SHORT).show();
         });
         mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> {
             openDrawer();

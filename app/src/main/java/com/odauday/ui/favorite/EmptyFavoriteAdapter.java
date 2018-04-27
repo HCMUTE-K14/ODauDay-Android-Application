@@ -18,7 +18,7 @@ public class EmptyFavoriteAdapter extends RecyclerView.Adapter<EmptyViewHolder> 
     public EmptyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.layout_empty_favorite, parent, false);
-    
+        
         return new EmptyViewHolder(view);
     }
     
@@ -32,10 +32,11 @@ public class EmptyFavoriteAdapter extends RecyclerView.Adapter<EmptyViewHolder> 
     
     }
     
-    public class EmptyViewHolder extends RecyclerView.ViewHolder{
+    public class EmptyViewHolder extends RecyclerView.ViewHolder {
+        
         public EmptyViewHolder(View itemView) {
             super(itemView);
         }
     }
-   
+    
 }

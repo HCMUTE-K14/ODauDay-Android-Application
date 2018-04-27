@@ -3,8 +3,6 @@ package com.odauday.utils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -13,10 +11,6 @@ import java.util.Locale;
 public class TextUtils {
     
     private static char[] SHORT_MONEY = new char[]{'k', 'm', 'b', 't'};
-    
-    enum Locale{
-        VN,US
-    }
     
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
@@ -42,28 +36,35 @@ public class TextUtils {
         }
         StringBuilder stringBuilder = new StringBuilder();
         Object valueOf = (d > 99.9d || isRound || (!isRound && d > 9.99d))
-                  ? Integer.valueOf((((int) d) * 10) / 10)
-                  : d + "";
+            ? Integer.valueOf((((int) d) * 10) / 10)
+            : d + "";
         return stringBuilder.append(valueOf).append("").append(SHORT_MONEY[iteration]).toString();
     }
-    public static String doubleFormat(double value){
+    
+    public static String doubleFormat(double value) {
         BigDecimal number = new BigDecimal(value);
-        String result=number.stripTrailingZeros().toPlainString();
+        String result = number.stripTrailingZeros().toPlainString();
         return result;
     }
-    public static String formatDecimal(float value){
+    
+    public static String formatDecimal(double value) {
         NumberFormat formatter = new DecimalFormat("#0.000");
         return formatter.format(value);
     }
-    public static String formatNumber(double value,Locale locale){
+    
+    public static String formatNumber(double value, Locale locale) {
         NumberFormat formatter = new DecimalFormat("#,###.00");
-        if(locale==Locale.US){
+        if (locale == Locale.US) {
             return formatter.format(value);
-        }else {
-            String number=formatter.format(value).replace(".","/");
-            number=number.replace(",",".");
-            number=number.replace("/",",");
+        } else {
+            String number = formatter.format(value).replace(".", "/");
+            number = number.replace(",", ".");
+            number = number.replace("/", ",");
             return number;
         }
+    }
+    
+    enum Locale {
+        VN, US
     }
 }

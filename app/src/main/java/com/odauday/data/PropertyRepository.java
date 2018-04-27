@@ -4,16 +4,12 @@ import com.odauday.SchedulersExecutor;
 import com.odauday.data.remote.PropertyService;
 import com.odauday.data.remote.PropertyService.Protect;
 import com.odauday.data.remote.PropertyService.Public;
-import com.odauday.data.remote.TagService;
-import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
-import com.odauday.exception.FavoriteException;
 import com.odauday.exception.PropertyException;
 import com.odauday.model.Property;
 import io.reactivex.Single;
 import java.util.List;
-import java.util.ListIterator;
 import javax.inject.Inject;
 
 /**
@@ -23,7 +19,8 @@ import javax.inject.Inject;
 public class PropertyRepository implements Repository {
     
     private final PropertyService.Public mPublicPropertyService;
-    private final PropertyService.Protect mProtectPropertyService;;
+    private final PropertyService.Protect mProtectPropertyService;
+    ;
     private final SchedulersExecutor mSchedulersExecutor;
     
     @Inject
@@ -34,18 +31,20 @@ public class PropertyRepository implements Repository {
         mProtectPropertyService = protectPropertyService;
         mSchedulersExecutor = schedulersExecutor;
     }
+    
     public Single<List<Property>> getPropertyOfUser(String user_id) {
-        Single<JsonResponse<List<Property>>> result = mProtectPropertyService.getPropertyOfUser(user_id);
+        Single<JsonResponse<List<Property>>> result = mProtectPropertyService
+            .getPropertyOfUser(user_id);
         return result
             .map(response -> {
                 try {
-                    if(response.isSuccess()){
+                    if (response.isSuccess()) {
                         return response.getData();
                     }
                     throw new PropertyException(response.getErrors());
                     
                 } catch (Exception ex) {
-                    if(ex instanceof PropertyException){
+                    if (ex instanceof PropertyException) {
                         throw ex;
                     }
                     throw new PropertyException(ex.getMessage());
@@ -54,18 +53,20 @@ public class PropertyRepository implements Repository {
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
     }
+    
     public Single<MessageResponse> deleteProperty(String property_id) {
-        Single<JsonResponse<MessageResponse>> result = mProtectPropertyService.deleteProperty(property_id);
+        Single<JsonResponse<MessageResponse>> result = mProtectPropertyService
+            .deleteProperty(property_id);
         return result
             .map(response -> {
                 try {
-                    if(response.isSuccess()){
+                    if (response.isSuccess()) {
                         return response.getData();
                     }
                     throw new PropertyException(response.getErrors());
                     
                 } catch (Exception ex) {
-                    if(ex instanceof PropertyException){
+                    if (ex instanceof PropertyException) {
                         throw ex;
                     }
                     throw new PropertyException(ex.getMessage());

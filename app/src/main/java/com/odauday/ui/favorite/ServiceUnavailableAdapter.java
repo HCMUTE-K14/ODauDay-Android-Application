@@ -11,7 +11,7 @@ import com.odauday.ui.favorite.ServiceUnavailableAdapter.ServiceUnavailableViewH
  * Created by kunsubin on 4/14/2018.
  */
 
-public class ServiceUnavailableAdapter extends RecyclerView.Adapter<ServiceUnavailableViewHolder>{
+public class ServiceUnavailableAdapter extends RecyclerView.Adapter<ServiceUnavailableViewHolder> {
     
     @Override
     public ServiceUnavailableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,7 +31,8 @@ public class ServiceUnavailableAdapter extends RecyclerView.Adapter<ServiceUnava
     
     }
     
-    public class ServiceUnavailableViewHolder extends RecyclerView.ViewHolder{
+    public class ServiceUnavailableViewHolder extends RecyclerView.ViewHolder {
+        
         public ServiceUnavailableViewHolder(View itemView) {
             super(itemView);
         }

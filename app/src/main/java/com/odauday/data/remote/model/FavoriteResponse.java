@@ -10,6 +10,7 @@ import java.util.List;
  */
 
 public class FavoriteResponse {
+    
     @SerializedName("id")
     @Expose
     private String id;

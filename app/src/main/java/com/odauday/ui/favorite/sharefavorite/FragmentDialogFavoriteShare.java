@@ -3,26 +3,17 @@ package com.odauday.ui.favorite.sharefavorite;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
 import com.odauday.databinding.FragmentDialogFavoriteShareBinding;
 import com.odauday.model.ShareFavorite;
-import com.odauday.ui.favorite.FavoriteViewModel;
 import com.odauday.utils.SnackBarUtils;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasFragmentInjector;
-import dagger.android.support.HasSupportFragmentInjector;
-import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -31,12 +22,14 @@ import timber.log.Timber;
 
 @SuppressLint("ValidFragment")
 public class FragmentDialogFavoriteShare extends DialogFragment {
-    private static final String TAG=FragmentDialogFavoriteShare.class.getSimpleName();
+    
+    private static final String TAG = FragmentDialogFavoriteShare.class.getSimpleName();
     private FragmentDialogFavoriteShareBinding mFragmentDialogFavoriteShareBinding;
-    private String message="";
+    private String message = "";
     private String mName;
     private String mEmail;
     private OnClickSendEmailListener mOnClickSendEmailListener;
+    
     @SuppressLint("ValidFragment")
     public FragmentDialogFavoriteShare(String name, String email) {
         mName = name;
@@ -48,11 +41,13 @@ public class FragmentDialogFavoriteShare extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return super.onCreateDialog(savedInstanceState);
     }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-        FragmentDialogFavoriteShareBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dialog_favorite_share, container, false);
-        mFragmentDialogFavoriteShareBinding=binding;
+        FragmentDialogFavoriteShareBinding binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_dialog_favorite_share, container, false);
+        mFragmentDialogFavoriteShareBinding = binding;
         return binding.getRoot();
     }
     
@@ -64,39 +59,46 @@ public class FragmentDialogFavoriteShare extends DialogFragment {
         mFragmentDialogFavoriteShareBinding.txtYourName.setText(mName);
         mFragmentDialogFavoriteShareBinding.txtYourEmail.setText(mEmail);
     }
-  
-    public void onClickClose(){
+    
+    public void onClickClose() {
         Timber.tag(TAG).d("Close");
         this.dismiss();
     }
-    public void onClickSendEmail(){
+    
+    public void onClickSendEmail() {
         Timber.tag(TAG).d("Send email");
-        if(checkInput()){
+        if (checkInput()) {
             
-            ShareFavorite shareFavorite=new ShareFavorite();
-            shareFavorite.setEmail_friend(mFragmentDialogFavoriteShareBinding.txtEmailFriend.getText().toString().trim());
-            shareFavorite.setName(mFragmentDialogFavoriteShareBinding.txtYourName.getText().toString().trim());
-            shareFavorite.setEmail_from(mFragmentDialogFavoriteShareBinding.txtYourEmail.getText().toString().trim());
+            ShareFavorite shareFavorite = new ShareFavorite();
+            shareFavorite.setEmail_friend(
+                mFragmentDialogFavoriteShareBinding.txtEmailFriend.getText().toString().trim());
+            shareFavorite.setName(
+                mFragmentDialogFavoriteShareBinding.txtYourName.getText().toString().trim());
+            shareFavorite.setEmail_from(
+                mFragmentDialogFavoriteShareBinding.txtYourEmail.getText().toString().trim());
             
             mOnClickSendEmailListener.onClick(shareFavorite);
             
             this.dismiss();
-        }else {
+        } else {
             SnackBarUtils.showSnackBar(mFragmentDialogFavoriteShareBinding.shareFavorite, message);
         }
     }
     
     private boolean checkInput() {
-        if(mFragmentDialogFavoriteShareBinding.txtEmailFriend.getText().toString().trim().equals("")){
-            message=getString(R.string.empty_email_friend);
+        if (mFragmentDialogFavoriteShareBinding.txtEmailFriend.getText().toString().trim()
+            .equals("")) {
+            message = getString(R.string.empty_email_friend);
             return false;
         }
-        if(mFragmentDialogFavoriteShareBinding.txtYourName.getText().toString().trim().equals("")){
-            message=getString(R.string.empty_your_name);
+        if (mFragmentDialogFavoriteShareBinding.txtYourName.getText().toString().trim()
+            .equals("")) {
+            message = getString(R.string.empty_your_name);
             return false;
         }
-        if(mFragmentDialogFavoriteShareBinding.txtYourEmail.getText().toString().trim().equals("")){
-            message=getString(R.string.empty_your_email);
+        if (mFragmentDialogFavoriteShareBinding.txtYourEmail.getText().toString().trim()
+            .equals("")) {
+            message = getString(R.string.empty_your_email);
             return false;
         }
         return true;
@@ -107,7 +109,8 @@ public class FragmentDialogFavoriteShare extends DialogFragment {
         mOnClickSendEmailListener = onClickSendEmailListener;
     }
     
-    public interface OnClickSendEmailListener{
+    public interface OnClickSendEmailListener {
+        
         void onClick(ShareFavorite shareFavorite);
     }
 }

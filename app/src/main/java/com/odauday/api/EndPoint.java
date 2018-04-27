@@ -19,9 +19,10 @@ public class EndPoint {
     public static final String FORGOT_PASSWORD = USERS + "/forgot-password";
     public static final String CHANGE_PASSWORD = USERS + "/change-password";
     
-    public static final String TAG="tag";
-    public static final String FAVORITE="favorite";
-    public static final String SEARCH="search";
-    public static final String PROPERTY="property";
+    public static final String TAG = "tag";
+    public static final String FAVORITE = "favorite";
+    public static final String SAVE_SEARCH = "save-search";
+    public static final String PROPERTY = "property";
+    public static final String HISTORY = "history";
     
 }

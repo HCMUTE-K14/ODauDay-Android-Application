@@ -5,7 +5,7 @@ package com.odauday.config;
  */
 
 public class Constants {
-
+    
     public static final String INTENT_EXTRA_VALUE_RES = "intent_extra_value_res";
     public static final String INTENT_EXTRA_VALUE_STRING_RES = "intent_extra_string_value_res";
     public static final String INTENT_EXTRA_SELECTION_FROM = "intent_extra_select_from";

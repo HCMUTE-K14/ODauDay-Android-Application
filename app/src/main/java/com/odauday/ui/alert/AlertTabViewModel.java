@@ -11,6 +11,6 @@ public class AlertTabViewModel extends BaseViewModel {
     
     @Inject
     public AlertTabViewModel() {
-
+    
     }
 }

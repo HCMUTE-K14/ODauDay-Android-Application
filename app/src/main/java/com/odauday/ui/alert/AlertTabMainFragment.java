@@ -13,11 +13,7 @@ import com.odauday.viewmodel.BaseViewModel;
 
 public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainBinding> {
     
-    //====================== Variable =========================//
-    
     public static final String TAG = NavigationTab.ALERT_TAB.getNameTab();
-    
-    //====================== Override Base Method =========================//
     
     public static AlertTabMainFragment newInstance() {
         
@@ -40,11 +36,7 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
     
-    //====================== ViewBinding Method =========================//
-    
-    //====================== Contract Method =========================//
-    //====================== Helper Method =========================//
 }

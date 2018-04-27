@@ -14,7 +14,7 @@ public class RetrofitException extends BaseException {
     private final Kind kind;
     
     RetrofitException(String message, String url, Response response, Kind kind,
-              Throwable exception) {
+        Throwable exception) {
         super(message, exception);
         this.url = url;
         this.response = response;
@@ -32,7 +32,7 @@ public class RetrofitException extends BaseException {
     
     public static RetrofitException unexpectedError(Throwable exception) {
         return new RetrofitException(exception.getMessage(), null, null, Kind.UNEXPECTED,
-                  exception);
+            exception);
     }
     
     public String getUrl() {

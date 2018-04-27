@@ -22,7 +22,7 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     private boolean mIsUsingMinMax;
     
     public WheelAdapterImpl(FilterPickerDialog pickerDialog, String[] displayStrings,
-              boolean isMinAdapter, boolean isUsingMinMax) {
+        boolean isMinAdapter, boolean isUsingMinMax) {
         this.mPickerDialog = pickerDialog;
         this.mDisplayString = displayStrings;
         this.mIsMinAdapter = isMinAdapter;
@@ -31,7 +31,7 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     }
     
     public WheelAdapterImpl(FilterPickerDialog pickerDialog, int[] displayIntegers,
-              boolean isMinAdapter, boolean isUsingMinMax) {
+        boolean isMinAdapter, boolean isUsingMinMax) {
         this.mPickerDialog = pickerDialog;
         this.mDisplayIntegers = displayIntegers;
         this.mIsMinAdapter = isMinAdapter;
@@ -41,14 +41,14 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     
     public int getItemsCount() {
         return mPickerDialog.mIsCurrency ? this.mDisplayIntegers.length + 1
-                  : this.mDisplayString.length;
+            : this.mDisplayString.length;
     }
     
     public View getItem(int index, View convertView, ViewGroup parent) {
         TextView txb;
         if (convertView == null) {
             txb = (TextView) this.mLayoutInflater
-                      .inflate(R.layout.item_filter_picker, parent, false);
+                .inflate(R.layout.item_filter_picker, parent, false);
         } else {
             txb = (TextView) convertView;
         }

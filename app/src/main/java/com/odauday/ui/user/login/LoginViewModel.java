@@ -24,14 +24,14 @@ public class LoginViewModel extends BaseViewModel {
     public void login(AbstractAuthRequest request) {
         
         Disposable disposable = mUserRepository.login(request)
-                  .doOnSubscribe(onSubscribe -> {
-                      response.setValue(Resource.loading(null));
-                  })
-                  .subscribe(success -> {
-                      response.setValue(Resource.success(""));
-                  }, error -> {
-                      response.setValue(Resource.error(error));
-                  });
+            .doOnSubscribe(onSubscribe -> {
+                response.setValue(Resource.loading(null));
+            })
+            .subscribe(success -> {
+                response.setValue(Resource.success(""));
+            }, error -> {
+                response.setValue(Resource.error(error));
+            });
         
         mCompositeDisposable.add(disposable);
     }

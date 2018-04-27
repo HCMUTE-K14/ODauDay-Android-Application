@@ -13,12 +13,10 @@ import com.odauday.R;
  */
 
 public class NotificationView<T> extends RelativeLayout {
+    
     private RelativeLayout mRelativeLayout;
     private ImageView mImageView;
     private OnClickNotificationListener mOnClickNotificationListener;
-    enum STATUS {
-        CHECK, UN_CHECK
-    }
     private STATUS mSTATUS = STATUS.UN_CHECK;
     
     public NotificationView(Context context) {
@@ -53,22 +51,26 @@ public class NotificationView<T> extends RelativeLayout {
         }
         mRelativeLayout = rootView.findViewById(R.id.relative_layout_notification);
         mImageView = rootView.findViewById(R.id.image_notification);
-        mSTATUS=STATUS.UN_CHECK;
+        mSTATUS = STATUS.UN_CHECK;
     }
+    
     private void changeStatus(Context context) {
         switch (mSTATUS) {
             case CHECK:
-                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_notification_alert));
+                mImageView.setImageDrawable(
+                    context.getResources().getDrawable(R.drawable.ic_notification_alert));
                 mSTATUS = STATUS.UN_CHECK;
                 break;
             case UN_CHECK:
-                mImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_notification_alert_active));
+                mImageView.setImageDrawable(
+                    context.getResources().getDrawable(R.drawable.ic_notification_alert_active));
                 mSTATUS = STATUS.CHECK;
                 break;
             default:
                 break;
         }
     }
+    
     public void addOnClick(T item) {
         if (mSTATUS == STATUS.CHECK) {
             mOnClickNotificationListener.offNotification(item);
@@ -91,8 +93,15 @@ public class NotificationView<T> extends RelativeLayout {
         this.mSTATUS = STATUS;
         changeStatus(getContext());
     }
+    
+    enum STATUS {
+        CHECK, UN_CHECK
+    }
+    
     public interface OnClickNotificationListener<T> {
+        
         void onNotification(T item);
+        
         void offNotification(T item);
     }
 }

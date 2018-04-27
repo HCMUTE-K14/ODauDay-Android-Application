@@ -1,7 +1,6 @@
 package com.odauday.ui.favorite;
 
 import com.odauday.data.FavoriteRepository;
-import com.odauday.model.Property;
 import com.odauday.model.PropertyID;
 import com.odauday.model.ShareFavorite;
 import com.odauday.viewmodel.BaseViewModel;
@@ -14,7 +13,7 @@ import javax.inject.Inject;
  * Created by kunsubin on 4/4/2018.
  */
 
-public class FavoriteViewModel extends BaseViewModel{
+public class FavoriteViewModel extends BaseViewModel {
     
     FavoriteRepository mFavoriteRepository;
     private FavoriteContract mFavoriteContract;
@@ -23,21 +22,9 @@ public class FavoriteViewModel extends BaseViewModel{
     public FavoriteViewModel(FavoriteRepository favoriteRepository) {
         this.mFavoriteRepository = favoriteRepository;
     }
-    public void getFavoritePropertyByUser(String userId){
-        Disposable disposable=mFavoriteRepository.getFavoritePropertyByUser(userId)
-            .doOnSubscribe(onSubscribe -> {
-                response.setValue(Resource.loading(null));
-            })
-            .subscribe(success -> {
-                response.setValue(Resource.success(success));
-            }, error -> {
-                response.setValue(Resource.error(error));
-            });
     
-        mCompositeDisposable.add(disposable);
-    }
-    public void unCheckFavorites(List<PropertyID> list){
-        Disposable disposable=mFavoriteRepository.unCheckFavorites(list)
+    public void getFavoritePropertyByUser(String userId) {
+        Disposable disposable = mFavoriteRepository.getFavoritePropertyByUser(userId)
             .doOnSubscribe(onSubscribe -> {
                 response.setValue(Resource.loading(null));
             })
@@ -49,8 +36,23 @@ public class FavoriteViewModel extends BaseViewModel{
         
         mCompositeDisposable.add(disposable);
     }
-    public void shareFavorite(ShareFavorite shareFavorite){
-        Disposable disposable=mFavoriteRepository.shareFavorite(shareFavorite)
+    
+    public void unCheckFavorites(List<PropertyID> list) {
+        Disposable disposable = mFavoriteRepository.unCheckFavorites(list)
+            .doOnSubscribe(onSubscribe -> {
+                response.setValue(Resource.loading(null));
+            })
+            .subscribe(success -> {
+                response.setValue(Resource.success(success));
+            }, error -> {
+                response.setValue(Resource.error(error));
+            });
+        
+        mCompositeDisposable.add(disposable);
+    }
+    
+    public void shareFavorite(ShareFavorite shareFavorite) {
+        Disposable disposable = mFavoriteRepository.shareFavorite(shareFavorite)
             .doOnSubscribe(onSubscribe -> {
                 mFavoriteContract.loading(true);
             })
@@ -61,7 +63,7 @@ public class FavoriteViewModel extends BaseViewModel{
                 mFavoriteContract.shareFavoriteError(error);
                 mFavoriteContract.loading(false);
             });
-    
+        
         mCompositeDisposable.add(disposable);
     }
     

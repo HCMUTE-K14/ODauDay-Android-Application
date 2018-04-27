@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Image {
+    
     @SerializedName("id")
     @Expose
     private String id;

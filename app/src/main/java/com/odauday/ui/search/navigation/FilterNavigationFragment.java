@@ -72,7 +72,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
             case BATHROOMS:
             case PARKING:
                 Toast.makeText(getContext(), pickedValueFrom + "-" + pickedValueTo,
-                          Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             default:
                 break;
         }
@@ -100,7 +100,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
             showDialogPicker(FilterOption.SIZE);
         });
         mBinding.get().filterPropertyType
-                  .setTextHeader(getString(R.string.txt_filter_property_type));
+            .setTextHeader(getString(R.string.txt_filter_property_type));
         
         mBinding.get().filterBedrooms.setTextHeader(getString(R.string.txt_filter_num_of_bedroom));
         mBinding.get().filterBedrooms.setListener(() -> {
@@ -108,7 +108,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         });
         
         mBinding.get().filterBathRooms
-                  .setTextHeader(getString(R.string.txt_filter_num_of_bathroom));
+            .setTextHeader(getString(R.string.txt_filter_num_of_bathroom));
         mBinding.get().filterBathRooms.setListener(() -> {
             showDialogPicker(FilterOption.BATHROOMS);
         });
@@ -133,27 +133,27 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 title = getString(R.string.txt_filter_price);
                 //SERACH TYPE ==> RENT OR BUY
                 pd = initDialogPicker(true, title, R.array.price_buy,
-                          0, 0, 0, true);
+                    0, 0, 0, true);
                 break;
             case SIZE:
                 title = getString(R.string.txt_filter_size);
                 pd = initDialogPicker(false, title, R.array.land_size_count_int,
-                          R.array.land_size_count_string, 0, 0, true);
+                    R.array.land_size_count_string, 0, 0, true);
                 break;
             case BEDROOMS:
                 title = getString(R.string.txt_filter_num_of_bedroom);
                 pd = initDialogPicker(false, title, R.array.bedroom_count_int,
-                          R.array.bedroom_count_string, 0, 0, true);
+                    R.array.bedroom_count_string, 0, 0, true);
                 break;
             case BATHROOMS:
                 title = getString(R.string.txt_filter_num_of_bathroom);
                 pd = initDialogPicker(false, title, R.array.bathroom_count_int,
-                          R.array.bathroom_count_string, 0, 0, true);
+                    R.array.bathroom_count_string, 0, 0, true);
                 break;
             case PARKING:
                 title = getString(R.string.txt_filter_num_of_parking);
                 pd = initDialogPicker(false, title, R.array.parking_count_int,
-                          R.array.parking_count_string, 0, 0, false);
+                    R.array.parking_count_string, 0, 0, false);
                 break;
             default:
                 pd = null;
@@ -167,16 +167,16 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     }
     
     private FilterPickerDialog initDialogPicker(boolean hasCurrency, String title, int intValuesRes,
-              int displayValuesRes, int from,
-              int to, boolean hasToWheel) {
+        int displayValuesRes, int from,
+        int to, boolean hasToWheel) {
         return new FilterPickerDialog.Builder(hasCurrency)
-                  .setTitle(title)
-                  .setValueRes(intValuesRes)
-                  .setDisplayValueRes(displayValuesRes)
-                  .setSelectedFrom(from)
-                  .setSelectedTo(to)
-                  .setHasToWheel(hasToWheel)
-                  .build();
+            .setTitle(title)
+            .setValueRes(intValuesRes)
+            .setDisplayValueRes(displayValuesRes)
+            .setSelectedFrom(from)
+            .setSelectedTo(to)
+            .setHasToWheel(hasToWheel)
+            .build();
     }
     
     private void toggleMoreOptions() {
@@ -190,10 +190,10 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         
         mBinding.get().btnMoreOptions.postDelayed((Runnable) () -> {
             mBinding.get().scrollView
-                      .fullScroll(show ? ScrollView.FOCUS_DOWN : ScrollView.FOCUS_UP);
+                .fullScroll(show ? ScrollView.FOCUS_DOWN : ScrollView.FOCUS_UP);
         }, 250);
         mBinding.get().btnMoreOptions.setText(show ? R.string.txt_filter_less_options
-                  : R.string.txt_filter_more_options);
+            : R.string.txt_filter_more_options);
     }
     
     private void resetMoreOptions() {

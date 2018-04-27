@@ -19,7 +19,7 @@ public class EmptyPropertyAdapter extends RecyclerView.Adapter<EmptyPropertyView
     public EmptyPropertyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.layout_empty_property, parent, false);
-    
+        
         return new EmptyPropertyViewHolder(view);
     }
     
@@ -33,8 +33,8 @@ public class EmptyPropertyAdapter extends RecyclerView.Adapter<EmptyPropertyView
         return 1;
     }
     
-    public class EmptyPropertyViewHolder extends ViewHolder{
-    
+    public class EmptyPropertyViewHolder extends ViewHolder {
+        
         public EmptyPropertyViewHolder(View itemView) {
             super(itemView);
         }

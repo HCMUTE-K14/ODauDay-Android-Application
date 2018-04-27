@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
   <item
     android:id="@+id/all"
-    android:title="@string/txt_all"/>
+    android:title="@string/txt_all" />
   <item
     android:id="@+id/buy"
-    android:title="@string/txt_buy"/>
+    android:title="@string/txt_buy" />
 
   <item
     android:id="@+id/rent"
-    android:title="@string/txt_rent"/>
+    android:title="@string/txt_rent" />
 </menu>

@@ -4,10 +4,49 @@
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:text="Alert tab" />
+    <RelativeLayout
+      android:id="@+id/relative_layout_top"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/colorPrimary">
+      <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_centerVertical="true"
+        android:text="@string/txt_notifications"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp" />
+      <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="?android:attr/selectableItemBackground">
+        <ImageView
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_marginRight="10dp"
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_notify_clear" />
+      </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="5dp"
+      android:layout_below="@id/relative_layout_top">
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view_notification"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
   </RelativeLayout>
 </layout>

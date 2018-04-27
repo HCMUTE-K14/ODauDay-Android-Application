@@ -3,31 +3,28 @@
   <data>
     <variable
       name="search"
-      type="com.odauday.model.Search"/>
+      type="com.odauday.model.Search" />
     <variable
       name="handler"
-      type="com.odauday.ui.savedsearch.RecentSearchAdapter"/>
+      type="com.odauday.ui.savedsearch.RecentSearchAdapter" />
   </data>
-  <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
     android:layout_marginBottom="20dp"
-    >
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
       android:background="?android:attr/selectableItemBackground"
       android:onClick="@{()->handler.onClickRecentSearch(search)}"
-      >
+      android:orientation="vertical">
       <View
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:background="@color/colorGreen"/>
+        android:background="@color/colorGreen" />
 
       <RelativeLayout
         android:layout_width="match_parent"
@@ -37,29 +34,26 @@
           android:id="@+id/image_location"
           android:layout_width="35dp"
           android:layout_height="30dp"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="5dp"
-          android:src="@drawable/ic_location_map_green"
-          />
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_location_map_green" />
         <TextView
           android:id="@+id/txt_name"
           android:layout_width="300dp"
           android:layout_height="wrap_content"
-          android:text="@{search.name}"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="5dp"
+          android:layout_centerVertical="true"
           android:layout_toRightOf="@id/image_location"
+          android:text="@{search.name}"
           android:textColor="@color/colorGray"
-          android:textSize="18dp"
-          />
+          android:textSize="18dp" />
         <ImageView
           android:id="@+id/image_more"
           android:layout_width="30dp"
           android:layout_height="25dp"
-          android:src="@drawable/ic_nav_bar_more_vertical"
           android:layout_alignParentRight="true"
           android:onClick="@{(view)->handler.onClickMoreMenu(view,search)}"
-          />
+          android:src="@drawable/ic_nav_bar_more_vertical" />
       </RelativeLayout>
       <RelativeLayout
 
@@ -72,47 +66,43 @@
           android:id="@+id/txt_lat_label"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/txt_latitude"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="10dp"
+          android:layout_centerVertical="true"
+          android:text="@string/txt_latitude"
           android:textColor="@color/colorGray"
-          android:textSize="15dp"
-          />
+          android:textSize="15dp" />
         <TextView
           android:id="@+id/txt_lat"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          app:textFloat="@{search.latitude}"
-          android:inputType="number"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="5dp"
+          android:layout_centerVertical="true"
           android:layout_toRightOf="@id/txt_lat_label"
+          android:inputType="number"
           android:textColor="@color/colorGray"
           android:textSize="15dp"
-          />
+          app:textFloat="@{search.latitude}" />
         <TextView
           android:id="@+id/txt_long_label"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/txt_longitude"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="10dp"
+          android:layout_centerVertical="true"
           android:layout_toRightOf="@id/txt_lat"
+          android:text="@string/txt_longitude"
           android:textColor="@color/colorGray"
-          android:textSize="15dp"
-          />
+          android:textSize="15dp" />
         <TextView
           android:id="@+id/txt_long"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          app:textFloat="@{search.longitude}"
-          android:inputType="number"
-          android:layout_centerVertical="true"
           android:layout_marginLeft="5dp"
+          android:layout_centerVertical="true"
           android:layout_toRightOf="@id/txt_long_label"
+          android:inputType="number"
           android:textColor="@color/colorGray"
           android:textSize="15dp"
-          />
+          app:textFloat="@{search.longitude}" />
       </RelativeLayout>
       <RelativeLayout
         android:layout_width="match_parent"
@@ -121,7 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="5dp"
-        android:background="@color/gray"/>
+        android:background="@color/gray" />
     </LinearLayout>
   </android.support.v7.widget.CardView>
 </layout>

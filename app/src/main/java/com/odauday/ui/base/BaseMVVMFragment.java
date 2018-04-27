@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.odauday.di.Injectable;
 import com.odauday.ui.common.AutoClearedData;
 import com.odauday.viewmodel.BaseViewModel;
-
 import dagger.android.support.AndroidSupportInjection;
 
 
@@ -35,10 +34,11 @@ public abstract class BaseMVVMFragment<VB extends ViewDataBinding> extends BaseF
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-              @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         VB binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
         
         mBinding = new AutoClearedData<>(this, binding);

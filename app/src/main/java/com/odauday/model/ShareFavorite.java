@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public class ShareFavorite {
+    
     @SerializedName("email_friend")
     @Expose
     private String email_friend;

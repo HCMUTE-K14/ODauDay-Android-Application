@@ -6,10 +6,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import com.odauday.R;
-import com.odauday.config.Type;
 import com.odauday.databinding.ItemPropertyManagerBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
@@ -18,23 +16,24 @@ import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
-import timber.log.Timber;
 
 /**
  * Created by kunsubin on 4/18/2018.
  */
 
-public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBinding> {
+public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBinding> {
     
-    private static final String TAG=PropertyAdapter.class.getSimpleName();
+    private static final String TAG = PropertyAdapter.class.getSimpleName();
     private PopupMenu mPopupMenu;
     private OnClickMenuListener mOnClickMenuListener;
-    private Filter mFilter=new ItemFilter();
-    private List<Property> mDisplayProperty=new ArrayList<>();
+    private Filter mFilter = new ItemFilter();
+    private List<Property> mDisplayProperty = new ArrayList<>();
+    
     @Override
     protected ItemPropertyManagerBinding createBinding(ViewGroup parent) {
-        ItemPropertyManagerBinding itemPropertyManagerBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-            R.layout.item_property_manager,parent,false);
+        ItemPropertyManagerBinding itemPropertyManagerBinding = DataBindingUtil
+            .inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_property_manager, parent, false);
         return itemPropertyManagerBinding;
     }
     
@@ -62,8 +61,8 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
     
     @Override
     public void setData(List<Property> _data) {
-        if(data==null){
-            data=new ArrayList<>();
+        if (data == null) {
+            data = new ArrayList<>();
         }
         data.clear();
         mDisplayProperty.clear();
@@ -74,31 +73,37 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
     
     @Override
     public int getItemCount() {
-        return mDisplayProperty==null?0:mDisplayProperty.size();
+        return mDisplayProperty == null ? 0 : mDisplayProperty.size();
     }
     
-    public void onClickMoreMenu(View view,Property property){
+    @Override
+    public int getItemViewType(int position) {
+        return 10;
+    }
+    
+    public void onClickMoreMenu(View view, Property property) {
         mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.popup_menu_action_manager_property, mPopupMenu.getMenu());
         
-        if(property.getStatus().equals(Status.ENDED)){
+        if (property.getStatus().equals(Status.EXPIRED)) {
             mPopupMenu.getMenu().removeItem(R.id.mark_the_end);
             mPopupMenu.getMenu().removeItem(R.id.edit);
             mPopupMenu.getMenu().removeItem(R.id.add_extend_time);
         }
-        if(!property.getStatus().equals(Status.ENDED)){
+        if (!property.getStatus().equals(Status.EXPIRED)) {
             mPopupMenu.getMenu().removeItem(R.id.reuse);
         }
         mPopupMenu.setOnMenuItemClickListener(item -> {
-            onHandlerItem(item,property);
+            onHandlerItem(item, property);
             return false;
         });
         mPopupMenu.show();
     }
+    
     private void onHandlerItem(MenuItem item, Property property) {
-       
-        switch (item.getItemId()){
+        
+        switch (item.getItemId()) {
             case R.id.edit:
                 mOnClickMenuListener.editProperty(property);
                 break;
@@ -114,8 +119,8 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
             case R.id.reuse:
                 mOnClickMenuListener.reuseProperty(property);
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
         
     }
@@ -125,15 +130,8 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
         mOnClickMenuListener = onClickMenuListener;
     }
     
-    public interface OnClickMenuListener{
-        void editProperty(Property property);
-        void deleteProperty(Property property);
-        void markTheEndProperty(Property property);
-        void addExtendsTime(Property property);
-        void reuseProperty(Property property);
-    }
-    public void filter(String text){
-        if(TextUtils.isEmpty(text)){
+    public void filter(String text) {
+        if (TextUtils.isEmpty(text)) {
             this.mDisplayProperty.clear();
             this.mDisplayProperty.addAll(data);
             notifyDataSetChanged();
@@ -142,6 +140,20 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
         }
         this.mFilter.filter(text);
     }
+    
+    public interface OnClickMenuListener {
+        
+        void editProperty(Property property);
+        
+        void deleteProperty(Property property);
+        
+        void markTheEndProperty(Property property);
+        
+        void addExtendsTime(Property property);
+        
+        void reuseProperty(Property property);
+    }
+    
     private class ItemFilter extends Filter {
         
         @Override
@@ -154,7 +166,7 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
             final ArrayList<Property> tempFilterList = new ArrayList<>();
             
             for (Property property : data) {
-                String name = property.getName().toLowerCase();
+                String name = property.getAddress().toLowerCase();
                 if (name.contains(filterString)) {
                     tempFilterList.add(property);
                 }
@@ -165,10 +177,14 @@ public class PropertyAdapter extends BaseAdapter<Property,ItemPropertyManagerBin
             
             return results;
         }
+        
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mDisplayProperty.clear();
             mDisplayProperty = (ArrayList<Property>) results.values;
+           /* if(mDisplayProperty!=null&&mDisplayProperty.size()>0){
+                Timber.tag(TAG).d("Anh ky:"+mDisplayProperty.get(0).toString());
+            }*/
             notifyDataSetChanged();
         }
     }

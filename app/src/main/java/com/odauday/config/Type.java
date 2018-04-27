@@ -5,6 +5,7 @@ package com.odauday.config;
  */
 
 public class Type {
-    public static final String SELL="SELL";
-    public static final String RENT="RENT";
+    
+    public static final String SELL = "SELL";
+    public static final String RENT = "RENT";
 }
