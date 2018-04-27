@@ -37,7 +37,6 @@ public class RootApplication extends Application implements HasActivityInjector 
     public static Context getContext() {
         return mContext;
     }
-    
     @Override
     public void onCreate() {
         super.onCreate();

@@ -25,5 +25,10 @@ public class EndPoint {
     public static final String AUTOCOMPLETE_PLACE = "auto-complete-place";
     
     public static final String GEO_INFO = "geo-info";
+    public static final String TAG = "tag";
+    public static final String FAVORITE = "favorite";
+    public static final String SAVE_SEARCH = "save-search";
+    public static final String PROPERTY = "property";
+    public static final String HISTORY = "history";
     
 }

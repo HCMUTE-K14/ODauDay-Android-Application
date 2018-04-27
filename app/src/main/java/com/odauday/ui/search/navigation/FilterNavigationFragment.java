@@ -275,8 +275,10 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                   .getDisplayPropertyType();
         mBinding.get().filterPropertyType.setText(displayPropertyType);
         
+
         String displayBedroom = mSearchCriteria.getDisplay().getDisplayBedroom();
         mBinding.get().filterBedrooms.setTextValue(displayBedroom);
+
         
         String displayBathroom = mSearchCriteria.getDisplay().getDisplayBathroom();
         mBinding.get().filterBathRooms.setTextValue(displayBathroom);
@@ -303,6 +305,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     
     public OnCompleteRefineFilter getOnCompleteRefineFilter() {
         return mOnCompleteRefineFilter;
+
     }
     
     public void setOnCompleteRefineFilter(

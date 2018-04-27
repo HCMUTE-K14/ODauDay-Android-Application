@@ -34,7 +34,7 @@ public class ViewUtils {
     
     public static void disabledUserInteraction(Activity view) {
         view.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
     
     public static void disabledUserInteraction(Fragment view) {
@@ -42,7 +42,7 @@ public class ViewUtils {
             return;
         }
         view.getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
     
     public static void enabledUserInteraction(Activity view) {

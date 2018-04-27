@@ -36,12 +36,12 @@ public class SingleCallAdapter extends Factory {
     
     @Override
     public CallAdapter<?, ?> get(
-              @NonNull Type returnType,
-              @NonNull Annotation[] annotations,
-              @NonNull Retrofit retrofit) {
+        @NonNull Type returnType,
+        @NonNull Annotation[] annotations,
+        @NonNull Retrofit retrofit) {
         return new RxCallAdapterWrapper(
-                  retrofit,
-                  original.get(returnType, annotations, retrofit));
+            retrofit,
+            original.get(returnType, annotations, retrofit));
     }
     
     private static class RxCallAdapterWrapper implements CallAdapter<Object, Single<?>> {
@@ -63,31 +63,31 @@ public class SingleCallAdapter extends Factory {
         @Override
         public Single<?> adapt(@NonNull Call<Object> call) {
             return wrapped.adapt(call)
-                      .flatMap(o -> {
-                          try {
-                              return Single.just(o);
-                          } catch (Exception ex) {
-                              return Single.error(ex);
-                          }
-                      })
-                      .onErrorResumeNext(throwable -> {
-                          if (throwable instanceof HttpException) {
-                              HttpException httpException = (HttpException) throwable;
-                              Response response = httpException.response();
-                              JsonResponse json = new Gson()
-                                        .fromJson(response.errorBody().string(),
-                                                  JsonResponse.class);
-                              return Single.just(json);
-                          }
-                          if (throwable instanceof IOException) {
-                              Timber.tag("ERROR").e(((IOException) throwable).getMessage());
-                              return Single.error(RetrofitException
-                                        .networkError((IOException) throwable));
-                          }
-                          Timber.tag("ERROR").e(((Throwable) throwable).getMessage());
-                          return Single.error(RetrofitException
-                                    .unexpectedError((Exception) throwable));
-                      });
+                .flatMap(o -> {
+                    try {
+                        return Single.just(o);
+                    } catch (Exception ex) {
+                        return Single.error(ex);
+                    }
+                })
+                .onErrorResumeNext(throwable -> {
+                    if (throwable instanceof HttpException) {
+                        HttpException httpException = (HttpException) throwable;
+                        Response response = httpException.response();
+                        JsonResponse json = new Gson()
+                            .fromJson(response.errorBody().string(),
+                                JsonResponse.class);
+                        return Single.just(json);
+                    }
+                    if (throwable instanceof IOException) {
+                        Timber.tag("ERROR").e(((IOException) throwable).getMessage());
+                        return Single.error(RetrofitException
+                            .networkError((IOException) throwable));
+                    }
+                    Timber.tag("ERROR").e(((Throwable) throwable).getMessage());
+                    return Single.error(RetrofitException
+                        .unexpectedError((Exception) throwable));
+                });
         }
         
         

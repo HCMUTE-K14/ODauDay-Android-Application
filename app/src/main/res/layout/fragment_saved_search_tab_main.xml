@@ -1,13 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-  <data />
+  <data>
+    <variable
+      name="handler"
+      type="com.odauday.ui.savedsearch.SavedSearchTabMainFragment" />
+  </data>
   <RelativeLayout
+    android:id="@+id/saved_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:text="saved search" />
+    <RelativeLayout
+      android:id="@+id/relative_layout_top"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/colorPrimary">
+      <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:text="@string/txt_recent_saved_search"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp" />
+      <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="@{()->handler.onClickRefresh()}">
+        <ImageView
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:layout_marginRight="10dp"
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_sync" />
+      </RelativeLayout>
+
+
+    </RelativeLayout>
+    <android.support.v4.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/relative_layout_top"
+      android:background="@color/gray">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+          android:id="@+id/relative_saved_search"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+          <TextView
+            android:id="@+id/txt_saved_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/txt_saved_search"
+            android:textColor="@color/colorGray"
+            android:textSize="17dp" />
+          <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_saved_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/txt_saved_search" />
+
+        </RelativeLayout>
+        <RelativeLayout
+          android:id="@+id/relative_recent_search"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/relative_saved_search">
+          <TextView
+            android:id="@+id/txt_recent_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/txt_recent_search"
+            android:textColor="@color/colorGray"
+            android:textSize="17dp" />
+          <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_recent_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/txt_recent_search" />
+
+        </RelativeLayout>
+
+      </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
   </RelativeLayout>
 </layout>

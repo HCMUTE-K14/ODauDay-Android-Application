@@ -2,14 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
   <data />
   <RelativeLayout
+    android:id="@+id/shortlist"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <com.odauday.ui.view.HeaderFavoriteView
+      android:id="@+id/header_favorite"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:text="Favorite tab" />
-    <include layout="@layout/layout_filter_picker" />
+    </com.odauday.ui.view.HeaderFavoriteView>
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycle_view_favorite"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/header_favorite">
+
+    </android.support.v7.widget.RecyclerView>
   </RelativeLayout>
 </layout>

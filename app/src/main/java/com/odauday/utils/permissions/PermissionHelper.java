@@ -39,14 +39,14 @@ public class PermissionHelper {
     }
     
     public static void askForPermission(
-              Activity activity, String permission,
-              PermissionCallBack permissionCallback) {
+        Activity activity, String permission,
+        PermissionCallBack permissionCallback) {
         askForPermission(activity, new String[]{permission}, permissionCallback);
     }
     
     public static void askForPermission(
-              Activity activity, String[] permissions,
-              PermissionCallBack permissionCallBack) {
+        Activity activity, String[] permissions,
+        PermissionCallBack permissionCallBack) {
         if (permissionCallBack == null) {
             return;
         }
@@ -55,15 +55,15 @@ public class PermissionHelper {
             return;
         }
         PermissionRequest permissionRequest = new PermissionRequest(
-                  new ArrayList<>(Arrays.asList(permissions)), permissionCallBack);
+            new ArrayList<>(Arrays.asList(permissions)), permissionCallBack);
         permissionRequests.add(permissionRequest);
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.requestPermissions(permissions,
-                      permissionRequest.getRequestCode());
+                permissionRequest.getRequestCode());
         } else {
             ActivityCompat.requestPermissions(activity, permissions,
-                      permissionRequest.getRequestCode());
+                permissionRequest.getRequestCode());
         }
     }
     
@@ -77,12 +77,12 @@ public class PermissionHelper {
     }
     
     public static void onRequestPermissionsResult(
-              int requestCode, String[] permissions,
-              int[] grantResults) {
+        int requestCode, String[] permissions,
+        int[] grantResults) {
         PermissionRequest requestResult = new PermissionRequest(requestCode);
         if (permissionRequests.contains(requestResult)) {
             PermissionRequest permissionRequest = permissionRequests
-                      .get(permissionRequests.indexOf(requestResult));
+                .get(permissionRequests.indexOf(requestResult));
             if (verifyPermissions(grantResults)) {
                 permissionRequest.getPermissionCallBack().onPermissionGranted();
             } else {
@@ -94,13 +94,13 @@ public class PermissionHelper {
     }
     
     public static boolean shouldShowRequestPermissionRationale(
-              Activity activity,
-              String permissions) {
+        Activity activity,
+        String permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return activity.shouldShowRequestPermissionRationale(permissions);
         } else {
             return ActivityCompat
-                      .shouldShowRequestPermissionRationale(activity, permissions);
+                .shouldShowRequestPermissionRationale(activity, permissions);
         }
     }
     

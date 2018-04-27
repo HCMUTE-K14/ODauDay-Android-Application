@@ -51,9 +51,9 @@ public class APIHelper {
     public Gson createDefaultGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder
-                  .excludeFieldsWithoutExposeAnnotation()
-                  .setPrettyPrinting()
-                  .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+            .excludeFieldsWithoutExposeAnnotation()
+            .setPrettyPrinting()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         return createGson(gsonBuilder);
     }
     
@@ -61,8 +61,8 @@ public class APIHelper {
         return chain -> {
             try {
                 Request modifiedRequest = chain.request().newBuilder()
-                          .headers(applicationHeader.getHeader())
-                          .build();
+                    .headers(applicationHeader.getHeader())
+                    .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException("Cannot connect to Service");
@@ -74,7 +74,7 @@ public class APIHelper {
         return chain -> {
             try {
                 Request modifiedRequest = chain.request().newBuilder()
-                          .build();
+                    .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException(
@@ -121,8 +121,8 @@ public class APIHelper {
               Interceptor languageInterceptor) {
         
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
-                  message -> Timber.tag("Network").d(message))
-                  .setLevel(Level.BODY);
+            message -> Timber.tag("Network").d(message))
+            .setLevel(Level.BODY);
         
         return new OkHttpClient.Builder()
                   .cache(cache)
@@ -148,16 +148,16 @@ public class APIHelper {
         //            return null;
         //        }
         return new Retrofit.Builder()
-                  .baseUrl(baseURL)
-                  .client(client)
-                  .addConverterFactory(GsonConverterFactory.create(gson))
-                  .addCallAdapterFactory(SingleCallAdapter.create())
-                  .build();
+            .baseUrl(baseURL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(SingleCallAdapter.create())
+            .build();
     }
     
     @Deprecated
     public <T> T createService(final Class<T> clazz, String baseURL, OkHttpClient client,
-              Gson gson) {
+        Gson gson) {
         if (!NetworkUtils.isNetworkAvailable(mContext)) {
             return null;
         }

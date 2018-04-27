@@ -15,7 +15,7 @@ public class NetworkUtils {
     
     public static NetworkInfo getInformationNetwork(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
-                  .getSystemService(Context.CONNECTIVITY_SERVICE);
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
         
         return cm != null ? cm.getActiveNetworkInfo() : null;
     }
@@ -39,7 +39,7 @@ public class NetworkUtils {
     
     public boolean isOnWiFi(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context
-                  .getSystemService(Context.CONNECTIVITY_SERVICE);
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
         
         NetworkInfo networkInfo = connManager != null ? connManager.getActiveNetworkInfo() : null;
         return networkInfo != null &&

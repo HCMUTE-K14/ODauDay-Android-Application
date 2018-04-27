@@ -83,7 +83,6 @@ public class Image implements Parcelable {
         
         return ObjectUtils.hash(id, url, dateCreated);
     }
-    
     @Override
     public String toString() {
         return "Image{" +

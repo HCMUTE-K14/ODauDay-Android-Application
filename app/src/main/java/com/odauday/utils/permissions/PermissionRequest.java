@@ -31,8 +31,8 @@ public class PermissionRequest {
     }
 
     public PermissionRequest(
-              ArrayList<String> permissions,
-              PermissionCallBack permissionCallBack) {
+        ArrayList<String> permissions,
+        PermissionCallBack permissionCallBack) {
         if (random == null) {
             random = new Random();
         }

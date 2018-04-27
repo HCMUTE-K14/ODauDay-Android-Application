@@ -116,7 +116,7 @@ public class BaseDialogFragment extends DialogFragment {
         this.mDialogView = View.inflate(activity, R.layout.layout_dialog_template, null);
         builder.setView(this.mDialogView);
         this.mDialogView.findViewById(R.id.dialog_layout_btn)
-                  .setVisibility(View.GONE);
+            .setVisibility(View.GONE);
         return builder;
     }
 }

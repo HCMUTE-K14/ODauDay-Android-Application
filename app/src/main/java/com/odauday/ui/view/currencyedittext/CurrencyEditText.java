@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 import com.odauday.R;
 import java.math.BigInteger;

@@ -29,7 +29,6 @@ public class RegisterViewModel extends BaseViewModel {
                   .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
                   .subscribe(success -> response.setValue(Resource.success(TASK_REGISTER, success)),
                             error -> response.setValue(Resource.error(TASK_REGISTER, error)));
-        
         mCompositeDisposable.add(disposable);
     }
 }
