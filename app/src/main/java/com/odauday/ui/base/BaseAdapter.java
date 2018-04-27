@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
                                                                  RecyclerView.Adapter<BaseViewHolder<VB>> {
     
-    private List<T> data;
+    protected List<T> data;
     
     private int dataVersion = 0;
     
@@ -75,7 +75,7 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
                         
                         @Override
                         public boolean areContentsTheSame(int oldItemPosition,
-                                  int newItemPosition) {
+                            int newItemPosition) {
                             T oldItem = oldData.get(oldItemPosition);
                             T newItem = newData.get(newItemPosition);
                             return BaseAdapter.this.areContentsTheSame(oldItem, newItem);
@@ -117,34 +117,34 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
     protected abstract boolean areContentsTheSame(T oldItem, T newItem);
     
     private Single<DiffResult> createSingleDiffResult(final List<T> oldData,
-              final List<T> newData) {
+        final List<T> newData) {
         return Single.fromCallable(
-                  () -> DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                      @Override
-                      public int getOldListSize() {
-                          return oldData.size();
-                      }
-                      
-                      @Override
-                      public int getNewListSize() {
-                          return newData.size();
-                      }
-                      
-                      @Override
-                      public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                          T oldItem = oldData.get(oldItemPosition);
-                          T newItem = newData.get(newItemPosition);
-                          return BaseAdapter.this.areItemsTheSame(oldItem, newItem);
-                      }
-                      
-                      @Override
-                      public boolean areContentsTheSame(int oldItemPosition,
-                                int newItemPosition) {
-                          T oldItem = oldData.get(oldItemPosition);
-                          T newItem = newData.get(newItemPosition);
-                          return BaseAdapter.this.areContentsTheSame(oldItem, newItem);
-                      }
-                  })
+            () -> DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return oldData.size();
+                }
+                
+                @Override
+                public int getNewListSize() {
+                    return newData.size();
+                }
+                
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    T oldItem = oldData.get(oldItemPosition);
+                    T newItem = newData.get(newItemPosition);
+                    return BaseAdapter.this.areItemsTheSame(oldItem, newItem);
+                }
+                
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition,
+                    int newItemPosition) {
+                    T oldItem = oldData.get(oldItemPosition);
+                    T newItem = newData.get(newItemPosition);
+                    return BaseAdapter.this.areContentsTheSame(oldItem, newItem);
+                }
+            })
         );
     }
     

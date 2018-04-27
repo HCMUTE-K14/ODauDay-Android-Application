@@ -16,15 +16,15 @@ public class AutoClearedData<T> {
         FragmentManager fragmentManager = fragment.getFragmentManager();
         if (fragmentManager != null) {
             fragmentManager.registerFragmentLifecycleCallbacks(
-                      new FragmentManager.FragmentLifecycleCallbacks() {
-                          @Override
-                          public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-                              if (f == fragment) {
-                                  AutoClearedData.this.value = null;
-                                  fragmentManager.unregisterFragmentLifecycleCallbacks(this);
-                              }
-                          }
-                      }, false);
+                new FragmentManager.FragmentLifecycleCallbacks() {
+                    @Override
+                    public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
+                        if (f == fragment) {
+                            AutoClearedData.this.value = null;
+                            fragmentManager.unregisterFragmentLifecycleCallbacks(this);
+                        }
+                    }
+                }, false);
         }
         this.value = value;
     }

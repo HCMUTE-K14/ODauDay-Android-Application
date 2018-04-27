@@ -25,10 +25,10 @@ public class Tag implements Parcelable {
     @SerializedName("id")
     @Expose
     private String id;
+    
     @SerializedName("name")
     @Expose
     private String name;
-    
     public Tag(String id, String name) {
         this.id = id;
         this.name = name;
@@ -42,7 +42,7 @@ public class Tag implements Parcelable {
     public Tag(String id) {
         this.id = id;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -85,7 +85,6 @@ public class Tag implements Parcelable {
                ", name='" + name + '\'' +
                '}';
     }
-    
     @Override
     public int describeContents() {
         return 0;

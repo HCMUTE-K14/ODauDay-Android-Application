@@ -2,6 +2,12 @@ package com.odauday.data.local.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.odauday.model.Search;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -17,7 +23,7 @@ public class PreferencesHelper {
     @Inject
     public PreferencesHelper(Context context) {
         this.mSharedPreferences = context.getApplicationContext()
-                  .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
     
     public void put(String key, String defaultValue) {
@@ -40,6 +46,21 @@ public class PreferencesHelper {
         mSharedPreferences.edit().putLong(key, defaultValue).apply();
     }
     
+    public <T> void putList(String key, List<T> list) {
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        mSharedPreferences.edit().putString(key, json).apply();
+    }
+    
+    public List<Search> getList(String key, String defaultValue) {
+        Gson gson = new Gson();
+        String jsonPreferences = mSharedPreferences.getString(key, defaultValue);
+        Type listType = new TypeToken<ArrayList<Search>>() {
+        }.getType();
+        List<Search> list = gson.fromJson(jsonPreferences, listType);
+        return list;
+    }
+    
     public String get(String key, String defaultValue) {
         return mSharedPreferences.getString(key, defaultValue);
     }
@@ -58,5 +79,9 @@ public class PreferencesHelper {
     
     public long get(String key, long defaultValue) {
         return mSharedPreferences.getLong(key, defaultValue);
+    }
+    
+    public void clear() {
+        mSharedPreferences.edit().clear().apply();
     }
 }

@@ -2,7 +2,9 @@ package com.odauday.utils;
 
 import com.odauday.R;
 import com.odauday.RootApplication;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -68,8 +70,8 @@ public class TextUtils {
         }
         StringBuilder stringBuilder = new StringBuilder();
         Object valueOf = (d > 99.9d || isRound || (!isRound && d > 9.99d))
-                  ? Integer.valueOf((((int) d) * 10) / 10)
-                  : d + "";
+            ? Integer.valueOf((((int) d) * 10) / 10)
+            : d + "";
         return stringBuilder.append(valueOf).append("").append(SHORT_MONEY[iteration]).toString();
     }
     
@@ -146,11 +148,37 @@ public class TextUtils {
         int[] names = RootApplication.getContext().getResources().getIntArray(intArrayRes);
         int count = 0;
         for (String value : RootApplication.getContext().getResources()
-                  .getStringArray(stringArrayRes)) {
-            
+            .getStringArray(stringArrayRes)) {
+    
             map.put(names[count], value);
             count++;
         }
         return map;
+    }
+    public static String doubleFormat(double value) {
+        BigDecimal number = new BigDecimal(value);
+        String result = number.stripTrailingZeros().toPlainString();
+        return result;
+    }
+    
+    public static String formatDecimal(double value) {
+        NumberFormat formatter = new DecimalFormat("#0.000");
+        return formatter.format(value);
+    }
+    
+    public static String formatNumber(double value, Locale locale) {
+        NumberFormat formatter = new DecimalFormat("#,###.00");
+        if (locale == Locale.US) {
+            return formatter.format(value);
+        } else {
+            String number = formatter.format(value).replace(".", "/");
+            number = number.replace(",", ".");
+            number = number.replace("/", ",");
+            return number;
+        }
+    }
+    
+    enum Locale {
+        VN, US
     }
 }

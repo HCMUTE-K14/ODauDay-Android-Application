@@ -1,10 +1,25 @@
 package com.odauday.exception;
 
+import com.odauday.data.remote.model.ErrorResponse;
+import java.util.List;
+
 /**
  * Created by infamouSs on 4/9/18.
+=======
+import com.odauday.data.remote.model.ErrorResponse;
+import java.util.List;
+
+/**
+ * Created by kunsubin on 3/30/2018.
+>>>>>>> mono
  */
 
 public class TagException extends BaseException {
+    
+
+    public TagException(List<ErrorResponse> errors) {
+        super(errors);
+    }
     
     public TagException(String message) {
         super(message);

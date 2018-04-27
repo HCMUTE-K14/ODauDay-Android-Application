@@ -13,8 +13,8 @@ public class SnackBarUtils {
     
     public static void showSnackBar(View rootView, String mMessage) {
         Snackbar.make(rootView, mMessage, Snackbar.LENGTH_LONG)
-                  .setAction("Action", null)
-                  .show();
+            .setAction("Action", null)
+            .show();
     }
     
     public static void showSnackBar(View rootView, String action, String message,

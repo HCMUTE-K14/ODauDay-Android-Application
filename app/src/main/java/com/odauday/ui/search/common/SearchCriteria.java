@@ -70,6 +70,7 @@ public class SearchCriteria implements Parcelable {
         this.parking = new MinMaxObject<>(-1, -1);
         this.propertyTypes = new ArrayList<>();
         this.display = new SearchCriteriaDisplay();
+
     }
     
     protected SearchCriteria(Parcel in) {

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
+  <RelativeLayout
+    android:id="@+id/relative_layout_top"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/colorPrimary">
+    <TextView
+      android:id="@+id/txt_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="20dp"
+      android:layout_centerVertical="true"
+      android:text="@string/txt_sortlist"
+      android:textColor="@color/colorWhite"
+      android:textSize="20dp" />
+    <ImageView
+      android:id="@+id/image_share"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:layout_marginRight="70dp"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:src="@drawable/ic_share" />
+    <ImageView
+      android:id="@+id/image_map"
+      android:layout_width="30dp"
+      android:layout_height="30dp"
+      android:layout_marginRight="10dp"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:src="@drawable/ic_action_map" />
+
+  </RelativeLayout>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_below="@id/relative_layout_top"
+    android:orientation="horizontal"
+    android:weightSum="2">
+    <RelativeLayout
+      android:id="@+id/relative_layout_sort"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1">
+      <ImageView
+        android:id="@+id/image_sort"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_sort"
+        android:tint="@color/colorGray" />
+      <TextView
+        android:id="@+id/txt_sort_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/image_sort"
+        android:text="Last Added"
+        android:textSize="15dp" />
+      <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_down"
+        android:tint="@color/colorGray" />
+
+    </RelativeLayout>
+    <RelativeLayout
+      android:id="@+id/relative_layout_filter"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1">
+
+      <ImageView
+        android:id="@+id/image_filter"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_filter"
+        android:tint="@color/colorGray" />
+      <TextView
+        android:id="@+id/txt_filter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/image_filter"
+        android:text="All"
+        android:textSize="15dp" />
+      <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_down"
+        android:tint="@color/colorGray" />
+
+    </RelativeLayout>
+  </LinearLayout>
+
+</RelativeLayout>

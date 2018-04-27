@@ -42,6 +42,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
               String title, int valueRes,
               int displayValueRes, int selectedFrom,
               int selectedTo, boolean hasToWheel) {
+
         
         FilterNumberPickerDialog dialog = new FilterNumberPickerDialog();
         
@@ -125,6 +126,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         setPositiveButton(getString(R.string.txt_done), false,
                   new OnShowFilterPickerDialogEvent());
         return create();
+
     }
     
     private int getSelectedValue(int selectedValue) {
@@ -132,7 +134,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
             throw new IllegalArgumentException("Need bundle to init this dialog");
         }
         int[] intValues = getResources()
-                  .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+            .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
         if (this.mIsCurrency && selectedValue == 0) {
             return 0;
         }
@@ -170,6 +172,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                     this.mFilterNumberPickerTo.getCurrentItem()) {
                     this.mFilterNumberPickerTo
                               .setCurrentItem(this.mFilterNumberPickerFrom.getCurrentItem(), true);
+
                     return;
                 }
                 return;
@@ -193,7 +196,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         }
         int index = picker.getCurrentItem();
         int[] intValues = getResources()
-                  .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+            .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
         if (!this.mIsCurrency) {
             return intValues[index];
         }

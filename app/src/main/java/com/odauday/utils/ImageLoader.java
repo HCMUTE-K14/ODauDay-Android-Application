@@ -12,7 +12,7 @@ import java.util.Random;
  */
 
 public class ImageLoader {
-    
+
     public static final int[] PLACE_HOLDER = new int[]{
               R.drawable.ic_gallery_placeholder1,
               R.drawable.ic_gallery_placeholder2,
@@ -43,8 +43,8 @@ public class ImageLoader {
     
     public static void loadWithoutOptions(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
-                  .load(image)
-                  .into(imageView);
+            .load(image)
+            .into(imageView);
     }
     
     public static int randomPlaceHolder() {

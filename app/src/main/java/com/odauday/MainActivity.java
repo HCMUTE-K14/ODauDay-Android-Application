@@ -85,7 +85,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             String tag = mTabStack.pop();
             if (tag.equals(NavigationTab.SEARCH_TAB.getNameTab())) {
                 SearchTabMainFragment searchTabMainFragment = (SearchTabMainFragment) getSupportFragmentManager()
-                          .findFragmentByTag(SearchTabMainFragment.TAG);
+                    .findFragmentByTag(SearchTabMainFragment.TAG);
                 if (searchTabMainFragment.isDrawerOpening()) {
                     return;
                 }
@@ -100,7 +100,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             
             mBinding.bottomNavBar.select(mTabStack.peek(), false);
             getSupportFragmentManager()
-                      .popBackStack(mTabStack.peek(), 0);
+                .popBackStack(mTabStack.peek(), 0);
         } catch (Exception ex) {
             finish();
         }
@@ -136,7 +136,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
         mBinding.bottomNavBar.setVisibility(show ? View.VISIBLE : View.GONE);
         if (mBinding.bottomNavBar.getVisibility() == View.VISIBLE) {
             mBinding.bottomNavBar
-                      .startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
+                .startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
         }
     }
 }
