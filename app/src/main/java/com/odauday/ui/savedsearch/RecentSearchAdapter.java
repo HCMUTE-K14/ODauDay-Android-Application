@@ -23,11 +23,10 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     
     private static final String TAG = RecentSearchAdapter.class.getSimpleName();
     private PopupMenu mPopupMenu;
-    private Context mContext;
     private OnClickRemoveRecentSearches mOnClickRemoveRecentSearches;
     
-    public RecentSearchAdapter(Context context) {
-        this.mContext = context;
+    public RecentSearchAdapter() {
+    
     }
     
     @Override
@@ -70,7 +69,7 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     }
     
     public void onClickMoreMenu(View view, Search search) {
-        mPopupMenu = new PopupMenu(mContext, (ImageView) view);
+        mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.popup_more_menu_saved_search, mPopupMenu.getMenu());
         mPopupMenu.setOnMenuItemClickListener(item -> {

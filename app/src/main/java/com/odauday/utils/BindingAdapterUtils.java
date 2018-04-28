@@ -73,14 +73,6 @@ public class BindingAdapterUtils {
             ImageLoader.load(view, images.get(0).getUrl());
         }
     }
-    
-    @BindingAdapter("loadIconMenu")
-    public static void loadIconMenu(ImageView view, String icon_name) {
-        Context context = view.getContext();
-        int resID = context.getResources()
-            .getIdentifier(icon_name, "drawable", context.getPackageName());
-        view.setImageDrawable(context.getResources().getDrawable(resID));
-    }
     @BindingAdapter("setTypeProperty")
     public static void setTypeProperty(TextView view,String type){
         switch (type){

@@ -20,7 +20,7 @@
       android:layout_marginLeft="30dp"
       android:layout_centerVertical="true"
       android:tint="@color/colorGray"
-      app:loadIconMenu="@{item.icon}" />
+      app:loadImage="@{item.icon}" />
     <TextView
       android:textStyle="bold"
       android:layout_width="wrap_content"

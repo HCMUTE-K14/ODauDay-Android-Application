@@ -12,6 +12,7 @@ import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.databinding.FragmentMoreTabMainBinding;
 import com.odauday.model.User;
+import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
@@ -26,12 +27,14 @@ import timber.log.Timber;
  * Created by infamouSs on 3/31/18.
  */
 
-public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBinding> {
+public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBinding> implements
+                                                                                      ClearMemory{
     public static final String TAG = NavigationTab.MORE_TAB.getNameTab();
     @Inject
     PreferencesHelper mPreferencesHelper;
     private List<MenuItemMore> mMenuItemMores;
     private MoreAdapter mMoreAdapter;
+    
     private MoreAdapter.OnClickMenuMoreListener mOnClickMenuMoreListener = item -> {
         switch (item.getId()) {
             case ItemType.PROPERTY_MANAGER:
@@ -75,6 +78,9 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
+        showInfo();
+        getMenu();
+        showMenu();
     }
     
     private void init() {
@@ -94,14 +100,6 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return null;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        showInfo();
-        getMenu();
-        showMenu();
     }
 
     private void showInfo() {
@@ -126,5 +124,17 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     @Override
     protected void processingTaskFromViewModel() {
 
+    }
+    
+    @Override
+    public void onStop() {
+        clearMemory();
+        super.onStop();
+    }
+    
+    @Override
+    public void clearMemory() {
+        mMenuItemMores=null;
+        mMoreAdapter=null;
     }
 }

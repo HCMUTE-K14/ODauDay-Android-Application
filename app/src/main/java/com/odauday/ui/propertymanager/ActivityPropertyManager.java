@@ -22,6 +22,7 @@ import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.ui.propertymanager.PropertyAdapter.OnClickMenuListener;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.SortAndFilterUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.Collections;
 import java.util.Comparator;
@@ -194,18 +195,8 @@ public class ActivityPropertyManager extends
     public void onSuccess(Object object) {
         Timber.tag(TAG).d("success");
         List<Property> list = (List<Property>) object;
-        if (list != null && list.size() > 0) {
-            mProperties = list;
-            if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
-            
-            } else {
-                mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
-            }
-            mPropertyAdapter.setData(list);
-            
-        } else {
-            mBinding.recycleViewProperties.setAdapter(mEmptyPropertyAdapter);
-        }
+        setAdapter(list);
+        mProperties = list;
     }
     
     @Override
@@ -234,9 +225,7 @@ public class ActivityPropertyManager extends
         if (mProperties != null && mProperties.size() > 0) {
             if (mPropertyDelete != null) {
                 mProperties.remove(mPropertyDelete);
-                if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
-                
-                } else {
+                if (!(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter)) {
                     mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
                 }
                 mPropertyAdapter.setData(mProperties);
@@ -260,10 +249,11 @@ public class ActivityPropertyManager extends
         SnackBarUtils.showSnackBar(mBinding.propertyManager, message);
     }
     
+    
     public void onClickMore(View view) {
         mPopupMenu = new PopupMenu(this, view);
         mPopupMenu.getMenuInflater()
-            .inflate(R.menu.menu_sort_property_manager, mPopupMenu.getMenu());
+            .inflate(R.menu.menu_gallery, mPopupMenu.getMenu());
         mPopupMenu.setOnMenuItemClickListener(item -> {
             handlerClickItem(item);
             return false;
@@ -273,13 +263,17 @@ public class ActivityPropertyManager extends
     
     private void handlerClickItem(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.ascending:
+            case R.id.action_sort_a_z:
                 Timber.tag(TAG).d("Ascending Click");
                 ascendingProperty();
                 break;
-            case R.id.descending:
+            case R.id.action_sort_z_a:
                 Timber.tag(TAG).d("Descending Click");
                 descendingProperty();
+                break;
+            case R.id.action_sort_date_added:
+                Timber.tag(TAG).d("Added Click");
+                sortLastAdded();
                 break;
             default:
                 break;
@@ -287,34 +281,21 @@ public class ActivityPropertyManager extends
     }
     
     private void ascendingProperty() {
-        List<Property> list = mProperties;
-        Comparator<Property> comparator = (property1, property2) -> {
-            return property1.getAddress().compareTo(property2.getAddress());
-        };
-        if (list != null && list.size() > 0) {
-            
-            Collections.sort(list, comparator);
-            
-            if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
-            
-            } else {
-                mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
-            }
-            mPropertyAdapter.setData(list);
-        } else {
-            mBinding.recycleViewProperties.setAdapter(mEmptyPropertyAdapter);
-        }
+        List<Property> list = SortAndFilterUtils.sortAddressPropertyAscending(mProperties);
+        setAdapter(list);
     }
     
     private void descendingProperty() {
-        List<Property> list = mProperties;
-        Comparator<Property> comparator = (property1, property2) -> {
-            return property2.getAddress().compareTo(property1.getAddress());
-        };
+        List<Property> list = SortAndFilterUtils.sortAddressPropertyDescending(mProperties);
+        setAdapter(list);
+    }
+    private void sortLastAdded() {
+        List<Property> propertyList = SortAndFilterUtils.sortPropertyLastAdded(mProperties);
+        setAdapter(propertyList);
+       
+    }
+    private void setAdapter(List<Property> list){
         if (list != null && list.size() > 0) {
-            
-            Collections.sort(list, comparator);
-            
             if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
             
             } else {

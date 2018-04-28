@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
+import com.google.gson.Gson;
 import com.odauday.R;
 import com.odauday.config.Type;
 import com.odauday.data.local.cache.PrefKey;
@@ -16,16 +17,17 @@ import com.odauday.databinding.FragmentFavoriteTabMainBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.Property;
 import com.odauday.model.PropertyID;
+import com.odauday.model.User;
+import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.FavoriteAdapter.OnClickStarListener;
 import com.odauday.ui.favorite.sharefavorite.FragmentDialogFavoriteShare;
 import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.SortAndFilterUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -36,7 +38,7 @@ import timber.log.Timber;
 
 public class FavoriteTabMainFragment extends
                                      BaseMVVMFragment<FragmentFavoriteTabMainBinding> implements
-                                                                                      FavoriteContract {
+                                                                                      FavoriteContract,ClearMemory {
     
     
     public static final String TAG = NavigationTab.FAVORITE_TAB.getNameTab();
@@ -53,6 +55,7 @@ public class FavoriteTabMainFragment extends
     private EmptyFavoriteAdapter mEmptyFavoriteAdapter;
     private ServiceUnavailableAdapter mServiceUnavailableAdapter;
     private FragmentDialogFavoriteShare mFragmentDialogFavoriteShare;
+    
     enum SortType {
         LAST_ADDED, LOWEST_PRICE, HIGHEST_PRICE
     }
@@ -82,8 +85,14 @@ public class FavoriteTabMainFragment extends
     //Event click share
     HeaderFavoriteView.OnClickShareListener mOnClickShareListener = view -> {
         Timber.tag(TAG).d("Share click");
-        mFragmentDialogFavoriteShare = new FragmentDialogFavoriteShare("Quoc",
-            "kunsubin96@gmail.com");
+        
+        String struser=mPreferencesHelper.get(PrefKey.CURRENT_USER,"");
+        User user=new Gson().fromJson(struser,User.class);
+        if(user==null){
+            return;
+        }
+        mFragmentDialogFavoriteShare = new FragmentDialogFavoriteShare(user.getDisplayName(),
+            user.getEmail());
         mFragmentDialogFavoriteShare.setOnClickSendEmailListener(mOnClickSendEmailListener);
         mFragmentDialogFavoriteShare.show(getActivity().getFragmentManager(), "");
         
@@ -240,115 +249,48 @@ public class FavoriteTabMainFragment extends
     }
     
     private void showDataView() {
-        if (mProperties == null || mProperties.isEmpty()) {
-            return;
-        }
-        List<Property> propertyList = getPropertyFilter();
+        List<Property> propertyList = getPropertyFilter(mProperties);
         if (propertyList != null && propertyList.size() > 0) {
-            
-            if (mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter) {
-            
-            } else {
+            if (!(mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter)) {
                 mBinding.get().recycleViewFavorite.setAdapter(mFavoriteAdapter);
             }
             mFavoriteAdapter.setData(propertyList);
         } else {
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
-        
     }
     
-    private List<Property> getPropertyFilter() {
-        List<Property> list = mProperties;
+    private List<Property> getPropertyFilter(List<Property> propertyList) {
+        List<Property> list = propertyList;
         switch (FILTER_TYPE) {
             case ALL:
                 break;
             case BUY:
-                list = getList(list, Type.BUY);
+                list = SortAndFilterUtils.getListPropertyByType(list, Type.BUY);
                 break;
             case RENT:
-                list = getList(list, Type.RENT);
+                list = SortAndFilterUtils.getListPropertyByType(list, Type.RENT);
                 break;
             default:
                 break;
         }
-        /*End list null or empty*/
-        if (list == null || list.isEmpty()) {
+        if (list == null || list.size()<1) {
             return list;
         }
-        
         switch (SORT_TYPE) {
             case LAST_ADDED:
                 break;
             case LOWEST_PRICE:
-                list = getListOrderByLowestPrice(list);
+                list = SortAndFilterUtils.sortListPropertyLowestPrice(list);
                 break;
             case HIGHEST_PRICE:
-                list = getListOrderByHighestPrice(list);
+                list = SortAndFilterUtils.sortListPropertyHighestPrice(list);
                 break;
             default:
                 break;
         }
         return list;
     }
-    
-    private List<Property> getList(List<Property> list, String type) {
-        List<Property> propertyList = new ArrayList<>();
-        for (Property property : list) {
-            if (property.getType_id().equals(type)) {
-                propertyList.add(property);
-            }
-        }
-        return propertyList;
-    }
-    
-    private List<Property> getListOrderByLowestPrice(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getPrice() < property2.getPrice()) {
-                return -1;
-            }
-            if (property1.getPrice() > property2.getPrice()) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
-    private List<Property> getListOrderByHighestPrice(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getPrice() > property2.getPrice()) {
-                return -1;
-            }
-            if (property1.getPrice() < property2.getPrice()) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
-    private List<Property> sortLastAdded(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getFavorite().getDate_created()
-                .after(property2.getFavorite().getDate_created())) {
-                return -1;
-            }
-            if (property1.getFavorite().getDate_created()
-                .before(property2.getFavorite().getDate_created())) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
     @Override
     public void loading(boolean isLoading) {
         if (isLoading) {
@@ -368,11 +310,11 @@ public class FavoriteTabMainFragment extends
         FavoriteResponse favoriteResponse = (FavoriteResponse) object;
         if (favoriteResponse != null) {
             List<Property> list = favoriteResponse.getProperties();
-            if (list != null) {
-                mProperties = sortLastAdded(list);
+            if (list != null&&list.size()>0) {
+                mProperties = SortAndFilterUtils.sortFavoriteLastAdded(list);
                 showDataView();
             }
-            Timber.tag(TAG).d(list.get(0).getAddress());
+            
         } else {
             Timber.tag(TAG).d("Null Favorite");
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
@@ -415,9 +357,10 @@ public class FavoriteTabMainFragment extends
     
     @Override
     public void onStop() {
-        super.onStop();
-        Timber.tag(TAG).d("On Stop");
         unCheckFavorites();
+        clearMemory();
+        super.onStop();
+       
     }
     
     public void unCheckFavorites() {
@@ -427,6 +370,15 @@ public class FavoriteTabMainFragment extends
         }
     }
     
-    
-    
+    @Override
+    public void clearMemory() {
+        mHeaderFavoriteView=null;
+        mProperties=null;
+        mProgressDialog=null;
+        mPropertiesIdNeedUnCheck=null;
+        mFavoriteAdapter=null;
+        mEmptyFavoriteAdapter=null;
+        mServiceUnavailableAdapter=null;
+        mFragmentDialogFavoriteShare=null;
+    }
 }

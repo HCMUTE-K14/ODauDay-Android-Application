@@ -36,11 +36,11 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
         }
     };
     private PopupMenu mPopupMenu;
-    private Context mContext;
+    
     private OnClickRemoveSavedSearches mOnClickRemoveSavedSearches;
     
-    public SavedSearchAdapter(Context context) {
-        this.mContext = context;
+    public SavedSearchAdapter() {
+    
     }
     
     @Override
@@ -83,7 +83,7 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     }
     
     public void onClickMoreMenu(View view, Search search) {
-        mPopupMenu = new PopupMenu(mContext, (ImageView) view);
+        mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.popup_more_menu_saved_search, mPopupMenu.getMenu());
         mPopupMenu.setOnMenuItemClickListener(item -> {
