@@ -12,15 +12,21 @@ public class SnackBarUtils {
     
     
     public static void showSnackBar(View rootView, String mMessage) {
-        Snackbar.make(rootView, mMessage, Snackbar.LENGTH_LONG)
+        Snackbar.make(rootView, mMessage, Snackbar.LENGTH_SHORT)
             .setAction("Action", null)
             .show();
     }
     
     public static void showSnackBar(View rootView, String action, String message,
-              OnClickListener listener) {
-        Snackbar.make(rootView, message, Snackbar.LENGTH_INDEFINITE)
-                  .setAction(action, listener)
-                  .show();
+        OnClickListener listener) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
+            .setAction(action, listener)
+            .show();
+    }
+    
+    public static void showSnackBar(View rootView, int message) {
+        Snackbar.make(rootView, rootView.getContext().getString(message), Snackbar.LENGTH_SHORT)
+            .setAction("Action", null)
+            .show();
     }
 }

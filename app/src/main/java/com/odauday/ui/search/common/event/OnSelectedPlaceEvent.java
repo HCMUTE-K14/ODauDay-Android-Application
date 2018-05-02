@@ -12,13 +12,20 @@ public class OnSelectedPlaceEvent extends BaseEvent {
     
     private final AutoCompletePlace data;
     
-    public OnSelectedPlaceEvent(AutoCompletePlace autoCompletePlace) {
+    private final boolean isNeedMoveMapInMapFragment;
+    
+    public OnSelectedPlaceEvent(AutoCompletePlace autoCompletePlace,
+        boolean isNeedMoveMapInMapFragment) {
         super(REQUEST_CODE);
         this.data = autoCompletePlace;
+        this.isNeedMoveMapInMapFragment = isNeedMoveMapInMapFragment;
     }
     
     public AutoCompletePlace getData() {
         return data;
     }
     
+    public boolean isNeedMoveMapInMapFragment() {
+        return isNeedMoveMapInMapFragment;
+    }
 }

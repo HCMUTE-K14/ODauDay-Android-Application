@@ -11,6 +11,7 @@ import io.reactivex.Single;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/9/18.
@@ -54,6 +55,7 @@ public class RecentTagRepository implements Repository {
                   .onErrorResumeNext(throwable -> {
                       throw new TagException(throwable.getMessage());
                   })
+                    .doOnSubscribe(loading -> Timber.d("Get recent tagg"))
                   .subscribeOn(mSchedulersExecutor.computation())
                   .observeOn(mSchedulersExecutor.ui());
     }

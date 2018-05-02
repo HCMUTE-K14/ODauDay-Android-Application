@@ -1,6 +1,9 @@
 package com.odauday.ui.addeditproperty;
 
 import android.arch.lifecycle.ViewModelProvider;
+import com.google.gson.Gson;
+import com.odauday.data.PropertyRepository;
+import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.viewmodel.ViewModelFactory;
 import dagger.Module;
 import dagger.Provides;
@@ -18,7 +21,8 @@ public class AddEditPropertyModule {
     }
     
     @Provides
-    AddEditPropertyViewModel provideAddEditPropertyViewModel() {
-        return new AddEditPropertyViewModel();
+    AddEditPropertyViewModel provideAddEditPropertyViewModel(
+        PropertyRepository propertyRepository, PreferencesHelper preferencesHelper, Gson gson) {
+        return new AddEditPropertyViewModel(propertyRepository, preferencesHelper, gson);
     }
 }

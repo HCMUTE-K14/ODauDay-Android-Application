@@ -2,6 +2,8 @@ package com.odauday.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.odauday.utils.ObjectUtils;
 import java.util.Date;
 
@@ -21,12 +23,26 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
+    
+    @SerializedName("id")
+    @Expose
     private String id;
+    
+    @SerializedName("url")
+    @Expose
     private String url;
+    
+    @SerializedName("date_created")
+    @Expose
     private Date dateCreated;
     
     public Image() {
 
+    }
+    
+    public Image(String id, String url) {
+        this.id = id;
+        this.url = url;
     }
     
     public Image(String id, String url, Date dateCreated) {
@@ -73,16 +89,15 @@ public class Image implements Parcelable {
             return false;
         }
         Image image = (Image) o;
-        return ObjectUtils.equals(id, image.id) &&
-               ObjectUtils.equals(url, image.url) &&
-               ObjectUtils.equals(dateCreated, image.dateCreated);
+        return ObjectUtils.equals(url, image.url);
     }
     
     @Override
     public int hashCode() {
         
-        return ObjectUtils.hash(id, url, dateCreated);
+        return ObjectUtils.hash(url);
     }
+    
     @Override
     public String toString() {
         return "Image{" +

@@ -22,7 +22,7 @@
           android:id="@+id/txt_land_size"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/txt_land_size"
+          android:hint="@string/txt_land_size_hint"
           android:inputType="number"
           android:textColor="#303030"
           android:textSize="16sp" />

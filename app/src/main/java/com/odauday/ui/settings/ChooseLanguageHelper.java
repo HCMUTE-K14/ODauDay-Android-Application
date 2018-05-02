@@ -19,8 +19,8 @@ import javax.inject.Inject;
 
 public class ChooseLanguageHelper {
     
-    private static final String[] LANGUAGE = new String[]{AppConfig.LANGUAGE.EN.getData(),
-        AppConfig.LANGUAGE.VI.getData()};
+    private static final String[] LANGUAGE = new String[]{AppConfig.LANGUAGE.EN.getDisplayString(),
+        AppConfig.LANGUAGE.VI.getDisplayString()};
     
     
     private PreferencesHelper mPreferencesHelper;

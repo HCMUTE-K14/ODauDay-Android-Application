@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.odauday.api.APIHeader.ProtectApiHeader;
 import com.odauday.api.APIHeader.PublicApiHeader;
 import com.odauday.api.APIHelper;
-import com.odauday.api.ApiLanguageSupport;
+import com.odauday.config.AppConfig.LANGUAGE;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import dagger.Module;
@@ -33,7 +33,7 @@ public class NetworkModule {
     @Provides
     @Named("lang")
     String provideLanguageAPI(PreferencesHelper preferencesHelper) {
-        return preferencesHelper.get(PrefKey.LANGUAGE_API, ApiLanguageSupport.EN.getValue());
+        return preferencesHelper.get(PrefKey.LANGUAGE_API, LANGUAGE.EN.getCode());
     }
     
     @Provides
@@ -81,9 +81,9 @@ public class NetworkModule {
     @Singleton
     @Named("protectHttpClient")
     OkHttpClient provideProtectHttpClient(
-              Cache cache,
-              @Named("protectInterceptor") Interceptor protectInterceptor,
-              @Named("languageInterceptor") Interceptor languageInterceptor) {
+        Cache cache,
+        @Named("protectInterceptor") Interceptor protectInterceptor,
+        @Named("languageInterceptor") Interceptor languageInterceptor) {
         return mApiHelper.createClient(cache, protectInterceptor, languageInterceptor);
     }
     
@@ -91,9 +91,9 @@ public class NetworkModule {
     @Singleton
     @Named("publicHttpClient")
     OkHttpClient providePublicHttpClient(
-              Cache cache,
-              @Named("publicInterceptor") Interceptor publicInterceptor,
-              @Named("languageInterceptor") Interceptor languageInterceptor) {
+        Cache cache,
+        @Named("publicInterceptor") Interceptor publicInterceptor,
+        @Named("languageInterceptor") Interceptor languageInterceptor) {
         return mApiHelper.createClient(cache, publicInterceptor, languageInterceptor);
     }
     
@@ -111,14 +111,14 @@ public class NetworkModule {
     @Singleton
     @Named("defaultRetrofit")
     Retrofit provideDefaultRetrofit(
-              @Named("baseURL") String baseURL,
-              Cache cache,
-              Gson gson) {
+        @Named("baseURL") String baseURL,
+        Cache cache,
+        Gson gson) {
         OkHttpClient client = mApiHelper
-                  .createClient(cache, mApiHelper.createDefaultInterceptor(), null);
+            .createClient(cache, mApiHelper.createDefaultInterceptor(), null);
         return mApiHelper.createRetrofit(baseURL,
-                  client,
-                  gson);
+            client,
+            gson);
     }
     
     @Provides

@@ -35,6 +35,8 @@ public class AutoCompletePlaceActivity extends
     
     public static final int REQUEST_CODE = 101;
     
+    public static final String EXTRA_NEED_MOVE_MAP_IN_MAP_FRAGMENT = "extra_need_move_map_in_map_fragment";
+    
     @Inject
     AutoCompletePlaceViewModel mAutoCompletePlaceViewModel;
     
@@ -45,6 +47,8 @@ public class AutoCompletePlaceActivity extends
     
     private AutoCompletePlaceAdapter mCompletePlaceAdapter;
     
+    private boolean mIsNeedMoveMapInMapFragment;
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mAutoCompletePlaceViewModel;
@@ -53,6 +57,14 @@ public class AutoCompletePlaceActivity extends
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        if (getIntent() != null) {
+            mIsNeedMoveMapInMapFragment = getIntent()
+                .getBooleanExtra(EXTRA_NEED_MOVE_MAP_IN_MAP_FRAGMENT, true);
+        } else {
+            mIsNeedMoveMapInMapFragment = true;
+        }
+        
         mAutoCompletePlaceViewModel.setContract(this);
         mBinding.txtSearch.getBackground().clearColorFilter();
         
@@ -160,7 +172,7 @@ public class AutoCompletePlaceActivity extends
     @Override
     public void onFailure(Exception ex) {
         SnackBarUtils.showSnackBar(mBinding.getRoot(),
-                  getString(R.string.message_some_thing_went_wrong_when_find_place));
+            getString(R.string.message_some_thing_went_wrong_when_find_place));
         mAutoCompletePlaceViewModel.searchLocal();
     }
     
@@ -189,7 +201,7 @@ public class AutoCompletePlaceActivity extends
     public void onSelectedSuggestionPlace(AutoCompletePlace autoCompletePlace) {
         mAutoCompletePlaceViewModel.create(autoCompletePlace);
         finish();
-        mBus.post(new OnSelectedPlaceEvent(autoCompletePlace));
+        mBus.post(new OnSelectedPlaceEvent(autoCompletePlace, mIsNeedMoveMapInMapFragment));
     }
     
     @Override
@@ -200,15 +212,15 @@ public class AutoCompletePlaceActivity extends
     
     private AlertDialog createDialogConfirmDeleteRecentSearch(AutoCompletePlace autoCompletePlace) {
         return new AlertDialog.Builder(this)
-                  .setTitle(R.string.txt_wait_a_second)
-                  .setMessage(R.string.message_are_u_sure_to_delete_this_item)
-                  .setNegativeButton(R.string.txt_cancel, (dialog12, which) -> {
-                      dialog12.cancel();
-                      dialog12.dismiss();
-                  })
-                  .setPositiveButton(R.string.txt_ok,
-                            (dialog1, which) -> mAutoCompletePlaceViewModel
-                                      .delete(autoCompletePlace))
-                  .create();
+            .setTitle(R.string.txt_wait_a_second)
+            .setMessage(R.string.message_are_u_sure_to_delete_this_item)
+            .setNegativeButton(R.string.txt_cancel, (dialog12, which) -> {
+                dialog12.cancel();
+                dialog12.dismiss();
+            })
+            .setPositiveButton(R.string.txt_ok,
+                (dialog1, which) -> mAutoCompletePlaceViewModel
+                    .delete(autoCompletePlace))
+            .create();
     }
 }

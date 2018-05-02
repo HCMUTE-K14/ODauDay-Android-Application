@@ -28,7 +28,6 @@ public class RecentTagServiceImpl implements RecentTagService {
     @Override
     public Single<List<Tag>> findAllRecentTagByUserId(String userId) {
         return Single.fromCallable(() -> {
-            
             List<RecentTag> recentTags = mRecentTagDao
                       .queryBuilder()
                       .where(Properties.UserId.eq(userId))

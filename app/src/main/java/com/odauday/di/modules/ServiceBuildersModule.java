@@ -8,10 +8,11 @@ import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.local.tag.RecentTagServiceImpl;
 import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.HistoryService;
-import com.odauday.data.remote.PropertyService;
 import com.odauday.data.remote.SavedSearchService;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
+import com.odauday.data.remote.image.ImageService;
+import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -48,30 +49,15 @@ public class ServiceBuildersModule {
     @Provides
     @Singleton
     AutoCompletePlaceService provideAutoCompletePlaceService(
-              @Named("protectRetrofit") Retrofit retrofit) {
+        @Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(AutoCompletePlaceService.class);
     }
     
     @Provides
     @Singleton
     GeoInfoService provideGeoInfoService(
-              @Named("protectRetrofit") Retrofit retrofit) {
+        @Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(GeoInfoService.class);
-    }
-    
-    //--------------------------LOCAL---------------------------//
-    
-    @Provides
-    @Singleton
-    RecentTagService provideRecentTagService(RecentTagDao recentTagDao) {
-        return new RecentTagServiceImpl(recentTagDao);
-    }
-    
-    @Provides
-    @Singleton
-    RecentSearchPlaceService provideRecentSearchPlaceService(
-              RecentSearchPlaceDao recentSearchPlaceDao) {
-        return new RecentSearchPlaceServiceImpl(recentSearchPlaceDao);
     }
     
     @Provides
@@ -88,16 +74,9 @@ public class ServiceBuildersModule {
     
     @Provides
     @Singleton
-    PropertyService.Public providePublicPropertyService(
-        @Named("publicRetrofit") Retrofit retrofit) {
-        return retrofit.create(PropertyService.Public.class);
-    }
-    
-    @Provides
-    @Singleton
-    PropertyService.Protect provideProtectPropertyService(
+    PropertyService provideProtectPropertyService(
         @Named("protectRetrofit") Retrofit retrofit) {
-        return retrofit.create(PropertyService.Protect.class);
+        return retrofit.create(PropertyService.class);
     }
     
     @Provides
@@ -105,4 +84,27 @@ public class ServiceBuildersModule {
     HistoryService provideHistoryService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(HistoryService.class);
     }
+    
+    @Provides
+    @Singleton
+    ImageService provideImageService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(ImageService.class);
+    }
+    
+    //--------------------------LOCAL---------------------------//
+    
+    @Provides
+    @Singleton
+    RecentTagService provideRecentTagService(RecentTagDao recentTagDao) {
+        return new RecentTagServiceImpl(recentTagDao);
+    }
+    
+    @Provides
+    @Singleton
+    RecentSearchPlaceService provideRecentSearchPlaceService(
+        RecentSearchPlaceDao recentSearchPlaceDao) {
+        return new RecentSearchPlaceServiceImpl(recentSearchPlaceDao);
+    }
+    
+    
 }

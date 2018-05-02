@@ -10,7 +10,6 @@ import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
 import com.odauday.ui.search.SearchTabMainFragment;
-import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
@@ -18,8 +17,6 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import java.util.Stack;
 import javax.inject.Inject;
-import org.greenrobot.eventbus.Subscribe;
-import timber.log.Timber;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
                                                                         HasSupportFragmentInjector {
@@ -69,11 +66,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     protected void processingTaskFromViewModel() {
     
-    }
-    
-    @Subscribe
-    public void onSelectedPlace(OnSelectedPlaceEvent event) {
-        Timber.d(event.getData().toString());
     }
     
     @Override

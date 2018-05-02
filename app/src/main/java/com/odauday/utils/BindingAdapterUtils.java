@@ -8,9 +8,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.config.AppConfig;
+import com.odauday.config.AppConfig.LANGUAGE;
 import com.odauday.model.Image;
 import com.odauday.ui.propertymanager.status.Status;
-import com.odauday.utils.TextUtils.Locale;
 import java.util.List;
 
 /**
@@ -18,8 +19,6 @@ import java.util.List;
  */
 
 public class BindingAdapterUtils {
-    
-    private static final String currencies = "đ";
     
     @BindingAdapter("loadImage")
     public static void setImageUri(ImageView view, String imageUri) {
@@ -58,7 +57,11 @@ public class BindingAdapterUtils {
     
     @BindingAdapter("textDoublePrice")
     public static void textDoublePrice(TextView view, double value) {
-        view.setText(TextUtils.formatNumber(value, Locale.VN) + " " + currencies);
+        String text = new StringBuilder()
+            .append(TextUtils.formatNumber(value, LANGUAGE.VI))
+            .append(AppConfig.VN_CURRENCY).toString();
+        
+        view.setText(text);
     }
     
     @BindingAdapter("textInteger")

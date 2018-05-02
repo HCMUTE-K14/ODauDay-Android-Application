@@ -16,6 +16,10 @@ import java.util.List;
  */
 public class MyProperty implements Parcelable {
     
+    public static final String PENDING = "pending";
+    public static final String ACTIVE = "active";
+    public static final String EXPIRED = "expired";
+    
     @SerializedName("id")
     @Expose
     private String id;
@@ -60,7 +64,7 @@ public class MyProperty implements Parcelable {
     @Expose
     private int numOfParking;
     
-    @SerializedName("size")
+    @SerializedName("land_size")
     @Expose
     private double size;
     
@@ -96,6 +100,10 @@ public class MyProperty implements Parcelable {
     @Expose
     private List<PropertyType> categories;
     
+    @SerializedName("user_id_created")
+    @Expose
+    private String userIdCreated;
+    
     public MyProperty() {
     
     }
@@ -126,7 +134,7 @@ public class MyProperty implements Parcelable {
     
     public List<PropertyType> convertPropertyTypeByListInteger(List<Integer> propertyType) {
         List<PropertyType> list = new ArrayList<>();
-        if(propertyType == null){
+        if (propertyType == null) {
             return list;
         }
         
@@ -309,8 +317,16 @@ public class MyProperty implements Parcelable {
     }
     
     public void setCategoriesByIntegerList(List<Integer> categories) {
-       
-        this.categories =  convertPropertyTypeByListInteger(categories);
+        
+        this.categories = convertPropertyTypeByListInteger(categories);
+    }
+    
+    public String getUserIdCreated() {
+        return userIdCreated;
+    }
+    
+    public void setUserIdCreated(String userIdCreated) {
+        this.userIdCreated = userIdCreated;
     }
     
     @Override

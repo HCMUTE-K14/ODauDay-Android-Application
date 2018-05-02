@@ -15,7 +15,7 @@ public class OnCompleteStep4Event extends BaseEvent {
         mProperty = myProperty;
     }
     
-    public MyProperty getProperty() {
+    public MyProperty getData() {
         return mProperty;
     }
 }

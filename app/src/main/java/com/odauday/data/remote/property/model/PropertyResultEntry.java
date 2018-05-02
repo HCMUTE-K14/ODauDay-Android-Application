@@ -58,7 +58,7 @@ public class PropertyResultEntry implements Parcelable {
     private boolean isVisited;
     @SerializedName("images")
     @Expose
-    private List<Image> mImages = new ArrayList<>();
+    private List<Image> images = new ArrayList<>();
     
     public PropertyResultEntry() {
     
@@ -75,7 +75,7 @@ public class PropertyResultEntry implements Parcelable {
         location = in.readParcelable(GeoLocation.class.getClassLoader());
         isFavorite = in.readByte() != 0;
         isVisited = in.readByte() != 0;
-        mImages = in.createTypedArrayList(Image.CREATOR);
+        images = in.createTypedArrayList(Image.CREATOR);
     }
     
     public String getId() {
@@ -160,11 +160,11 @@ public class PropertyResultEntry implements Parcelable {
     }
     
     public List<Image> getImages() {
-        return mImages;
+        return images;
     }
     
     public void setImages(List<Image> images) {
-        this.mImages = images;
+        this.images = images;
     }
     
     @Override
@@ -190,8 +190,8 @@ public class PropertyResultEntry implements Parcelable {
     public int hashCode() {
         
         return ObjectUtils
-                  .hash(id, address, numOfBedRooms, numOfBathRooms, numOfParkings, location,
-                            isFavorite, isVisited);
+            .hash(id, address, numOfBedRooms, numOfBathRooms, numOfParkings, location,
+                isFavorite, isVisited);
     }
     
     @Override
@@ -199,12 +199,15 @@ public class PropertyResultEntry implements Parcelable {
         return "PropertyResultEntry{" +
                "id='" + id + '\'' +
                ", address='" + address + '\'' +
+               ", price=" + price +
+               ", searchType='" + searchType + '\'' +
                ", numOfBedRooms=" + numOfBedRooms +
                ", numOfBathRooms=" + numOfBathRooms +
                ", numOfParkings=" + numOfParkings +
                ", location=" + location +
                ", isFavorite=" + isFavorite +
                ", isVisited=" + isVisited +
+               ", images=" + images +
                '}';
     }
     
@@ -226,6 +229,6 @@ public class PropertyResultEntry implements Parcelable {
         parcel.writeParcelable(location, i);
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeByte((byte) (isVisited ? 1 : 0));
-        parcel.writeTypedList(mImages);
+        parcel.writeTypedList(images);
     }
 }

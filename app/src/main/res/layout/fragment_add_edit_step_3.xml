@@ -26,21 +26,15 @@
           android:textColor="#303030"
           android:textSize="16sp" />
       </android.support.design.widget.TextInputLayout>
-      <android.support.design.widget.TextInputLayout
+      <EditText
+        android:id="@+id/txt_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp">
-        <EditText
-          android:id="@+id/txt_tags"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:focusable="false"
-          android:hint="@string/txt_filter_tags"
-          android:inputType="text"
-          android:textColor="#303030"
-          android:textSize="16sp" />
-      </android.support.design.widget.TextInputLayout>
+        android:focusable="false"
+        android:hint="@string/txt_filter_tags"
+        android:inputType="text"
+        android:textColor="#303030"
+        android:textSize="16sp" />
     </LinearLayout>
     <include
       android:id="@+id/button_nav"

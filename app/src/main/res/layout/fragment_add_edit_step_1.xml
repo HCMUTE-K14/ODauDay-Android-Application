@@ -20,7 +20,7 @@
       <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center_vertical">
         <TextView
           android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:id="@+id/select_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:focusable="false"
         android:hint="@string/txt_click_to_select_address"
         android:inputType="text"
@@ -67,18 +67,17 @@
         android:id="@+id/select_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:focusable="false"
         android:hint="@string/txt_click_to_select_property_type"
         android:inputType="text"
-        android:onClick="openChoosePropertyTypeDialog"
         android:textColor="#303030"
         android:textSize="16sp" />
       <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="12dp">
 
         <com.odauday.ui.view.currencyedittext.CurrencyEditText
           android:id="@+id/txt_price"
@@ -91,10 +90,21 @@
           app:decimal_digits="0" />
       </android.support.design.widget.TextInputLayout>
 
+      <EditText
+        android:id="@+id/select_time_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:focusable="false"
+        android:hint="@string/txt_click_to_select_time_contact"
+        android:inputType="text"
+        android:textColor="#303030"
+        android:textSize="16sp" />
+
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:orientation="vertical">
         <TextView
           android:layout_width="wrap_content"
@@ -110,7 +120,7 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:orientation="vertical">
         <TextView
           android:layout_width="wrap_content"

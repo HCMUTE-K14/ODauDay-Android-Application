@@ -95,6 +95,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         Bundle args = new Bundle();
         
         SearchTabMainFragment fragment = new SearchTabMainFragment();
+        Timber.d("new instance search tab");
         fragment.setArguments(args);
         
         return fragment;
@@ -145,18 +146,26 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     @Override
+    public void onStop() {
+        System.gc();
+        super.onStop();
+    }
+    
+    @Override
     public void onDestroy() {
         mBus.unregister(this);
+        Timber.d("On destroy search tab");
+        
         super.onDestroy();
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeStateWhenSearchProperty(SearchPropertyState state) {
         String displayLocation = mSearchPropertyRepository
-                  .getCurrentSearchRequest()
-                  .getCriteria()
-                  .getDisplay()
-                  .getDisplayLocation();
+            .getCurrentSearchRequest()
+            .getCriteria()
+            .getDisplay()
+            .getDisplayLocation();
         
         if (TextUtils.isEmpty(displayLocation)) {
             updateTextSearchBar(getString(R.string.txt_map_area));
@@ -187,7 +196,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCompleteDownloadProperty(
-              OnCompleteDownloadPropertyEvent onCompleteDownloadPropertyEvent) {
+        OnCompleteDownloadPropertyEvent onCompleteDownloadPropertyEvent) {
         SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
         SearchResult searchResult = onCompleteDownloadPropertyEvent.getSearchResult();
         
@@ -290,7 +299,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                 SavedSearchDialog searchDialog = SavedSearchDialog.newInstance();
                 searchDialog.setSaveSearchListener(SearchTabMainFragment.this);
                 searchDialog.setTargetFragment(SearchTabMainFragment.this,
-                          SavedSearchDialog.REQUEST_CODE);
+                    SavedSearchDialog.REQUEST_CODE);
                 if (getFragmentManager() != null) {
                     searchDialog.show(getFragmentManager(), TAG);
                 }
@@ -329,11 +338,11 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             mVitalPropertyView = new VitalPropertyView(this.getActivity());
             
             ((MainActivity) getActivity()).getBinding().vitalPropertyContainer
-                      .addView(mVitalPropertyView);
+                .addView(mVitalPropertyView);
             
             ViewUtils.showHideView(
-                      ((MainActivity) getActivity()).getBinding().vitalPropertyContainer,
-                      false);
+                ((MainActivity) getActivity()).getBinding().vitalPropertyContainer,
+                false);
         }
     }
     
@@ -356,10 +365,10 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         }
         
         mFilterNavigationFragment = FilterNavigationFragment
-                  .newInstance();
+            .newInstance();
         getActivity().getSupportFragmentManager().beginTransaction()
-                  .replace(R.id.filter_nav, mFilterNavigationFragment, FilterNavigationFragment.TAG)
-                  .commit();
+            .replace(R.id.filter_nav, mFilterNavigationFragment, FilterNavigationFragment.TAG)
+            .commit();
     }
     
     private void setupMapView() {
@@ -370,15 +379,15 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mMapViewFragment = MapViewFragment.newInstance();
         
         Runnable attachRunnableMapView = new AttachFragmentRunnable
-                  .AttachFragmentBuilder()
-                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-                  .setFragmentManager(getActivity().getSupportFragmentManager())
-                  .setContainerId(R.id.fragment_map_view)
-                  .setFragment(mMapViewFragment)
-                  .setAnimationIn(android.R.anim.fade_in)
-                  .setAnimationOut(android.R.anim.fade_out)
-                  .setAddToBackTrack(false)
-                  .build();
+            .AttachFragmentBuilder()
+            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+            .setFragmentManager(getActivity().getSupportFragmentManager())
+            .setContainerId(R.id.fragment_map_view)
+            .setFragment(mMapViewFragment)
+            .setAnimationIn(android.R.anim.fade_in)
+            .setAnimationOut(android.R.anim.fade_out)
+            .setAddToBackTrack(false)
+            .build();
         
         new Handler().postDelayed(attachRunnableMapView, 50);
     }
@@ -391,13 +400,13 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         loadingFragment.setLoadingFragmentListener(this);
         
         Runnable attachRunnableLoadingFragment = new AttachFragmentRunnable
-                  .AttachFragmentBuilder()
-                  .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
-                  .setFragmentManager(getActivity().getSupportFragmentManager())
-                  .setContainerId(R.id.fragment_map_view)
-                  .setFragment(loadingFragment)
-                  .setAddToBackTrack(false)
-                  .build();
+            .AttachFragmentBuilder()
+            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+            .setFragmentManager(getActivity().getSupportFragmentManager())
+            .setContainerId(R.id.fragment_map_view)
+            .setFragment(loadingFragment)
+            .setAddToBackTrack(false)
+            .build();
         
         new Handler().postDelayed(attachRunnableLoadingFragment, 50);
     }
@@ -405,8 +414,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     private void bindViewOnToolBar(View view) {
         mBinding.get().toolbar.searchBar.setTypeface(null, Typeface.NORMAL);
         mBinding.get().toolbar.searchBar.setOnClickListener(
-                  viewSearchBar -> ViewUtils.startActivity(getActivity(),
-                            AutoCompletePlaceActivity.class));
+            viewSearchBar -> ViewUtils.startActivity(getActivity(),
+                AutoCompletePlaceActivity.class));
         mBinding.get().toolbar.btnFilter.setOnClickListener(viewSearchBar -> openDrawer());
     }
     

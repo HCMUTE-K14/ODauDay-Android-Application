@@ -16,11 +16,12 @@ import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.HistoryService;
-import com.odauday.data.remote.PropertyService;
 import com.odauday.data.remote.SavedSearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
+import com.odauday.data.remote.image.ImageService;
+import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
@@ -57,9 +58,11 @@ public class RepositoryBuildersModule {
     
     @Provides
     @Singleton
-    PropertyRepository providePropertyRepository(PropertyService.Public publicPropertyService,
-        PropertyService.Protect protectPropertyService, SchedulersExecutor schedulersExecutor) {
-        return new PropertyRepository(publicPropertyService, protectPropertyService,
+    PropertyRepository providePropertyRepository(PropertyService protectPropertyService,
+        ImageService imageService,
+        SchedulersExecutor schedulersExecutor) {
+        return new PropertyRepository(protectPropertyService,
+            imageService,
             schedulersExecutor);
     }
     
@@ -87,33 +90,33 @@ public class RepositoryBuildersModule {
     @Provides
     @Singleton
     SearchPropertyRepository provideSearchPropertyRepository(
-              EventBus eventBus,
-              SearchService searchService,
-              SchedulersExecutor schedulersExecutor) {
+        EventBus eventBus,
+        SearchService searchService,
+        SchedulersExecutor schedulersExecutor) {
         return new SearchPropertyRepository(
-                  eventBus,
-                  searchService,
-                  schedulersExecutor);
+            eventBus,
+            searchService,
+            schedulersExecutor);
     }
     
     @Provides
     @Singleton
     AutoCompletePlaceRepository provideAutoCompletePlaceRepository(
-              AutoCompletePlaceService autoCompletePlaceService,
-              RecentSearchPlaceService recentSearchPlaceService,
-              PreferencesHelper preferencesHelper,
-              SchedulersExecutor schedulersExecutor) {
+        AutoCompletePlaceService autoCompletePlaceService,
+        RecentSearchPlaceService recentSearchPlaceService,
+        PreferencesHelper preferencesHelper,
+        SchedulersExecutor schedulersExecutor) {
         return new AutoCompletePlaceRepository(
-                  autoCompletePlaceService,
-                  recentSearchPlaceService,
-                  preferencesHelper,
-                  schedulersExecutor);
+            autoCompletePlaceService,
+            recentSearchPlaceService,
+            preferencesHelper,
+            schedulersExecutor);
     }
     
     @Provides
     @Singleton
     GeoInfoRepository provideGeoInfoRepository(GeoInfoService geoInfoService,
-              SchedulersExecutor schedulersExecutor) {
+        SchedulersExecutor schedulersExecutor) {
         return new GeoInfoRepository(geoInfoService, schedulersExecutor);
     }
     
@@ -122,12 +125,12 @@ public class RepositoryBuildersModule {
     @Provides
     @Singleton
     RecentTagRepository provideRecentTagRepository(
-              RecentTagService recentTagService,
-              PreferencesHelper preferencesHelper,
-              SchedulersExecutor schedulersExecutor) {
+        RecentTagService recentTagService,
+        PreferencesHelper preferencesHelper,
+        SchedulersExecutor schedulersExecutor) {
         return new RecentTagRepository(
-                  recentTagService,
-                  preferencesHelper,
-                  schedulersExecutor);
+            recentTagService,
+            preferencesHelper,
+            schedulersExecutor);
     }
 }

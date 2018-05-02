@@ -412,8 +412,7 @@ public class FavoriteTabMainFragment extends
     public void shareFavoriteError(Object object) {
         Exception exception = (Exception) object;
         Timber.tag(TAG).d("Error share: " + exception.getMessage());
-        String message;
-        message = getActivity().getString(R.string.error_share_favorite);
+        String message = getActivity().getString(R.string.error_share_favorite);
         SnackBarUtils.showSnackBar(mBinding.get().shortlist, message);
     }
     

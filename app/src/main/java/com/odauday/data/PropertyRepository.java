@@ -1,16 +1,18 @@
 package com.odauday.data;
 
 import com.odauday.SchedulersExecutor;
-import com.odauday.data.remote.PropertyService;
-import com.odauday.data.remote.PropertyService.Protect;
-import com.odauday.data.remote.PropertyService.Public;
+import com.odauday.data.remote.image.ImageService;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
+import com.odauday.data.remote.property.PropertyService;
+import com.odauday.data.remote.property.model.CreatePropertyRequest;
 import com.odauday.exception.PropertyException;
 import com.odauday.model.Property;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 import javax.inject.Inject;
+import okhttp3.MultipartBody;
 
 /**
  * Created by kunsubin on 4/18/2018.
@@ -18,19 +20,38 @@ import javax.inject.Inject;
 
 public class PropertyRepository implements Repository {
     
-    private final PropertyService.Public mPublicPropertyService;
-    private final PropertyService.Protect mProtectPropertyService;
-    ;
+    private final PropertyService mProtectPropertyService;
+    private final ImageService mImageService;
     private final SchedulersExecutor mSchedulersExecutor;
     
     @Inject
-    public PropertyRepository(Public publicPropertyService,
-        Protect protectPropertyService,
+    public PropertyRepository(PropertyService protectPropertyService,
+        ImageService imageService,
         SchedulersExecutor schedulersExecutor) {
-        mPublicPropertyService = publicPropertyService;
         mProtectPropertyService = protectPropertyService;
+        mImageService = imageService;
         mSchedulersExecutor = schedulersExecutor;
     }
+    
+    
+    public Single uploadImage(List<MultipartBody.Part> images) {
+        return mImageService.upload(images)
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+    }
+    
+    public Flowable<MessageResponse> create(CreatePropertyRequest request) {
+        
+        return Single.merge(
+            mProtectPropertyService.create(request.getProperty())
+                .subscribeOn(mSchedulersExecutor.io())
+                .observeOn(mSchedulersExecutor.ui()),
+            mImageService.upload(request.getImages())
+                .subscribeOn(mSchedulersExecutor.io())
+                .observeOn(mSchedulersExecutor.ui())
+        ).map(JsonResponse::getData);
+    }
+    
     
     public Single<List<Property>> getPropertyOfUser(String user_id) {
         Single<JsonResponse<List<Property>>> result = mProtectPropertyService
