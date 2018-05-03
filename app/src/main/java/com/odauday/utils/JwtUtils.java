@@ -2,6 +2,9 @@ package com.odauday.utils;
 
 import android.util.Base64;
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.odauday.model.User;
 import java.io.UnsupportedEncodingException;
 import timber.log.Timber;
 
@@ -75,6 +78,42 @@ public class JwtUtils {
                    ", body='" + body + '\'' +
                    '}';
         }
+    }
+    
+    public static class UserInJWTModel {
+        
+        @SerializedName("user")
+        @Expose
+        private User user;
+        @SerializedName("iat")
+        @Expose
+        private String iat;
+        
+        public UserInJWTModel() {
+        
+        }
+    
+        public UserInJWTModel(User user, String iat) {
+            this.user = user;
+            this.iat = iat;
+        }
+    
+        public User getUser() {
+            return user;
+        }
+    
+        public void setUser(User user) {
+            this.user = user;
+        }
+    
+        public String getIat() {
+            return iat;
+        }
+    
+        public void setIat(String iat) {
+            this.iat = iat;
+        }
+        
     }
     
     

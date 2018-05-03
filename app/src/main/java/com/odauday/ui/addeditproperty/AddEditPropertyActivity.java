@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.ActivityAddEditPropertyBinding;
 import com.odauday.model.MyProperty;
@@ -20,7 +21,6 @@ import com.odauday.ui.addeditproperty.step4.OnCompleteStep4Event;
 import com.odauday.ui.addeditproperty.step4.Step4Fragment;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.utils.NumberUtils;
-import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.TextUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
@@ -343,25 +343,24 @@ public class AddEditPropertyActivity extends
     
     @Override
     public void onSuccessCreateProperty() {
-        SnackBarUtils
-            .showSnackBar(findViewById(R.id.content), R.string.message_creat_property_successfull);
+        Toast.makeText(this, R.string.message_creat_property_successfull, Toast.LENGTH_SHORT)
+            .show();
         finish();
     }
     
     @Override
     public void onErrorCreateProperty() {
-        SnackBarUtils
-            .showSnackBar(findViewById(R.id.content),
-                R.string.message_some_thing_went_wrong_create_property);
+        Toast.makeText(this, R.string.message_some_thing_went_wrong_create_property,
+            Toast.LENGTH_SHORT).show();
         finish();
     }
     
     @Override
     public void loading(boolean showing) {
-        if (showing) {
-            mProgressDialog.show();
-            return;
-        }
-        mProgressDialog.hide();
+        //        if (showing) {
+        //            mProgressDialog.show();
+        //            return;
+        //        }
+        //        mProgressDialog.hide();
     }
 }

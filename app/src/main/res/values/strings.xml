@@ -206,7 +206,6 @@
   <string name="logout_user">Are you logout?</string>
   <string name="logout_user_success">Logout account success</string>
   <string name="txt_click_to_select_time_contact">Tap to select time contact</string>
-
   <string name="message_date_time_can_not_less_than_current">Time contact can not less than current time</string>
   <string name="txt_land_size_hint" >Land size (m²)</string>
   <string name="txt_all_time">All time</string>
@@ -214,4 +213,6 @@
   <string name="message_creat_property_successfull">Property is created. Please wait admin confirm this property !</string>
   <string name="message_some_thing_went_wrong_create_property">Something went wrong when creating property. Please try later !</string>
   <string name="txt_creating_property">Creating Property...</string>
+  <string name="sell">SELL</string>
+  <string name="message_choose_image">Please choose image for property</string>
 </resources>

@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar.OnTabSelectedListener;
+import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
 import com.odauday.ui.search.SearchTabMainFragment;
+import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -31,7 +34,10 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     @Inject
     MainActivityViewModel mMainActivityViewModel;
-
+    
+    @Inject
+    UserRepository mUserRepository;
+    
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
@@ -40,6 +46,11 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (mUserRepository.isNeedLogin()) {
+            ViewUtils.startActivity(this, LoginActivity.class);
+            finish();
+            return;
+        }
         init();
     }
     

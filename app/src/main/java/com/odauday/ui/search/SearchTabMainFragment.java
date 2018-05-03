@@ -199,8 +199,10 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         OnCompleteDownloadPropertyEvent onCompleteDownloadPropertyEvent) {
         SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
         SearchResult searchResult = onCompleteDownloadPropertyEvent.getSearchResult();
-        
-        mBinding.get().inforBar.updateWithSearchRequestAndSearchResult(searchRequest, searchResult);
+        if (mBinding.get().inforBar != null) {
+            mBinding.get().inforBar
+                .updateWithSearchRequestAndSearchResult(searchRequest, searchResult);
+        }
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -263,7 +265,10 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void updateTextSearchBar(String text) {
-        mBinding.get().toolbar.searchBar.setText(text);
+        if (mBinding != null && mBinding.get().toolbar != null &&
+            mBinding.get().toolbar.searchBar != null) {
+            mBinding.get().toolbar.searchBar.setText(text);
+        }
     }
     
     private void initBinding() {

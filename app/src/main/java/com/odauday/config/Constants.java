@@ -29,10 +29,4 @@ public class Constants {
         public static final String TASK_GET_RECENT_TAG = "task_get_recent_tag";
         public static final String TASK_CREATE_PROPERTY = "task_create_property";
     }
-    
-    public class TypeProperty {
-        
-        public static final String SELL = "SELL";
-        public static final String RENT = "RENT";
-    }
 }

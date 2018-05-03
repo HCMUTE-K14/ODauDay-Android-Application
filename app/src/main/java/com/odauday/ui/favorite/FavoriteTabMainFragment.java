@@ -264,7 +264,7 @@ public class FavoriteTabMainFragment extends
             case ALL:
                 break;
             case BUY:
-                list = getList(list, Type.SELL);
+                list = getList(list, Type.BUY);
                 break;
             case RENT:
                 list = getList(list, Type.RENT);
@@ -390,15 +390,11 @@ public class FavoriteTabMainFragment extends
         }
         Timber.tag(TAG).d(ex.getMessage());
         
-        String message;
         if (ex instanceof RetrofitException) {
-            message = getString(R.string.message_service_unavailable);
             mBinding.get().recycleViewFavorite.setAdapter(mServiceUnavailableAdapter);
         } else {
-            message = getString(R.string.empty_favorite);
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
-        SnackBarUtils.showSnackBar(mBinding.get().shortlist, message);
     }
     
     @Override
@@ -412,7 +408,8 @@ public class FavoriteTabMainFragment extends
     public void shareFavoriteError(Object object) {
         Exception exception = (Exception) object;
         Timber.tag(TAG).d("Error share: " + exception.getMessage());
-        String message = getActivity().getString(R.string.error_share_favorite);
+        String message;
+        message = getActivity().getString(R.string.error_share_favorite);
         SnackBarUtils.showSnackBar(mBinding.get().shortlist, message);
     }
     
@@ -429,7 +426,4 @@ public class FavoriteTabMainFragment extends
             mFavoriteViewModel.unCheckFavorites(mPropertiesIdNeedUnCheck);
         }
     }
-    
-    
-    
 }

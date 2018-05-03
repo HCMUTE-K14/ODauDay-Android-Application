@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
 import com.odauday.R;
@@ -121,9 +122,14 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     
     @Override
     public void onNextStep(View view) {
-        mProperty.setImages(mSelectedImages);
-        mBus.post(new OnCompleteStep4Event(mProperty));
-        mNavigationStepListener.navigate(getStep(), getNextStep());
+        if (!mSelectedImages.isEmpty()) {
+            mProperty.setImages(mSelectedImages);
+            mBus.post(new OnCompleteStep4Event(mProperty));
+            mNavigationStepListener.navigate(getStep(), getNextStep());
+            return;
+        }
+        Toast.makeText(getContext(), R.string.message_choose_image, Toast.LENGTH_SHORT).show();
+        
     }
     
     private List<com.odauday.model.Image> convertToImageModel(List<Image> images) {
@@ -158,7 +164,7 @@ public class Step4Fragment extends BaseStepFragment<FragmentAddEditStep4Binding>
     public void onRemoveImage(com.odauday.model.Image image, int position) {
         mSelectedImages.remove(image);
         mSelectedImageAdapter.remove(image, position);
-        
+        mSelectedImagesInImagePiker.remove(new Image(0, "", image.getUrl()));
         if (mSelectedImages.isEmpty()) {
             ViewUtils.showHideView(mBinding.get().recycleView, false);
             ViewUtils.showHideView(mBinding.get().noImage, true);

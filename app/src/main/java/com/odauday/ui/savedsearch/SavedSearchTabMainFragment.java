@@ -64,6 +64,8 @@ public class SavedSearchTabMainFragment extends
             }
             mPreferencesHelper.putList(PrefKey.RECENT_SEARCH, mRecentSearches);
             mRecentSearchAdapter.setData(mRecentSearches);
+            onChangeRemoveToEmpty();
+            
         }
         
     };
@@ -111,8 +113,8 @@ public class SavedSearchTabMainFragment extends
     
     private void getData() {
         mSTATUS = STATUS.GET;
-        mBinding.get().relativeSavedSearch.setVisibility(View.VISIBLE);
-        mBinding.get().relativeRecentSearch.setVisibility(View.VISIBLE);
+        mBinding.get().relativeSavedSearch.setVisibility(View.GONE);
+        mBinding.get().relativeRecentSearch.setVisibility(View.GONE);
         mBinding.get().txtSavedSearch.setVisibility(View.VISIBLE);
         mBinding.get().txtRecentSearch.setVisibility(View.VISIBLE);
         
@@ -185,6 +187,7 @@ public class SavedSearchTabMainFragment extends
                     }
                 }
                 mSavedSearchAdapter.setData(mSearches);
+                onChangeRemoveToEmpty();
             }
             mSTATUS = STATUS.GET;
             SnackBarUtils
@@ -194,7 +197,7 @@ public class SavedSearchTabMainFragment extends
         SavedSearchResponse savedSearchResponse = (SavedSearchResponse) object;
         if (savedSearchResponse != null) {
             List<Search> searches = savedSearchResponse.getSearches();
-            if (searches != null && !searches.isEmpty()) {
+            if (searches != null && searches.size()>0) {
                 mSearches = searches;
                // mPreferencesHelper.putList(PrefKey.RECENT_SEARCH,searches);
                 if (mRecyclerViewSavedSearch.getAdapter() instanceof SavedSearchAdapter) {
@@ -203,21 +206,26 @@ public class SavedSearchTabMainFragment extends
                     mRecyclerViewSavedSearch.setAdapter(mSavedSearchAdapter);
                 }
                 mSavedSearchAdapter.setData(searches);
+                mBinding.get().relativeSavedSearch.setVisibility(View.VISIBLE);
             } else {
                 mBinding.get().relativeSavedSearch.setVisibility(View.GONE);
             }
         } else {
             mBinding.get().relativeSavedSearch.setVisibility(View.GONE);
         }
-        if (mRecentSearches != null && !mRecentSearches.isEmpty()) {
+        
+        if (mRecentSearches != null && mRecentSearches.size()>0) {
             if (mRecyclerViewRecentSearch.getAdapter() instanceof RecentSearchAdapter) {
             
             } else {
                 mRecyclerViewRecentSearch.setAdapter(mRecentSearchAdapter);
             }
             mRecentSearchAdapter.setData(mRecentSearches);
+            mBinding.get().relativeRecentSearch.setVisibility(View.VISIBLE);
         } else {
+            
             if (mBinding.get().relativeSavedSearch.getVisibility() == View.GONE) {
+                mBinding.get().relativeRecentSearch.setVisibility(View.VISIBLE);
                 mBinding.get().txtRecentSearch.setVisibility(View.GONE);
                 mRecyclerViewRecentSearch.setAdapter(mEmptySavedSearchAdapter);
             } else {
@@ -237,7 +245,7 @@ public class SavedSearchTabMainFragment extends
             mSTATUS = STATUS.GET;
             return;
         }
-        if (mRecentSearches != null && !mRecentSearches.isEmpty()) {
+        if (mRecentSearches != null && mRecentSearches.size()>0) {
             //set recent search
             if (mRecyclerViewRecentSearch.getAdapter() instanceof RecentSearchAdapter) {
             
@@ -245,19 +253,29 @@ public class SavedSearchTabMainFragment extends
                 mRecyclerViewRecentSearch.setAdapter(mRecentSearchAdapter);
             }
             mRecentSearchAdapter.setData(mRecentSearches);
-            
-            mBinding.get().relativeSavedSearch.setVisibility(View.GONE);
+            mBinding.get().relativeRecentSearch.setVisibility(View.VISIBLE);
             
         } else {
-            mRecyclerViewSavedSearch.setAdapter(mEmptySavedSearchAdapter);
-            mBinding.get().relativeRecentSearch.setVisibility(View.GONE);
+            mBinding.get().relativeSavedSearch.setVisibility(View.VISIBLE);
             mBinding.get().txtSavedSearch.setVisibility(View.GONE);
+            mBinding.get().relativeRecentSearch.setVisibility(View.GONE);
+            mRecyclerViewSavedSearch.setAdapter(mEmptySavedSearchAdapter);
         }
-        String message;
-        message = getActivity().getString(R.string.empty_recent_saved_search);
-        SnackBarUtils.showSnackBar(mBinding.get().savedSearch, message);
     }
-    
+    public void onChangeRemoveToEmpty(){
+        if(mSearches.size()<1){
+            mBinding.get().relativeSavedSearch.setVisibility(View.GONE);
+        }
+        if(mRecentSearches.size()<1){
+            mBinding.get().relativeRecentSearch.setVisibility(View.GONE);
+        }
+        if(mSearches.size()<1&&mRecentSearches.size()<1){
+            mBinding.get().relativeRecentSearch.setVisibility(View.GONE);
+            mBinding.get().relativeSavedSearch.setVisibility(View.VISIBLE);
+            mBinding.get().txtSavedSearch.setVisibility(View.GONE);
+            mBinding.get().recycleViewSavedSearch.setAdapter(mEmptySavedSearchAdapter);
+        }
+    }
     public void onClickRefresh() {
         getData();
     }

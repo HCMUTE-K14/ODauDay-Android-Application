@@ -5,6 +5,7 @@ import com.odauday.config.AppConfig;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.SearchType;
+import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.utils.TextUtils;
 import javax.inject.Inject;
 
@@ -48,7 +49,7 @@ public class MapPreferenceHelper {
     }
     
     public float getLastZoomLevel() {
-        return mPreferencesHelper.get(PrefKey.LAST_ZOOM_LEVEL, DEFAULT_ZOOM_LEVEL);
+        return mPreferencesHelper.get(PrefKey.LAST_ZOOM_LEVEL, MapViewFragment.MIN_ZOOM_LEVEL);
     }
     
     public void putRecentSearchCriteria(SearchCriteria searchCriteria) {

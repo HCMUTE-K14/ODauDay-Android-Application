@@ -3,7 +3,6 @@ package com.odauday.di.modules;
 import com.odauday.MainActivity;
 import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
-import com.odauday.di.scopes.PerFragment;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.AddEditPropertyModule;
 import com.odauday.ui.addeditproperty.step1.Step1Provider;
@@ -29,7 +28,8 @@ import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.user.login.LoginModule;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.user.register.RegisterModule;
-
+import com.odauday.ui.welcome.WelcomeActivity;
+import com.odauday.ui.welcome.WelcomeActivityModule;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
@@ -69,6 +69,10 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = SelectLocationModule.class)
     @PerActivity
     abstract SelectLocationActivity bindSelectLocationActivity();
+
+    @ContributesAndroidInjector(modules = WelcomeActivityModule.class)
+    @PerActivity
+    abstract WelcomeActivity bindWelcomeActivity();
     
     @ContributesAndroidInjector(modules = {
         SearchTabProvider.class,

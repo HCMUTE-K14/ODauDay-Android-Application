@@ -8,11 +8,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
 import com.odauday.config.AppConfig.LANGUAGE;
+import com.odauday.config.Type;
 import com.odauday.model.Image;
 import com.odauday.ui.propertymanager.status.Status;
 import java.util.List;
+import timber.log.Timber;
+
 
 /**
  * Created by infamouSs on 3/5/18.
@@ -72,7 +76,8 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images) {
         if (images != null && images.size() > 0) {
-            ImageLoader.load(view, images.get(0).getUrl());
+            Timber.d(images.get(0).getUrl());
+            ImageLoader.loadWithoutOptions(view, EndPoint.BASE_URL + images.get(0).getUrl());
         }
     }
     
@@ -86,6 +91,7 @@ public class BindingAdapterUtils {
     
     @BindingAdapter("activeProperty")
     public static void activeProperty(TextView view, String status) {
+        Timber.d(status);
         switch (status) {
             case Status.ACTIVE:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
@@ -98,6 +104,20 @@ public class BindingAdapterUtils {
             case Status.EXPIRED:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    @BindingAdapter("setTypeProperty")
+    public static void setTypeProperty(TextView view, String type) {
+        switch (type) {
+            case Type.BUY:
+                view.setText(view.getContext().getString(R.string.sell));
+                break;
+            case Type.RENT:
+                view.setText(type);
                 break;
             default:
                 break;

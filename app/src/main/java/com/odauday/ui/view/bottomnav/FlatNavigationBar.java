@@ -153,7 +153,7 @@ public class FlatNavigationBar extends FrameLayout {
     
     public void updateAlertsBubble() {
         if (this.mAlertBubbleItem != null) {
-            int numOfNotifications = 100;//TODO: GET UNREAD NOTIFY
+            int numOfNotifications = 0;//TODO: GET UNREAD NOTIFY
             if (numOfNotifications > 0) {
                 setAlertBubbleText(numOfNotifications);
                 this.mAlertBubbleItem.show();
