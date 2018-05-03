@@ -131,14 +131,18 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     }
     
     public void filter(String text) {
-        if (TextUtils.isEmpty(text)) {
-            this.mDisplayProperty.clear();
-            this.mDisplayProperty.addAll(data);
-            notifyDataSetChanged();
-            return;
-            
+        if(mDisplayProperty!=null){
+            if (TextUtils.isEmpty(text)) {
+        
+                this.mDisplayProperty.clear();
+                this.mDisplayProperty.addAll(data);
+                notifyDataSetChanged();
+                return;
+        
+            }
+            this.mFilter.filter(text);
         }
-        this.mFilter.filter(text);
+        
     }
     
     public interface OnClickMenuListener {

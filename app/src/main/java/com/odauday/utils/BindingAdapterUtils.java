@@ -70,7 +70,7 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images) {
         if (images != null && images.size() > 0) {
-            ImageLoader.load(view, images.get(0).getUrl());
+            ImageLoader.loadWithoutOptions(view, images.get(0).getUrl());
         }
     }
     @BindingAdapter("setTypeProperty")
