@@ -48,6 +48,7 @@ import com.odauday.ui.search.common.RxCameraIdleListener.TriggerCameraIdle;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
 import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.OnFavouriteEvent;
 import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
 import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
@@ -98,8 +99,12 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     @Inject
     EventBus mBus;
     
+    @Inject
+    MapViewAdapter mMapViewAdapter;
+    
+    
     private GoogleMap mMap;
-    private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
+    private PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
         public void onPermissionGranted() {
             mMap.setMyLocationEnabled(true);
@@ -111,6 +116,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         
         }
     };
+    
     private GoogleApiClient mLocationClient;
     private MapOverlayView mMapOverlayView;
     private MapFragmentClickCallBack mMapFragmentClickCallBack;
@@ -118,7 +124,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     private GeoLocation[] mLastBounds;
     private HashMap<GeoLocation, Marker> mMapMarkers = new HashMap<>();
     private Collection<GeoLocation> mPendingToShowLocations;
-    private MapViewAdapter mMapViewAdapter;
     private float mZoomLevel;
     private RxCameraIdleListener mRxCameraIdleListener;
     private boolean mIsSearchWithSuggestionLocation;
@@ -205,7 +210,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 .build();
         }
         
-        mMapViewAdapter = new MapViewAdapter(this.getContext());
         mMapViewAdapter.setOnUpdatedListLocation(this);
     }
     
@@ -238,22 +242,39 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         this.mLocationClient.connect();
     }
     
-    @Override
-    public void onStop() {
-        super.onStop();
-        this.mLocationClient.disconnect();
+    public void clear() {
+        mLocationClient.disconnect();
+        mMapViewAdapter.clear();
         mRxCameraIdleListener.stop();
     }
     
     @Override
+    public void onStop() {
+        clear();
+        super.onStop();
+    }
+    
+    @Override
     public void onDestroy() {
-        mMapViewAdapter = null;
-        mLocationClient = null;
-        mMapMarkers = null;
         mBus.unregister(this);
+        mPermissionCallBack = null;
+        clear();
+        mLocationClient = null;
+        mRxCameraIdleListener = null;
+        mMap = null;
+        mMapViewAdapter.destroy();
+        mMapViewAdapter = null;
+        mMapFragmentClickCallBack = null;
+        
+        Timber.d("on destroy map view");
         super.onDestroy();
     }
     
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mMapOverlayView = null;
+    }
     
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -374,6 +395,23 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }, 1000);
     }
     
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFavouriteEvent(OnFavouriteEvent event) {
+        PropertyResultEntry resultEntry = event.getResult();
+        GeoLocation geoLocation = resultEntry.getLocation();
+        
+        Marker marker = mMapMarkers.get(geoLocation);
+        marker.setVisible(false);
+        
+        marker.setIcon(mMapViewAdapter.getMarkerIconForLocation(geoLocation));
+        marker.setVisible(true);
+        if (resultEntry.isFavorite()) {
+            mMapViewAdapter.addToFavoriteList(resultEntry);
+        } else {
+            mMapViewAdapter.removeToFavoriteList(resultEntry);
+        }
+    }
+    
     
     @Override
     public void onClickMapLayer(int type) {
@@ -439,7 +477,18 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             return true;
         }
         setSelectedMarker(marker);
+        PropertyResultEntry entry = mMapViewAdapter
+            .getEntriesAtLocation(mOpenedLocation)
+            .get(0);
+        entry.setVisited(true);
         
+        marker.setVisible(false);
+        
+        marker.setIcon(mMapViewAdapter.getMarkerIconForLocation(mOpenedLocation));
+        marker.setVisible(true);
+        
+        mMapViewAdapter
+            .addToHistoryList(entry);
         return true;
     }
     
@@ -477,12 +526,8 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     private void setSelectedMarker(Marker marker) {
         boolean isSameMarker;
-        if (this.mOpenedMarker == null ||
-            !marker.getPosition().equals(this.mOpenedMarker.getPosition())) {
-            isSameMarker = false;
-        } else {
-            isSameMarker = true;
-        }
+        isSameMarker = this.mOpenedMarker != null &&
+                       marker.getPosition().equals(this.mOpenedMarker.getPosition());
         if (!isSameMarker) {
             List<PropertyResultEntry> entry = mMapViewAdapter
                 .getEntriesAtLocation(marker.getPosition());
@@ -582,6 +627,10 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public void setMapFragmentClickCallBack(
         MapFragmentClickCallBack mapFragmentClickCallBack) {
         mMapFragmentClickCallBack = mapFragmentClickCallBack;
+    }
+    
+    public MapViewAdapter getMapViewAdapter() {
+        return mMapViewAdapter;
     }
     
     public interface MapFragmentClickCallBack {

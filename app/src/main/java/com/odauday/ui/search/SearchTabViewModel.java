@@ -18,7 +18,7 @@ public class SearchTabViewModel extends BaseViewModel {
     
     @Inject
     public SearchTabViewModel(UserRepository userRepository) {
-
+    
     }
     
     
@@ -42,13 +42,13 @@ public class SearchTabViewModel extends BaseViewModel {
         }
         if (show) {
             view.startAnimation(
-                      AnimationUtils.loadAnimation(this.mSearchTabMainFragment.getContext(),
-                                R.anim.slide_up));
+                AnimationUtils.loadAnimation(this.mSearchTabMainFragment.getContext(),
+                    R.anim.slide_up));
             view.setVisibility(View.VISIBLE);
         } else {
             view.startAnimation(
-                      AnimationUtils.loadAnimation(this.mSearchTabMainFragment.getContext(),
-                                R.anim.slide_down));
+                AnimationUtils.loadAnimation(this.mSearchTabMainFragment.getContext(),
+                    R.anim.slide_down));
             view.setVisibility(View.GONE);
         }
     }
@@ -56,7 +56,7 @@ public class SearchTabViewModel extends BaseViewModel {
     public View getVitalPropertyContainer() {
         if (mSearchTabMainFragment.getActivity() != null) {
             return ((MainActivity) mSearchTabMainFragment.getActivity())
-                      .getBinding().vitalPropertyContainer;
+                .getBinding().vitalPropertyContainer;
         }
         return null;
     }

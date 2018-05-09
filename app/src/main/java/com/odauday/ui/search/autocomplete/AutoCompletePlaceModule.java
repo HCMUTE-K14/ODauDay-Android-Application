@@ -20,7 +20,7 @@ public class AutoCompletePlaceModule {
     
     @Provides
     AutoCompletePlaceViewModel provideSearchTabViewModel(
-              AutoCompletePlaceRepository autoCompletePlaceRepository) {
+        AutoCompletePlaceRepository autoCompletePlaceRepository) {
         return new AutoCompletePlaceViewModel(autoCompletePlaceRepository);
     }
 }

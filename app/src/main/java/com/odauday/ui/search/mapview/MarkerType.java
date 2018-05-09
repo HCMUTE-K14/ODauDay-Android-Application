@@ -7,14 +7,13 @@ import com.odauday.R;
  */
 
 public enum MarkerType {
-    
     FAVORITE(R.drawable.ic_map_pin_favorite),
     VISITED(R.drawable.ic_map_pin_visited),
     DEFAULT(R.drawable.ic_map_pin);
     
     
     private int resourceId;
-
+    
     MarkerType(int resourceId) {
         this.resourceId = resourceId;
     }

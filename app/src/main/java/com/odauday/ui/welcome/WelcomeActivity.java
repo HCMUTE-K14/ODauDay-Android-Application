@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.odauday.MainActivity;
-import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.utils.MapUtils;
 import com.odauday.utils.ViewUtils;
@@ -48,12 +47,6 @@ public class WelcomeActivity extends AppCompatActivity {
         @NonNull int[] grantResults) {
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-    
-    private void runAddEditActivity() {
-        ViewUtils.startActivity(this, AddEditPropertyActivity.class);
-        finish();
-    }
-    
     
     private void runMainActivity() {
         ViewUtils.startActivity(this, MainActivity.class);

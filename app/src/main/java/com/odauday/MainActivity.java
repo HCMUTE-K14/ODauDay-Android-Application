@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar.OnTabSelectedListener;
+import com.google.android.gms.maps.MapsInitializer;
 import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
@@ -46,22 +47,13 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MapsInitializer.initialize(getApplicationContext());
         if (mUserRepository.isNeedLogin()) {
             ViewUtils.startActivity(this, LoginActivity.class);
             finish();
             return;
         }
         init();
-    }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
     
     @Override
@@ -102,8 +94,9 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             }
             
             mBinding.bottomNavBar.select(mTabStack.peek(), false);
-            getSupportFragmentManager()
-                .popBackStack(mTabStack.peek(), 0);
+            mNavigationController.navigateTo(mTabStack.peek());
+//            getSupportFragmentManager()
+//                .popBackStack(mTabStack.peek(), 0);
         } catch (Exception ex) {
             finish();
         }

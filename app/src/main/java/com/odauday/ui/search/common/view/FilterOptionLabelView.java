@@ -19,16 +19,16 @@ import com.odauday.utils.TextUtils;
  * Created by infamouSs on 4/1/18.
  */
 @BindingMethods(
-          {
-                    @BindingMethod(type = FilterOptionLabelView.class,
-                              attribute = "app:onToggle", method = "setListener"),
-                    @BindingMethod(type = FilterOptionLabelView.class,
-                              attribute = "app:txtHeader", method = "setTextHeader"),
-                    @BindingMethod(type = FilterOptionLabelView.class,
-                              attribute = "app:txtValue", method = "setTextValue"),
-                    @BindingMethod(type = FilterOptionLabelView.class,
-                              attribute = "app:txtMoreValue", method = "setMoreValue")
-          }
+    {
+        @BindingMethod(type = FilterOptionLabelView.class,
+            attribute = "app:onToggle", method = "setListener"),
+        @BindingMethod(type = FilterOptionLabelView.class,
+            attribute = "app:txtHeader", method = "setTextHeader"),
+        @BindingMethod(type = FilterOptionLabelView.class,
+            attribute = "app:txtValue", method = "setTextValue"),
+        @BindingMethod(type = FilterOptionLabelView.class,
+            attribute = "app:txtMoreValue", method = "setMoreValue")
+    }
 )
 public class FilterOptionLabelView extends LinearLayout {
     
@@ -84,6 +84,10 @@ public class FilterOptionLabelView extends LinearLayout {
         return mTextViewValue;
     }
     
+    public void setTextValue(int value) {
+        mTextViewValue.setText(value);
+    }
+    
     public void setTextValue(String value) {
         if (TextUtils.isEmpty(value)) {
             if (this.getId() == R.id.filter_location) {
@@ -93,10 +97,6 @@ public class FilterOptionLabelView extends LinearLayout {
             }
             return;
         }
-        mTextViewValue.setText(value);
-    }
-    
-    public void setTextValue(int value) {
         mTextViewValue.setText(value);
     }
     

@@ -48,10 +48,10 @@ public class FilterNavigationViewModel extends BaseViewModel {
     
     public void insertCurrentTags(List<Tag> tags) {
         Disposable disposable = mRecentTagRepository
-                  .save(tags)
-                  .subscribe(success -> response
-                                      .setValue(Resource.success(Task.TASK_CREATE_TAGS, success)),
-                            error -> response.setValue(Resource.error(Task.TASK_CREATE_TAGS, error)));
+            .save(tags)
+            .subscribe(success -> response
+                    .setValue(Resource.success(Task.TASK_CREATE_TAGS, success)),
+                error -> response.setValue(Resource.error(Task.TASK_CREATE_TAGS, error)));
         
         mCompositeDisposable.add(disposable);
     }
@@ -75,23 +75,23 @@ public class FilterNavigationViewModel extends BaseViewModel {
         switch (option) {
             case PROPERTY_TYPE:
                 List<Integer> selectedPropertyType =
-                          PropertyType.convertToArrayInt(mFragment.getSearchCriteria()
-                                    .getPropertyType());
+                    PropertyType.convertToArrayInt(mFragment.getSearchCriteria()
+                        .getPropertyType());
                 openPropertyTypeDialog(selectedPropertyType);
                 break;
             case TAGS:
                 final List<Tag> recentTags = new ArrayList<>();
                 
                 mRecentTagRepository
-                          .findAllRecentTagByCurrentUserId()
-                          .subscribe(success -> {
-                              recentTags.addAll(success);
-                              List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
-                              openTagTypeDialog(selectedTag, recentTags);
-                          }, error -> {
-                              List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
-                              openTagTypeDialog(selectedTag, recentTags);
-                          });
+                    .findAllRecentTagByCurrentUserId()
+                    .subscribe(success -> {
+                        recentTags.addAll(success);
+                        List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
+                        openTagTypeDialog(selectedTag, recentTags);
+                    }, error -> {
+                        List<Tag> selectedTag = mFragment.getSearchCriteria().getTags();
+                        openTagTypeDialog(selectedTag, recentTags);
+                    });
                 break;
             default:
                 break;
@@ -103,7 +103,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
             return;
         }
         BaseDialogFragment dialog = TagTypeDialog
-                  .newInstance(selectedTag, recentTag);
+            .newInstance(selectedTag, recentTag);
         
         if (dialog == null) {
             return;
@@ -118,7 +118,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
             return;
         }
         BaseDialogFragment dialog = PropertyTypeDialog
-                  .newInstance(selectedPropertyType);
+            .newInstance(selectedPropertyType);
         
         if (dialog == null) {
             return;
@@ -135,20 +135,20 @@ public class FilterNavigationViewModel extends BaseViewModel {
         switch (option) {
             case PRICE:
                 SearchType searchType = SearchType
-                          .getByValue(mFragment.getSearchCriteria().getSearchType());
+                    .getByValue(mFragment.getSearchCriteria().getSearchType());
                 title = TextUtils.build(mFragment.getString(R.string.txt_filter_price),
-                          mFragment.getString(R.string.txt_filter_price_rate));
+                    mFragment.getString(R.string.txt_filter_price_rate));
                 
                 MinMaxObject<Integer> priceFromTo = mFragment.getSearchCriteria().getPrice();
                 
                 switch (searchType) {
                     case BUY:
                         pd = initNumberPickerDialog(true, title, R.array.price_buy,
-                                  0, priceFromTo.getMin(), priceFromTo.getMax(), true);
+                            0, priceFromTo.getMin(), priceFromTo.getMax(), true);
                         break;
                     case RENT:
                         pd = initNumberPickerDialog(true, title, R.array.price_rent,
-                                  0, priceFromTo.getMin(), priceFromTo.getMax(), true);
+                            0, priceFromTo.getMin(), priceFromTo.getMax(), true);
                         break;
                     default:
                         pd = null;
@@ -161,31 +161,31 @@ public class FilterNavigationViewModel extends BaseViewModel {
                 MinMaxObject<Integer> landSize = mFragment.getSearchCriteria().getSize();
                 
                 pd = initNumberPickerDialog(false, title, R.array.land_size_count_int,
-                          R.array.land_size_count_string, landSize.getMin(), landSize.getMax(),
-                          true);
+                    R.array.land_size_count_string, landSize.getMin(), landSize.getMax(),
+                    true);
                 break;
             case BEDROOMS:
                 title = mFragment.getString(R.string.txt_filter_num_of_bedroom);
                 MinMaxObject<Integer> bedrooms = mFragment.getSearchCriteria().getBedrooms();
                 
                 pd = initNumberPickerDialog(false, title, R.array.bedroom_count_int,
-                          R.array.bedroom_count_string, bedrooms.getMin(), bedrooms.getMax(), true);
+                    R.array.bedroom_count_string, bedrooms.getMin(), bedrooms.getMax(), true);
                 break;
             case BATHROOMS:
                 title = mFragment.getString(R.string.txt_filter_num_of_bathroom);
                 MinMaxObject<Integer> bathrooms = mFragment.getSearchCriteria().getBathrooms();
                 
                 pd = initNumberPickerDialog(false, title, R.array.bathroom_count_int,
-                          R.array.bathroom_count_string, bathrooms.getMin(), bathrooms.getMax(),
-                          true);
+                    R.array.bathroom_count_string, bathrooms.getMin(), bathrooms.getMax(),
+                    true);
                 break;
             case PARKING:
                 title = mFragment.getString(R.string.txt_filter_num_of_parking);
                 MinMaxObject<Integer> parkings = mFragment.getSearchCriteria().getParking();
                 
                 pd = initNumberPickerDialog(false, title, R.array.parking_count_int,
-                          R.array.parking_count_string, parkings.getMin(), parkings.getMax(),
-                          false);
+                    R.array.parking_count_string, parkings.getMin(), parkings.getMax(),
+                    false);
                 break;
             default:
                 pd = null;
@@ -199,17 +199,17 @@ public class FilterNavigationViewModel extends BaseViewModel {
     }
     
     private FilterNumberPickerDialog initNumberPickerDialog(boolean hasCurrency, String title,
-              int intValuesRes,
-              int displayValuesRes, int from,
-              int to, boolean hasToWheel) {
+        int intValuesRes,
+        int displayValuesRes, int from,
+        int to, boolean hasToWheel) {
         return new FilterNumberPickerDialog.Builder(hasCurrency)
-                  .setTitle(title)
-                  .setValueRes(intValuesRes)
-                  .setDisplayValueRes(displayValuesRes)
-                  .setSelectedFrom(from)
-                  .setSelectedTo(to)
-                  .setHasToWheel(hasToWheel)
-                  .build();
+            .setTitle(title)
+            .setValueRes(intValuesRes)
+            .setDisplayValueRes(displayValuesRes)
+            .setSelectedFrom(from)
+            .setSelectedTo(to)
+            .setHasToWheel(hasToWheel)
+            .build();
     }
     
     public void onSelectedSearchType(SearchType searchType) {
@@ -225,7 +225,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
         
         mFragment.getMapPreferenceHelper().putLastSearchMode(searchType.getValue());
         mFragment.setSearchCriteria(mFragment.getMapPreferenceHelper()
-                  .getRecentSearchCriteria(searchType.getValue()));
+            .getRecentSearchCriteria(searchType.getValue()));
     }
     
     private void resetViewWhenChangeSearchType(SearchType searchType) {
@@ -235,10 +235,10 @@ public class FilterNavigationViewModel extends BaseViewModel {
         } else {
             if (searchType == SearchType.RENT) {
                 mFragment.getBinding().get().filterPrice
-                          .setTextHeader(mFragment.getString(R.string.txt_rent_per_month));
+                    .setTextHeader(mFragment.getString(R.string.txt_rent_per_month));
             } else {
                 mFragment.getBinding().get().filterPrice
-                          .setTextHeader(mFragment.getString(R.string.txt_filter_price));
+                    .setTextHeader(mFragment.getString(R.string.txt_filter_price));
             }
             mFragment.getBinding().get().filterPrice.setVisibility(View.VISIBLE);
         }
@@ -251,15 +251,15 @@ public class FilterNavigationViewModel extends BaseViewModel {
         showAdvancedOptions(mIsShowMoreOptions);
         
         mFragment.getBinding().get().filterAdvanceOption
-                  .postDelayed(() -> mFragment.getBinding().get().scrollView
-                            .fullScroll(View.FOCUS_DOWN), 500);
+            .postDelayed(() -> mFragment.getBinding().get().scrollView
+                .fullScroll(View.FOCUS_DOWN), 500);
     }
     
     private void showAdvancedOptions(boolean show) {
         mFragment.getBinding().get().filterAdvanceOption
-                  .setVisibility(show ? View.VISIBLE : View.GONE);
+            .setVisibility(show ? View.VISIBLE : View.GONE);
         mFragment.getBinding().get().btnMoreOptions.setText(show ? R.string.txt_filter_less_options
-                  : R.string.txt_filter_more_options);
+            : R.string.txt_filter_more_options);
         
     }
     
@@ -279,7 +279,7 @@ public class FilterNavigationViewModel extends BaseViewModel {
     public void completeRefineFilter(View view) {
         if (mFragment.getOnCompleteRefineFilter() != null) {
             mFragment.getOnCompleteRefineFilter()
-                      .onCompleteRefineFilter(mFragment.getSearchCriteria());
+                .onCompleteRefineFilter(mFragment.getSearchCriteria());
         }
     }
     
@@ -324,15 +324,15 @@ public class FilterNavigationViewModel extends BaseViewModel {
             
             if (valueMax == 0) {
                 return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), " ", orMore);
+                    .build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), " ", orMore);
             }
             if (valueMin == 0) {
                 return TextUtils
-                          .build(TextUtils.formatIntToCurrency(valueMax * RATE_VND), " ", orLess);
+                    .build(TextUtils.formatIntToCurrency(valueMax * RATE_VND), " ", orLess);
             }
             
             return TextUtils.build(TextUtils.formatIntToCurrency(valueMin * RATE_VND), "-",
-                      TextUtils.formatIntToCurrency(valueMax * RATE_VND));
+                TextUtils.formatIntToCurrency(valueMax * RATE_VND));
         }
     }
 }

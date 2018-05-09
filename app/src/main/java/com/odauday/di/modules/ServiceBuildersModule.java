@@ -1,5 +1,9 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.favorite.FavoritePropertyDao;
+import com.odauday.data.local.favorite.FavoriteServiceImpl;
+import com.odauday.data.local.history.HistoryPropertyDao;
+import com.odauday.data.local.history.HistoryServiceImpl;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.place.RecentSearchPlaceServiceImpl;
@@ -106,5 +110,18 @@ public class ServiceBuildersModule {
         return new RecentSearchPlaceServiceImpl(recentSearchPlaceDao);
     }
     
+    @Provides
+    @Singleton
+    com.odauday.data.local.history.HistoryService provideHistoryServiceLocal(
+        HistoryPropertyDao historyPropertyDao) {
+        return new HistoryServiceImpl(historyPropertyDao);
+    }
+    
+    @Provides
+    @Singleton
+    com.odauday.data.local.favorite.FavoriteService provideFavoriteServiceLocal(
+        FavoritePropertyDao favoritePropertyDao) {
+        return new FavoriteServiceImpl(favoritePropertyDao);
+    }
     
 }

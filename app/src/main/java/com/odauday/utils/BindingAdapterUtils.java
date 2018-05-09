@@ -76,7 +76,6 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images) {
         if (images != null && images.size() > 0) {
-            Timber.d(images.get(0).getUrl());
             ImageLoader.loadWithoutOptions(view, EndPoint.BASE_URL + images.get(0).getUrl());
         }
     }

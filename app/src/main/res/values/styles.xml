@@ -31,10 +31,16 @@
     <item name="android:background">@drawable/button_flat</item>
     <item name="android:textAllCaps">true</item>
   </style>
+
   <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="colorControlNormal">@color/colorGray</item>
     <item name="colorControlActivated">@color/colorGreen</item>
     <item name="colorControlHighlight">@color/colorGreen</item>
+  </style>
+
+  <style name="CustomActionBar" parent="AppTheme">
+    <item name="colorControlNormal">#fff</item>
+
   </style>
 
 </resources>

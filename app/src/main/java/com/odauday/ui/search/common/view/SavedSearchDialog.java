@@ -41,14 +41,14 @@ public class SavedSearchDialog extends BaseDialogFragment {
             dialog.dismiss();
         });
         setPositiveAlertDialogButton(getString(R.string.txt_save),
-                  (dialog, which) -> mSaveSearchListener
-                            .onSaveSearch(editText.getText().toString()));
+            (dialog, which) -> mSaveSearchListener
+                .onSaveSearch(editText.getText().toString()));
         
         return create();
     }
     
     public void setSaveSearchListener(
-              SaveSearchListener saveSearchListener) {
+        SaveSearchListener saveSearchListener) {
         mSaveSearchListener = saveSearchListener;
     }
     

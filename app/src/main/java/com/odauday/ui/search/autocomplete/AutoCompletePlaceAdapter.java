@@ -25,7 +25,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
     }
     
     public void setOnClickItemSearchPlace(
-              OnClickItemSearchPlace onClickItemSearchPlace) {
+        OnClickItemSearchPlace onClickItemSearchPlace) {
         mOnClickItemSearchPlace = onClickItemSearchPlace;
     }
     
@@ -34,7 +34,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
         ViewHolder viewHolder = SearchCard.getCard(viewType).createViewHolder(parent);
         if (viewHolder instanceof AutoCompletePlaceCardViewHolder) {
             ((AutoCompletePlaceCardViewHolder) viewHolder)
-                      .setOnClickItemSearchPlace(mOnClickItemSearchPlace);
+                .setOnClickItemSearchPlace(mOnClickItemSearchPlace);
         }
         return viewHolder;
     }
@@ -145,7 +145,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
     }
     
     private void setRecentSearchListFromAutoCompletePlaceCollection(
-              AutoCompletePlaceCollection collection) {
+        AutoCompletePlaceCollection collection) {
         List<AutoCompletePlace> recentSearchList = collection.getRecentSearch();
         if (recentSearchList != null) {
             if (recentSearchList.isEmpty()) {
@@ -158,7 +158,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
     }
     
     private void setSuggestionSearchFromAutoCompletePlaceCollection(
-              AutoCompletePlaceCollection collection) {
+        AutoCompletePlaceCollection collection) {
         List<AutoCompletePlace> suggestionSearchList = collection.getSuggestionSearch();
         List<AutoCompletePlace> recentSearchList = collection.getRecentSearch();
 
@@ -167,7 +167,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
                 hideSuggestionCard();
             } else {
                 suggestionSearchList = removeDuplicateResult(recentSearchList,
-                          suggestionSearchList);
+                    suggestionSearchList);
                 setSuggestedLocationList(suggestionSearchList);
                 showSuggestionSearchCard();
             }
@@ -175,7 +175,7 @@ public class AutoCompletePlaceAdapter extends Adapter<ViewHolder> {
     }
     
     private List<AutoCompletePlace> removeDuplicateResult(List<AutoCompletePlace> recentSearches,
-              List<AutoCompletePlace> suggestedLocationList) {
+        List<AutoCompletePlace> suggestedLocationList) {
         if (isListNotEmpty(recentSearches)) {
             for (AutoCompletePlace i : recentSearches) {
                 if (suggestedLocationList.contains(i)) {

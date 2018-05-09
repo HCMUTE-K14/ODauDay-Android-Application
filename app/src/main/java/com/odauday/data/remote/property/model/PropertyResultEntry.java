@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.odauday.model.Image;
 import com.odauday.utils.ObjectUtils;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +34,7 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("price")
     @Expose
     private double price;
-    @SerializedName("type")
+    @SerializedName("type_id")
     @Expose
     private String searchType;
     @SerializedName("num_of_bedroom")
@@ -58,7 +57,10 @@ public class PropertyResultEntry implements Parcelable {
     private boolean isVisited;
     @SerializedName("images")
     @Expose
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images;
+    @SerializedName("time_contact")
+    @Expose
+    private String timeContact;
     
     public PropertyResultEntry() {
     

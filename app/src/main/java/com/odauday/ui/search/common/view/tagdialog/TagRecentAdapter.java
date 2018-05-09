@@ -26,15 +26,15 @@ public class TagRecentAdapter extends BaseAdapter<Tag, ItemTextViewOnlyBinding> 
     }
     
     public void setOnClickTagRecent(
-              OnClickTagRecent onClickTagRecent) {
+        OnClickTagRecent onClickTagRecent) {
         mOnClickTagRecent = onClickTagRecent;
     }
     
     @Override
     protected ItemTextViewOnlyBinding createBinding(ViewGroup parent) {
         return DataBindingUtil
-                  .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_text_view_only,
-                            parent, false, null);
+            .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_text_view_only,
+                parent, false, null);
     }
     
     @Override

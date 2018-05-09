@@ -3,6 +3,7 @@ package com.odauday.data.local.history;
 import com.odauday.data.local.history.HistoryPropertyDao.Properties;
 import io.reactivex.Single;
 import java.util.List;
+import org.greenrobot.greendao.query.DeleteQuery;
 
 /**
  * Created by infamouSs on 4/14/18.
@@ -23,7 +24,14 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public Single<Long> delete(HistoryProperty historyProperty) {
         return Single.fromCallable(() -> {
-            mHistoryPropertyDao.delete(historyProperty);
+            DeleteQuery deleteQuery = mHistoryPropertyDao
+                .queryBuilder()
+                .where(Properties.PropertyId
+                        .eq(historyProperty.getPropertyId()),
+                    Properties.UserId
+                        .eq(historyProperty.getUserId()))
+                .buildDelete();
+            deleteQuery.executeDeleteWithoutDetachingEntities();
             return 1L;
         });
     }
@@ -31,9 +39,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public Single<List<HistoryProperty>> findHistoryByUserId(String userId) {
         return Single.fromCallable(() -> mHistoryPropertyDao
-                  .queryBuilder()
-                  .where(Properties.UserId.eq(userId))
-                  .list());
+            .queryBuilder()
+            .where(Properties.UserId.eq(userId))
+            .list());
     }
     
     @Override
@@ -41,12 +49,12 @@ public class HistoryServiceImpl implements HistoryService {
         return Single.fromCallable(() -> {
             for (HistoryProperty historyProperty : historyProperties) {
                 boolean isExists = mHistoryPropertyDao
-                                             .queryBuilder()
-                                             .where(Properties.PropertyId
-                                                                 .eq(historyProperty.getId()),
-                                                       Properties.UserId
-                                                                 .eq(historyProperty.getId()))
-                                             .count() > 0;
+                                       .queryBuilder()
+                                       .where(Properties.PropertyId
+                                               .eq(historyProperty.getPropertyId()),
+                                           Properties.UserId
+                                               .eq(historyProperty.getUserId()))
+                                       .count() > 0;
                 
                 if (!isExists) {
                     mHistoryPropertyDao.insert(historyProperty);

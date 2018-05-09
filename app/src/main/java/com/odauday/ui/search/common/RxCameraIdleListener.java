@@ -31,11 +31,11 @@ public class RxCameraIdleListener {
     private Disposable createCameraIdleDisposable() {
         
         return Observable.<String>create(
-                  subscriber -> mMap.setOnCameraIdleListener(() -> subscriber.onNext("OK")))
-                  .throttleLast(DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
-                  .subscribeOn(AndroidSchedulers.mainThread())
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(trigger -> mTriggerCameraIdle.onCameraIdle());
+            subscriber -> mMap.setOnCameraIdleListener(() -> subscriber.onNext("OK")))
+            .throttleLast(DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(trigger -> mTriggerCameraIdle.onCameraIdle());
     }
     
     public void start() {

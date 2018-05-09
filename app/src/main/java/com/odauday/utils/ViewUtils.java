@@ -1,5 +1,6 @@
 package com.odauday.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import com.facebook.internal.NativeProtocol;
 import com.odauday.R;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +91,13 @@ public class ViewUtils {
             }
             imm.hideSoftInputFromWindow(windowToken, 0);
         }
+    }
+    
+    @SuppressLint("WrongConstant")
+    public static boolean isIntentAvailable(Context context, Intent intent) {
+        return context.getPackageManager()
+                   .queryIntentActivities(intent, NativeProtocol.MESSAGE_GET_ACCESS_TOKEN_REQUEST)
+                   .size() > 0;
     }
     
     public static void showDateTimePicker(Context context, Date currentDate, Date date,

@@ -10,12 +10,14 @@ import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.utils.BitmapUtils;
 import com.odauday.utils.MapUtils;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 /**
  * Created by infamouSs on 4/13/18.
@@ -25,16 +27,20 @@ public class MapViewAdapter {
     private static final int WIDTH_MARKER = 45;
     private static final int HEIGHT_MARKER = 45;
     
-    private final HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
-    private final Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
+    private HashMap<GeoLocation, List<PropertyResultEntry>> mMapDisplayItems = new HashMap<>();
+    private Map<MarkerType, WeakReference<BitmapDescriptor>> mMarketIconBitmapDescriptors = new HashMap<>();
+    private HashMap<GeoLocation, String> mFavoriteListProperty = new HashMap<>();
+    private HashMap<GeoLocation, String> mHistoryListProperty = new HashMap<>();
     
-    private final BitmapDescriptor mMarkSelectedBitmapDescriptor;
-    private final Context mContext;
+    private BitmapDescriptor mMarkSelectedBitmapDescriptor;
+    private Context mContext;
     private OnUpdatedListLocation mOnUpdatedListLocation;
     
+    @Inject
     public MapViewAdapter(Context context) {
         this.mContext = context;
-        mMarkSelectedBitmapDescriptor = MapUtils.buildMarkSelectedBitmapDescriptorWithPadding(context);
+        mMarkSelectedBitmapDescriptor = MapUtils
+            .buildMarkSelectedBitmapDescriptorWithPadding(mContext);
     }
     
     
@@ -48,6 +54,12 @@ public class MapViewAdapter {
                     entries = new LinkedList<>();
                     this.mMapDisplayItems.put(location, entries);
                 }
+                if (mHistoryListProperty.containsKey(location)) {
+                    listing.setVisited(true);
+                }
+                if (mFavoriteListProperty.containsKey(location)) {
+                    listing.setFavorite(true);
+                }
                 entries.add(listing);
             }
         }
@@ -56,8 +68,61 @@ public class MapViewAdapter {
         }
     }
     
+    public void clear() {
+        mMapDisplayItems.clear();
+        mMarketIconBitmapDescriptors.clear();
+        mFavoriteListProperty.clear();
+        mHistoryListProperty.clear();
+    }
+    
+    public void destroy() {
+        mMapDisplayItems = null;
+        mMarketIconBitmapDescriptors = null;
+        mFavoriteListProperty = null;
+        mHistoryListProperty = null;
+        mMarkSelectedBitmapDescriptor = null;
+        mOnUpdatedListLocation = null;
+    }
+    
+    public void addToFavoriteList(PropertyResultEntry resultEntry) {
+        mFavoriteListProperty.put(resultEntry.getLocation(), resultEntry.getId());
+    }
+    
+    public void removeToFavoriteList(PropertyResultEntry resultEntry) {
+        mFavoriteListProperty.remove(resultEntry.getLocation());
+    }
+    
+    public List<String> getFavoriteList() {
+        List<String> arrIdProperty = new ArrayList<>();
+        
+        for (GeoLocation geoLocation : mFavoriteListProperty.keySet()) {
+            String id = mFavoriteListProperty.get(geoLocation);
+            arrIdProperty.add(id);
+        }
+        return arrIdProperty;
+    }
+    
+    public void addToHistoryList(PropertyResultEntry resultEntry) {
+        mHistoryListProperty.put(resultEntry.getLocation(), resultEntry.getId());
+    }
+    
+    public void removeToHistoryList(PropertyResultEntry resultEntry) {
+        mHistoryListProperty.remove(resultEntry.getLocation());
+    }
+    
+    public List<String> getHistoryList() {
+        List<String> arrIdProperty = new ArrayList<>();
+        
+        for (GeoLocation geoLocation : mFavoriteListProperty.keySet()) {
+            String id = mHistoryListProperty.get(geoLocation);
+            arrIdProperty.add(id);
+        }
+        return arrIdProperty;
+    }
+    
+    
     public void setOnUpdatedListLocation(
-              OnUpdatedListLocation onUpdatedListLocation) {
+        OnUpdatedListLocation onUpdatedListLocation) {
         mOnUpdatedListLocation = onUpdatedListLocation;
     }
     
@@ -94,7 +159,7 @@ public class MapViewAdapter {
         BitmapDescriptor bitmapDescriptor = null;
         if (this.mMarketIconBitmapDescriptors.containsKey(markerType)) {
             bitmapDescriptor = (BitmapDescriptor) ((WeakReference) this.mMarketIconBitmapDescriptors
-                      .get(markerType)).get();
+                .get(markerType)).get();
         }
         if (bitmapDescriptor != null) {
             return bitmapDescriptor;
@@ -140,10 +205,5 @@ public class MapViewAdapter {
     public interface OnUpdatedListLocation {
         
         void onUpdatedListLocation(Collection<GeoLocation> locations);
-    }
-    
-    public interface ListingsUpdateListener {
-        
-        void onListingsUpdated(Collection<GeoLocation> collection);
     }
 }

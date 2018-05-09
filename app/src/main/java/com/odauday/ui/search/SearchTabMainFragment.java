@@ -25,6 +25,7 @@ import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
 import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
 import com.odauday.ui.search.common.event.OnErrorDownloadPropertyEvent;
+import com.odauday.ui.search.common.event.OnFavouriteEvent;
 import com.odauday.ui.search.common.event.ReInitMapFragmentEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.common.view.InformationBar.InformationBarListener;
@@ -37,6 +38,7 @@ import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.ui.search.mapview.MapViewFragment.MapFragmentClickCallBack;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
+import com.odauday.ui.view.StarView.OnClickStarListener;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
 import com.odauday.utils.NetworkUtils;
@@ -61,7 +63,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                                                                                           OnCompleteRefineFilter,
                                                                                           MapFragmentClickCallBack,
                                                                                           SaveSearchListener,
-                                                                                          LoadingFragmentListener {
+                                                                                          LoadingFragmentListener,
+                                                                                          OnClickStarListener<PropertyResultEntry> {
     
     
     //====================== Variable =========================//
@@ -82,8 +85,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Inject
     EventBus mBus;
     
-    VitalPropertyView mVitalPropertyView;
-    
+    private VitalPropertyView mVitalPropertyView;
     private FilterNavigationFragment mFilterNavigationFragment;
     private MapViewFragment mMapViewFragment;
     
@@ -146,16 +148,11 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     @Override
-    public void onStop() {
-        System.gc();
-        super.onStop();
-    }
-    
-    @Override
     public void onDestroy() {
         mBus.unregister(this);
-        Timber.d("On destroy search tab");
+        System.gc();
         
+        Timber.d("On destroy search tab");
         super.onDestroy();
     }
     
@@ -182,7 +179,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             mBinding.get().inforBar.showHideErrorContainer(false);
         }
         
-        if (mMapViewFragment.isVisible()) {
+        if (mMapViewFragment != null && mMapViewFragment.isVisible()) {
             mBinding.get().inforBar.showHideButtonSort(false);
         }
     }
@@ -271,6 +268,14 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         }
     }
     
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mVitalPropertyView = null;
+        mMapViewFragment = null;
+        mFilterNavigationFragment = null;
+    }
+    
     private void initBinding() {
         
         mBinding.get().mainContent.addProperty.setOnClickListener(addProperty -> {
@@ -344,7 +349,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             
             ((MainActivity) getActivity()).getBinding().vitalPropertyContainer
                 .addView(mVitalPropertyView);
-            
+            mVitalPropertyView.setOnClickStarListener(this);
             ViewUtils.showHideView(
                 ((MainActivity) getActivity()).getBinding().vitalPropertyContainer,
                 false);
@@ -441,4 +446,18 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         return mChildFragmentInjector;
     }
     
+    @Override
+    public void onCheckStar(PropertyResultEntry item) {
+        Timber.d("Favorite");
+        item.setFavorite(true);
+        mBus.post(new OnFavouriteEvent(item));
+    }
+    
+    @Override
+    public void onUnCheckStar(PropertyResultEntry item) {
+        Timber.d("Un-Favorite");
+    
+        item.setFavorite(false);
+        mBus.post(new OnFavouriteEvent(item));
+    }
 }

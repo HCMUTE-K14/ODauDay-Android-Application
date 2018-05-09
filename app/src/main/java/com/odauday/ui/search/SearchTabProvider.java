@@ -10,10 +10,10 @@ import dagger.android.ContributesAndroidInjector;
  * Created by infamouSs on 3/31/18.
  */
 @Module(
-          includes = {
-                    FilterNavigationProvider.class,
-                    MapViewFragmentProvider.class
-          }
+    includes = {
+        FilterNavigationProvider.class,
+        MapViewFragmentProvider.class
+    }
 )
 public abstract class SearchTabProvider {
     

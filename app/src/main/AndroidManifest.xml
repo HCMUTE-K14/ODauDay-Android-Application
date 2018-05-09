@@ -65,6 +65,7 @@
     <activity android:name=".ui.propertymanager.ActivityPropertyManager" />
     <activity android:name=".ui.settings.ActivitySettings" />
     <activity android:name=".ui.confirmproperty.ActivityConfirmProperty" />
+    <activity android:name=".ui.propertydetail.PropertyDetailActivity" />
   </application>
 
 </manifest>

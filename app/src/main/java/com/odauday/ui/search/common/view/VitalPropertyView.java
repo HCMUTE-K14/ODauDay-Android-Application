@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.odauday.R;
+import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
+import com.odauday.ui.view.StarView;
+import com.odauday.ui.view.StarView.OnClickStarListener;
+import com.odauday.ui.view.StarView.STATUS;
 import com.odauday.utils.ImageLoader;
 import com.odauday.utils.TextUtils;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by infamouSs on 4/18/18.
@@ -24,6 +30,8 @@ public class VitalPropertyView extends RelativeLayout {
     TextView mTextViewPrice;
     TextView mTextViewFeature;
     TextView mTextViewAddress;
+    StarView<PropertyResultEntry> mStarView;
+    OnClickStarListener<PropertyResultEntry> mOnClickStarListener;
     private PropertyResultEntry mProperty;
     
     public VitalPropertyView(Context context) {
@@ -53,6 +61,7 @@ public class VitalPropertyView extends RelativeLayout {
         mTextViewPrice = rootView.findViewById(R.id.txt_price);
         mTextViewFeature = rootView.findViewById(R.id.txt_feature);
         mTextViewAddress = rootView.findViewById(R.id.txt_address);
+        mStarView = rootView.findViewById(R.id.star_view);
     }
     
     
@@ -78,11 +87,13 @@ public class VitalPropertyView extends RelativeLayout {
     
     public void setProperty(PropertyResultEntry property) {
         mProperty = property;
-        Timber.d(mProperty.toString());
+        mStarView.setSTATUS(mProperty.isFavorite() ? STATUS.UN_CHECK : STATUS.CHECK);
+        
         if (property.getImages() != null) {
             if (!property.getImages().isEmpty()) {
-                String urlFirstImage = property.getImages().get(0).getUrl();
-                setImage(urlFirstImage);
+                String urlFirstImage =
+                    property.getImages().get(0) == null ? "" : property.getImages().get(0).getUrl();
+                setImage(EndPoint.BASE_URL + urlFirstImage);
             }
         } else {
             setImage(ImageLoader.randomPlaceHolder());
@@ -91,22 +102,11 @@ public class VitalPropertyView extends RelativeLayout {
         String buildPriceText = TextUtils.formatIntToCurrency((float) property.getPrice() *
                                                               AppConfig.RATE_VND);
         setPrice(buildPriceText);
+        String featureText = getContext()
+            .getString(R.string.txt_display_bedroom_bathroom_parking, property.getNumOfBedRooms(),
+                property.getNumOfBathRooms(), property.getNumOfParkings());
         
-        String buildFeatureText = new StringBuilder()
-            .append(property.getNumOfBathRooms())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_bedrooms))
-            .append(", ")
-            .append(property.getNumOfBedRooms())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_bathrooms))
-            .append(", ")
-            .append(property.getNumOfParkings())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_parking))
-            .toString();
-        
-        setFeature(buildFeatureText);
+        setFeature(featureText);
         
         String address = new StringBuilder()
             .append("<b>")
@@ -115,6 +115,20 @@ public class VitalPropertyView extends RelativeLayout {
             .append(property.getAddress()).toString();
         
         getTextViewAddress().setText(Html.fromHtml(address));
+    }
+    
+    public void setOnClickStarListener(
+        OnClickStarListener<PropertyResultEntry> onClickStarListener) {
+        mOnClickStarListener = onClickStarListener;
+        mStarView.setOnClickStarListener(mOnClickStarListener);
+        
+        RxView.clicks(mStarView)
+            .throttleLast(300, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success ->{
+                mStarView.addOnClick(mProperty);
+            });
+               // mStarView.setOnClickListener(view -> {
     }
     
     public void setImage(String url) {

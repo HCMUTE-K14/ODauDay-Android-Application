@@ -65,7 +65,7 @@ public class SearchCriteriaDisplay implements Parcelable {
     }
     
     public void setDisplayPropertyType(
-              TextAndMoreTextValue displayPropertyType) {
+        TextAndMoreTextValue displayPropertyType) {
         this.displayPropertyType = displayPropertyType;
     }
     

@@ -13,13 +13,13 @@ public enum SearchCard {
     SUGGESTION(1, R.string.txt_sugguesstion_place, R.layout.item_auto_complete_place) {
         ViewHolder createViewHolder(ViewGroup parent) {
             return new AutoCompletePlaceCardViewHolder(
-                      inflateView(parent, this.mLayoutRes), this);
+                inflateView(parent, this.mLayoutRes), this);
         }
     },
     RECENT_SEARCHES(2, R.string.txt_recent_place, R.layout.item_auto_complete_place) {
         ViewHolder createViewHolder(ViewGroup parent) {
             return new AutoCompletePlaceCardViewHolder(
-                      inflateView(parent, this.mLayoutRes), this);
+                inflateView(parent, this.mLayoutRes), this);
         }
     };
     

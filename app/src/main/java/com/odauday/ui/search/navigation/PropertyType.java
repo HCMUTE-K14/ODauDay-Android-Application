@@ -2,6 +2,7 @@ package com.odauday.ui.search.navigation;
 
 import com.google.gson.annotations.SerializedName;
 import com.odauday.R;
+import com.odauday.model.Category;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,16 @@ public enum PropertyType {
             integers.add(propertyType.getId());
         }
         return integers;
+    }
+    
+    
+    public static List<PropertyType> convertCategoriesToPropertyType(List<Category> categories) {
+        List<PropertyType> propertyTypes = new ArrayList<>();
+        for (Category category : categories) {
+            propertyTypes.add(PropertyType.getById(Integer.valueOf(category.getId())));
+        }
+        
+        return propertyTypes;
     }
     
     public int getId() {

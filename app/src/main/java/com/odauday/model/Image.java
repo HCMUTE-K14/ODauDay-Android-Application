@@ -17,7 +17,7 @@ public class Image implements Parcelable {
         public Image createFromParcel(Parcel in) {
             return new Image(in);
         }
-
+        
         @Override
         public Image[] newArray(int size) {
             return new Image[size];
@@ -37,7 +37,7 @@ public class Image implements Parcelable {
     private Date dateCreated;
     
     public Image() {
-
+    
     }
     
     public Image(String id, String url) {

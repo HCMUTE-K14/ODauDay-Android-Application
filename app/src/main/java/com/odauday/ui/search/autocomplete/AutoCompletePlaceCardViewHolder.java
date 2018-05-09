@@ -30,7 +30,7 @@ public class AutoCompletePlaceCardViewHolder extends ViewHolder {
     }
     
     public void setOnClickItemSearchPlace(
-              OnClickItemSearchPlace onClickItemSearchPlace) {
+        OnClickItemSearchPlace onClickItemSearchPlace) {
         mOnClickItemSearchPlace = onClickItemSearchPlace;
     }
     

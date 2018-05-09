@@ -105,6 +105,8 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     
     @Override
     public void onDestroy() {
+        mStep1Helper = null;
+    
         super.onDestroy();
     }
     

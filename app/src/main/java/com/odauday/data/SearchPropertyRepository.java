@@ -45,6 +45,7 @@ public class SearchPropertyRepository {
                   .map(response -> {
                       try {
                           if (response.isSuccess()) {
+                              Timber.d(response.getData().toString());
                               return response.getData();
                           } else {
                               throw new SearchException(response.getErrors());

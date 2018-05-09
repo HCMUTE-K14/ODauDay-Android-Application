@@ -22,7 +22,7 @@ public class RowItemAdapter extends BaseAdapter<AutoCompletePlace, RowItemSearch
     private final boolean mIsNeedShowRemoveButton;
     
     public RowItemAdapter(OnClickItemSearchPlace onClickItemSearchPlace,
-              boolean isNeedShowRemoveButton) {
+        boolean isNeedShowRemoveButton) {
         this.mOnClickItemSearchPlace = onClickItemSearchPlace;
         this.mIsNeedShowRemoveButton = isNeedShowRemoveButton;
     }
@@ -30,9 +30,9 @@ public class RowItemAdapter extends BaseAdapter<AutoCompletePlace, RowItemSearch
     @Override
     protected RowItemSearchBinding createBinding(ViewGroup parent) {
         return DataBindingUtil
-                  .inflate(LayoutInflater.from(parent.getContext()),
-                            R.layout.row_item_search,
-                            parent, false, null);
+            .inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.row_item_search,
+                parent, false, null);
     }
     
     @Override

@@ -215,4 +215,30 @@
   <string name="txt_creating_property">Creating Property...</string>
   <string name="sell">SELL</string>
   <string name="message_choose_image">Please choose image for property</string>
+  <string name="txt_name">Name</string>
+  <string name="txt_display_bedroom_bathroom_parking">%1$d Bedrooms, %2$d Bathrooms, %3$d Parkings</string>
+  <string name="txt_view_more_image" >+ %1$d</string>
+  <string name="txt_rent_upppercast">RENT</string>
+  <string name="txt_buy_uppercast">BUY</string>
+  <string name="cta_email">Email</string>
+  <string name="cta_call">Call</string>
+  <string name="txt_contact_time">Contact time: %1$s</string>
+  <string name="txt_per_month">(per month)</string>
+  <string name="txt_read_more">READ MORE</string>
+  <string name="txt_tags">Tags</string>
+  <string name="message_google_street_view_missing">Google Street View required for this service</string>
+  <string name="message_error_no_maps_directions">Directions are not available.</string>
+  <string name="txt_share_property">Share</string>
+  <string name="txt_favorite">Favorite</string>
+  <string name="txt_travel_time">Travel Times</string>
+  <string name="txt_travel_intro">Calculate travel times to your favourite locations.</string>
+  <string name="txt_add_location">Add location</string>
+  <string name="txt_destination_hint">Place that matters to you</string>
+  <string name="txt_hide_card">Hide Card</string>
+  <string name="txt_card_is_hidden">Card hidden. Go to settings to re-enable it.</string>
+  <string name="txt_undo">Undo</string>
+  <string name="txt_reset_locations">Reset Locations</string>
+  <string name="txt_save_location">Save Location</string>
+
+
 </resources>

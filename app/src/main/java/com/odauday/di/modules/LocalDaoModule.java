@@ -1,6 +1,8 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.favorite.FavoritePropertyDao;
 import com.odauday.data.local.history.DaoSession;
+import com.odauday.data.local.history.HistoryPropertyDao;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.tag.RecentTagDao;
 import dagger.Module;
@@ -24,4 +26,17 @@ public class LocalDaoModule {
     RecentSearchPlaceDao provideRecentSearchPlaceDao(DaoSession daoSession) {
         return daoSession.getRecentSearchPlaceDao();
     }
+    
+    @Provides
+    @Singleton
+    HistoryPropertyDao provideHistoryPropertyDao(DaoSession daoSession) {
+        return daoSession.getHistoryPropertyDao();
+    }
+    
+    @Provides
+    @Singleton
+    FavoritePropertyDao provideFavoritePropertyDao(DaoSession daoSession) {
+        return daoSession.getFavoritePropertyDao();
+    }
+    
 }

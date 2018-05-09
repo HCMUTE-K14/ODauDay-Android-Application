@@ -21,9 +21,9 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     private final boolean mIsUsingMinMax;
     private int[] mDisplayIntegers;
     private String[] mDisplayString;
-
+    
     public WheelAdapterImpl(FilterNumberPickerDialog pickerDialog, String[] displayStrings,
-              boolean isMinAdapter, boolean isUsingMinMax) {
+        boolean isMinAdapter, boolean isUsingMinMax) {
         this.mPickerDialog = pickerDialog;
         this.mDisplayString = displayStrings;
         this.mIsMinAdapter = isMinAdapter;
@@ -32,7 +32,7 @@ public class WheelAdapterImpl implements WheelViewAdapter {
     }
     
     public WheelAdapterImpl(FilterNumberPickerDialog pickerDialog, int[] displayIntegers,
-              boolean isMinAdapter, boolean isUsingMinMax) {
+        boolean isMinAdapter, boolean isUsingMinMax) {
         this.mPickerDialog = pickerDialog;
         this.mDisplayIntegers = displayIntegers;
         this.mIsMinAdapter = isMinAdapter;
@@ -60,7 +60,7 @@ public class WheelAdapterImpl implements WheelViewAdapter {
                 index--;
             }
             txb.setText(TextUtils.formatIntWithoutCurrency((float) this.mDisplayIntegers[index],
-                      false));
+                false));
         } else {
             txb.setText(this.mDisplayString[index]);
         }

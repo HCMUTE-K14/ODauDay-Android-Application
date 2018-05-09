@@ -27,7 +27,7 @@ public class PropertyTypeDialog extends BaseDialogFragment {
         PropertyTypeDialog dialog = new PropertyTypeDialog();
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(INTENT_EXTRA_SELECTED_PROPERTY_TYPE,
-                  (ArrayList<Integer>) selectedProperty);
+            (ArrayList<Integer>) selectedProperty);
         dialog.setArguments(bundle);
         return dialog;
     }
@@ -41,11 +41,11 @@ public class PropertyTypeDialog extends BaseDialogFragment {
             throw new IllegalArgumentException("Need Bundle INTENT_EXTRA_SELECTED_PROPERTY_TYPE");
         }
         List<Integer> selectedPropertyType = getArguments()
-                  .getIntegerArrayList(INTENT_EXTRA_SELECTED_PROPERTY_TYPE);
+            .getIntegerArrayList(INTENT_EXTRA_SELECTED_PROPERTY_TYPE);
         PropertyTypeDialogAdapter adapter = new PropertyTypeDialogAdapter(getContext(),
-                  selectedPropertyType);
+            selectedPropertyType);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mList.getContext(),
-                  LinearLayoutManager.VERTICAL);
+            LinearLayoutManager.VERTICAL);
         mList.addItemDecoration(dividerItemDecoration);
         this.mList.setAdapter(adapter);
         setTitle(getString(R.string.txt_property_type));
@@ -54,8 +54,8 @@ public class PropertyTypeDialog extends BaseDialogFragment {
             Fragment fragment = PropertyTypeDialog.this.getTargetFragment();
             if (fragment != null && (fragment instanceof OnCompletePickedType)) {
                 ((OnCompletePickedType) fragment)
-                          .onCompletePickedType(PropertyTypeDialog.this.getTargetRequestCode(),
-                                    adapter.getSelectedPropertyType());
+                    .onCompletePickedType(PropertyTypeDialog.this.getTargetRequestCode(),
+                        adapter.getSelectedPropertyType());
             }
             dismiss();
         });

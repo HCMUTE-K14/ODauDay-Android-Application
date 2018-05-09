@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Unique;
 /**
  * Created by infamouSs on 4/14/18.
  */
-@Entity(nameInDb = "history")
+@Entity(nameInDb = "tbl_history")
 public class HistoryProperty {
     
     @Id(autoincrement = true)
