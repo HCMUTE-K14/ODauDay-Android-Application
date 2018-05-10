@@ -21,6 +21,7 @@ import com.odauday.model.Property;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.ui.propertymanager.PropertyAdapter.OnClickMenuListener;
+import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.SortAndFilterUtils;
 import com.odauday.viewmodel.BaseViewModel;
@@ -50,6 +51,7 @@ public class ActivityPropertyManager extends
     private EmptyPropertyAdapter mEmptyPropertyAdapter;
     private ProgressDialog mProgressDialog;
     private Property mPropertyDelete;
+    private Property mPropertyMark;
     private List<Property> mProperties;
     private PopupMenu mPopupMenu;
     private PropertyAdapter.OnClickMenuListener mOnClickMenuListener = new OnClickMenuListener() {
@@ -84,6 +86,23 @@ public class ActivityPropertyManager extends
         @Override
         public void markTheEndProperty(Property property) {
             Timber.tag(TAG).d("mark:" + property.getAddress());
+            if(property!=null){
+                mBuilderAlertDialog.setMessage(getString(R.string.message_mark_the_end));
+                mBuilderAlertDialog.setCancelable(true);
+                mBuilderAlertDialog.setIcon(getResources().getDrawable(R.drawable.ic_warning));
+                mBuilderAlertDialog
+                    .setPositiveButton(getString(R.string.txt_ok), (dialogInterface, i) -> {
+                        mPropertyMark = property;
+                        mPropertyManagerViewModel.changeStatus(property.getId(), Status.EXPIRED);
+                    });
+                mBuilderAlertDialog
+                    .setNegativeButton(getString(R.string.txt_cancel), (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                    });
+                AlertDialog alert11 = mBuilderAlertDialog.create();
+                alert11.show();
+            }
+            
         }
         
         @Override
@@ -96,7 +115,9 @@ public class ActivityPropertyManager extends
             Timber.tag(TAG).d("reuse:" + property.getAddress());
         }
     };
-    
+    private ServiceUnavailableAdapter.OnClickTryAgain mOnClickTryAgain=()->{
+        getData();
+    };
     @Override
     protected int getLayoutId() {
         return R.layout.activity_property_manager;
@@ -118,6 +139,16 @@ public class ActivityPropertyManager extends
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setMessage(getString(R.string.txt_progress));
         mBuilderAlertDialog = new Builder(this);
+    
+        mPropertyManagerViewModel.setPropertyManagerContract(this);
+        mPropertyAdapter = new PropertyAdapter();
+        mPropertyAdapter.setOnClickMenuListener(mOnClickMenuListener);
+        mBinding.recycleViewProperties.setLayoutManager(new GridLayoutManager(this, 1));
+        mBinding.recycleViewProperties.setNestedScrollingEnabled(false);
+        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
+        mServiceUnavailableAdapter.setOnClickTryAgain(mOnClickTryAgain);
+        mEmptyPropertyAdapter = new EmptyPropertyAdapter();
+        
         mBinding.txtSearchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -146,8 +177,6 @@ public class ActivityPropertyManager extends
     }
     
     private void getData() {
-        mProgressDialog.show();
-        mPropertyManagerViewModel.setPropertyManagerContract(this);
         mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
     }
     
@@ -172,12 +201,7 @@ public class ActivityPropertyManager extends
                 }
             }
         });
-        mPropertyAdapter = new PropertyAdapter();
-        mPropertyAdapter.setOnClickMenuListener(mOnClickMenuListener);
-        mBinding.recycleViewProperties.setLayoutManager(new GridLayoutManager(this, 1));
-        mBinding.recycleViewProperties.setNestedScrollingEnabled(false);
-        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
-        mEmptyPropertyAdapter = new EmptyPropertyAdapter();
+        
         
     }
     
@@ -249,7 +273,26 @@ public class ActivityPropertyManager extends
         SnackBarUtils.showSnackBar(mBinding.propertyManager, message);
     }
     
-    
+    @Override
+    public void onSuccessMarkTheEnd(Object object) {
+        MessageResponse messageResponse=(MessageResponse) object;
+        if(messageResponse!=null){
+            SnackBarUtils.showSnackBar(mBinding.propertyManager, messageResponse.getMessage());
+        }
+        if(mPropertyMark!=null){
+            mPropertyAdapter.changeStatusItem(mPropertyMark,Status.EXPIRED);
+        }
+    }
+    @Override
+    public void onFailureMarkTheEnd(Object object) {
+        Timber.tag(TAG).d("Error mark the end");
+        Exception ex=(Exception) object;
+        if (ex instanceof RetrofitException) {
+            SnackBarUtils.showSnackBar(mBinding.propertyManager, getString(R.string.message_service_unavailable));
+        }else {
+            SnackBarUtils.showSnackBar(mBinding.propertyManager, ex.getMessage());
+        }
+    }
     public void onClickMore(View view) {
         mPopupMenu = new PopupMenu(this, view);
         mPopupMenu.getMenuInflater()

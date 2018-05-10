@@ -14,27 +14,38 @@ public class AppConfig {
     
     public static final String DATABASE_NAME = "odauday_db";
     
+    public static final String PATTERN_DATE = "dd/MM/yyyy HH:mm";
+    
     public static final int RATE_VND = 1000;
     
     public static final GeoLocation DEFAULT_GEO_LOCATION = new GeoLocation(16.158653, 107.476252);
     
+    public static final String VN_CURRENCY = "VND";
+    
     public static boolean isDebug() {
         return BuildConfig.DEBUG;
     }
+    
     public static final int THREAD_POOL = 3;
     
     public enum LANGUAGE {
-        EN("English (Tiếng Anh)"),
-        VI("Vietnamese (Tiếng Việt)");
+        EN("English (Tiếng Anh)", "en"),
+        VI("Vietnamese (Tiếng Việt)", "vi");
         
         private final String mString;
+        private final String mCode;
         
-        LANGUAGE(String str) {
+        LANGUAGE(String str, String code) {
             this.mString = str;
+            this.mCode = code;
         }
         
-        public String getData() {
+        public String getDisplayString() {
             return this.mString;
+        }
+        
+        public String getCode() {
+            return mCode;
         }
     }
 }

@@ -66,12 +66,16 @@ public class RowItemView extends LinearLayout {
             for (int i = 0; i < sizeView; i++) {
                 AddRowItemView addRowItemView = (AddRowItemView) mRowItemContainer.getChildAt(i);
                 if (sizeView == 1) {
-                    if (addRowItemView != null) {
+                    if (addRowItemView != null && addRowItemView.isValid(type)) {
                         String value = getTextValueFromAddRowItemView(addRowItemView);
                         emails.add(createEmail(value));
                     } else {
-                        return emails;
+                        if (addRowItemView != null) {
+                            addRowItemView.getTextView().setError(getContext()
+                                .getString(R.string.message_email_is_invalid));
+                        }
                     }
+                    return emails;
                 } else {
                     if (addRowItemView != null && addRowItemView.isValid(type)) {
                         String value = getTextValueFromAddRowItemView(addRowItemView);
@@ -79,7 +83,7 @@ public class RowItemView extends LinearLayout {
                     } else {
                         if (addRowItemView != null) {
                             addRowItemView.getTextView().setError(getContext()
-                                      .getString(R.string.message_email_is_invalid));
+                                .getString(R.string.message_email_is_invalid));
                         }
                     }
                 }
@@ -95,7 +99,7 @@ public class RowItemView extends LinearLayout {
                 } else {
                     if (addRowItemView != null) {
                         addRowItemView.getTextView().setError(getContext()
-                                  .getString(R.string.message_phone_is_invalid));
+                            .getString(R.string.message_phone_is_invalid));
                     }
                 }
             }
@@ -123,7 +127,7 @@ public class RowItemView extends LinearLayout {
     
     public void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -132,7 +136,7 @@ public class RowItemView extends LinearLayout {
     }
     
     public void addRow(Context context, int typeInput, int text, int imageUrl,
-              RowAddedCallBack rowAddedCallBack) {
+        RowAddedCallBack rowAddedCallBack) {
         mText = text;
         mImageUrl = imageUrl;
         mTypeInput = typeInput;
@@ -146,8 +150,8 @@ public class RowItemView extends LinearLayout {
         row.setImage(mImageUrl);
         row.setPlusOrMinusButtonTag(10);
         row.getPlusOrMinusBtn()
-                  .setOnClickListener(
-                            new AddClickListener(row.getPlusOrMinusBtn(), row.getTextView(), row));
+            .setOnClickListener(
+                new AddClickListener(row.getPlusOrMinusBtn(), row.getTextView(), row));
         
         mRowItemContainer.addView(row);
     }
@@ -176,7 +180,7 @@ public class RowItemView extends LinearLayout {
                 if (!TextUtils.isEmpty(text)) {
                     addRow(getContext(), mTypeInput, mText, mImageUrl, mRowAddedCallBack);
                     mImageView.setImageDrawable(
-                              ContextCompat.getDrawable(getContext(), R.drawable.ic_minus_gray));
+                        ContextCompat.getDrawable(getContext(), R.drawable.ic_minus_gray));
                     mImageView.setTag(100);
                     mRowAddedCallBack.rowItemAddedCallBack();
                 }
@@ -184,10 +188,10 @@ public class RowItemView extends LinearLayout {
             }
             mRowItemContainer.removeView(mLayout);
             ImageView imageLastItem = (ImageView) mRowItemContainer
-                      .getChildAt(mRowItemContainer.getChildCount() - 1)
-                      .findViewById(R.id.plus_or_minus_btn);
+                .getChildAt(mRowItemContainer.getChildCount() - 1)
+                .findViewById(R.id.plus_or_minus_btn);
             imageLastItem.setImageDrawable(
-                      ContextCompat.getDrawable(getContext(), R.drawable.ic_plus_blue));
+                ContextCompat.getDrawable(getContext(), R.drawable.ic_plus_blue));
             imageLastItem.setTag(10);
         }
     }

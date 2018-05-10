@@ -2,9 +2,15 @@ package com.odauday.utils;
 
 import com.odauday.R;
 import com.odauday.RootApplication;
+import com.odauday.api.EndPoint;
+import com.odauday.config.AppConfig;
+import com.odauday.config.AppConfig.LANGUAGE;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -16,11 +22,11 @@ import java.util.UUID;
 public class TextUtils {
     
     public static final Map<Integer, String> MAP_BATHROOMS = TextUtils
-              .getRoomCountMap(R.array.bathroom_count_int, R.array.bathroom_count_string);
+        .getRoomCountMap(R.array.bathroom_count_int, R.array.bathroom_count_string);
     public static final Map<Integer, String> MAP_BEDROOMS = TextUtils
-              .getRoomCountMap(R.array.bedroom_count_int, R.array.bedroom_count_string);
+        .getRoomCountMap(R.array.bedroom_count_int, R.array.bedroom_count_string);
     public static final Map<Integer, String> MAP_PARKING = TextUtils
-              .getRoomCountMap(R.array.parking_count_int, R.array.parking_count_string);
+        .getRoomCountMap(R.array.parking_count_int, R.array.parking_count_string);
     private static final String[] SHORT_MONEY = new String[]{" Ngàn", " Triệu", " Tỷ", " Trăm tỷ"};
     private static final String CURRENCY = " VND ";
     
@@ -83,7 +89,7 @@ public class TextUtils {
     }
     
     public static String getPriceText(int minValue, int maxValue,
-              boolean shortHand) {
+        boolean shortHand) {
         String anyText = RootApplication.getContext().getString(R.string.txt_any);
         if (minValue <= 0 && maxValue > 0) {
             return (shortHand ? "&lt;" : "Below ") +
@@ -103,13 +109,13 @@ public class TextUtils {
     
     public static String getBedRangeDisplayString(int minimumBeds, int maximumBeds) {
         return getCriteriaRangeDisplayString(MAP_BEDROOMS, minimumBeds, maximumBeds,
-                  R.plurals.beds);
+            R.plurals.beds);
     }
     
     public static String getBathRangeDisplayString(int minimumBaths, int maximumBaths) {
         try {
             return getCriteriaRangeDisplayString(MAP_BATHROOMS, minimumBaths,
-                      maximumBaths, R.plurals.baths);
+                maximumBaths, R.plurals.baths);
         } catch (NullPointerException e) {
             return "";
         }
@@ -118,43 +124,44 @@ public class TextUtils {
     public static String getParkingRangeDisplayString(int parkingCount) {
         try {
             return getCriteriaRangeDisplayString(MAP_PARKING, parkingCount,
-                      parkingCount, R.plurals.parking)
-                      .replace(RootApplication.getContext().getString(R.string.txt_no_parking),
-                                RootApplication.getContext().getString(R.string.txt_no));
+                parkingCount, R.plurals.parking)
+                .replace(RootApplication.getContext().getString(R.string.txt_no_parking),
+                    RootApplication.getContext().getString(R.string.txt_no));
         } catch (NullPointerException e) {
             return "";
         }
     }
     
     private static String getCriteriaRangeDisplayString(
-              Map<Integer, String> intToStringMap,
-              int minimumRoomCount, int maximumRoomCount, int pluralResId) {
+        Map<Integer, String> intToStringMap,
+        int minimumRoomCount, int maximumRoomCount, int pluralResId) {
         String minString = intToStringMap.get(minimumRoomCount);
         String maxString = intToStringMap.get(maximumRoomCount);
         if (!minString.equals(maxString)) {
             return minString + "-" + RootApplication.getContext().getResources()
-                      .getQuantityString(pluralResId, 2, maxString);
+                .getQuantityString(pluralResId, 2, maxString);
         } else if (maxString.equals(RootApplication.getContext().getString(R.string.txt_any))) {
             return "";
         } else {
             return RootApplication.getContext().getResources()
-                      .getQuantityString(pluralResId, maximumRoomCount, maxString);
+                .getQuantityString(pluralResId, maximumRoomCount, maxString);
         }
     }
     
     public static Map<Integer, String> getRoomCountMap(int intArrayRes,
-              int stringArrayRes) {
+        int stringArrayRes) {
         Map<Integer, String> map = new LinkedHashMap<>();
         int[] names = RootApplication.getContext().getResources().getIntArray(intArrayRes);
         int count = 0;
         for (String value : RootApplication.getContext().getResources()
             .getStringArray(stringArrayRes)) {
-    
+            
             map.put(names[count], value);
             count++;
         }
         return map;
     }
+    
     public static String doubleFormat(double value) {
         BigDecimal number = new BigDecimal(value);
         String result = number.stripTrailingZeros().toPlainString();
@@ -166,9 +173,9 @@ public class TextUtils {
         return formatter.format(value);
     }
     
-    public static String formatNumber(double value, Locale locale) {
+    public static String formatNumber(double value, LANGUAGE locale) {
         NumberFormat formatter = new DecimalFormat("#,###.00");
-        if (locale == Locale.US) {
+        if (locale == LANGUAGE.EN) {
             return formatter.format(value);
         } else {
             String number = formatter.format(value).replace(".", "/");
@@ -178,7 +185,14 @@ public class TextUtils {
         }
     }
     
-    enum Locale {
-        VN, US
+    public static String buildImageUrl(String fileName) {
+        return EndPoint.IMAGE +
+               "/" +
+               fileName;
+    }
+    
+    public static String formatDateTime(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat(AppConfig.PATTERN_DATE);
+        return dateFormat.format(date);
     }
 }

@@ -234,7 +234,7 @@ public class SavedSearchTabMainFragment extends
             List<Search> searches = savedSearchResponse.getSearches();
             if (searches != null && searches.size()>0) {
                 mSearches = searches;
-                //mPreferencesHelper.putList(PrefKey.RECENT_SEARCH,searches);
+               // mPreferencesHelper.putList(PrefKey.RECENT_SEARCH,searches);
                 if (!(mRecyclerViewSavedSearch.getAdapter() instanceof SavedSearchAdapter)) {
                     mRecyclerViewSavedSearch.setAdapter(mSavedSearchAdapter);
                 }
@@ -253,12 +253,14 @@ public class SavedSearchTabMainFragment extends
     private void changeView(){
         if(mSearches.size()>0){
             mRelativeLayoutSavedSearch.setVisibility(View.VISIBLE);
+            mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
         }
         
         if(mRecentSearches.size()>0){
             mRelativeLayoutRecentSearch.setVisibility(View.VISIBLE);
+            mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
             mRelativeLayoutRecentSearch.setVisibility(View.GONE);
         }
@@ -273,7 +275,6 @@ public class SavedSearchTabMainFragment extends
     public void onClickRefresh() {
         getData();
     }
-    
     @Override
     public void onStop() {
         clearMemory();

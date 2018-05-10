@@ -27,7 +27,7 @@ public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseM
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-              @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         
         VB binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false);
         
@@ -81,7 +81,7 @@ public abstract class BaseStepFragment<VB extends ViewDataBinding> extends BaseM
     }
     
     public void setNavigationStepListener(
-              NavigationStepListener navigationStepListener) {
+        NavigationStepListener navigationStepListener) {
         mNavigationStepListener = navigationStepListener;
     }
     

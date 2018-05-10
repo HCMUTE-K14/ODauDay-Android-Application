@@ -70,7 +70,13 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         mDisplayProperty.addAll(_data);
         notifyDataSetChanged();
     }
-    
+    public void changeStatusItem(Property property, String status){
+        int index=data.indexOf(property);
+        if(index>-1){
+            data.get(index).setStatus(status);
+            notifyDataSetChanged();
+        }
+    }
     @Override
     public int getItemCount() {
         return mDisplayProperty == null ? 0 : mDisplayProperty.size();

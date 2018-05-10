@@ -21,6 +21,7 @@ import com.odauday.model.User;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.FavoriteAdapter.OnClickStarListener;
+import com.odauday.ui.favorite.LoadingAdapter.LoadingViewHolder;
 import com.odauday.ui.favorite.sharefavorite.FragmentDialogFavoriteShare;
 import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
@@ -49,12 +50,12 @@ public class FavoriteTabMainFragment extends
     PreferencesHelper mPreferencesHelper;
     HeaderFavoriteView mHeaderFavoriteView;
     private List<Property> mProperties;
-    private ProgressDialog mProgressDialog;
     private List<PropertyID> mPropertiesIdNeedUnCheck;
     private FavoriteAdapter mFavoriteAdapter;
     private EmptyFavoriteAdapter mEmptyFavoriteAdapter;
     private ServiceUnavailableAdapter mServiceUnavailableAdapter;
     private FragmentDialogFavoriteShare mFragmentDialogFavoriteShare;
+    private LoadingAdapter mLoadingAdapter;
     
     enum SortType {
         LAST_ADDED, LOWEST_PRICE, HIGHEST_PRICE
@@ -159,7 +160,9 @@ public class FavoriteTabMainFragment extends
         }
         mHeaderFavoriteView.setTextViewFilter(item.getTitle().toString());
     };
-    
+    ServiceUnavailableAdapter.OnClickTryAgain mOnClickTryAgain=()->{
+        getFavorite();
+    };
     public static FavoriteTabMainFragment newInstance() {
         
         Bundle args = new Bundle();
@@ -186,16 +189,23 @@ public class FavoriteTabMainFragment extends
         mPropertiesIdNeedUnCheck = new ArrayList<>();
         mHeaderFavoriteView = mBinding.get().headerFavorite;
         
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.setMessage(getActivity().getString(R.string.txt_progress));
-        mProgressDialog.show();
-        
         mHeaderFavoriteView.setTitle(getResources().getString(R.string.txt_shortlist));
         mHeaderFavoriteView.setOnClickShareListener(mOnClickShareListener);
         mHeaderFavoriteView.setOnClickMapListener(mOnClickMapListener);
         mHeaderFavoriteView.setOnItemClickMenuSort(mOnItemClickMenuSort);
         mHeaderFavoriteView.setOnItemClickMenuFilter(mOnItemClickMenuFilter);
+    
+        mBinding.get().recycleViewFavorite
+            .setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        mBinding.get().recycleViewFavorite.setNestedScrollingEnabled(false);
+        mFavoriteAdapter = new FavoriteAdapter();
+        mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
+    
+        mEmptyFavoriteAdapter = new EmptyFavoriteAdapter();
+        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
+        mLoadingAdapter=new LoadingAdapter();
+        
+        mServiceUnavailableAdapter.setOnClickTryAgain(mOnClickTryAgain);
     }
     
     @Override
@@ -237,18 +247,12 @@ public class FavoriteTabMainFragment extends
                 }
             }
         });
-        mBinding.get().recycleViewFavorite
-            .setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        mBinding.get().recycleViewFavorite.setNestedScrollingEnabled(false);
-        mFavoriteAdapter = new FavoriteAdapter();
-        mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
-        
-        mEmptyFavoriteAdapter = new EmptyFavoriteAdapter();
-        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
-        
     }
     
     private void showDataView() {
+        if(mProperties.size()<1){
+            return;
+        }
         List<Property> propertyList = getPropertyFilter(mProperties);
         if (propertyList != null && propertyList.size() > 0) {
             if (!(mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter)) {
@@ -293,10 +297,8 @@ public class FavoriteTabMainFragment extends
     }
     @Override
     public void loading(boolean isLoading) {
-        if (isLoading) {
-            mProgressDialog.show();
-        } else {
-            mProgressDialog.dismiss();
+        if(isLoading&&mSTATUS == STATUS.GET){
+            mBinding.get().recycleViewFavorite.setAdapter(mLoadingAdapter);
         }
         Timber.tag(TAG).d("Loading");
     }
@@ -374,11 +376,11 @@ public class FavoriteTabMainFragment extends
     public void clearMemory() {
         mHeaderFavoriteView=null;
         mProperties=null;
-        mProgressDialog=null;
         mPropertiesIdNeedUnCheck=null;
         mFavoriteAdapter=null;
         mEmptyFavoriteAdapter=null;
         mServiceUnavailableAdapter=null;
         mFragmentDialogFavoriteShare=null;
+        mLoadingAdapter=null;
     }
 }

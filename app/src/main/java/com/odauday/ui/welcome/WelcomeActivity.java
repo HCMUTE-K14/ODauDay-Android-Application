@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.odauday.MainActivity;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
+import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.utils.MapUtils;
 import com.odauday.utils.ViewUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
@@ -16,6 +17,7 @@ import com.odauday.utils.permissions.PermissionHelper;
  */
 
 public class WelcomeActivity extends AppCompatActivity {
+    
     
     private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
@@ -43,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-              @NonNull int[] grantResults) {
+        @NonNull int[] grantResults) {
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     
@@ -52,8 +54,14 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
     
+    
     private void runMainActivity() {
         ViewUtils.startActivity(this, MainActivity.class);
+        finish();
+    }
+    
+    private void runLoginActivity() {
+        ViewUtils.startActivity(this, LoginActivity.class);
         finish();
     }
 }

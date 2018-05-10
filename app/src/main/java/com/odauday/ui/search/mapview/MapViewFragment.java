@@ -86,6 +86,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public static final String TAG = MapViewFragment.class.getSimpleName();
     
     public static final float MIN_ZOOM_LEVEL = 5.45f;
+    
     private static final int DEBOUNCE_TIME = 500;
     
     @Inject
@@ -170,7 +171,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }
         
         Animation anim = android.view.animation.AnimationUtils
-                  .loadAnimation(getContext(), nextAnim);
+            .loadAnimation(getContext(), nextAnim);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -198,10 +199,10 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         mMapUnlocked = mMapPreferenceHelper.getIsMapUnlocked();
         if (getActivity() != null) {
             this.mLocationClient = new Builder(getActivity())
-                      .addApi(LocationServices.API)
-                      .addConnectionCallbacks(this)
-                      .addOnConnectionFailedListener(this)
-                      .build();
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
         }
         
         mMapViewAdapter = new MapViewAdapter(this.getContext());
@@ -226,7 +227,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-              @NonNull int[] grantResults) {
+        @NonNull int[] grantResults) {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -288,11 +289,11 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             boolean insignificantMove;
             CameraPosition currentCameraPosition = mMap.getCameraPosition();
             insignificantMove =
-                      (MapUtils.isCamPositionEqual(currentCameraPosition,
-                                this.mLastCameraPosition) || this.mDistanceTooShort)
-                      &&
-                      MapUtils.isCamPositionEqual(currentCameraPosition,
-                                this.mLastCameraPosition);
+                (MapUtils.isCamPositionEqual(currentCameraPosition,
+                    this.mLastCameraPosition) || this.mDistanceTooShort)
+                &&
+                MapUtils.isCamPositionEqual(currentCameraPosition,
+                    this.mLastCameraPosition);
             if (!insignificantMove) {
                 //                    if (this.mMapUnlocked && !this.myIgnoreInitCameraChange) {
                 //                        closeOpenedMarker();
@@ -357,12 +358,15 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSelectedSuggestionPlace(OnSelectedPlaceEvent onSelectedPlaceEvent) {
         new Handler().postDelayed(() -> {
+            if (!onSelectedPlaceEvent.isNeedMoveMapInMapFragment()) {
+                return;
+            }
             AutoCompletePlace autoCompletePlace = onSelectedPlaceEvent.getData();
             GeoLocation locationSelectedPlace = autoCompletePlace.getLocation();
             MapUtils.moveMap(mMap, locationSelectedPlace.toLatLng(),
-                      MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
+                MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
             mSearchRepository.getCurrentSearchRequest().getCriteria().getDisplay()
-                      .setDisplayLocation(autoCompletePlace.getName());
+                .setDisplayLocation(autoCompletePlace.getName());
             
             mAutoCompletePlace = autoCompletePlace;
             mBus.post(new OnUpdateCriteriaEvent());
@@ -390,7 +394,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public void onMapLockToggle(boolean isMapUnLocked) {
         if (!isMapUnLocked) {
             Toast.makeText(this.getContext(), R.string.txt_map_is_locked,
-                      Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();
         }
         mMapUnlocked = isMapUnLocked;
         mMapPreferenceHelper.putIsMapUnlocked(mMapUnlocked);
@@ -408,14 +412,14 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         for (GeoLocation mapDisplayItem : locations) {
             LatLng entryLatLng = mapDisplayItem.toLatLng();
             boolean isInVisibleRegion = mMap.getProjection().getVisibleRegion().latLngBounds
-                      .contains(entryLatLng);
+                .contains(entryLatLng);
             
             if (!isInVisibleRegion) {
                 continue;
             }
             MarkerOptions markerOptions = new MarkerOptions()
-                      .position(entryLatLng)
-                      .icon(this.mMapViewAdapter.getMarkerIconForLocation(mapDisplayItem));
+                .position(entryLatLng)
+                .icon(this.mMapViewAdapter.getMarkerIconForLocation(mapDisplayItem));
             
             Marker marker = this.mMap.addMarker(markerOptions);
             this.mMapMarkers.put(mapDisplayItem, marker);
@@ -423,7 +427,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         mBus.post(SearchPropertyState.COMPLETE_SHOW_DATA);
         if (!mIsSearchWithSuggestionLocation) {
             mSearchRepository.getCurrentSearchRequest().getCriteria().getDisplay()
-                      .setDisplayLocation(getString(R.string.txt_map_area));
+                .setDisplayLocation(getString(R.string.txt_map_area));
             mAutoCompletePlace = null;
             mBus.post(new OnUpdateCriteriaEvent());
         }
@@ -481,7 +485,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }
         if (!isSameMarker) {
             List<PropertyResultEntry> entry = mMapViewAdapter
-                      .getEntriesAtLocation(marker.getPosition());
+                .getEntriesAtLocation(marker.getPosition());
             
             mMapFragmentClickCallBack.onMapPropertyClick(entry.get(0));
             mIsShowVitalProperty = true;
@@ -508,13 +512,13 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 showEnableGps();
             } else {
                 MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
-                                    location.getLongitude()),
-                          MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
+                        location.getLongitude()),
+                    MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
             }
         }, e -> Toast.makeText(getActivity(),
-                  R.string.message_cannot_find_your_location,
-                  Toast.LENGTH_SHORT)
-                  .show());
+            R.string.message_cannot_find_your_location,
+            Toast.LENGTH_SHORT)
+            .show());
     }
     
     private void showEnableGps() {
@@ -525,8 +529,8 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             ViewUtils.showGoToSettingsDialog((AppCompatActivity) getActivity());
         } else {
             Toast.makeText(getActivity(), R.string.message_waiting_for_location,
-                      Toast.LENGTH_SHORT)
-                      .show();
+                Toast.LENGTH_SHORT)
+                .show();
         }
         
     }
@@ -535,10 +539,10 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         MapUtils.moveMap(mMap, mLastGeoLocation.toLatLng(), mZoomLevel, false);
         try {
             mMap.moveCamera(CameraUpdateFactory
-                      .newLatLngBounds(
-                                new LatLngBounds(mLastBounds[0].toLatLng(),
-                                          mLastBounds[1].toLatLng()),
-                                0));
+                .newLatLngBounds(
+                    new LatLngBounds(mLastBounds[0].toLatLng(),
+                        mLastBounds[1].toLatLng()),
+                    0));
         } catch (Exception ignored) {
         
         }
@@ -549,7 +553,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         SearchRequest searchRequest = makeSearchRequest();
         mSearchRepository.search(searchRequest);
         MapUtils.drawCircle(mMap, searchRequest.getCore().getCenter().toLatLng(),
-                  searchRequest.getCore().getRadius());
+            searchRequest.getCore().getRadius());
         saveStateSearch(searchRequest);
     }
     
@@ -565,18 +569,18 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         float zoom = mMap.getCameraPosition().zoom;
         
         CoreSearchRequest coreSearchRequest = MapUtils
-                  .getCoreSearchRequestFromCurrentLocation(mMap, ot);
+            .getCoreSearchRequestFromCurrentLocation(mMap, ot);
         
         SearchCriteria searchCriteria = mSearchRepository
-                  .getCurrentSearchRequest()
-                  .getCriteria();
+            .getCurrentSearchRequest()
+            .getCriteria();
         
         return new SearchRequest(coreSearchRequest, searchCriteria,
-                  zoom);
+            zoom);
     }
     
     public void setMapFragmentClickCallBack(
-              MapFragmentClickCallBack mapFragmentClickCallBack) {
+        MapFragmentClickCallBack mapFragmentClickCallBack) {
         mMapFragmentClickCallBack = mapFragmentClickCallBack;
     }
     

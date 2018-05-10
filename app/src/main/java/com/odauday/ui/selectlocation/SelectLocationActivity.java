@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
@@ -30,14 +31,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.odauday.R;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.autocompleteplace.model.AutoCompletePlace;
+import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.databinding.ActivitySelectLocationBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
+import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
 import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.utils.MapUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by infamouSs on 4/25/18.
@@ -66,13 +74,14 @@ public class SelectLocationActivity extends
     @Inject
     SelectLocationViewModel mSelectLocationViewModel;
     
+    @Inject
+    EventBus mBus;
+    
     private Marker mCurrentMarker;
     
     private GoogleApiClient mLocationClient;
     
     private AddressAndLocationObject mAddressAndLocationObject;
-    
-    private AddressAndLocationObject mLastLocation;
     
     private final PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
         @Override
@@ -83,7 +92,7 @@ public class SelectLocationActivity extends
         @Override
         public void onPermissionDenied() {
             Toast.makeText(SelectLocationActivity.this,
-                      R.string.message_permission_location_request, Toast.LENGTH_SHORT).show();
+                R.string.message_permission_location_request, Toast.LENGTH_SHORT).show();
         }
     };
     
@@ -95,22 +104,49 @@ public class SelectLocationActivity extends
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBus.register(this);
         if (getIntent() != null) {
-            mLastLocation = getIntent().getParcelableExtra(EXTRA_LAST_LOCATION);
+            mAddressAndLocationObject = getIntent().getParcelableExtra(EXTRA_LAST_LOCATION);
         }
         
         this.mLocationClient = new Builder(this)
-                  .addApi(LocationServices.API)
-                  .addConnectionCallbacks(this)
-                  .addOnConnectionFailedListener(this)
-                  .build();
+            .addApi(LocationServices.API)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .build();
         initToolBar();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                  .findFragmentById(R.id.map);
+            .findFragmentById(R.id.map);
         if (!MapUtils.isHasLocationPermission(this)) {
             MapUtils.requireLocationPermission(this, mPermissionCallBack);
         }
         mapFragment.getMapAsync(this);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        mBus.unregister(this);
+        super.onDestroy();
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSelectedSuggestionPlace(OnSelectedPlaceEvent event) {
+        new Handler().postDelayed(() -> {
+            AutoCompletePlace autoCompletePlace = event.getData();
+            GeoLocation locationSelectedPlace = autoCompletePlace.getLocation();
+            MapUtils.moveMap(mMap, locationSelectedPlace.toLatLng(),
+                MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
+            
+            mAddressAndLocationObject = new AddressAndLocationObject(autoCompletePlace.getName(),
+                autoCompletePlace.getLocation().toLatLng());
+            
+            MarkerOptions markerOptions = createMakerOptionAtLocation(
+                mAddressAndLocationObject.getLocation());
+            markerOptions.title(mAddressAndLocationObject.getAddress());
+            
+            mMap.addMarker(markerOptions).showInfoWindow();
+            
+        }, 300);
     }
     
     private void setTitleToolBar(String text) {
@@ -125,6 +161,8 @@ public class SelectLocationActivity extends
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         mBinding.includeToolbar.image.setVisibility(View.VISIBLE);
+        mBinding.includeToolbar.image.setOnClickListener(this::openAutoCompletePlaceActivity);
+        
         mBinding.includeToolbar.btnDone.setVisibility(View.VISIBLE);
         mBinding.includeToolbar.btnDone.setOnClickListener(done -> {
             if (mAddressAndLocationObject != null) {
@@ -134,11 +172,19 @@ public class SelectLocationActivity extends
                 finish();
             } else {
                 Toast.makeText(this, R.string.message_cannot_find_that_location_please_try_later,
-                          Toast.LENGTH_SHORT)
-                          .show();
+                    Toast.LENGTH_SHORT)
+                    .show();
             }
         });
     }
+    
+    public void openAutoCompletePlaceActivity(View view) {
+        Intent intent = new Intent(this, AutoCompletePlaceActivity.class);
+        intent.putExtra(AutoCompletePlaceActivity.EXTRA_NEED_MOVE_MAP_IN_MAP_FRAGMENT, false);
+        
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in,
+            android.R.anim.fade_out);    }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -152,7 +198,7 @@ public class SelectLocationActivity extends
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-              @NonNull int[] grantResults) {
+        @NonNull int[] grantResults) {
         //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -203,15 +249,15 @@ public class SelectLocationActivity extends
             mMap.getUiSettings().setMapToolbarEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.getUiSettings().setZoomControlsEnabled(false);
-            if (mLastLocation == null) {
+            if (mAddressAndLocationObject == null) {
                 moveToMyLocation();
             } else {
                 MarkerOptions markerOptions = createMakerOptionAtLocation(
-                          mLastLocation.getLocation())
-                          .title(mLastLocation.getAddress());
+                    mAddressAndLocationObject.getLocation())
+                    .title(mAddressAndLocationObject.getAddress());
                 mMap.addMarker(markerOptions).showInfoWindow();
-                MapUtils.moveMap(mMap, mLastLocation.getLocation(),
-                          MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
+                MapUtils.moveMap(mMap, mAddressAndLocationObject.getLocation(),
+                    MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
             }
         }
     }
@@ -219,21 +265,21 @@ public class SelectLocationActivity extends
     private void moveToMyLocation() {
         
         MapUtils.moveToMyLocation(this,
-                  location -> {
-                      if (location != null) {
-                          MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
-                                              location.getLongitude()),
-                                    MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
-                      }
-                  },
-                  e -> {
-                      MapUtils.moveMap(mMap, AppConfig.DEFAULT_GEO_LOCATION.toLatLng(),
-                                MapViewFragment.MIN_ZOOM_LEVEL, true);
-                      Toast.makeText(this,
-                                R.string.message_cannot_find_your_location,
-                                Toast.LENGTH_SHORT)
-                                .show();
-                  });
+            location -> {
+                if (location != null) {
+                    MapUtils.moveMap(mMap, new LatLng(location.getLatitude(),
+                            location.getLongitude()),
+                        MapPreferenceHelper.DEFAULT_ZOOM_LEVEL);
+                }
+            },
+            e -> {
+                MapUtils.moveMap(mMap, AppConfig.DEFAULT_GEO_LOCATION.toLatLng(),
+                    MapViewFragment.MIN_ZOOM_LEVEL, true);
+                Toast.makeText(this,
+                    R.string.message_cannot_find_your_location,
+                    Toast.LENGTH_SHORT)
+                    .show();
+            });
     }
     
     
@@ -274,8 +320,8 @@ public class SelectLocationActivity extends
     
     private MarkerOptions createMakerOptionAtLocation(LatLng latLng) {
         return new MarkerOptions()
-                  .position(latLng)
-                  .icon(MapUtils.buildMarkSelectedBitmapDescriptorNoPadding(this));
+            .position(latLng)
+            .icon(MapUtils.buildMarkSelectedBitmapDescriptorNoPadding(this));
     }
     
     @Override

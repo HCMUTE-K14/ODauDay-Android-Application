@@ -1,10 +1,12 @@
 package com.odauday.ui.addeditproperty;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.databinding.ActivityAddEditPropertyBinding;
 import com.odauday.model.MyProperty;
@@ -15,8 +17,11 @@ import com.odauday.ui.addeditproperty.step2.OnCompleteStep2Event;
 import com.odauday.ui.addeditproperty.step2.Step2Fragment;
 import com.odauday.ui.addeditproperty.step3.OnCompleteStep3Event;
 import com.odauday.ui.addeditproperty.step3.Step3Fragment;
+import com.odauday.ui.addeditproperty.step4.OnCompleteStep4Event;
 import com.odauday.ui.addeditproperty.step4.Step4Fragment;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.utils.NumberUtils;
+import com.odauday.utils.TextUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -33,7 +38,8 @@ import timber.log.Timber;
 public class AddEditPropertyActivity extends
                                      BaseMVVMActivity<ActivityAddEditPropertyBinding> implements
                                                                                       NavigationStepListener,
-                                                                                      HasSupportFragmentInjector {
+                                                                                      HasSupportFragmentInjector,
+                                                                                      AddEditPropertyContract {
     
     public static final int NUM_OF_STEP = 4;
     
@@ -54,6 +60,11 @@ public class AddEditPropertyActivity extends
     
     private MyProperty mCurrentProperty;
     
+    ProgressDialog mProgressDialog;
+    
+    @Inject
+    AddEditPropertyViewModel mAddEditPropertyViewModel;
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return null;
@@ -61,7 +72,25 @@ public class AddEditPropertyActivity extends
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+        mAddEditPropertyViewModel.response().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case ERROR:
+                        loading(false);
+                        onErrorCreateProperty();
+                        break;
+                    case SUCCESS:
+                        loading(false);
+                        onSuccessCreateProperty();
+                        break;
+                    case LOADING:
+                        loading(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
     
     @Override
@@ -127,7 +156,8 @@ public class AddEditPropertyActivity extends
     @Subscribe
     public void onCompleteStep1(OnCompleteStep1Event event) {
         MyProperty property = event.getData();
-        if (mCurrentProperty != null) {
+        
+        if (mCurrentProperty != null && property != null) {
             mCurrentProperty.setType_id(property.getType_id());
             mCurrentProperty.setPrice(property.getPrice());
             mCurrentProperty.setLocation(property.getLocation());
@@ -141,7 +171,8 @@ public class AddEditPropertyActivity extends
     @Subscribe
     public void onCompleteStep2(OnCompleteStep2Event event) {
         MyProperty property = event.getData();
-        if (mCurrentProperty != null) {
+        
+        if (mCurrentProperty != null && property != null) {
             mCurrentProperty.setSize(property.getSize());
             mCurrentProperty.setNumOfBedRoom(property.getNumOfBedRoom());
             mCurrentProperty.setNumOfBathRoom(property.getNumOfBathRoom());
@@ -153,8 +184,34 @@ public class AddEditPropertyActivity extends
     public void onCompleteStep3(OnCompleteStep3Event event) {
         MyProperty property = event.getData();
         
-        mCurrentProperty.setDescription(property.getDescription());
-        mCurrentProperty.setTags(property.getTags());
+        if (mCurrentProperty != null && property != null) {
+            mCurrentProperty.setDescription(property.getDescription());
+            mCurrentProperty.setTags(property.getTags());
+        }
+        
+    }
+    
+    @Subscribe
+    public void onCompleteStep4(OnCompleteStep4Event event) {
+        MyProperty property = event.getData();
+        
+        if (mCurrentProperty != null && property != null) {
+            mCurrentProperty.setImages(property.getImages());
+        }
+        
+        onCompleteAllStep();
+    }
+    
+    
+    private void onCompleteAllStep() {
+        if (TextUtils.isEmpty(mCurrentProperty.getId())) {
+            mCurrentProperty.setId(TextUtils.generatorUUID());
+        }
+        if (TextUtils.isEmpty(mCurrentProperty.getCode())) {
+            mCurrentProperty.setCode(NumberUtils.randomCodeProperty(mCurrentProperty.getId()));
+        }
+        
+        mAddEditPropertyViewModel.create(mCurrentProperty);
     }
     
     
@@ -190,6 +247,12 @@ public class AddEditPropertyActivity extends
     }
     
     private void init() {
+        
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setTitle(R.string.txt_wait_a_second);
+        mProgressDialog.setMessage(getString(R.string.txt_creating_property));
+        
         getProperty();
         initStepFragment();
         initToolbar();
@@ -240,41 +303,64 @@ public class AddEditPropertyActivity extends
     
     private void addFragment(Fragment fragment, String tag) {
         getSupportFragmentManager()
-                  .beginTransaction()
-                  .add(R.id.step_property_container, fragment, tag)
-                  .commit();
+            .beginTransaction()
+            .add(R.id.step_property_container, fragment, tag)
+            .commit();
         
     }
     
     private void showFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager()
-                      .beginTransaction()
-                      .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                      .show(fragment)
-                      .commit();
+                .beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                .show(fragment)
+                .commit();
         }
     }
     
     private void hideFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager()
-                      .beginTransaction()
-                      .hide(fragment)
-                      .commit();
+                .beginTransaction()
+                .hide(fragment)
+                .commit();
         }
     }
     
     public void setTitle(int step) {
         String title = getString(R.string.txt_add_property_step, String.valueOf(step),
-                  String.valueOf(NUM_OF_STEP));
+            String.valueOf(NUM_OF_STEP));
         
         mBinding.includeToolbar.title
-                  .setText(title);
+            .setText(title);
     }
     
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return mFragmentDispatchingAndroidInjector;
+    }
+    
+    @Override
+    public void onSuccessCreateProperty() {
+        Toast.makeText(this, R.string.message_creat_property_successfull, Toast.LENGTH_SHORT)
+            .show();
+        finish();
+    }
+    
+    @Override
+    public void onErrorCreateProperty() {
+        Toast.makeText(this, R.string.message_some_thing_went_wrong_create_property,
+            Toast.LENGTH_SHORT).show();
+        finish();
+    }
+    
+    @Override
+    public void loading(boolean showing) {
+        //        if (showing) {
+        //            mProgressDialog.show();
+        //            return;
+        //        }
+        //        mProgressDialog.hide();
     }
 }

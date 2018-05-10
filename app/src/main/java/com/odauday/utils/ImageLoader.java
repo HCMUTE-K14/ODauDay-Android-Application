@@ -48,6 +48,6 @@ public class ImageLoader {
     }
     
     public static int randomPlaceHolder() {
-        return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length - 1)];
+        return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length)];
     }
 }

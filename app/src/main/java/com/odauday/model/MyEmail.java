@@ -17,6 +17,9 @@ public class MyEmail {
     @Expose
     private String email;
     
+    @SerializedName("property_id")
+    @Expose String propertyId;
+    
     public MyEmail() {
     
     }
@@ -40,6 +43,14 @@ public class MyEmail {
     
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public String getPropertyId() {
+        return propertyId;
+    }
+    
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
     }
     
     @Override

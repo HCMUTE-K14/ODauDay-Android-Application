@@ -1,26 +1,27 @@
 package com.odauday.utils;
-
-import android.content.Context;
 import android.databinding.BindingAdapter;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.api.EndPoint;
+import com.odauday.config.AppConfig;
+import com.odauday.config.AppConfig.LANGUAGE;
 import com.odauday.config.Type;
 import com.odauday.model.Image;
 import com.odauday.ui.propertymanager.status.Status;
-import com.odauday.utils.TextUtils.Locale;
 import java.util.List;
+import timber.log.Timber;
+
 
 /**
  * Created by infamouSs on 3/5/18.
  */
 
 public class BindingAdapterUtils {
-    
-    private static final String currencies = "đ";
     
     @BindingAdapter("loadImage")
     public static void setImageUri(ImageView view, String imageUri) {
@@ -59,7 +60,11 @@ public class BindingAdapterUtils {
     
     @BindingAdapter("textDoublePrice")
     public static void textDoublePrice(TextView view, double value) {
-        view.setText(TextUtils.formatNumber(value, Locale.VN) + " " + currencies);
+        String text = new StringBuilder()
+            .append(TextUtils.formatNumber(value, LANGUAGE.VI))
+            .append(AppConfig.VN_CURRENCY).toString();
+        
+        view.setText(text);
     }
     
     @BindingAdapter("textInteger")
@@ -70,36 +75,48 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images) {
         if (images != null && images.size() > 0) {
-            ImageLoader.loadWithoutOptions(view, images.get(0).getUrl());
+            Timber.d(images.get(0).getUrl());
+            ImageLoader.loadWithoutOptions(view, EndPoint.BASE_URL + images.get(0).getUrl());
         }
     }
-    @BindingAdapter("setTypeProperty")
-    public static void setTypeProperty(TextView view,String type){
-        switch (type){
-            case Type.BUY:
-                view.setText(view.getContext().getString(R.string.sell));
-                break;
-            case Type.RENT:
-                view.setText(type);
-                break;
-                default:
-                    break;
-        }
+    
+    @BindingAdapter("loadIconMenu")
+    public static void loadIconMenu(ImageView view, String icon_name) {
+        Context context = view.getContext();
+        int resID = context.getResources()
+            .getIdentifier(icon_name, "drawable", context.getPackageName());
+        view.setImageDrawable(context.getResources().getDrawable(resID));
     }
+    
     @BindingAdapter("activeProperty")
     public static void activeProperty(TextView view, String status) {
+        Timber.d(status);
         switch (status) {
             case Status.ACTIVE:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
                 view.setText(status);
                 break;
             case Status.PENDING:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
                 break;
             case Status.EXPIRED:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    @BindingAdapter("setTypeProperty")
+    public static void setTypeProperty(TextView view, String type) {
+        switch (type) {
+            case Type.BUY:
+                view.setText(view.getContext().getString(R.string.sell));
+                break;
+            case Type.RENT:
+                view.setText(type);
                 break;
             default:
                 break;

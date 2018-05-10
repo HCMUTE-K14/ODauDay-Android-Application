@@ -1,6 +1,9 @@
 package com.odauday.ui.addeditproperty.step1;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,10 +29,16 @@ import com.odauday.ui.selectlocation.SelectLocationActivity;
 import com.odauday.ui.view.RowItemView;
 import com.odauday.ui.view.RowItemView.RowAddedCallBack;
 import com.odauday.ui.view.currencyedittext.CurrencyEditText;
+import com.odauday.utils.NetworkUtils;
+import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.TextUtils;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/24/18.
@@ -68,6 +77,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         if (getArguments() != null) {
             mProperty = getArguments().getParcelable(AddEditPropertyActivity.EXTRA_PROPERTY);
         }
@@ -107,11 +117,11 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         RowItemView phoneContainer = mBinding.get().phoneContainer;
         RowItemView emailContainer = mBinding.get().emailContainer;
         
-        boolean isValidate = mStep1Helper
-                  .validate(selectLocation, selectCategory, txtPrice, phoneContainer,
-                            emailContainer, mProperty);
+        boolean isValid = mStep1Helper
+            .validate(selectLocation, selectCategory, txtPrice, phoneContainer,
+                emailContainer, mProperty);
         
-        if (!isValidate) {
+        if (!isValid) {
             return;
         }
         
@@ -125,11 +135,12 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         mProperty.setPrice(txtPrice.getRawValue().doubleValue());
         
         mProperty.setEmails(
-                  (List<MyEmail>) emailContainer.getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
+            (List<MyEmail>) emailContainer.getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
         mProperty.setPhones(
-                  (List<MyPhone>) phoneContainer.getRawValue(PhoneAndEmailEnum.PHONE.getId()));
+            (List<MyPhone>) phoneContainer.getRawValue(PhoneAndEmailEnum.PHONE.getId()));
         
         mProperty.setType_id(typeId);
+        mProperty.setTime_contact(mBinding.get().selectTimeContact.getText().toString());
         
         mBus.post(new OnCompleteStep1Event(mProperty));
         
@@ -149,7 +160,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     @Override
     public void rowItemAddedCallBack() {
         mBinding.get().scrollView
-                  .postDelayed(() -> mBinding.get().scrollView.fullScroll(View.FOCUS_DOWN), 100);
+            .postDelayed(() -> mBinding.get().scrollView.fullScroll(View.FOCUS_DOWN), 100);
     }
     
     @Override
@@ -159,7 +170,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
             data != null) {
             
             AddressAndLocationObject addressAndLocationObject = data
-                      .getParcelableExtra(SelectLocationActivity.EXTRA_ADDRESS_AND_LOCATION);
+                .getParcelableExtra(SelectLocationActivity.EXTRA_ADDRESS_AND_LOCATION);
             
             updateSelectLocation(addressAndLocationObject);
         }
@@ -170,6 +181,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     public void onCompletePickedType(int requestCode, Object value) {
         if (requestCode == FilterOption.PROPERTY_TYPE.getRequestCode()) {
             List<Integer> integerList = (List<Integer>) value;
+            Timber.d(integerList.toString());
             mProperty.setCategoriesByIntegerList(integerList);
             String text = buildStringCategory(integerList);
             mBinding.get().selectCategory.setText(text);
@@ -180,16 +192,28 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         mBinding.get().selectLocation.setOnClickListener(this::openActivitySelectAddress);
         
         mBinding.get().selectCategory.setOnClickListener(this::openChoosePropertyTypeDialog);
+        
+        mBinding.get().selectTimeContact.setOnClickListener(this::openDialogSelectContactTime);
+        
     }
     
     public void openActivitySelectAddress(View view) {
+        if (!NetworkUtils.isNetworkAvailable(this.getContext())) {
+            String message = getString(R.string.message_no_internet_access);
+            SnackBarUtils.showSnackBar(this.getView(), message);
+            return;
+        }
         Intent intent = new Intent(this.getContext(), SelectLocationActivity.class);
         if (mProperty.getLocation() != null) {
             intent.putExtra(SelectLocationActivity.EXTRA_LAST_LOCATION,
-                      new AddressAndLocationObject(mProperty.getAddress(),
-                                mProperty.getLocation().toLatLng()));
+                new AddressAndLocationObject(mProperty.getAddress(),
+                    mProperty.getLocation().toLatLng()));
         }
         this.startActivityForResult(intent, OnCompleteSelectLocationEvent.REQUEST_CODE);
+        if (getActivity() == null) {
+            return;
+        }
+        getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
     
     
@@ -204,9 +228,9 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
             return;
         }
         List<Integer> selectedPropertyType = PropertyType
-                  .convertToArrayInt(mProperty.getCategories());
+            .convertToArrayInt(mProperty.getCategories());
         BaseDialogFragment dialog = PropertyTypeDialog
-                  .newInstance(selectedPropertyType);
+            .newInstance(selectedPropertyType);
         
         if (dialog == null) {
             return;
@@ -216,14 +240,43 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         dialog.show(getFragmentManager(), FilterOption.PROPERTY_TYPE.getTag());
     }
     
+    public void openDialogSelectContactTime(View view) {
+        
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        
+        String[] listData = new String[]{getString(R.string.txt_all_time),
+            getString(R.string.txt_select_time)};
+        
+        dialog.setSingleChoiceItems(listData, 0, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        mBinding.get().selectTimeContact.setText(listData[which]);
+                        dialog.dismiss();
+                        break;
+                    case 1:
+                        ViewUtils.showDateTimePicker(getContext(), new Date(), new Date(), date -> {
+                            mBinding.get().selectTimeContact
+                                .setText(TextUtils.formatDateTime(date));
+                        });
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+        
+        dialog.create().show();
+    }
+    
     
     private void addRow(PhoneAndEmailEnum type) {
         if (type == PhoneAndEmailEnum.EMAIL) {
             this.mBinding.get().emailContainer
-                      .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
+                .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
         } else {
             this.mBinding.get().phoneContainer
-                      .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
+                .addRow(getContext(), type.mTypeInput, type.mText, type.mImage, this);
         }
     }
     
@@ -233,11 +286,12 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         int size = list.size();
         for (int i = 0; i < size; i++) {
             if (i == size - 1) {
-                builder.append(getString(PropertyType.getById(i).getDisplayStringResource()));
+                builder.append(
+                    getString(PropertyType.getById(list.get(i)).getDisplayStringResource()));
                 break;
             }
-            builder.append(getString(PropertyType.getById(i).getDisplayStringResource()))
-                      .append(", ");
+            builder.append(getString(PropertyType.getById(list.get(i)).getDisplayStringResource()))
+                .append(", ");
         }
         
         return builder.toString();

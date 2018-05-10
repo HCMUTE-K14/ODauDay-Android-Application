@@ -21,6 +21,8 @@ import com.odauday.model.User;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.utils.JwtUtils;
 import com.odauday.utils.JwtUtils.JwtModel;
+import com.odauday.utils.JwtUtils.UserInJWTModel;
+import com.odauday.utils.TextUtils;
 import io.reactivex.Single;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -33,7 +35,7 @@ public class UserRepository implements Repository {
     
     private final UserService.Public mPublicUserService;
     private final UserService.Protect mProtectUserService;
-
+    
     private final PreferencesHelper mPreferencesHelper;
     
     private final SchedulersExecutor mSchedulersExecutor;
@@ -52,10 +54,20 @@ public class UserRepository implements Repository {
         this.mSchedulersExecutor = schedulersExecutor;
     }
     
+    public boolean isNeedLogin() {
+        Timber.tag("current user").d(mPreferencesHelper.get(PrefKey.CURRENT_USER, ""));
+        Timber.tag("user id").d(mPreferencesHelper.get(PrefKey.USER_ID, ""));
+        Timber.tag("access token").d(mPreferencesHelper.get(PrefKey.ACCESS_TOKEN, ""));
+        
+        return TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.CURRENT_USER, ""))
+               || TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.USER_ID, ""))
+               || TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.ACCESS_TOKEN, ""));
+    }
+    
     public Single<JsonResponse<MessageResponse>> test(SearchCriteria searchCriteria) {
         return mProtectUserService.test(searchCriteria)
-                  .subscribeOn(mSchedulersExecutor.io())
-                  .observeOn(mSchedulersExecutor.ui());
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     public Single<User> login(AbstractAuthRequest request) {
@@ -78,9 +90,12 @@ public class UserRepository implements Repository {
                     
                     User userFromJwt = decodeUserAccessToken(accessToken);
                     
+                    Timber.d(userFromJwt.toString());
+                    
                     mPreferencesHelper.put(PrefKey.ACCESS_TOKEN, accessToken);
                     mPreferencesHelper
                         .put(PrefKey.CURRENT_USER, JwtUtils.toJson(userFromJwt, User.class));
+                    mPreferencesHelper.put(PrefKey.USER_ID, userFromJwt.getId());
                     
                     return userFromJwt;
                 } else {
@@ -147,8 +162,9 @@ public class UserRepository implements Repository {
     
     private User decodeUserAccessToken(String accessToken) throws Exception {
         JwtModel jwtModel = JwtUtils.decoded(accessToken);
-        
-        return JwtUtils.parseBody(jwtModel, User.class);
+        UserInJWTModel model = JwtUtils.parseBody(jwtModel, UserInJWTModel.class);
+
+        return model.getUser();
     }
     
     

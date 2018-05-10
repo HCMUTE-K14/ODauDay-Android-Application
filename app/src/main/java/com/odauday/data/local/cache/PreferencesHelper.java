@@ -57,8 +57,7 @@ public class PreferencesHelper {
         String jsonPreferences = mSharedPreferences.getString(key, defaultValue);
         Type listType = new TypeToken<ArrayList<Search>>() {
         }.getType();
-        List<Search> list = gson.fromJson(jsonPreferences, listType);
-        return list;
+        return gson.fromJson(jsonPreferences, listType);
     }
     
     public String get(String key, String defaultValue) {

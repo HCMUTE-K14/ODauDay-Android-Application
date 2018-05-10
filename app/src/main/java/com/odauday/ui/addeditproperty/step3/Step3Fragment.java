@@ -1,7 +1,6 @@
 package com.odauday.ui.addeditproperty.step3;
 
-import static com.odauday.config.Constants.Task.TASK_GET_RECENT_TAG;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +18,7 @@ import com.odauday.ui.search.common.view.tagdialog.TagTypeDialog;
 import com.odauday.ui.search.navigation.FilterOption;
 import com.odauday.viewmodel.BaseViewModel;
 import com.pchmn.materialchips.model.ChipInterface;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -41,6 +41,7 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
         Bundle args = new Bundle();
         
         Step3Fragment fragment = new Step3Fragment();
+        Timber.d("Step 3 new instance");
         args.putParcelable(AddEditPropertyActivity.EXTRA_PROPERTY, myProperty);
         
         fragment.setArguments(args);
@@ -84,14 +85,19 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
     @Override
     public void onNextStep(View view) {
         mProperty.setDescription(mBinding.get().txtDescription.getText().toString());
-        mProperty.setTags(null);
         
         mBus.post(new OnCompleteStep3Event(mProperty));
         mNavigationStepListener.navigate(getStep(), getNextStep());
     }
     
+    @SuppressLint("CheckResult")
     public void openChooseTagsDialog(View view) {
-        mStep3ViewModel.getRecentTags();
+        mStep3ViewModel.getRecentTagRepository()
+            .findAllRecentTagByCurrentUserId()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::onSuccessGetRecentTag, throwable -> {
+                onErrorGetRecentTag(new ArrayList<>());
+            });
     }
     
     
@@ -108,26 +114,6 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
     @Override
     @SuppressWarnings("unchecked")
     protected void processingTaskFromViewModel() {
-        mStep3ViewModel.response().observe(this, resource -> {
-            if (resource != null) {
-                switch (resource.status) {
-                    case ERROR:
-                        if (resource.task.equals(TASK_GET_RECENT_TAG)) {
-                            onErrorGetRecentTag((List<Tag>) resource.data);
-                        }
-                        break;
-                    case SUCCESS:
-                        if (resource.task.equals(TASK_GET_RECENT_TAG)) {
-                            onSuccessGetRecentTag((List<Tag>) resource.data);
-                        }
-                        break;
-                    case LOADING:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
     }
     
     @Override
@@ -138,7 +124,6 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
             mProperty.setTags(selectedTag);
             String textTags = buildStringTags(selectedTag);
             mBinding.get().txtTags.setText(textTags);
-            
             mStep3ViewModel.insertCurrentTags(selectedTag);
         }
     }
@@ -152,7 +137,7 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
                 break;
             }
             builder.append(list.get(i).getName())
-                      .append(", ");
+                .append(", ");
         }
         
         return builder.toString();
@@ -160,8 +145,6 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
     
     @Override
     public void onSuccessGetRecentTag(List<Tag> recentTags) {
-        Timber.d(recentTags.toString());
-        
         List<Tag> selectedTag = mProperty.getTags();
         openTagTypeDialog(selectedTag, recentTags);
     }
@@ -177,7 +160,7 @@ public class Step3Fragment extends BaseStepFragment<FragmentAddEditStep3Binding>
             return;
         }
         BaseDialogFragment dialog = TagTypeDialog
-                  .newInstance(selectedTag, recentTag);
+            .newInstance(selectedTag, recentTag);
         
         if (dialog == null) {
             return;

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.odauday.R;
@@ -18,9 +16,7 @@ public class StarView<T> extends RelativeLayout {
     
     private RelativeLayout mRelativeLayout;
     private ImageView mImageView;
-    private OnClickStarListener mOnClickStarListener;
-    private Animation mAnimationRight;
-    private Animation mAnimationLeft;
+    private OnClickStarListener<T> mOnClickStarListener;
     private STATUS mSTATUS = STATUS.UN_CHECK;
     
     public StarView(Context context) {
@@ -55,21 +51,18 @@ public class StarView<T> extends RelativeLayout {
         }
         mRelativeLayout = rootView.findViewById(R.id.relative_layout_star);
         mImageView = rootView.findViewById(R.id.image_star);
-        mAnimationRight = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_right);
-        mAnimationLeft = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_left);
+      
         mSTATUS = STATUS.UN_CHECK;
     }
     
     private void changeStatus(Context context) {
         switch (mSTATUS) {
             case CHECK:
-                mImageView.startAnimation(mAnimationLeft);
                 mImageView.setImageDrawable(
                     context.getResources().getDrawable(R.drawable.ic_listing_shortlist_no_padding));
                 mSTATUS = STATUS.UN_CHECK;
                 break;
             case UN_CHECK:
-                mImageView.startAnimation(mAnimationRight);
                 mImageView.setImageDrawable(context.getResources()
                     .getDrawable(R.drawable.ic_listing_shortlist_selected_no_padding));
                 mSTATUS = STATUS.CHECK;
@@ -90,14 +83,12 @@ public class StarView<T> extends RelativeLayout {
             changeStatus(getContext());
             return;
         }
-        if (mSTATUS == STATUS.UN_CHECK) {
-            mOnClickStarListener.onCheckStar(item);
-            changeStatus(getContext());
-            return;
-        }
+        
+        mOnClickStarListener.onCheckStar(item);
+        changeStatus(getContext());
     }
     
-    public void setOnClickStarListener(OnClickStarListener onClickStarListener) {
+    public void setOnClickStarListener(OnClickStarListener<T> onClickStarListener) {
         mOnClickStarListener = onClickStarListener;
     }
     

@@ -21,6 +21,7 @@ import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.view.MyProgressBar.MyProgressBarListener;
+import com.odauday.ui.welcome.WelcomeActivity;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.ValidationHelper;
 import com.odauday.utils.ViewUtils;
@@ -189,7 +190,9 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
     
     @Override
     public void onSuccess(Object data) {
-        Timber.tag(TAG).i("Login Successfully");
+        Timber.d("Login usccess");
+        ViewUtils.startActivity(this, WelcomeActivity.class);
+        finish();
     }
     
     @Override

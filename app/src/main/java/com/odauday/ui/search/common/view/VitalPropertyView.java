@@ -13,6 +13,7 @@ import com.odauday.config.AppConfig;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.utils.ImageLoader;
 import com.odauday.utils.TextUtils;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 4/18/18.
@@ -42,7 +43,7 @@ public class VitalPropertyView extends RelativeLayout {
     
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -77,9 +78,12 @@ public class VitalPropertyView extends RelativeLayout {
     
     public void setProperty(PropertyResultEntry property) {
         mProperty = property;
-        if (!property.getImages().isEmpty()) {
-            String urlFirstImage = property.getImages().get(0).getUrl();
-            setImage(urlFirstImage);
+        Timber.d(mProperty.toString());
+        if (property.getImages() != null) {
+            if (!property.getImages().isEmpty()) {
+                String urlFirstImage = property.getImages().get(0).getUrl();
+                setImage(urlFirstImage);
+            }
         } else {
             setImage(ImageLoader.randomPlaceHolder());
         }
@@ -89,26 +93,26 @@ public class VitalPropertyView extends RelativeLayout {
         setPrice(buildPriceText);
         
         String buildFeatureText = new StringBuilder()
-                  .append(property.getNumOfBathRooms())
-                  .append(" ")
-                  .append(getContext().getString(R.string.txt_bedrooms))
-                  .append(", ")
-                  .append(property.getNumOfBedRooms())
-                  .append(" ")
-                  .append(getContext().getString(R.string.txt_bathrooms))
-                  .append(", ")
-                  .append(property.getNumOfParkings())
-                  .append(" ")
-                  .append(getContext().getString(R.string.txt_parking))
-                  .toString();
+            .append(property.getNumOfBathRooms())
+            .append(" ")
+            .append(getContext().getString(R.string.txt_bedrooms))
+            .append(", ")
+            .append(property.getNumOfBedRooms())
+            .append(" ")
+            .append(getContext().getString(R.string.txt_bathrooms))
+            .append(", ")
+            .append(property.getNumOfParkings())
+            .append(" ")
+            .append(getContext().getString(R.string.txt_parking))
+            .toString();
         
         setFeature(buildFeatureText);
         
         String address = new StringBuilder()
-                  .append("<b>")
-                  .append(getContext().getString(R.string.txt_at))
-                  .append("</b> ")
-                  .append(property.getAddress()).toString();
+            .append("<b>")
+            .append(getContext().getString(R.string.txt_at))
+            .append("</b> ")
+            .append(property.getAddress()).toString();
         
         getTextViewAddress().setText(Html.fromHtml(address));
     }

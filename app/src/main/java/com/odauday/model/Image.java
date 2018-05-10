@@ -23,6 +23,7 @@ public class Image implements Parcelable {
             return new Image[size];
         }
     };
+    
     @SerializedName("id")
     @Expose
     private String id;
@@ -37,6 +38,11 @@ public class Image implements Parcelable {
     
     public Image() {
 
+    }
+    
+    public Image(String id, String url) {
+        this.id = id;
+        this.url = url;
     }
     
     public Image(String id, String url, Date dateCreated) {
@@ -83,16 +89,15 @@ public class Image implements Parcelable {
             return false;
         }
         Image image = (Image) o;
-        return ObjectUtils.equals(id, image.id) &&
-               ObjectUtils.equals(url, image.url) &&
-               ObjectUtils.equals(dateCreated, image.dateCreated);
+        return ObjectUtils.equals(url, image.url);
     }
     
     @Override
     public int hashCode() {
         
-        return ObjectUtils.hash(id, url, dateCreated);
+        return ObjectUtils.hash(url);
     }
+    
     @Override
     public String toString() {
         return "Image{" +

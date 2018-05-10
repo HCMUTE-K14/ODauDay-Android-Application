@@ -1,11 +1,11 @@
 package com.odauday.ui.addeditproperty.step1;
 
 import android.widget.EditText;
-import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.model.MyProperty;
 import com.odauday.ui.view.RowItemView;
 import com.odauday.ui.view.currencyedittext.CurrencyEditText;
+import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.TextUtils;
 import java.util.List;
 
@@ -21,24 +21,22 @@ public class Step1Helper {
     }
     
     public boolean validate(EditText selectLocation, EditText selectCategory,
-              CurrencyEditText txtPrice, RowItemView phoneContainer, RowItemView emailContainer,
-              MyProperty myProperty) {
+        CurrencyEditText txtPrice, RowItemView phoneContainer, RowItemView emailContainer,
+        MyProperty myProperty) {
         if (!isSelectedLocation(selectLocation, myProperty)) {
             selectLocation
-                      .setError(selectLocation.getContext()
-                                .getString(R.string.message_location_is_required));
+                .setError(selectLocation.getContext()
+                    .getString(R.string.message_location_is_required));
             selectLocation.requestFocus();
-            Toast.makeText(selectLocation.getContext(), R.string.message_location_is_required,
-                      Toast.LENGTH_SHORT).show();
+            SnackBarUtils.showSnackBar(selectLocation, R.string.message_location_is_required);
             return false;
         }
         if (!isSelectedCategory(selectCategory, myProperty)) {
             selectCategory
-                      .setError(selectLocation.getContext()
-                                .getString(R.string.message_category_is_required));
+                .setError(selectLocation.getContext()
+                    .getString(R.string.message_category_is_required));
             selectCategory.requestFocus();
-            Toast.makeText(selectLocation.getContext(), R.string.message_category_is_required,
-                      Toast.LENGTH_SHORT).show();
+            SnackBarUtils.showSnackBar(selectCategory, R.string.message_category_is_required);
             return false;
         }
         
@@ -49,9 +47,9 @@ public class Step1Helper {
         }
         
         return isValidList(phoneContainer, R.string.message_phone_is_required,
-                  PhoneAndEmailEnum.PHONE.getId()) &&
+            PhoneAndEmailEnum.PHONE.getId()) &&
                isValidList(emailContainer, R.string.message_email_is_required,
-                         PhoneAndEmailEnum.EMAIL.getId());
+                   PhoneAndEmailEnum.EMAIL.getId());
     }
     
     private boolean isSelectedLocation(EditText selectLocation, MyProperty property) {
@@ -74,12 +72,11 @@ public class Step1Helper {
         }
         
         List list = container
-                  .getRawValue(id);
+            .getRawValue(id);
         
         if (list == null) {
             if (id != PhoneAndEmailEnum.EMAIL.getId()) {
-                Toast.makeText(container.getContext(), resourceStr,
-                          Toast.LENGTH_SHORT).show();
+                SnackBarUtils.showSnackBar(container, resourceStr);
                 return false;
             }
             return true;
@@ -87,8 +84,7 @@ public class Step1Helper {
         
         if (list.isEmpty()) {
             if (id != PhoneAndEmailEnum.EMAIL.getId()) {
-                Toast.makeText(container.getContext(), resourceStr,
-                          Toast.LENGTH_SHORT).show();
+                SnackBarUtils.showSnackBar(container, resourceStr);
                 return false;
             }
             return true;

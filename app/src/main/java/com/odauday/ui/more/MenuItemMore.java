@@ -29,8 +29,8 @@ public class MenuItemMore {
         MenuItemMore menuItemMorePostNews = new MenuItemMore(ItemType.POST_NEWS, R.drawable.ic_newspaper,
             context.getString(
                 R.string.post_news));
-        MenuItemMore menuItemMoreConfirmProperty = new MenuItemMore(ItemType.CONFIRM_PROPERTY,
-            R.drawable.ic_checked, context.getString(
+        MenuItemMore menuItemMoreConfirmProperty = new MenuItemMore(ItemType.ADMIN_MANAGER,
+            R.drawable.ic_admin_manager, context.getString(
             R.string.confirm_property));
         MenuItemMore menuItemMoreSetting = new MenuItemMore(ItemType.SETTINGS,R.drawable.ic_settings,
             context.getString(

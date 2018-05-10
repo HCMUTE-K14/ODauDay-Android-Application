@@ -49,6 +49,21 @@ public class PropertyManagerViewModel extends BaseViewModel {
         
         mCompositeDisposable.add(disposable);
     }
+    public void changeStatus(String property_id,String status) {
+        Disposable disposable = mPropertyRepository.changeStatus(property_id, status)
+            .doOnSubscribe(onSubscribe -> {
+                mPropertyManagerContract.loading(true);
+            })
+            .subscribe(success -> {
+                mPropertyManagerContract.onSuccessMarkTheEnd(success);
+                mPropertyManagerContract.loading(false);
+            }, error -> {
+                mPropertyManagerContract.onFailureMarkTheEnd(error);
+                mPropertyManagerContract.loading(false);
+            });
+        
+        mCompositeDisposable.add(disposable);
+    }
     
     public void setPropertyManagerContract(
         PropertyManagerContract propertyManagerContract) {

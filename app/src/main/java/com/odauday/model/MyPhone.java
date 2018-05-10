@@ -17,6 +17,10 @@ public class MyPhone {
     @Expose
     private String phoneNumber;
     
+    @SerializedName("property_id")
+    @Expose String propertyId;
+    
+    
     public MyPhone() {
     
     }
@@ -40,6 +44,14 @@ public class MyPhone {
     
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    
+    public String getPropertyId() {
+        return propertyId;
+    }
+    
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
     }
     
     @Override

@@ -31,4 +31,11 @@ public class EndPoint {
     public static final String PROPERTY = "property";
     public static final String HISTORY = "history";
     
+    public static final String IMAGE = "image";
+    public static final String IMAGE_UPLOAD = IMAGE + "/upload";
+    
+    public static final String GET_IMAGE = BASE_URL + IMAGE;
+    
+    public static final String ADMIN="admin";
+    
 }

@@ -14,9 +14,11 @@ import com.odauday.databinding.FragmentMoreTabMainBinding;
 import com.odauday.model.User;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +41,13 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
         switch (item.getId()) {
             case ItemType.PROPERTY_MANAGER:
                 Timber.tag(TAG).d("Click: " + item.getName());
-                Intent intentPropertyManager = new Intent(getActivity(),
-                    ActivityPropertyManager.class);
-                startActivity(intentPropertyManager);
+                ViewUtils.startActivity(getActivity(), ActivityPropertyManager.class);
                 break;
             case ItemType.POST_NEWS:
                 Timber.tag(TAG).d("Click: " + item.getName());
                 break;
-            case ItemType.CONFIRM_PROPERTY:
+            case ItemType.ADMIN_MANAGER:
+                ViewUtils.startActivity(getActivity(), ActivityAdminManager.class);
                 Timber.tag(TAG).d("Click: " + item.getName());
                 break;
             case ItemType.SETTINGS:

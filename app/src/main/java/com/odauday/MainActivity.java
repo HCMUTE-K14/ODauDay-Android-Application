@@ -6,20 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar.OnTabSelectedListener;
+import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
 import com.odauday.ui.search.SearchTabMainFragment;
-import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
+import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import java.util.Stack;
 import javax.inject.Inject;
-import org.greenrobot.eventbus.Subscribe;
-import timber.log.Timber;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
                                                                         HasSupportFragmentInjector {
@@ -34,7 +34,10 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     
     @Inject
     MainActivityViewModel mMainActivityViewModel;
-
+    
+    @Inject
+    UserRepository mUserRepository;
+    
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
@@ -43,6 +46,11 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (mUserRepository.isNeedLogin()) {
+            ViewUtils.startActivity(this, LoginActivity.class);
+            finish();
+            return;
+        }
         init();
     }
     
@@ -69,11 +77,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     protected void processingTaskFromViewModel() {
     
-    }
-    
-    @Subscribe
-    public void onSelectedPlace(OnSelectedPlaceEvent event) {
-        Timber.d(event.getData().toString());
     }
     
     @Override
