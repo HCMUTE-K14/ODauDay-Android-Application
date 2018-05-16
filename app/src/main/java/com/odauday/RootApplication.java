@@ -26,8 +26,10 @@ import timber.log.Timber;
 public class RootApplication extends Application implements HasActivityInjector {
     
     private static Context mContext;
+    
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
+    
     @Inject
     DaoSession mDaoSession;
     

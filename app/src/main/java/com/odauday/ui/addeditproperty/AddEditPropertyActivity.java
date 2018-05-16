@@ -338,7 +338,7 @@ public class AddEditPropertyActivity extends
     
     @Override
     public void onSuccessCreateProperty() {
-        Toast.makeText(this, R.string.message_creat_property_successfull, Toast.LENGTH_SHORT)
+        Toast.makeText(this, R.string.message_create_property_successfully, Toast.LENGTH_SHORT)
             .show();
         finish();
     }

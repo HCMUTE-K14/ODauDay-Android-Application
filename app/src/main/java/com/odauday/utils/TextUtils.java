@@ -217,4 +217,8 @@ public class TextUtils {
         DateFormat dateFormat = new SimpleDateFormat(AppConfig.PATTERN_DATE);
         return dateFormat.format(date);
     }
+    
+    public static String formatGeoLocationForRequest(GeoLocation location) {
+        return location.getLatitude() + "," + location.getLongitude();
+    }
 }

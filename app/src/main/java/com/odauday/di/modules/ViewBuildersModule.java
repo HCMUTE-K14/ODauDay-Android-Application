@@ -12,6 +12,8 @@ import com.odauday.ui.addeditproperty.step4.Step4Provider;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
+import com.odauday.ui.propertydetail.PropertyDetailModule;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.propertymanager.PropertyManagerModule;
 import com.odauday.ui.savedsearch.SavedSearchProvider;
@@ -57,11 +59,11 @@ public abstract class ViewBuildersModule {
     abstract AutoCompletePlaceActivity bindAutoCompletePlaceActitivty();
     
     @ContributesAndroidInjector(modules = {
-              AddEditPropertyModule.class,
-              Step1Provider.class,
-              Step2Provider.class,
-              Step3Provider.class,
-              Step4Provider.class
+        AddEditPropertyModule.class,
+        Step1Provider.class,
+        Step2Provider.class,
+        Step3Provider.class,
+        Step4Provider.class
     })
     @PerActivity
     abstract AddEditPropertyActivity bindAddEditPropertyActivity();
@@ -69,10 +71,14 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = SelectLocationModule.class)
     @PerActivity
     abstract SelectLocationActivity bindSelectLocationActivity();
-
+    
     @ContributesAndroidInjector(modules = WelcomeActivityModule.class)
     @PerActivity
     abstract WelcomeActivity bindWelcomeActivity();
+    
+    @ContributesAndroidInjector(modules = PropertyDetailModule.class)
+    @PerActivity
+    abstract PropertyDetailActivity bindPropertyDetailActivity();
     
     @ContributesAndroidInjector(modules = {
         SearchTabProvider.class,

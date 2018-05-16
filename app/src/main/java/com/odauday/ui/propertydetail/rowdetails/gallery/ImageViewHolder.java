@@ -3,6 +3,7 @@ package com.odauday.ui.propertydetail.rowdetails.gallery;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import com.odauday.api.EndPoint;
 import com.odauday.model.Image;
 import com.odauday.utils.ImageLoader;
 import java.util.ArrayList;
@@ -20,10 +21,9 @@ abstract class ImageViewHolder {
     
     public ImageViewHolder(ViewGroup container,
         DisplayMode displayMode, OnClickImage onClickImage) {
-        this.mContainer = displayMode.showView(container);
         this.mDisplayMode = displayMode;
+        this.mContainer = displayMode.showView(container);
         this.mOnClickImage = onClickImage;
-        
     }
     
     public void setImages(List<Image> images) {
@@ -60,13 +60,12 @@ abstract class ImageViewHolder {
         GalleryImageEntryHolder entryHolder = mDisplayMode
             .getEntriesToDisplay()
             .get(pos);
-        
         ImageView imageView = mContainer.findViewById(entryHolder.getViewId());
         imageView.setOnClickListener(view -> {
             if (mOnClickImage != null) {
                 mOnClickImage.onClickImage(pos + 1, mImages);
             }
         });
-        ImageLoader.load(imageView, data.get(pos).getUrl());
+        ImageLoader.load(imageView, EndPoint.BASE_URL + data.get(pos).getUrl());
     }
 }

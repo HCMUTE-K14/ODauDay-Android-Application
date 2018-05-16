@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -124,6 +125,14 @@ public class ViewUtils {
                 .show();
         }, _currentDate.get(Calendar.YEAR), _currentDate.get(Calendar.MONTH),
             _currentDate.get(Calendar.DATE)).show();
+    }
+    
+    @SuppressLint("MissingPermission")
+    private static void openCallActivity(Activity activity, String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        
+        activity.startActivity(intent);
     }
     
     public interface DateTimePickerListener {

@@ -1,17 +1,20 @@
 package com.odauday.data.remote.property;
 
 import static com.odauday.api.EndPoint.PROPERTY;
+import static com.odauday.api.EndPoint.PROPERTY_DETAIL;
 
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.model.MyProperty;
 import com.odauday.model.Property;
+import com.odauday.model.PropertyDetail;
 import io.reactivex.Single;
 import java.util.List;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -28,4 +31,7 @@ public interface PropertyService {
     
     @POST(PROPERTY)
     Single<JsonResponse<MessageResponse>> create(@Body MyProperty property);
+    
+    @GET(PROPERTY_DETAIL + "/{id}")
+    Single<JsonResponse<PropertyDetail>> getDetail(@Path("id") String id);
 }

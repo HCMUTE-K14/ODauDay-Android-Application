@@ -27,6 +27,8 @@ public class VitalDetailViewHolder extends BaseRowViewHolder<VitalDetailRow> {
     
     @Override
     protected void update(VitalDetailRow vitalDetailRow) {
+        super.update(vitalDetailRow);
+        
         PropertyDetail propertyDetail = vitalDetailRow.getData();
         if (propertyDetail == null) {
             return;
@@ -48,6 +50,7 @@ public class VitalDetailViewHolder extends BaseRowViewHolder<VitalDetailRow> {
     
     @Override
     public void unbind() {
+        super.unbind();
         mPrice = null;
         mAddress = null;
         mStatus = null;

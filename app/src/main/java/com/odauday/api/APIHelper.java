@@ -78,7 +78,7 @@ public class APIHelper {
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException(
-                          mContext.getString(R.string.message_cannot_connect_to_service));
+                    mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -90,17 +90,17 @@ public class APIHelper {
                 HttpUrl originalHttpUrl = original.url();
                 
                 HttpUrl url = originalHttpUrl.newBuilder()
-                          .addQueryParameter("lang", lang)
-                          .build();
+                    .addQueryParameter("lang", lang)
+                    .build();
                 
                 Request.Builder requestBuilder = original.newBuilder()
-                          .url(url);
+                    .url(url);
                 
                 Request request = requestBuilder.build();
                 return chain.proceed(request);
             } catch (Exception ex) {
                 throw new NetworkException(
-                          mContext.getString(R.string.message_cannot_connect_to_service));
+                    mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -118,20 +118,20 @@ public class APIHelper {
     }
     
     public OkHttpClient createClient(Cache cache, Interceptor interceptor,
-              Interceptor languageInterceptor) {
+        Interceptor languageInterceptor) {
         
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
             message -> Timber.tag("Network").d(message))
             .setLevel(Level.BODY);
         
         return new OkHttpClient.Builder()
-                  .cache(cache)
-                  .addInterceptor(logging)
-                  .addInterceptor(interceptor)
-                  .addInterceptor(languageInterceptor)
-                  .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
-                  .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                  .build();
+            .cache(cache)
+            .addInterceptor(logging)
+            .addInterceptor(interceptor)
+            .addInterceptor(languageInterceptor)
+            .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .build();
     }
     
     public Retrofit createRetrofit(String baseURL, @NonNull OkHttpClient client, Gson gson) {
@@ -166,7 +166,7 @@ public class APIHelper {
             return retrofit.create(clazz);
         } catch (Exception e) {
             throw new NetworkException(
-                      mContext.getString(R.string.message_cannot_connect_to_service));
+                mContext.getString(R.string.message_cannot_connect_to_service));
         }
     }
 }

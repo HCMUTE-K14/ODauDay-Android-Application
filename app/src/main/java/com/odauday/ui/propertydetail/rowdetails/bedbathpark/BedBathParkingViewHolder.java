@@ -48,8 +48,10 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
         mCategory = itemView.findViewById(R.id.category);
     }
     
+    
     @Override
     protected void update(BedBathParkingRow bedBathParkingRow) {
+        super.update(bedBathParkingRow);
         PropertyDetail propertyDetail = bedBathParkingRow.getData();
         
         if (propertyDetail == null) {
@@ -87,6 +89,7 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
     
     @Override
     public void unbind() {
+        super.unbind();
         mBedsContainer = null;
         mBathContainer = null;
         mParkingContainer = null;

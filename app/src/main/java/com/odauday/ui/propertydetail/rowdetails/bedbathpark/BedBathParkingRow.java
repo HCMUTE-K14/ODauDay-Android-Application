@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
 import com.odauday.model.PropertyDetail;
+import com.odauday.ui.propertydetail.StageRow;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 
 /**
@@ -22,6 +23,11 @@ public class BedBathParkingRow extends BaseRowDetail<PropertyDetail, BedBathPark
     @Override
     public void setData(PropertyDetail data) {
         mData = data;
+    }
+    
+    @Override
+    public StageRow getStageRow() {
+        return StageRow.BED_BATH_PARKING_ROW;
     }
     
     @Override

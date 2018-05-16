@@ -20,7 +20,8 @@ public class Constants {
     public static final String INTENT_EXTRA_ARRAY_IMAGES = "intent_extra_array_images";
     public static final String INTENT_EXTRA_SELECTED_IMAGE_URL = "intent_extra_selected_image_url";
     public static final String MAPS_INTENT_URI = "geo:0,0?q=";
-    
+    public static final String INTENT_EXTRA_PROPERTY_DETAIL = "intent_extra_property_detail";
+    public static final String INTENT_EXTRA_PHONES_NUMBER = "intent_extra_phone_number";
     
     public class Task {
         
@@ -32,5 +33,9 @@ public class Constants {
         public static final String TASK_SEARCH_GEO_INFO = "search_geo_info";
         public static final String TASK_GET_RECENT_TAG = "task_get_recent_tag";
         public static final String TASK_CREATE_PROPERTY = "task_create_property";
+        
+        public static final String TASK_GET_DETAIL_PROPERTY = "task_get_detail";
+        public static final String TASK_CREATE_FAVORITE = "task_create_favorite";
+        public static final String TASK_CREATE_SAVED_SEARCH = "task_create_saved_search";
     }
 }

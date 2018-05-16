@@ -15,17 +15,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/main_image"
+    android:inflatedId="@id/single_image_stub"
     android:layout="@layout/gallery_single_image" />
   <ViewStub
     android:id="@+id/double_image_stub"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/main_image"
+    android:inflatedId="@id/double_image_stub"
     android:layout="@layout/gallery_double_image" />
   <ViewStub
     android:id="@+id/triple_image_stub"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/main_image"
+    android:inflatedId="@id/triple_image_stub"
     android:layout="@layout/gallery_triple_images" />
 </RelativeLayout>

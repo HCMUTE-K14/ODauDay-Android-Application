@@ -1,5 +1,7 @@
 package com.odauday.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.odauday.utils.ObjectUtils;
@@ -7,7 +9,7 @@ import com.odauday.utils.ObjectUtils;
 /**
  * Created by infamouSs on 4/25/18.
  */
-public class MyPhone {
+public class MyPhone implements Parcelable {
     
     @SerializedName("id")
     @Expose
@@ -18,7 +20,8 @@ public class MyPhone {
     private String phoneNumber;
     
     @SerializedName("property_id")
-    @Expose String propertyId;
+    @Expose
+    String propertyId;
     
     
     public MyPhone() {
@@ -29,6 +32,24 @@ public class MyPhone {
         this.id = id;
         this.phoneNumber = phoneNumber;
     }
+    
+    protected MyPhone(Parcel in) {
+        id = in.readString();
+        phoneNumber = in.readString();
+        propertyId = in.readString();
+    }
+    
+    public static final Creator<MyPhone> CREATOR = new Creator<MyPhone>() {
+        @Override
+        public MyPhone createFromParcel(Parcel in) {
+            return new MyPhone(in);
+        }
+        
+        @Override
+        public MyPhone[] newArray(int size) {
+            return new MyPhone[size];
+        }
+    };
     
     public String getId() {
         return id;
@@ -78,5 +99,18 @@ public class MyPhone {
                "id='" + id + '\'' +
                ", phoneNumber='" + phoneNumber + '\'' +
                '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        
+        dest.writeString(id);
+        dest.writeString(phoneNumber);
+        dest.writeString(propertyId);
     }
 }

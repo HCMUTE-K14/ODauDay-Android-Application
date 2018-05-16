@@ -1,6 +1,7 @@
 package com.odauday.ui.search.common.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,7 +13,10 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.odauday.R;
 import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
+import com.odauday.config.Constants;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
+import com.odauday.model.PropertyDetail;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.view.StarView;
 import com.odauday.ui.view.StarView.OnClickStarListener;
 import com.odauday.ui.view.StarView.STATUS;
@@ -32,6 +36,9 @@ public class VitalPropertyView extends RelativeLayout {
     TextView mTextViewAddress;
     StarView<PropertyResultEntry> mStarView;
     OnClickStarListener<PropertyResultEntry> mOnClickStarListener;
+    
+    RelativeLayout mContainerVital;
+    
     private PropertyResultEntry mProperty;
     
     public VitalPropertyView(Context context) {
@@ -56,12 +63,34 @@ public class VitalPropertyView extends RelativeLayout {
             return;
         }
         View rootView = inflater.inflate(R.layout.layout_property_detail_vital, this, true);
-        
+        mContainerVital = rootView.findViewById(R.id.container_vital);
         mImageView = rootView.findViewById(R.id.image);
         mTextViewPrice = rootView.findViewById(R.id.txt_price);
         mTextViewFeature = rootView.findViewById(R.id.txt_feature);
         mTextViewAddress = rootView.findViewById(R.id.txt_address);
         mStarView = rootView.findViewById(R.id.star_view);
+        
+        mContainerVital.setOnClickListener(view -> {
+            if (mProperty != null) {
+                PropertyDetail propertyDetail = new PropertyDetail();
+                propertyDetail.setId(mProperty.getId());
+                propertyDetail.setFavorite(mProperty.isFavorite());
+                propertyDetail.setImages(mProperty.getImages());
+                //propertyDetail.setLocation(mProperty.getLocation());
+//                propertyDetail.setAddress(mProperty.getAddress());
+//                propertyDetail.setNumOfParkings(mProperty.getNumOfParkings());
+//                propertyDetail.setNumOfBathrooms(mProperty.getNumOfBathRooms());
+//                propertyDetail.setNumOfBedrooms(mProperty.getNumOfBedRooms());
+//                propertyDetail.setType(mProperty.getSearchType().equals(Type.BUY) ? 1 : 2);
+//
+//                propertyDetail.setPrice(mProperty.getPrice());
+//
+                Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
+                
+                getContext().startActivity(intent);
+            }
+        });
     }
     
     
@@ -125,10 +154,10 @@ public class VitalPropertyView extends RelativeLayout {
         RxView.clicks(mStarView)
             .throttleLast(300, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(success ->{
+            .subscribe(success -> {
                 mStarView.addOnClick(mProperty);
             });
-               // mStarView.setOnClickListener(view -> {
+        // mStarView.setOnClickListener(view -> {
     }
     
     public void setImage(String url) {

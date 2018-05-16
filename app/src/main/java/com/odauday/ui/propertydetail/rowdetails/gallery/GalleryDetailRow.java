@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.odauday.R;
 import com.odauday.model.Image;
 import com.odauday.model.PropertyDetail;
+import com.odauday.ui.propertydetail.StageRow;
 import java.util.List;
 import timber.log.Timber;
 
@@ -44,6 +45,10 @@ public class GalleryDetailRow extends LinearLayout implements
         
     }
     
+    public StageRow getStageRow() {
+        return StageRow.GALLERY_ROW;
+    }
+    
     public void init(Context context) {
         setData(null);
         LayoutInflater inflater = (LayoutInflater) context
@@ -57,7 +62,6 @@ public class GalleryDetailRow extends LinearLayout implements
         
         mParentView = rootView.findViewById(R.id.gallery_container);
         mGalleryDetailViewHolder = new GalleryDetailViewHolder(this);
-        
     }
     
     public ImageView getMainImageView() {
@@ -65,7 +69,9 @@ public class GalleryDetailRow extends LinearLayout implements
     }
     
     public ViewGroup getParentView() {
-        return mParentView;
+        return mParentView == null ?
+            getRootView().findViewById(R.id.gallery_container)
+            : mParentView;
     }
     
     public PropertyDetail getData() {
@@ -74,6 +80,7 @@ public class GalleryDetailRow extends LinearLayout implements
     
     public void bind(PropertyDetail propertyDetail) {
         setData(propertyDetail);
+        Timber.d(propertyDetail.getImages().toString());
         mGalleryDetailViewHolder.update(this);
     }
     

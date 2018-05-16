@@ -3,7 +3,6 @@ package com.odauday.ui.propertydetail;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.ViewGroup;
 import com.odauday.model.PropertyDetail;
-import com.odauday.ui.propertydetail.common.CardViewHasOption;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
 import com.odauday.ui.propertydetail.rowdetails.RowControllerListener;
@@ -39,9 +38,7 @@ public class PropertyDetailRowAdapter extends Adapter<BaseRowViewHolder> {
     
     @Override
     public void onBindViewHolder(BaseRowViewHolder holder, int position) {
-        if (holder instanceof CardViewHasOption) {
-            ((CardViewHasOption) holder).setRowControllerListener(mRowControllerListener);
-        }
+        holder.setRowControllerListener(mRowControllerListener);
         holder.bind(mRows.get(position));
     }
     
@@ -60,5 +57,25 @@ public class PropertyDetailRowAdapter extends Adapter<BaseRowViewHolder> {
         for (BaseRowDetail<PropertyDetail, ? extends BaseRowViewHolder> row : this.mRows) {
             this.mTypeToRow.put(row.getType(), row);
         }
+    }
+    
+    @Override
+    public long getItemId(int position) {
+        return mRows.get(position).getStageRow().getPos();
+    }
+    
+    public long getItemId(BaseRowDetail row) {
+        int index = mRows.indexOf(row);
+        return super.getItemId(index);
+    }
+    
+    public HashMap<Integer, BaseRowDetail<PropertyDetail, ? extends BaseRowViewHolder>> getTypeToRow() {
+        return mTypeToRow;
+    }
+    
+    public void setRows(List<BaseRowDetail<PropertyDetail, ? extends BaseRowViewHolder>> rows) {
+        this.mRows.clear();
+        this.mRows.addAll(rows);
+        initTypeToRowCache();
     }
 }

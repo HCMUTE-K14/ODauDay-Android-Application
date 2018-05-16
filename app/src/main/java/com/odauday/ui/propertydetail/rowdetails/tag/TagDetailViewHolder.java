@@ -28,6 +28,7 @@ public class TagDetailViewHolder extends BaseRowViewHolder<TagDetailRow> {
     
     @Override
     protected void update(TagDetailRow tagDetailRow) {
+        super.update(tagDetailRow);
         PropertyDetail propertyDetail = tagDetailRow.getData();
         if (propertyDetail == null) {
             return;
@@ -60,6 +61,8 @@ public class TagDetailViewHolder extends BaseRowViewHolder<TagDetailRow> {
     
     @Override
     public void unbind() {
+        super.unbind();
+        
         mTagLeft = null;
         mTagRight = null;
     }

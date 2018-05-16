@@ -7,7 +7,6 @@ import android.view.View;
 import com.odauday.R;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
-import com.odauday.ui.propertydetail.rowdetails.RowControllerListener;
 
 /**
  * Created by infamouSs on 5/9/18.
@@ -16,7 +15,6 @@ public abstract class CardViewHasOption<ROW extends BaseRowDetail> extends BaseR
     
     protected abstract int getMenuResId();
     
-    private RowControllerListener mRowControllerListener;
     
     private BaseRowDetail mRow;
     
@@ -44,27 +42,18 @@ public abstract class CardViewHasOption<ROW extends BaseRowDetail> extends BaseR
         mRow = row;
     }
     
-    public BaseRowDetail getRow() {
-        return mRow;
-    }
-    
-    public void setRowControllerListener(
-        RowControllerListener rowControllerListener) {
-        mRowControllerListener = rowControllerListener;
-    }
-    
-    private boolean onMenuItemSelected(int idMenu) {
+    protected boolean onMenuItemSelected(int idMenu) {
         if (R.id.hide != idMenu) {
             return false;
         }
         
-        if (mRowControllerListener == null) {
+        if (getRowControllerListener() == null) {
             return false;
         }
-        mRowControllerListener.removeRow(mRow);
+        getRowControllerListener().removeRow(mRow);
         Snackbar snackbar = Snackbar
             .make(this.itemView, R.string.txt_card_is_hidden, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.txt_undo, v -> mRowControllerListener.addRow(mRow));
+        snackbar.setAction(R.string.txt_undo, v -> getRowControllerListener().addRow(mRow));
         snackbar.setActionTextColor(ContextCompat.getColor(itemView.getContext(), R.color.green));
         snackbar.show();
         return true;

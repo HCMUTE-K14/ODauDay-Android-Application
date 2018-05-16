@@ -28,4 +28,14 @@ public class NumberUtils {
             .append(random(1000, 9999))
             .toString();
     }
+    
+    public static String meterToKilometer(double meter) {
+        double kilometer = meter * 0.001;
+        return String.valueOf(round(kilometer, 1)) + " km";
+    }
+    
+    private static double round(double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
+    }
 }

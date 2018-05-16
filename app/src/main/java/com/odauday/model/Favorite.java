@@ -23,4 +23,13 @@ public class Favorite {
     public String getPropertyId() {
         return propertyId;
     }
+    
+    public Favorite() {
+    
+    }
+    
+    public Favorite(String userId, String propertyId) {
+        this.userId = userId;
+        this.propertyId = propertyId;
+    }
 }

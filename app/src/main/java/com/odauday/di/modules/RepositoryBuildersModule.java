@@ -2,6 +2,7 @@ package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.AutoCompletePlaceRepository;
+import com.odauday.data.DirectionRepository;
 import com.odauday.data.FavoriteRepository;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.HistoryRepository;
@@ -19,6 +20,7 @@ import com.odauday.data.remote.HistoryService;
 import com.odauday.data.remote.SavedSearchService;
 import com.odauday.data.remote.TagService;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
+import com.odauday.data.remote.direction.DirectionService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.image.ImageService;
 import com.odauday.data.remote.property.PropertyService;
@@ -118,6 +120,13 @@ public class RepositoryBuildersModule {
     GeoInfoRepository provideGeoInfoRepository(GeoInfoService geoInfoService,
         SchedulersExecutor schedulersExecutor) {
         return new GeoInfoRepository(geoInfoService, schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    DirectionRepository provideDirectionRepository(DirectionService directionService,
+        SchedulersExecutor schedulersExecutor) {
+        return new DirectionRepository(directionService, schedulersExecutor);
     }
     
     //--------------------------LOCAL---------------------------//

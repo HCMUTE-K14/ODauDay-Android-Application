@@ -45,8 +45,10 @@ public class DescriptionDetailViewHolder extends BaseRowViewHolder<DescriptionDe
         mReadMore.setOnClickListener(this);
     }
     
+    
     @Override
     protected void update(DescriptionDetailRow descriptionDetailRow) {
+        super.update(descriptionDetailRow);
         PropertyDetail propertyDetail = descriptionDetailRow.getData();
         
         if (propertyDetail == null) {
@@ -61,7 +63,6 @@ public class DescriptionDetailViewHolder extends BaseRowViewHolder<DescriptionDe
             mReadMore.setVisibility(View.INVISIBLE);
             mOverlay.setVisibility(View.INVISIBLE);
             mDescription.setText(null);
-            descriptionLayoutParams.height = this.mCollapsedHeight;
         } else {
             setTextDescription(description);
             mDescription
@@ -132,6 +133,7 @@ public class DescriptionDetailViewHolder extends BaseRowViewHolder<DescriptionDe
     
     @Override
     public void unbind() {
+        super.unbind();
         mDescription = null;
         mReadMore = null;
         mOverlay = null;

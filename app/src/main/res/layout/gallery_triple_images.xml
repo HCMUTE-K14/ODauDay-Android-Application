@@ -4,7 +4,7 @@
   android:layout_height="match_parent"
   android:weightSum="3">
   <ImageView
-    android:id="@id/image_1"
+    android:id="@+id/image_1"
     android:layout_width="0dp"
     android:layout_height="100dp"
     android:layout_weight="1"

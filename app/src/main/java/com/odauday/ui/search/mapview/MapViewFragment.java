@@ -244,7 +244,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     public void clear() {
         mLocationClient.disconnect();
-        mMapViewAdapter.clear();
         mRxCameraIdleListener.stop();
     }
     

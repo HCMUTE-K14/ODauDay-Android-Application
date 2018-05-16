@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
 import com.odauday.model.PropertyDetail;
+import com.odauday.ui.propertydetail.StageRow;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 
 /**
@@ -30,5 +31,10 @@ public class DescriptionDetailRow extends
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.row_description_property_detail, parent, false);
         return new DescriptionDetailViewHolder(view);
+    }
+    
+    @Override
+    public StageRow getStageRow() {
+        return StageRow.DESCRIPTION_ROW;
     }
 }

@@ -210,7 +210,7 @@
   <string name="txt_land_size_hint" >Land size (m²)</string>
   <string name="txt_all_time">All time</string>
   <string name="txt_select_time">Select time</string>
-  <string name="message_creat_property_successfull">Property is created. Please wait admin confirm this property !</string>
+  <string name="message_create_property_successfully">Property is created. Please wait admin confirm this property !</string>
   <string name="message_some_thing_went_wrong_create_property">Something went wrong when creating property. Please try later !</string>
   <string name="txt_creating_property">Creating Property...</string>
   <string name="sell">SELL</string>
@@ -218,8 +218,8 @@
   <string name="txt_name">Name</string>
   <string name="txt_display_bedroom_bathroom_parking">%1$d Bedrooms, %2$d Bathrooms, %3$d Parkings</string>
   <string name="txt_view_more_image" >+ %1$d</string>
-  <string name="txt_rent_upppercast">RENT</string>
-  <string name="txt_buy_uppercast">BUY</string>
+  <string name="txt_rent_upppercase">RENT</string>
+  <string name="txt_buy_uppercase">BUY</string>
   <string name="cta_email">Email</string>
   <string name="cta_call">Call</string>
   <string name="txt_contact_time">Contact time: %1$s</string>
@@ -239,6 +239,20 @@
   <string name="txt_undo">Undo</string>
   <string name="txt_reset_locations">Reset Locations</string>
   <string name="txt_save_location">Save Location</string>
-
+  <string name="message_destination_is_reuiqred">Required filed</string>
+  <string name="duration">%1$d hr %2$d min</string>
+  <string name="duration_minutes">%d min</string>
+  <string name="txt_no_result">No Result</string>
+  <string name="message_google_maps_missing_title">Google Maps Required</string>
+  <string name="message_google_maps_missing_message">Google Map is missing</string>
+  <string name="message_detail_is_loading">Getting property detail...</string>
+  <string name="message_failure_get_full_detail">Failed to fetch full property details.</string>
+  <string name="message_phone_list_is_empty">Phones is empty</string>
+  <string name="message_email_list_is_empty">Emails is empty</string>
+  <string name="message_permission_call">Application need call permission</string>
+  <string name="txt_your_notes">Your Note</string>
+  <string name="txt_hint_property_notes">Type your notes here</string>
+  <string name="text_property_notes_char_count">%1$d characters remaining</string>
+  <string name="message_direction_is_already">Direction is already! Please choose another</string>
 
 </resources>

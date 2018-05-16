@@ -8,15 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 import com.odauday.MainActivity;
 import com.odauday.R;
+import com.odauday.config.Constants.Task;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.remote.model.MessageResponse;
+import com.odauday.data.remote.property.model.CoreSearchRequest;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.data.remote.property.model.SearchResult;
 import com.odauday.databinding.FragmentSearchTabMainBinding;
+import com.odauday.model.Search;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.common.AttachFragmentRunnable;
@@ -64,7 +69,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                                                                                           MapFragmentClickCallBack,
                                                                                           SaveSearchListener,
                                                                                           LoadingFragmentListener,
-                                                                                          OnClickStarListener<PropertyResultEntry> {
+                                                                                          OnClickStarListener<PropertyResultEntry>,
+                                                                                          SearchTabContract {
     
     
     //====================== Variable =========================//
@@ -215,7 +221,26 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     protected void processingTaskFromViewModel() {
-    
+        mSearchTabViewModel.response().observe(this, resource -> {
+            if (resource != null) {
+                switch (resource.status) {
+                    case ERROR:
+                        if (resource.task.equals(Task.TASK_CREATE_SAVED_SEARCH)) {
+                            onFailSavedSearch((Throwable) resource.data);
+                        }
+                        break;
+                    case SUCCESS:
+                        if (resource.task.equals(Task.TASK_CREATE_SAVED_SEARCH)) {
+                            onSuccessSavedSearch((MessageResponse) resource.data);
+                        }
+                        break;
+                    case LOADING:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
     
     @Override
@@ -258,7 +283,23 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onSaveSearch(String savedSearchName) {
-    
+        Search search = new Search();
+        search.setId(TextUtils.generatorUUID());
+        SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
+        CoreSearchRequest core = searchRequest.getCore();
+        search.setLatitude(core.getCenter().getLatitude());
+        search.setLongitude(core.getCenter().getLongitude());
+        
+        search.setLatitude_sw(core.getBounds()[0].getLatitude());
+        search.setLongitude_sw(core.getBounds()[0].getLongitude());
+        
+        search.setLatitude_ns(core.getBounds()[1].getLatitude());
+        search.setLongitude_ns(core.getBounds()[1].getLongitude());
+        
+        search.setName(savedSearchName);
+        
+        mSearchTabViewModel.createSearch(search);
+        
     }
     
     private void updateTextSearchBar(String text) {
@@ -456,8 +497,18 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onUnCheckStar(PropertyResultEntry item) {
         Timber.d("Un-Favorite");
-    
+        
         item.setFavorite(false);
         mBus.post(new OnFavouriteEvent(item));
+    }
+    
+    @Override
+    public void onSuccessSavedSearch(MessageResponse response) {
+        Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+    
+    @Override
+    public void onFailSavedSearch(Throwable throwable) {
+    
     }
 }

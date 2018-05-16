@@ -12,7 +12,12 @@ import com.odauday.utils.TextUtils;
 public abstract class BaseRowViewHolder<ROW extends BaseRowDetail> extends
                                                                    ViewHolder {
     
-    protected abstract void update(ROW row);
+    private RowControllerListener mRowControllerListener;
+    private ROW mRow;
+    
+    protected void update(ROW row) {
+        this.mRow = row;
+    }
     
     public BaseRowViewHolder(View itemView) {
         super(itemView);
@@ -22,8 +27,10 @@ public abstract class BaseRowViewHolder<ROW extends BaseRowDetail> extends
         update(row);
     }
     
-    
-    public abstract void unbind();
+    public void unbind() {
+        mRow = null;
+        mRowControllerListener = null;
+    }
     
     protected void updateTextView(CharSequence text, TextView view) {
         boolean showText;
@@ -41,5 +48,18 @@ public abstract class BaseRowViewHolder<ROW extends BaseRowDetail> extends
     
     protected void updateTextView(TextView view, String text) {
         updateTextView(text == null ? null : text.trim(), view);
+    }
+    
+    
+    public void setRowControllerListener(RowControllerListener rowControllerListener) {
+        mRowControllerListener = rowControllerListener;
+    }
+    
+    public RowControllerListener getRowControllerListener() {
+        return mRowControllerListener;
+    }
+    
+    public ROW getRow() {
+        return mRow;
     }
 }

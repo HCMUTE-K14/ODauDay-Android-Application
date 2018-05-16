@@ -36,13 +36,14 @@ public class MapDetailRowViewHolder extends BaseRowViewHolder<MapDetailRow> {
     
     @Override
     protected void update(MapDetailRow mapDetailRow) {
+        super.update(mapDetailRow);
         mData = mapDetailRow.getData();
         
         if (mData == null) {
             return;
         }
         
-        String urlMap = TextUtils.buildUrlStaticMap(mData.getLocation(), 15, "600x300");
+        String urlMap = TextUtils.buildUrlStaticMap(mData.getLocation(), 13, "600x300");
         
         Glide.with(mMap.getContext())
             .load(urlMap)

@@ -61,8 +61,17 @@ enum DisplayMode {
     }
     
     public View showView(ViewGroup parent) {
+        
         if (parent != null) {
-            return ((ViewStub) parent.findViewById(viewId)).inflate();
+            View view = parent.findViewById(viewId);
+            try {
+                if (((ViewStub) view).getParent() != null) {
+                    return ((ViewStub) view).inflate();
+                }
+                return view;
+            } catch (Exception ex) {
+                return view;
+            }
         }
         return null;
     }

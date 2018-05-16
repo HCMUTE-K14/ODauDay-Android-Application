@@ -3,6 +3,7 @@ package com.odauday.ui.propertydetail.rowdetails.gallery;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import com.odauday.api.EndPoint;
 import com.odauday.utils.ImageLoader;
 
 /**
@@ -51,7 +52,6 @@ public class GalleryDetailViewHolder {
         galleryDetailRow.getMainImageView().setVisibility(View.VISIBLE);
     }
     
-    
     private void setImageMain(GalleryDetailRow galleryDetailRow) {
         galleryDetailRow.getMainImageView().getLayoutParams().height = (int) TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200f,
@@ -64,8 +64,9 @@ public class GalleryDetailViewHolder {
             }
         });
         ImageLoader
-            .load(galleryDetailRow.getMainImageView(),
-                galleryDetailRow.getData().getImages().get(0));
+            .load(galleryDetailRow.getMainImageView(), EndPoint.BASE_URL +
+                                                       galleryDetailRow.getData().getImages()
+                                                           .get(0).getUrl());
         
     }
     
