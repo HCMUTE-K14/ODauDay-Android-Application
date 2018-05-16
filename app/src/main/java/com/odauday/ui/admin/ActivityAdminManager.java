@@ -126,10 +126,12 @@ public class ActivityAdminManager extends BaseMVVMActivity<ActivityAdminManagerB
         this.finish();
     }
     private void replaceFragment(Fragment fragment, String fragmentTag) {
+        for (Fragment fragment1:getSupportFragmentManager().getFragments()){
+            getSupportFragmentManager().beginTransaction().remove(fragment1).commit();
+        }
         getSupportFragmentManager()
             .beginTransaction()
             .replace(R.id.frame_layout_main, fragment, fragmentTag)
-            .addToBackStack(fragmentTag)
             .commit();
     }
     

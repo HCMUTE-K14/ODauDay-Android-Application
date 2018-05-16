@@ -174,6 +174,9 @@ public class TextUtils {
     }
     
     public static String formatNumber(double value, LANGUAGE locale) {
+        if(value==0){
+            return String.valueOf(value);
+        }
         NumberFormat formatter = new DecimalFormat("#,###.00");
         if (locale == LANGUAGE.EN) {
             return formatter.format(value);

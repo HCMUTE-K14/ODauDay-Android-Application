@@ -190,6 +190,7 @@ public class FragmentConfirmProperty extends BaseMVVMFragment<FragmentConfirmPro
     private void updateUI() {
         mLimit=10;
         numPage=1;
+        mStatusGetProperty=true;
         mLikeName=mBinding.get().editTextSearch.getText().toString().trim();
         mConfirmPropertyAdapter.clearData();
         
@@ -363,6 +364,7 @@ public class FragmentConfirmProperty extends BaseMVVMFragment<FragmentConfirmPro
     public void clear(){
         mLimit=10;
         numPage=1;
+        mStatusGetProperty=true;
         mBinding.get().editTextSearch.setText("");
         mLikeName=mBinding.get().editTextSearch.getText().toString().trim();
         mConfirmPropertyAdapter.clearData();
@@ -382,12 +384,12 @@ public class FragmentConfirmProperty extends BaseMVVMFragment<FragmentConfirmPro
                             break;
                         case 2:
                             mPropertyChange = property;
-                            mConfirmPropertyModel.changeStatus(property.getId(), Status.EXPIRED);
+                            mConfirmPropertyModel.changeStatusProperty(property.getId(), Status.EXPIRED);
                             mAction=Action.MARK_THE_END;
                             break;
                         case 3:
                             mPropertyChange = property;
-                            mConfirmPropertyModel.changeStatus(property.getId(), Status.ACTIVE);
+                            mConfirmPropertyModel.changeStatusProperty(property.getId(), Status.ACTIVE);
                             mAction=Action.CONFIRM;
                             break;
                             default:

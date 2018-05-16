@@ -11,6 +11,7 @@ import com.odauday.ui.addeditproperty.step3.Step3Provider;
 import com.odauday.ui.addeditproperty.step4.Step4Provider;
 import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.admin.propertymanager.ConfirmPropertyProvider;
+import com.odauday.ui.admin.usermanager.UserManagerProvider;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
@@ -95,7 +96,7 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract ActivitySettings provideActivitySettings();
     
-    @ContributesAndroidInjector(modules = {ConfirmPropertyProvider.class})
+    @ContributesAndroidInjector(modules = {ConfirmPropertyProvider.class, UserManagerProvider.class})
     @PerActivity
     abstract ActivityAdminManager provideActivityAdminManager();
 }

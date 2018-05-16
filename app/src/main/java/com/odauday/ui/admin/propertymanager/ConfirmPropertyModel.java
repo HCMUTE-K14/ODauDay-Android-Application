@@ -22,7 +22,6 @@ public class ConfirmPropertyModel extends BaseViewModel{
     public ConfirmPropertyModel(AdminRepository adminRepository,
         PropertyRepository propertyRepository) {
         mAdminRepository = adminRepository;
-        mPropertyRepository = propertyRepository;
     }
     
     public void setConfirmPropertyContract(
@@ -57,8 +56,8 @@ public class ConfirmPropertyModel extends BaseViewModel{
         
         mCompositeDisposable.add(disposable);
     }
-    public void changeStatus(String property_id,String status) {
-        Disposable disposable = mPropertyRepository.changeStatus(property_id, status)
+    public void changeStatusProperty(String property_id,String status) {
+        Disposable disposable = mAdminRepository.changeStatusProperty(property_id, status)
             .doOnSubscribe(onSubscribe -> {
                 mConfirmPropertyContract.onLoadingAction(true);
             })
@@ -72,5 +71,4 @@ public class ConfirmPropertyModel extends BaseViewModel{
         
         mCompositeDisposable.add(disposable);
     }
-    
 }

@@ -62,6 +62,7 @@ public class BindingAdapterUtils {
     public static void textDoublePrice(TextView view, double value) {
         String text = new StringBuilder()
             .append(TextUtils.formatNumber(value, LANGUAGE.VI))
+            .append(" ")
             .append(AppConfig.VN_CURRENCY).toString();
         
         view.setText(text);
@@ -79,7 +80,10 @@ public class BindingAdapterUtils {
             ImageLoader.loadWithoutOptions(view, EndPoint.BASE_URL + images.get(0).getUrl());
         }
     }
-    
+    @BindingAdapter("loadImage")
+    public static void loadImage(ImageView view, String url) {
+        ImageLoader.loadImageForUser(view, EndPoint.BASE_URL + url);
+    }
     @BindingAdapter("loadIconMenu")
     public static void loadIconMenu(ImageView view, String icon_name) {
         Context context = view.getContext();
@@ -90,7 +94,6 @@ public class BindingAdapterUtils {
     
     @BindingAdapter("activeProperty")
     public static void activeProperty(TextView view, String status) {
-        Timber.d(status);
         switch (status) {
             case Status.ACTIVE:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
@@ -101,6 +104,25 @@ public class BindingAdapterUtils {
                 view.setText(status);
                 break;
             case Status.EXPIRED:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
+                view.setText(status);
+                break;
+            default:
+                break;
+        }
+    }
+    @BindingAdapter("statusUser")
+    public static void statusUser(TextView view, String status) {
+        switch (status) {
+            case com.odauday.data.remote.user.model.Status.ACTIVE:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
+                view.setText(status);
+                break;
+            case com.odauday.data.remote.user.model.Status.PENDING:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
+                view.setText(status);
+                break;
+            case com.odauday.data.remote.user.model.Status.DISABLED:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
                 break;

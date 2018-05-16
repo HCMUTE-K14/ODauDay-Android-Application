@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+  <data>
+    <variable
+      name="handler"
+      type="com.odauday.ui.admin.usermanager.FragmentUserManager"/>
+  </data>
   <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/confirm_property"
+    android:id="@+id/user_manager"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,6 +19,7 @@
       android:weightSum="9">
       <RelativeLayout
         android:id="@+id/relative_status"
+        android:onClick="@{(view)->handler.onClickMoreStatus(view)}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="7">
@@ -52,7 +58,14 @@
 
       </RelativeLayout>
     </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycle_view_user"
+      android:layout_marginTop="10dp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@id/linear_bar">
 
+    </android.support.v7.widget.RecyclerView>
 
   </RelativeLayout>
 </layout>

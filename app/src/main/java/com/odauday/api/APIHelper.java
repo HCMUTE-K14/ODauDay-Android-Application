@@ -126,7 +126,7 @@ public class APIHelper {
         
         return new OkHttpClient.Builder()
                   .cache(cache)
-                  // .addInterceptor(logging)
+                    //.addInterceptor(logging)
                   .addInterceptor(interceptor)
                   .addInterceptor(languageInterceptor)
                   .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)

@@ -48,7 +48,6 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
     }
     public void clearData(){
         data.clear();
-        notifyDataSetChanged();
     }
     public void removeItem(Property property){
         data.remove(property);
