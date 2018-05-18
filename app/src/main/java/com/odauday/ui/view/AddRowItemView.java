@@ -46,7 +46,6 @@ public class AddRowItemView extends LinearLayout {
         View rootView = inflater.inflate(R.layout.layout_add_row_view, this, true);
         
         mEditText = rootView.findViewById(R.id.txt_title);
-        
     }
     
     public ImageView getPlusOrMinusBtn() {

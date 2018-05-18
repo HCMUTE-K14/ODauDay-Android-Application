@@ -4,67 +4,48 @@
     <attr format="dimension" name="civ_border_width" />
     <attr format="color" name="civ_border_color" />
     <attr format="boolean" name="civ_border_overlay" />
-    <!-- {@deprecated Use civ_circlebackground_color instead.} -->
     <attr format="color" name="civ_fill_color" />
     <attr format="color" name="civ_circle_background_color" />
   </declare-styleable>
   <declare-styleable name="CurrencyEditText">
-    <attr name="allow_negative_values" format="boolean" />
-    <attr name="decimal_digits" format="integer" />
+    <attr format="boolean" name="allow_negative_values" />
+    <attr format="integer" name="decimal_digits" />
   </declare-styleable>
   <declare-styleable name="CircleIndicator">
-    <attr name="ci_width" format="dimension"/>
-    <attr name="ci_height" format="dimension"/>
-    <attr name="ci_margin" format="dimension"/>
-    <attr name="ci_animator" format="reference"/>
-    <attr name="ci_animator_reverse" format="reference"/>
-    <attr name="ci_drawable" format="reference"/>
-    <attr name="ci_drawable_unselected" format="reference"/>
+    <attr format="dimension" name="ci_width" />
+    <attr format="dimension" name="ci_height" />
+    <attr format="dimension" name="ci_margin" />
+    <attr format="reference" name="ci_animator" />
+    <attr format="reference" name="ci_animator_reverse" />
+    <attr format="reference" name="ci_drawable" />
+    <attr format="reference" name="ci_drawable_unselected" />
 
-    <attr name="ci_orientation" format="enum">
-      <!-- Defines an horizontal widget. -->
-      <enum name="horizontal" value="0"/>
-      <!-- Defines a vertical widget. -->
-      <enum name="vertical" value="1"/>
+    <attr format="enum" name="ci_orientation">
+      <enum name="horizontal" value="0" />
+      <enum name="vertical" value="1" />
     </attr>
 
     <attr name="ci_gravity">
-      <!-- Push object to the top of its container, not changing its size. -->
-      <flag name="top" value="0x30"/>
-      <!-- Push object to the bottom of its container, not changing its size. -->
-      <flag name="bottom" value="0x50"/>
-      <!-- Push object to the left of its container, not changing its size. -->
-      <flag name="left" value="0x03"/>
-      <!-- Push object to the right of its container, not changing its size. -->
-      <flag name="right" value="0x05"/>
-      <!-- Place object in the vertical center of its container, not changing its size. -->
-      <flag name="center_vertical" value="0x10"/>
-      <!-- Grow the vertical size of the object if needed so it completely fills its container. -->
-      <flag name="fill_vertical" value="0x70"/>
-      <!-- Place object in the horizontal center of its container, not changing its size. -->
-      <flag name="center_horizontal" value="0x01"/>
-      <!-- Grow the horizontal size of the object if needed so it completely fills its container. -->
-      <flag name="fill_horizontal" value="0x07"/>
-      <!-- Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. -->
-      <flag name="center" value="0x11"/>
-      <!-- Grow the horizontal and vertical size of the object if needed so it completely fills its container. -->
-      <flag name="fill" value="0x77"/>
-      <!-- Additional option that can be set to have the top and/or bottom edges of
-      the child clipped to its container's bounds.
-      The clip will be based on the vertical gravity: a top gravity will clip the bottom
-      edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
-      <flag name="clip_vertical" value="0x80"/>
-      <!-- Additional option that can be set to have the left and/or right edges of
-      the child clipped to its container's bounds.
-      The clip will be based on the horizontal gravity: a left gravity will clip the right
-      edge, a right gravity will clip the left edge, and neither will clip both edges. -->
-      <flag name="clip_horizontal" value="0x08"/>
-      <!-- Push object to the beginning of its container, not changing its size. -->
-      <flag name="start" value="0x00800003"/>
-      <!-- Push object to the end of its container, not changing its size. -->
-      <flag name="end" value="0x00800005"/>
+      <flag name="top" value="0x30" />
+      <flag name="bottom" value="0x50" />
+      <flag name="left" value="0x03" />
+      <flag name="right" value="0x05" />
+      <flag name="center_vertical" value="0x10" />
+      <flag name="fill_vertical" value="0x70" />
+      <flag name="center_horizontal" value="0x01" />
+      <flag name="fill_horizontal" value="0x07" />
+      <flag name="center" value="0x11" />
+      <flag name="fill" value="0x77" />
+      <flag name="clip_vertical" value="0x80" />
+      <flag name="clip_horizontal" value="0x08" />
+      <flag name="start" value="0x00800003" />
+      <flag name="end" value="0x00800005" />
     </attr>
-
+  </declare-styleable>
+  <declare-styleable name="AspectRatioImageView">
+    <attr format="integer" name="heightRatio" />
+    <attr format="integer" name="widthRatio" />
+    <attr format="dimension" name="scaleFactor" />
   </declare-styleable>
 
 </resources>

@@ -5,8 +5,9 @@ import static com.odauday.config.Constants.Task.TASK_GET_DETAIL_PROPERTY;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.data.DirectionRepository;
+import com.odauday.data.NoteRepository;
 import com.odauday.data.local.cache.DirectionsPreference;
 import com.odauday.model.MyPhone;
 import com.odauday.model.PropertyDetail;
@@ -29,16 +31,15 @@ import com.odauday.ui.propertydetail.rowdetails.RowControllerListener;
 import com.odauday.ui.propertydetail.rowdetails.bedbathpark.BedBathParkingRow;
 import com.odauday.ui.propertydetail.rowdetails.description.DescriptionDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.direction.DirectionDetailRow;
+import com.odauday.ui.propertydetail.rowdetails.enquiry.EnquiryDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.gallery.GalleryDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.map.MapDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.note.NoteDetailRow;
+import com.odauday.ui.propertydetail.rowdetails.similar.SimilarPropertyRow;
 import com.odauday.ui.propertydetail.rowdetails.tag.TagDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.vital.VitalDetailRow;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.TextUtils;
-import com.odauday.utils.permissions.PermissionCallBack;
-import com.odauday.utils.permissions.PermissionHelper;
-import com.odauday.utils.permissions.PermissionHelper.Permission;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     DirectionRepository mDirectionRepository;
     
     @Inject
+    NoteRepository mNoteRepository;
+    
+    @Inject
     PropertyDetailViewModel mPropertyDetailViewModel;
     
     @Override
@@ -78,19 +82,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private GalleryDetailRow mGalleryDetailRow;
     private RelativeLayout mContainerGalleryRow;
     private String mPhoneNumberSelected;
-    
-    private PermissionCallBack mPermissionCallBack = new PermissionCallBack() {
-        @Override
-        public void onPermissionGranted() {
-            showDialogCall(mPropertyDetail.getPhones());
-        }
-        
-        @Override
-        public void onPermissionDenied() {
-        
-        }
-    };
-    
+    private AppBarLayout mAppBarLayout;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,22 +102,15 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private void initButtonController() {
         Button buttonEmail = findViewById(R.id.email);
         buttonEmail.setOnClickListener(view -> {
-            if (mPropertyDetail != null && !mPropertyDetail.getEmails().isEmpty()) {
+            new Handler().postDelayed(this::collapseAppBar, 50);
             
-            } else {
-                Toast.makeText(this, R.string.message_email_list_is_empty, Toast.LENGTH_SHORT)
-                    .show();
-            }
+            scrollToItem(StageRow.ENQUIRY_ROW);
         });
         
         Button buttonPhone = findViewById(R.id.call);
         buttonPhone.setOnClickListener(view -> {
             if (mPropertyDetail != null && !mPropertyDetail.getPhones().isEmpty()) {
-                if (!PermissionHelper.isHasPermission(this, Permission.CALL_PERMISSION)) {
-                    requireCallPermission();
-                } else {
-                    showDialogCall(mPropertyDetail.getPhones());
-                }
+                showDialogCall(mPropertyDetail.getPhones());
             } else {
                 Toast.makeText(this, R.string.message_phone_list_is_empty, Toast.LENGTH_SHORT)
                     .show();
@@ -147,6 +132,17 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        
+        mAppBarLayout = findViewById(R.id.appbar);
+        
+    }
+    
+    private void collapseAppBar() {
+        mAppBarLayout.setExpanded(false, true);
+    }
+    
+    private void expandAppBar() {
+        mAppBarLayout.setExpanded(true, false);
     }
     
     private void initGalleryRow() {
@@ -164,9 +160,13 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         MapDetailRow mapDetailRow = new MapDetailRow();
         DirectionDetailRow directionDetailRow = new DirectionDetailRow();
         NoteDetailRow noteDetailRow = new NoteDetailRow();
+        EnquiryDetailRow enquiryDetailRow = new EnquiryDetailRow();
+        SimilarPropertyRow similarPropertyRow = new SimilarPropertyRow();
         
         directionDetailRow.setDirectionRepository(mDirectionRepository);
         directionDetailRow.setDirectionsPreference(mDirectionsPreference);
+        
+        noteDetailRow.setNoteRepository(mNoteRepository);
         
         mDefaultRows.add(vitalDetailRow);
         mDefaultRows.add(bedBathParkingRow);
@@ -175,32 +175,19 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         mDefaultRows.add(directionDetailRow);
         
         mDefaultRows.add(noteDetailRow);
+        mDefaultRows.add(enquiryDetailRow);
+        
+        mDefaultRows.add(similarPropertyRow);
         
         mAdapter = new PropertyDetailRowAdapter(mDefaultRows);
         mAdapter.setRowControllerListener(this);
         mRecyclerView.setAdapter(mAdapter);
     }
     
-    private void requireCallPermission() {
-        if (PermissionHelper.shouldShowRequestPermissionRationale(this,
-            PermissionHelper.Permission.READ_EXTERNAL_STORAGE)) {
-            String message = this.getString(R.string.message_permission_call);
-            String action = this.getString(R.string.txt_ok);
-            SnackBarUtils.showSnackBar(findViewById(android.R.id.content), action, message,
-                view -> PermissionHelper.askForPermission(this,
-                    Permission.CALL_PERMISSION, mPermissionCallBack));
-        } else {
-            PermissionHelper
-                .askForPermission(this,
-                    Permission.CALL_PERMISSION,
-                    mPermissionCallBack);
-        }
-    }
-    
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //unBindRow();
+        unBindRow();
     }
     
     private void unBindRow() {
@@ -217,13 +204,6 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         Long itemId = mAdapter.getItemId(row);
         return this.mRecyclerView == null ? null : (BaseRowViewHolder) this.mRecyclerView
             .findViewHolderForItemId(itemId);
-    }
-    
-    
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults) {
-        PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     
     @Override
@@ -321,29 +301,29 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void scrollToItem(StageRow stageRow) {
         int index = findIndexByStageRow(stageRow);
-        mRecyclerView.scrollToPosition(index);
+        mRecyclerView.smoothScrollToPosition(index);
     }
     
     private int findIndexByStageRow(StageRow stageRow) {
         int index = 0;
         for (BaseRowDetail row : mDefaultRows) {
-            index++;
             if (stageRow == row.getStageRow()) {
                 break;
             }
+            index++;
         }
         return index;
     }
     
     @Override
     public void scrollToItem(int index) {
-        mRecyclerView.scrollToPosition(index);
+        mRecyclerView.smoothScrollToPosition(index);
     }
     
     @Override
     public void scrollToBottom() {
         int size = mDefaultRows.size();
-        mRecyclerView.scrollToPosition(size - 1);
+        mRecyclerView.smoothScrollToPosition(size - 1);
     }
     
     @Override
@@ -363,7 +343,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void scrollToTop() {
-        mRecyclerView.scrollToPosition(0);
+        mRecyclerView.smoothScrollToPosition(0);
     }
     
     @Override
@@ -377,12 +357,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         mGalleryDetailRow.bind(mPropertyDetail);
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
-            mDefaultRows.add(2, descriptionDetailRow);
+            mDefaultRows.add(StageRow.DESCRIPTION_ROW.getPos(), descriptionDetailRow);
             mAdapter.getTypeToRow().put(descriptionDetailRow.getType(), descriptionDetailRow);
         }
         if (mPropertyDetail.getTags() != null && !mPropertyDetail.getTags().isEmpty()) {
             TagDetailRow tagDetailRow = new TagDetailRow();
-            mDefaultRows.add(3, tagDetailRow);
+            mDefaultRows.add(StageRow.TAGS_ROW.getPos(), tagDetailRow);
             mAdapter.getTypeToRow().put(tagDetailRow.getType(), tagDetailRow);
         }
         

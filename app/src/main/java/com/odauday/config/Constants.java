@@ -21,7 +21,7 @@ public class Constants {
     public static final String INTENT_EXTRA_SELECTED_IMAGE_URL = "intent_extra_selected_image_url";
     public static final String MAPS_INTENT_URI = "geo:0,0?q=";
     public static final String INTENT_EXTRA_PROPERTY_DETAIL = "intent_extra_property_detail";
-    public static final String INTENT_EXTRA_PHONES_NUMBER = "intent_extra_phone_number";
+    public static final String INTENT_EXTRA_SELECT_ITEM_DATA = "intent_extra_select_item_data";
     
     public class Task {
         

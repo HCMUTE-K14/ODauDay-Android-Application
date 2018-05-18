@@ -17,6 +17,7 @@ import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.direction.DirectionService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.image.ImageService;
+import com.odauday.data.remote.note.NoteService;
 import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
@@ -100,6 +101,12 @@ public class ServiceBuildersModule {
     @Singleton
     DirectionService provideDirectionService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(DirectionService.class);
+    }
+    
+    @Provides
+    @Singleton
+    NoteService provideNoteService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(NoteService.class);
     }
     
     //--------------------------LOCAL---------------------------//

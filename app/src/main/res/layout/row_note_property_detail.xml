@@ -29,7 +29,7 @@
       android:hint="@string/txt_hint_property_notes"
       android:maxLength="2000"
       android:textColor="#747c8a"
-      android:textSize="14sp" />
+      android:textSize="16sp" />
     <TextView
       android:id="@+id/property_notes_char_count"
       android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
       android:paddingLeft="16dp"
       android:paddingRight="16dp"
       android:textColor="#747c8a"
-      android:textSize="12sp" />
+      android:textSize="14sp" />
     <Button
       android:id="@+id/property_notes_done"
       style="@style/Widget.Button.Flat"

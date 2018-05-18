@@ -41,4 +41,5 @@ public class EndPoint {
     public static final String DIRECTION = "direction";
     
     public static final String PROPERTY_DETAIL = PROPERTY + "/detail";
+    public static final String NOTE = "note";
 }

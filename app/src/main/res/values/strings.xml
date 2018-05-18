@@ -254,5 +254,16 @@
   <string name="txt_hint_property_notes">Type your notes here</string>
   <string name="text_property_notes_char_count">%1$d characters remaining</string>
   <string name="message_direction_is_already">Direction is already! Please choose another</string>
+  <string name="txt_email_agent">Email Agent</string>
+  <string name="txt_message_optional">Message (Optional)</string>
+  <string name="txt_enquiry_form">Enquiry form</string>
+  <string name="txt_from_email">Your email</string>
+  <string name="txt_enquiry_starter_text">Please send me more information on %s.</string>
+  <string name="txt_clear_all">Clear all</string>
+  <string name="message_name_is_required">Name is required</string>
+  <string name="txt_send_mail">Send</string>
+  <string name="txt_close">Close</string>
+  <string name="txt_similar_properties">Similar Properties</string>
+  <string name="txt_properties_may_be_interesting">Properties you may be interested in</string>
 
 </resources>

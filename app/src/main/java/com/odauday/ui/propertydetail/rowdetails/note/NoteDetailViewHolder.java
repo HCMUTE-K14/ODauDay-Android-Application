@@ -1,5 +1,6 @@
 package com.odauday.ui.propertydetail.rowdetails.note;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import com.odauday.utils.TextUtils;
 /**
  * Created by infamouSs on 5/16/18.
  */
+@SuppressLint("CheckResult")
 public class NoteDetailViewHolder extends BaseRowViewHolder<NoteDetailRow> {
     
     EditText mNotes;
@@ -62,6 +64,16 @@ public class NoteDetailViewHolder extends BaseRowViewHolder<NoteDetailRow> {
     public void onSaveNote(View view) {
         mSavedNote = mNonSavedNote;
         
+        if (getRow().getData().getNote() != null) {
+            Note note = getRow().getData().getNote();
+            note.setContent(mSavedNote);
+            updateNote(note);
+        } else {
+            Note note = new Note();
+            note.setPropertyId(getRow().getData().getId());
+            note.setContent(mSavedNote);
+            createNote(note);
+        }
         mButtonSave.setVisibility(View.GONE);
     }
     
@@ -87,5 +99,23 @@ public class NoteDetailViewHolder extends BaseRowViewHolder<NoteDetailRow> {
     
     public void setNonSavedNote(String nonSavedNote) {
         mNonSavedNote = nonSavedNote;
+    }
+    
+    private void createNote(Note note) {
+        getRow().getNoteRepository().create(note)
+            .subscribe(success -> {
+            
+            }, throwable -> {
+            
+            });
+    }
+    
+    private void updateNote(Note note) {
+        getRow().getNoteRepository().update(note)
+            .subscribe(success -> {
+            
+            }, throwable -> {
+            
+            });
     }
 }

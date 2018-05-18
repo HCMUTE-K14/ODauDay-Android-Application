@@ -11,7 +11,8 @@ public enum StageRow {
     TAGS_ROW(3),
     MAP_ROW(4),
     DIRECTION_ROW(5),
-    NOTE_ROW(6);
+    NOTE_ROW(6), ENQUIRY_ROW(7),
+    SIMILAR_PROPERTY(8);
     
     int pos;
     

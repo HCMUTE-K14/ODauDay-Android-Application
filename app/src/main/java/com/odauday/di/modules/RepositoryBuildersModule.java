@@ -6,6 +6,7 @@ import com.odauday.data.DirectionRepository;
 import com.odauday.data.FavoriteRepository;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.HistoryRepository;
+import com.odauday.data.NoteRepository;
 import com.odauday.data.PropertyRepository;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.data.SavedSearchRepository;
@@ -23,6 +24,7 @@ import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
 import com.odauday.data.remote.direction.DirectionService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.image.ImageService;
+import com.odauday.data.remote.note.NoteService;
 import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
 import com.odauday.data.remote.user.UserService;
@@ -127,6 +129,14 @@ public class RepositoryBuildersModule {
     DirectionRepository provideDirectionRepository(DirectionService directionService,
         SchedulersExecutor schedulersExecutor) {
         return new DirectionRepository(directionService, schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    NoteRepository provideNoteRepository(NoteService noteService,
+        PreferencesHelper preferencesHelper,
+        SchedulersExecutor schedulersExecutor) {
+        return new NoteRepository(noteService, preferencesHelper, schedulersExecutor);
     }
     
     //--------------------------LOCAL---------------------------//

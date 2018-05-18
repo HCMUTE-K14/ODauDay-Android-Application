@@ -1,5 +1,7 @@
 package com.odauday.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.odauday.utils.ObjectUtils;
@@ -7,7 +9,7 @@ import com.odauday.utils.ObjectUtils;
 /**
  * Created by infamouSs on 4/25/18.
  */
-public class MyEmail {
+public class MyEmail implements Parcelable {
     
     @SerializedName("id")
     @Expose
@@ -18,7 +20,8 @@ public class MyEmail {
     private String email;
     
     @SerializedName("property_id")
-    @Expose String propertyId;
+    @Expose
+    String propertyId;
     
     public MyEmail() {
     
@@ -28,6 +31,28 @@ public class MyEmail {
         this.id = id;
         this.email = email;
     }
+    
+    public MyEmail(String email) {
+        this.email = email;
+    }
+    
+    protected MyEmail(Parcel in) {
+        id = in.readString();
+        email = in.readString();
+        propertyId = in.readString();
+    }
+    
+    public static final Creator<MyEmail> CREATOR = new Creator<MyEmail>() {
+        @Override
+        public MyEmail createFromParcel(Parcel in) {
+            return new MyEmail(in);
+        }
+        
+        @Override
+        public MyEmail[] newArray(int size) {
+            return new MyEmail[size];
+        }
+    };
     
     public String getId() {
         return id;
@@ -62,14 +87,13 @@ public class MyEmail {
             return false;
         }
         MyEmail myEmail = (MyEmail) o;
-        return ObjectUtils.equals(id, myEmail.id) &&
-               ObjectUtils.equals(email, myEmail.email);
+        return ObjectUtils.equals(email, myEmail.email);
     }
     
     @Override
     public int hashCode() {
         
-        return ObjectUtils.hash(id, email);
+        return ObjectUtils.hash(email);
     }
     
     @Override
@@ -78,5 +102,18 @@ public class MyEmail {
                "id='" + id + '\'' +
                ", email='" + email + '\'' +
                '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        
+        dest.writeString(id);
+        dest.writeString(email);
+        dest.writeString(propertyId);
     }
 }

@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -133,6 +134,10 @@ public class ViewUtils {
         intent.setData(Uri.parse("tel:" + phoneNumber));
         
         activity.startActivity(intent);
+    }
+    
+    public static void delay(Runnable runnable, long duration) {
+        new Handler().postDelayed(runnable, duration);
     }
     
     public interface DateTimePickerListener {

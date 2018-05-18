@@ -28,9 +28,9 @@ public abstract class CardViewHasOption<ROW extends BaseRowDetail> extends BaseR
             if (menuResId != 0) {
                 overflowMenu.getMenuInflater().inflate(menuResId, overflowMenu.getMenu());
             }
-            if (isHideable) {
-                overflowMenu.getMenu().add(0, R.id.hide, 0, R.string.txt_hide_card);
-            }
+//            if (isHideable) {
+//                overflowMenu.getMenu().add(0, R.id.hide, 0, R.string.txt_hide_card);
+//            }
             overflowMenu.setOnMenuItemClickListener(item -> onMenuItemSelected(item.getItemId()));
             menuView.setOnClickListener(v -> overflowMenu.show());
             return;

@@ -47,6 +47,13 @@ public class ImageLoader {
             .into(imageView);
     }
     
+    public static void load(ImageView imageView, Object image, RequestOptions options) {
+        Glide.with(imageView.getContext())
+            .load(image)
+            .apply(options)
+            .into(imageView);
+    }
+    
     public static int randomPlaceHolder() {
         return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length)];
     }

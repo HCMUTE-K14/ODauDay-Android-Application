@@ -1,7 +1,7 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.favorite.DaoSession;
 import com.odauday.data.local.favorite.FavoritePropertyDao;
-import com.odauday.data.local.history.DaoSession;
 import com.odauday.data.local.history.HistoryPropertyDao;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.tag.RecentTagDao;
