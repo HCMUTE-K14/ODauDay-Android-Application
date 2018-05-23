@@ -1,6 +1,7 @@
 package com.odauday.ui.propertydetail.rowdetails.gallery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.odauday.R;
-import com.odauday.model.Image;
+import com.odauday.config.Constants;
 import com.odauday.model.PropertyDetail;
+import com.odauday.ui.galleryviewer.GalleryViewerActivity;
 import com.odauday.ui.propertydetail.StageRow;
-import java.util.List;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 5/7/18.
@@ -80,7 +80,6 @@ public class GalleryDetailRow extends LinearLayout implements
     
     public void bind(PropertyDetail propertyDetail) {
         setData(propertyDetail);
-        Timber.d(propertyDetail.getImages().toString());
         mGalleryDetailViewHolder.update(this);
     }
     
@@ -89,7 +88,11 @@ public class GalleryDetailRow extends LinearLayout implements
     }
     
     @Override
-    public void onClickImage(int pos, List<Image> images) {
-        Timber.d("on click iamge " + pos);
+    public void onClickImage(int pos) {
+        Intent intent = new Intent(getContext(), GalleryViewerActivity.class);
+        intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, getData());
+        intent.putExtra(Constants.INTENT_EXTRA_SELECTED_IMAGE_POSITION, pos);
+        
+        getContext().startActivity(intent);
     }
 }

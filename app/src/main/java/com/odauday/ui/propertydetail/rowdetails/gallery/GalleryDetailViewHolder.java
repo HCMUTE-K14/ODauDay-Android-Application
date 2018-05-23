@@ -60,7 +60,7 @@ public class GalleryDetailViewHolder {
         
         galleryDetailRow.getMainImageView().setOnClickListener(view -> {
             if (mOnClickImage != null) {
-                mOnClickImage.onClickImage(0, galleryDetailRow.getData().getImages());
+                mOnClickImage.onClickImage(0);
             }
         });
         ImageLoader

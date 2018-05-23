@@ -30,4 +30,5 @@
   <color name="background_gray_white">#FAFBFC</color>
   <color name="red">#a70000</color>
   <color name="background_form">#f5f5f5</color>
+  <color name="translucent">#85000000</color>
 </resources>

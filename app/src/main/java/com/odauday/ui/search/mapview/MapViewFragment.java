@@ -513,7 +513,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     private void closeOpenedMarker() {
         if (this.mOpenedMarker != null) {
-            this.mOpenedMarker.remove();
+            this.mOpenedMarker.setVisible(false);
             this.mOpenedMarker = null;
             this.mOpenedLocation = null;
         }
@@ -635,8 +635,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public interface MapFragmentClickCallBack {
         
         void onMapPropertyClick(PropertyResultEntry entry);
-        
-        //void on
     }
     
     

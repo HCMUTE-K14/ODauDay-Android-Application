@@ -40,7 +40,6 @@
 
   <style name="CustomActionBar" parent="AppTheme">
     <item name="colorControlNormal">#fff</item>
-
   </style>
   <style name="WindowAnimationStyle">
     <item name="android:windowEnterAnimation">@anim/fade_in</item>

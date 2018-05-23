@@ -86,6 +86,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initToolBar();
@@ -97,6 +98,8 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         initRows();
         initButtonController();
         mPropertyDetailViewModel.getFullDetail(mPropertyDetail);
+        
+        
     }
     
     private void initButtonController() {
@@ -188,6 +191,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     protected void onDestroy() {
         super.onDestroy();
         unBindRow();
+    }
+    
+    @Override
+    public void finish() {
+        overridePendingTransition(R.anim.fade_out, 0);
+        super.finish();
     }
     
     private void unBindRow() {
@@ -370,6 +379,8 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
             row.setData(propertyDetail);
         }
         mAdapter.notifyDataSetChanged();
+        
+        scrollToTop();
     }
     
     @Override

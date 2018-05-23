@@ -63,7 +63,7 @@ abstract class ImageViewHolder {
         ImageView imageView = mContainer.findViewById(entryHolder.getViewId());
         imageView.setOnClickListener(view -> {
             if (mOnClickImage != null) {
-                mOnClickImage.onClickImage(pos + 1, mImages);
+                mOnClickImage.onClickImage(pos + 1);
             }
         });
         ImageLoader.load(imageView, EndPoint.BASE_URL + data.get(pos).getUrl());
