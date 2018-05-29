@@ -49,10 +49,10 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("location")
     @Expose
     private GeoLocation location;
-    @SerializedName("is_favorite")
+    @SerializedName("isFavorited")
     @Expose
     private boolean isFavorite;
-    @SerializedName("is_visited")
+    @SerializedName("isViewed")
     @Expose
     private boolean isVisited;
     @SerializedName("images")

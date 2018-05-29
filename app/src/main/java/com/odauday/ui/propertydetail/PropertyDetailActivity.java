@@ -3,6 +3,7 @@ package com.odauday.ui.propertydetail;
 import static com.odauday.config.Constants.Task.TASK_GET_DETAIL_PROPERTY;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +21,7 @@ import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.data.DirectionRepository;
 import com.odauday.data.NoteRepository;
-import com.odauday.data.local.cache.DirectionsPreference;
+import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.model.MyPhone;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseMVVMActivity;
@@ -62,7 +63,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private PropertyDetailRowAdapter mAdapter;
     
     @Inject
-    DirectionsPreference mDirectionsPreference;
+    DirectionsPreferenceHelper mDirectionsPreferenceHelper;
     
     @Inject
     DirectionRepository mDirectionRepository;
@@ -167,7 +168,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         SimilarPropertyRow similarPropertyRow = new SimilarPropertyRow();
         
         directionDetailRow.setDirectionRepository(mDirectionRepository);
-        directionDetailRow.setDirectionsPreference(mDirectionsPreference);
+        directionDetailRow.setDirectionsPreferenceHelper(mDirectionsPreferenceHelper);
         
         noteDetailRow.setNoteRepository(mNoteRepository);
         
@@ -265,7 +266,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
                 finish();
                 return true;
             case R.id.menu_item_share:
-                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
+                shareProperty();
                 return true;
             case R.id.menu_item_favorite:
                 mPropertyDetail.setFavorite(!mPropertyDetail.isFavorite());
@@ -403,5 +404,24 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private void showDialogCall(List<MyPhone> myPhones) {
         SelectPhoneCallDialog dialog = SelectPhoneCallDialog.newInstance(myPhones);
         dialog.show(getSupportFragmentManager(), "TAG");
+    }
+    
+    private void shareProperty() {
+        Intent intent = Intent
+            .createChooser(createShareIntent(), getString(R.string.txt_share_property_label));
+        startActivity(intent);
+    }
+    
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent("android.intent.action.SEND");
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra("android.intent.extra.TEXT",
+            (!TextUtils.isEmpty(mPropertyDetail.getAddress()) ? mPropertyDetail.getAddress() + "\\n"
+                : "") +
+            getString(R.string.txt_share_text));
+        shareIntent.putExtra("android.intent.extra.SUBJECT",
+            getString(R.string.txt_share_subject, mPropertyDetail.getAddress()));
+        
+        return shareIntent;
     }
 }

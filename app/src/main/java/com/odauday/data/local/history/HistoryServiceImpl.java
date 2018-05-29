@@ -63,4 +63,17 @@ public class HistoryServiceImpl implements HistoryService {
             return 1L;
         });
     }
+    
+    @Override
+    public Single<Boolean> isSavedLocalProperty(HistoryProperty historyProperty) {
+        return Single.fromCallable(() -> {
+            return mHistoryPropertyDao
+                                   .queryBuilder()
+                                   .where(Properties.PropertyId
+                                           .eq(historyProperty.getPropertyId()),
+                                       Properties.UserId
+                                           .eq(historyProperty.getUserId()))
+                                   .count() > 0;
+        });
+    }
 }

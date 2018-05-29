@@ -38,5 +38,8 @@ public class Constants {
         public static final String TASK_GET_DETAIL_PROPERTY = "task_get_detail";
         public static final String TASK_CREATE_FAVORITE = "task_create_favorite";
         public static final String TASK_CREATE_SAVED_SEARCH = "task_create_saved_search";
+        public static final String TASK_GET_HISTORY = "task_get_history";
+        
+        public static final String TASK_CLEAR_HISTORY = "task_clear_history";
     }
 }

@@ -15,4 +15,6 @@ public interface HistoryService {
     Single<List<HistoryProperty>> findHistoryByUserId(String userId);
     
     Single<Long> save(List<HistoryProperty> historyProperties);
+    
+    Single<Boolean> isSavedLocalProperty(HistoryProperty historyProperty);
 }

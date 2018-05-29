@@ -15,7 +15,6 @@ import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.data.remote.user.model.LoginResponse;
 import com.odauday.data.remote.user.model.NormalAuthRequest;
 import com.odauday.data.remote.user.model.RegisterRequest;
-import com.odauday.ui.search.common.SearchCriteria;
 import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -54,8 +53,5 @@ public interface UserService {
         
         @PUT(CHANGE_PASSWORD)
         Single<JsonResponse<MessageResponse>> changePassword(@Body ChangePasswordRequest request);
-        
-        @POST("/health-check")
-        Single<JsonResponse<MessageResponse>> test(@Body SearchCriteria searchCriteria);
     }
 }

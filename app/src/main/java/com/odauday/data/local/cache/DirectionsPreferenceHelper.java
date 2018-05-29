@@ -12,14 +12,14 @@ import javax.inject.Inject;
 /**
  * Created by infamouSs on 5/12/18.
  */
-public class DirectionsPreference {
+public class DirectionsPreferenceHelper {
     
     
     private final PreferencesHelper mPreferencesHelper;
     private final Gson mGson;
     
     @Inject
-    DirectionsPreference(PreferencesHelper preferencesHelper) {
+    DirectionsPreferenceHelper(PreferencesHelper preferencesHelper) {
         this.mPreferencesHelper = preferencesHelper;
         GsonBuilder builder = new GsonBuilder();
         builder.excludeFieldsWithoutExposeAnnotation();

@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.odauday.R;
+import com.odauday.data.HistoryRepository;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
@@ -73,7 +74,7 @@ import timber.log.Timber;
  * Created by infamouSs on 4/10/18.
  */
 
-@SuppressLint("MissingPermission")
+@SuppressLint({"MissingPermission", "CheckResult"})
 public class MapViewFragment extends SupportMapFragment implements OnMapReadyCallback,
                                                                    TriggerCameraIdle,
                                                                    OnMarkerClickListener,
@@ -95,6 +96,9 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Inject
     SearchPropertyRepository mSearchRepository;
+    
+    @Inject
+    HistoryRepository mHistoryRepository;
     
     @Inject
     EventBus mBus;
@@ -265,7 +269,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         mMapViewAdapter = null;
         mMapFragmentClickCallBack = null;
         
-        Timber.d("on destroy map view");
         super.onDestroy();
     }
     
@@ -364,7 +367,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdatedSearchResult(OnCompleteDownloadPropertyEvent completeDownloadProperty) {
-        
         mMapViewAdapter.setData(completeDownloadProperty.getResult());
         closeOpenedMarker();
         closeVitals();
@@ -479,13 +481,21 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         PropertyResultEntry entry = mMapViewAdapter
             .getEntriesAtLocation(mOpenedLocation)
             .get(0);
-        entry.setVisited(true);
         
         marker.setVisible(false);
         
+       
+        if(!entry.isVisited()){
+            mHistoryRepository.create(entry.getId())
+                .subscribe(success -> {
+                }, throwable -> {
+                });
+        }
+    
+        entry.setVisited(true);
         marker.setIcon(mMapViewAdapter.getMarkerIconForLocation(mOpenedLocation));
         marker.setVisible(true);
-        
+    
         mMapViewAdapter
             .addToHistoryList(entry);
         return true;

@@ -13,6 +13,7 @@ public class APIHeader {
     
     private final PublicApiHeader mPublicApiHeader;
     
+    
     @Inject
     public APIHeader(ProtectApiHeader protectApiHeader, PublicApiHeader publicApiHeader) {
         this.mProtectApiHeader = protectApiHeader;

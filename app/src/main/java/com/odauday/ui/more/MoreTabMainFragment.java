@@ -15,7 +15,9 @@ import com.odauday.model.User;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
+import com.odauday.ui.user.profile.ProfileUserActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import timber.log.Timber;
  */
 
 public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBinding> {
+    
     public static final String TAG = NavigationTab.MORE_TAB.getNameTab();
     @Inject
     PreferencesHelper mPreferencesHelper;
@@ -84,18 +87,22 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
         mBinding.get().recycleViewMore.setNestedScrollingEnabled(false);
         mMoreAdapter.setOnClickMenuMoreListener(mOnClickMenuMoreListener);
         mBinding.get().recycleViewMore.setAdapter(mMoreAdapter);
+        
+        mBinding.get().profileUser.setOnClickListener(view -> {
+            ViewUtils.startActivity(getActivity(), ProfileUserActivity.class);
+        });
     }
     
     @Override
     public int getLayoutId() {
         return R.layout.fragment_more_tab_main;
     }
-
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return null;
     }
-
+    
     @Override
     public void onStart() {
         super.onStart();
@@ -103,7 +110,7 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
         getMenu();
         showMenu();
     }
-
+    
     private void showInfo() {
         String string = mPreferencesHelper.get(PrefKey.CURRENT_USER, "");
         User user = new Gson().fromJson(string, User.class);
@@ -112,19 +119,19 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
             mBinding.get().txtEmail.setText(user.getEmail());
         }
     }
-
+    
     private void getMenu() {
         mMenuItemMores = MenuItemMore.getListMenuMore(getActivity(), "admin");
     }
-
+    
     private void showMenu() {
         if (mMenuItemMores != null && mMenuItemMores.size() > 0) {
             mMoreAdapter.setData(mMenuItemMores);
         }
     }
-
+    
     @Override
     protected void processingTaskFromViewModel() {
-
+    
     }
 }

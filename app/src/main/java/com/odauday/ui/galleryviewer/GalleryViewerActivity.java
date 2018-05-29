@@ -42,6 +42,7 @@ public class GalleryViewerActivity extends BaseActivity implements OnPageChangeL
         } else {
             throw new IllegalArgumentException("Need INTENT_EXTRA_PROPERTY_DETAIL");
         }
+        
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         
@@ -58,7 +59,7 @@ public class GalleryViewerActivity extends BaseActivity implements OnPageChangeL
         
         ViewPager viewPager = findViewById(R.id.pager);
         viewPager.addOnPageChangeListener(this);
-        if (propertyDetail.getImages() != null) {
+        if (propertyDetail != null && propertyDetail.getImages() != null) {
             GalleryViewAdapter galleryViewAdapter = new GalleryViewAdapter(
                 getSupportFragmentManager(),
                 propertyDetail.getImages());

@@ -79,6 +79,16 @@ public class PropertyDetail implements Parcelable {
     }
     
     
+    public PropertyDetail(HistoryDetail historyDetail) {
+        this.id = historyDetail.getPropertyId();
+        this.address = historyDetail.getAddress();
+        this.isFavorite = historyDetail.isFavorite();
+        this.images = historyDetail.getImages();
+        this.numOfBathrooms = historyDetail.getNumOfBathrooms();
+        this.numOfBedrooms = historyDetail.getNumOfBedrooms();
+        this.numOfParkings = historyDetail.getNumOfParkings();
+    }
+    
     protected PropertyDetail(Parcel in) {
         id = in.readString();
         images = in.createTypedArrayList(Image.CREATOR);

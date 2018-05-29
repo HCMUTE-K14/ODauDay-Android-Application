@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
 import com.odauday.data.DirectionRepository;
-import com.odauday.data.local.cache.DirectionsPreference;
+import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.propertydetail.StageRow;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
@@ -19,7 +19,7 @@ public class DirectionDetailRow extends BaseRowDetail<PropertyDetail, DirectionD
     private PropertyDetail mData;
     
     private DirectionRepository mDirectionRepository;
-    private DirectionsPreference mDirectionsPreference;
+    private DirectionsPreferenceHelper mDirectionsPreferenceHelper;
     
     private boolean mIsShowDirectionForm = false;
     
@@ -52,17 +52,17 @@ public class DirectionDetailRow extends BaseRowDetail<PropertyDetail, DirectionD
         return mDirectionRepository;
     }
     
-    public DirectionsPreference getDirectionsPreference() {
-        return mDirectionsPreference;
+    public DirectionsPreferenceHelper getDirectionsPreferenceHelper() {
+        return mDirectionsPreferenceHelper;
     }
     
     public void setDirectionRepository(DirectionRepository directionRepository) {
         mDirectionRepository = directionRepository;
     }
     
-    public void setDirectionsPreference(
-        DirectionsPreference directionsPreference) {
-        mDirectionsPreference = directionsPreference;
+    public void setDirectionsPreferenceHelper(
+        DirectionsPreferenceHelper directionsPreferenceHelper) {
+        mDirectionsPreferenceHelper = directionsPreferenceHelper;
     }
     
     @Override

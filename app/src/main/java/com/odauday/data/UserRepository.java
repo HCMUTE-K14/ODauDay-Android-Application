@@ -18,14 +18,12 @@ import com.odauday.exception.ForgotPasswordException;
 import com.odauday.exception.LoginException;
 import com.odauday.exception.RegisterException;
 import com.odauday.model.User;
-import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.utils.JwtUtils;
 import com.odauday.utils.JwtUtils.JwtModel;
 import com.odauday.utils.JwtUtils.UserInJWTModel;
 import com.odauday.utils.TextUtils;
 import io.reactivex.Single;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 2/27/18.
@@ -55,19 +53,9 @@ public class UserRepository implements Repository {
     }
     
     public boolean isNeedLogin() {
-        Timber.tag("current user").d(mPreferencesHelper.get(PrefKey.CURRENT_USER, ""));
-        Timber.tag("user id").d(mPreferencesHelper.get(PrefKey.USER_ID, ""));
-        Timber.tag("access token").d(mPreferencesHelper.get(PrefKey.ACCESS_TOKEN, ""));
-        
         return TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.CURRENT_USER, ""))
                || TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.USER_ID, ""))
                || TextUtils.isEmpty(mPreferencesHelper.get(PrefKey.ACCESS_TOKEN, ""));
-    }
-    
-    public Single<JsonResponse<MessageResponse>> test(SearchCriteria searchCriteria) {
-        return mProtectUserService.test(searchCriteria)
-            .subscribeOn(mSchedulersExecutor.io())
-            .observeOn(mSchedulersExecutor.ui());
     }
     
     public Single<User> login(AbstractAuthRequest request) {
@@ -89,8 +77,6 @@ public class UserRepository implements Repository {
                     String accessToken = response.getData().getAccessToken();
                     
                     User userFromJwt = decodeUserAccessToken(accessToken);
-                    
-                    Timber.d(userFromJwt.toString());
                     
                     mPreferencesHelper.put(PrefKey.ACCESS_TOKEN, accessToken);
                     mPreferencesHelper
@@ -144,7 +130,6 @@ public class UserRepository implements Repository {
             .map(response -> {
                 try {
                     if (response.isSuccess()) {
-                        Timber.d(response.getData().toString());
                         return response.getData();
                     } else {
                         throw new ForgotPasswordException(response.getErrors());
@@ -163,7 +148,7 @@ public class UserRepository implements Repository {
     private User decodeUserAccessToken(String accessToken) throws Exception {
         JwtModel jwtModel = JwtUtils.decoded(accessToken);
         UserInJWTModel model = JwtUtils.parseBody(jwtModel, UserInJWTModel.class);
-
+        
         return model.getUser();
     }
     

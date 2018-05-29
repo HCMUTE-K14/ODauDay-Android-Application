@@ -62,6 +62,14 @@ public class NetworkModule {
         return mApiHelper.createInterceptor(protectApiHeader);
     }
     
+//    @Provides
+//    @Singleton
+//    @Named("protectInterceptor")
+//    Interceptor provideProtectInterceptor(
+//        UserPreferenceHelper userPreferenceHelper) {
+//        return mApiHelper.createProtectInterceptor(userPreferenceHelper);
+//    }
+    
     @Provides
     @Singleton
     @Named("publicInterceptor")

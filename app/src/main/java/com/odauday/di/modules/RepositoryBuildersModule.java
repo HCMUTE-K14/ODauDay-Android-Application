@@ -87,8 +87,9 @@ public class RepositoryBuildersModule {
     @Provides
     @Singleton
     HistoryRepository provideHistoryRepository(HistoryService historyService,
+        PreferencesHelper preferencesHelper,
         SchedulersExecutor schedulersExecutor) {
-        return new HistoryRepository(historyService, schedulersExecutor);
+        return new HistoryRepository(historyService, preferencesHelper, schedulersExecutor);
     }
     
     @Provides

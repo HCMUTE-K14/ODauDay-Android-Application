@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:clickable="true"
+    android:background="@drawable/profile_card_selector">
+    <com.odauday.ui.view.CircleImageView
+      android:id="@+id/profile_picture"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_marginRight="12dp"
+      android:src="@drawable/ic_profile_picture_default" />
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:layout_centerVertical="true"
+      android:layout_toRightOf="@id/profile_picture"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+      <TextView
+        android:id="@+id/profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#e6f6e5"
+        android:textSize="14sp" />
+    </LinearLayout>
+  </RelativeLayout>
+</layout>

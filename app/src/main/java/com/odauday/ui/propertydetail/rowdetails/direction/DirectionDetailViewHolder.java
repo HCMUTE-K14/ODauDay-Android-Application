@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.data.DirectionRepository;
-import com.odauday.data.local.cache.DirectionsPreference;
+import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.data.remote.direction.model.DirectionRequest;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.propertydetail.StageRow;
@@ -30,7 +30,7 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
     private DirectionFormViewHolder mDirectionForm;
     
     private PropertyDetail mData;
-    private DirectionsPreference mDirectionsPreference;
+    private DirectionsPreferenceHelper mDirectionsPreferenceHelper;
     private DirectionRepository mDirectionRepository;
     
     int mLocationAdded = 0;
@@ -56,7 +56,7 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
     @Override
     protected boolean onMenuItemSelected(int idMenu) {
         if (idMenu == R.id.action_reset_directions_locations) {
-            mDirectionsPreference.clearDirection();
+            mDirectionsPreferenceHelper.clearDirection();
             mLocationAdded = 0;
             update(getRow());
             getRowControllerListener().notifyDataChanged();
@@ -68,7 +68,7 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
     protected void update(DirectionDetailRow directionDetailRow) {
         super.update(directionDetailRow);
         
-        mDirectionsPreference = ((DirectionDetailRow) getRow()).getDirectionsPreference();
+        mDirectionsPreferenceHelper = ((DirectionDetailRow) getRow()).getDirectionsPreferenceHelper();
         mDirectionRepository = ((DirectionDetailRow) getRow()).getDirectionRepository();
         
         mData = directionDetailRow.getData();
@@ -83,10 +83,10 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
         }
         clearLocation();
         
-        if (mDirectionsPreference.getDirection().size() < LIMIT_DIRECTION) {
+        if (mDirectionsPreferenceHelper.getDirection().size() < LIMIT_DIRECTION) {
             mActionButton.setVisibility(View.VISIBLE);
         }
-        for (DirectionLocation location : mDirectionsPreference.getDirection()) {
+        for (DirectionLocation location : mDirectionsPreferenceHelper.getDirection()) {
             addLocation(location);
         }
     }
@@ -167,7 +167,7 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
                 directionLocation.setLabel(mDirectionForm.getPlace().getName().split(",")[0]);
                 directionLocation.setToLocation(mDirectionForm.getPlace().getLocation());
                 directionLocation.setMode(mDirectionForm.getMode());
-                if (mDirectionsPreference.getDirection().contains(directionLocation)) {
+                if (mDirectionsPreferenceHelper.getDirection().contains(directionLocation)) {
                     Toast.makeText(itemView.getContext(), R.string.message_direction_is_already,
                         Toast.LENGTH_SHORT).show();
                     return;
@@ -196,7 +196,7 @@ public class DirectionDetailViewHolder extends CardViewHasOption<DirectionDetail
     }
     
     private void storedDirectionLocation(DirectionLocation location) {
-        mDirectionsPreference.putDirection(location);
+        mDirectionsPreferenceHelper.putDirection(location);
     }
     
     @SuppressLint("CheckResult")

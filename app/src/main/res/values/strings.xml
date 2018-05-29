@@ -29,7 +29,7 @@
 
   <string name="flat_nav_bar_title_alert">Alerts</string>
   <string name="flat_nav_bar_title_more">More</string>
-  <string name="flat_nav_bar_title_saved_search">History</string>
+  <string name="flat_nav_bar_title_saved_search">Saved</string>
   <string name="flat_nav_bar_title_search">Search</string>
   <string name="flat_nav_bar_title_favorite">Favorite</string>
   <string name="txt_list_view">List view</string>
@@ -193,7 +193,7 @@
   <string name="settings">Settings</string>
   <string name="txt_language">Language</string>
   <string name="txt_clear_history">Clear history</string>
-  <string name="txt_logout">Logout</string>
+  <string name="txt_logout">Log out</string>
   <string name="txt_your_account">Your account</string>
   <string name="txt_about_us">About us</string>
   <string name="txt_privacy_policy">Privacy policy</string>
@@ -265,5 +265,21 @@
   <string name="txt_close">Close</string>
   <string name="txt_similar_properties">Similar Properties</string>
   <string name="txt_properties_may_be_interesting">Properties you may be interested in</string>
+  <string name="txt_details">Details</string>
+  <string name="txt_history">History</string>
+  <string name="txt_profile">Profile</string>
+  <string name="message_error_load_history">Could not load history</string>
+  <string name="message_error_no_history">You haven\'t viewed any properties yet</string>
+  <string name="txt_change_display_name">Change display name</string>
+  <string name="message_clear_history_successfully">History is deleted !</string>
+  <string name="message_clear_history_failure">Something went wrong when deleting history. Please try later</string>
+  <string name="message_are_u_sure_to_clear_history">Are you sure to clear history ?</string>
+  <string name="txt_yes">Yes</string>
+  <string name="message_are_u_want_to_log_out">Are you wanna log out ?</string>
+  <string name="txt_update_display_name">Update Display Name</string>
+  <string name="txt_update_display_name_hint">Please enter your name below.</string>
+  <string name="txt_share_text">\n\nSent via the ODauDay App\n</string>
+  <string name="txt_share_subject">Check out this property on ODauDay - %s</string>
+  <string name="txt_share_property_label">Share property</string>
 
 </resources>

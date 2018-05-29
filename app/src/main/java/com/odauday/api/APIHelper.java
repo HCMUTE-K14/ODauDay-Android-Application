@@ -5,15 +5,20 @@ import android.support.annotation.NonNull;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.odauday.BuildConfig;
 import com.odauday.R;
+import com.odauday.api.APIHeader.ProtectApiHeader;
 import com.odauday.config.AppConfig;
+import com.odauday.data.local.cache.UserPreferenceHelper;
 import com.odauday.exception.NetworkException;
 import com.odauday.utils.NetworkUtils;
 import com.odauday.utils.TextUtils;
 import java.io.File;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import okhttp3.Cache;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -40,6 +45,10 @@ public class APIHelper {
     
     private final Context mContext;
     
+    @Inject
+    UserPreferenceHelper mUserPreferenceHelper;
+    
+    @Inject
     public APIHelper(Context context) {
         this.mContext = context.getApplicationContext();
     }
@@ -60,8 +69,42 @@ public class APIHelper {
     public Interceptor createInterceptor(AbstractApiHeader applicationHeader) {
         return chain -> {
             try {
+                if (applicationHeader instanceof ProtectApiHeader) {
+                    if (TextUtils
+                        .isEmpty(((ProtectApiHeader) applicationHeader).getAccess_token())) {
+                        ((ProtectApiHeader) applicationHeader)
+                            .setAccess_token(mUserPreferenceHelper.getAccessToken());
+                    }
+                    if (TextUtils.isEmpty(((ProtectApiHeader) applicationHeader).getUser_id())) {
+                        ((ProtectApiHeader) applicationHeader)
+                            .setUser_id(mUserPreferenceHelper.getUserId());
+                    }
+                    
+                    if (TextUtils.isEmpty(((ProtectApiHeader) applicationHeader).getApi_key())) {
+                        ((ProtectApiHeader) applicationHeader).setApi_key(BuildConfig.API_KEY);
+                    }
+                }
                 Request modifiedRequest = chain.request().newBuilder()
                     .headers(applicationHeader.getHeader())
+                    .build();
+                return chain.proceed(modifiedRequest);
+            } catch (SocketTimeoutException e) {
+                throw new NetworkException("Cannot connect to Service");
+            }
+        };
+    }
+    
+    public Interceptor createProtectInterceptor(UserPreferenceHelper userPreferenceHelper) {
+        return chain -> {
+            try {
+                Headers.Builder builder = new Headers.Builder();
+                
+                builder.add(APIHelper.ACCESS_TOKEN, userPreferenceHelper.getAccessToken());
+                builder.add(APIHelper.API_KEY, BuildConfig.API_KEY);
+                builder.add(APIHelper.USER_ID, userPreferenceHelper.getUserId());
+                
+                Request modifiedRequest = chain.request().newBuilder()
+                    .headers(builder.build())
                     .build();
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {

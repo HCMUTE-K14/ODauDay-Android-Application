@@ -69,6 +69,7 @@
       android:name=".ui.propertydetail.PropertyDetailActivity"
       android:windowSoftInputMode="stateHidden|adjustResize" />
     <activity android:name=".ui.galleryviewer.GalleryViewerActivity" />
+    <activity android:name=".ui.user.profile.ProfileUserActivity" />
   </application>
 
 </manifest>

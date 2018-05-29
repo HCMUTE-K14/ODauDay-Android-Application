@@ -221,4 +221,22 @@ public class TextUtils {
     public static String formatGeoLocationForRequest(GeoLocation location) {
         return location.getLatitude() + "," + location.getLongitude();
     }
+    
+    public static String getImageUrl(String url) {
+        return EndPoint.BASE_URL + url;
+    }
+    
+    public static String formatDateForDisplayHistory(Date dateCreated) {
+        long minDiff = (System.currentTimeMillis() - dateCreated.getTime()) / 60000;
+        String text = "";
+        if (minDiff < 60) {
+            text = minDiff + "m";
+        } else if (minDiff < 1440) {
+            text = (minDiff / 60) + "h";
+        } else {
+            text = (minDiff / 1440) + "d";
+        }
+        
+        return text;
+    }
 }

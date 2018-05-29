@@ -58,6 +58,7 @@ public class MapViewAdapter {
                     listing.setVisited(true);
                 }
                 if (mFavoriteListProperty.containsKey(location)) {
+                    listing.setVisited(true);
                     listing.setFavorite(true);
                 }
                 entries.add(listing);
@@ -105,6 +106,7 @@ public class MapViewAdapter {
     public void addToHistoryList(PropertyResultEntry resultEntry) {
         mHistoryListProperty.put(resultEntry.getLocation(), resultEntry.getId());
     }
+    
     
     public void removeToHistoryList(PropertyResultEntry resultEntry) {
         mHistoryListProperty.remove(resultEntry.getLocation());

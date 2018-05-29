@@ -28,6 +28,9 @@ import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.user.login.LoginModule;
+import com.odauday.ui.user.profile.ProfileUserActivity;
+import com.odauday.ui.user.profile.ProfileUserModule;
+import com.odauday.ui.user.profile.history.HistoryPropertyProvider;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.user.register.RegisterModule;
 import com.odauday.ui.welcome.WelcomeActivity;
@@ -98,4 +101,8 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = SettingsModule.class)
     @PerActivity
     abstract ActivitySettings provideActivitySettings();
+    
+    @ContributesAndroidInjector(modules = {ProfileUserModule.class, HistoryPropertyProvider.class})
+    @PerActivity
+    abstract ProfileUserActivity provideProfileUserActivity();
 }
