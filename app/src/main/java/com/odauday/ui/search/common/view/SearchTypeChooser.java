@@ -24,7 +24,7 @@ import java.util.List;
 @BindingMethods(
     {
         @BindingMethod(type = SearchTypeChooser.class,
-            attribute = "app:onSelectedSearchType", method = "setListener")
+            attribute = "onSelectedSearchType", method = "setListener")
     }
 )
 public class SearchTypeChooser extends LinearLayout {

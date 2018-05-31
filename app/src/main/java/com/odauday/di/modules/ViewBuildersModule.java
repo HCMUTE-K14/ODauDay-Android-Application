@@ -24,15 +24,20 @@ import com.odauday.ui.selectlocation.SelectLocationActivity;
 import com.odauday.ui.selectlocation.SelectLocationModule;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.settings.SettingsModule;
+import com.odauday.ui.user.buypoint.BuyPointActivity;
+import com.odauday.ui.user.buypoint.BuyPointModule;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.user.login.LoginModule;
 import com.odauday.ui.user.profile.ProfileUserActivity;
 import com.odauday.ui.user.profile.ProfileUserModule;
+import com.odauday.ui.user.profile.detail.ProfileDetailProvider;
 import com.odauday.ui.user.profile.history.HistoryPropertyProvider;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.user.register.RegisterModule;
+import com.odauday.ui.user.subscribe.SubscribePremiumActivity;
+import com.odauday.ui.user.subscribe.SubscribePremiumModule;
 import com.odauday.ui.welcome.WelcomeActivity;
 import com.odauday.ui.welcome.WelcomeActivityModule;
 import dagger.Module;
@@ -102,7 +107,19 @@ public abstract class ViewBuildersModule {
     @PerActivity
     abstract ActivitySettings provideActivitySettings();
     
-    @ContributesAndroidInjector(modules = {ProfileUserModule.class, HistoryPropertyProvider.class})
+    @ContributesAndroidInjector(modules = {
+        ProfileUserModule.class,
+        HistoryPropertyProvider.class,
+        ProfileDetailProvider.class
+    })
     @PerActivity
     abstract ProfileUserActivity provideProfileUserActivity();
+    
+    @ContributesAndroidInjector(modules = BuyPointModule.class)
+    @PerActivity
+    abstract BuyPointActivity provideBuyPointActivity();
+    
+    @ContributesAndroidInjector(modules = SubscribePremiumModule.class)
+    @PerActivity
+    abstract SubscribePremiumActivity provideSubscribePremiumActivity();
 }

@@ -186,8 +186,7 @@ public class TextUtils {
     
     public static String doubleFormat(double value) {
         BigDecimal number = new BigDecimal(value);
-        String result = number.stripTrailingZeros().toPlainString();
-        return result;
+        return number.stripTrailingZeros().toPlainString();
     }
     
     public static String formatDecimal(double value) {
@@ -238,5 +237,9 @@ public class TextUtils {
         }
         
         return text;
+    }
+    
+    public static String capitalize(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 }

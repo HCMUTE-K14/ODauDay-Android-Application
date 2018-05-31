@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.odauday.BuildConfig;
 import com.odauday.R;
-import com.odauday.api.APIHeader.ProtectApiHeader;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.UserPreferenceHelper;
 import com.odauday.exception.NetworkException;
@@ -46,9 +45,6 @@ public class APIHelper {
     private final Context mContext;
     
     @Inject
-    UserPreferenceHelper mUserPreferenceHelper;
-    
-    @Inject
     public APIHelper(Context context) {
         this.mContext = context.getApplicationContext();
     }
@@ -69,21 +65,6 @@ public class APIHelper {
     public Interceptor createInterceptor(AbstractApiHeader applicationHeader) {
         return chain -> {
             try {
-                if (applicationHeader instanceof ProtectApiHeader) {
-                    if (TextUtils
-                        .isEmpty(((ProtectApiHeader) applicationHeader).getAccess_token())) {
-                        ((ProtectApiHeader) applicationHeader)
-                            .setAccess_token(mUserPreferenceHelper.getAccessToken());
-                    }
-                    if (TextUtils.isEmpty(((ProtectApiHeader) applicationHeader).getUser_id())) {
-                        ((ProtectApiHeader) applicationHeader)
-                            .setUser_id(mUserPreferenceHelper.getUserId());
-                    }
-                    
-                    if (TextUtils.isEmpty(((ProtectApiHeader) applicationHeader).getApi_key())) {
-                        ((ProtectApiHeader) applicationHeader).setApi_key(BuildConfig.API_KEY);
-                    }
-                }
                 Request modifiedRequest = chain.request().newBuilder()
                     .headers(applicationHeader.getHeader())
                     .build();

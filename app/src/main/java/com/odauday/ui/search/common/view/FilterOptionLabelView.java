@@ -21,13 +21,13 @@ import com.odauday.utils.TextUtils;
 @BindingMethods(
     {
         @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:onToggle", method = "setListener"),
+            attribute = "onToggle", method = "setListener"),
         @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtHeader", method = "setTextHeader"),
+            attribute = "txtHeader", method = "setTextHeader"),
         @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtValue", method = "setTextValue"),
+            attribute = "txtValue", method = "setTextValue"),
         @BindingMethod(type = FilterOptionLabelView.class,
-            attribute = "app:txtMoreValue", method = "setMoreValue")
+            attribute = "txtMoreValue", method = "setMoreValue")
     }
 )
 public class FilterOptionLabelView extends LinearLayout {

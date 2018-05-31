@@ -2,12 +2,12 @@ package com.odauday.di.modules;
 
 import android.content.Context;
 import com.google.gson.Gson;
-import com.odauday.api.APIHeader.ProtectApiHeader;
 import com.odauday.api.APIHeader.PublicApiHeader;
 import com.odauday.api.APIHelper;
 import com.odauday.config.AppConfig.LANGUAGE;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.local.cache.UserPreferenceHelper;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -54,21 +54,21 @@ public class NetworkModule {
         return mApiHelper.createCache(context);
     }
     
-    @Provides
-    @Singleton
-    @Named("protectInterceptor")
-    Interceptor provideProtectInterceptor(
-        @Named("protectApiHeader") ProtectApiHeader protectApiHeader) {
-        return mApiHelper.createInterceptor(protectApiHeader);
-    }
-    
 //    @Provides
 //    @Singleton
 //    @Named("protectInterceptor")
 //    Interceptor provideProtectInterceptor(
-//        UserPreferenceHelper userPreferenceHelper) {
-//        return mApiHelper.createProtectInterceptor(userPreferenceHelper);
+//        @Named("protectApiHeader") ProtectApiHeader protectApiHeader) {
+//        return mApiHelper.createInterceptor(protectApiHeader);
 //    }
+    
+    @Provides
+    @Singleton
+    @Named("protectInterceptor")
+    Interceptor provideProtectInterceptor(
+        UserPreferenceHelper userPreferenceHelper) {
+        return mApiHelper.createProtectInterceptor(userPreferenceHelper);
+    }
     
     @Provides
     @Singleton

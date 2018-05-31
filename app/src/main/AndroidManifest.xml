@@ -70,6 +70,8 @@
       android:windowSoftInputMode="stateHidden|adjustResize" />
     <activity android:name=".ui.galleryviewer.GalleryViewerActivity" />
     <activity android:name=".ui.user.profile.ProfileUserActivity" />
+    <activity android:name=".ui.user.buypoint.BuyPointActivity" />
+    <activity android:name=".ui.user.subscribe.SubscribePremiumActivity" />
   </application>
 
 </manifest>

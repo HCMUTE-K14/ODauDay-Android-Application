@@ -281,5 +281,36 @@
   <string name="txt_share_text">\n\nSent via the ODauDay App\n</string>
   <string name="txt_share_subject">Check out this property on ODauDay - %s</string>
   <string name="txt_share_property_label">Share property</string>
-
+  <string name="message_update_display_name_successfully">Display name is updated !</string>
+  <string name="message_update_display_name_failure">Something went wrong when updating display name.</string>
+  <string name="txt_facebook_profile">Facebook profile</string>
+  <string name="txt_role">Role</string>
+  <string name="txt_status">Status</string>
+  <string name="txt_account">Account</string>
+  <string name="txt_point">Point</string>
+  <string name="txt_change_password">Change Password</string>
+  <string name="n_a">N/A</string>
+  <string name="facebook_url">fb.com/%1$s</string>
+  <string name="message_you_should_active_account">You should active this account.</string>
+  <string name="message_search_is_saved_successfully">Search is saved successfully</string>
+  <string name="txt_update_phone">Update Phone Number</string>
+  <string name="message_update_profile_failure">Something went wrong when updating profile</string>
+  <string name="message_your_account_is_disabled">Your account has been disabled</string>
+  <string name="txt_sending_mail">Sending mail....</string>
+  <string name="message_activation_link_has_been_sent_to_your_email">Activation link has been sent to your email</string>
+  <string name="message_error_resend_activation">Something went wrong when sending email.</string>
+  <string name="message_are_u_want_to_get_activation_link">Are you wanna to get activation link ?</string>
+  <string name="txt_old_password">Old password</string>
+  <string name="txt_new_password">New  password</string>
+  <string name="message_password_is_updated">Password is updated</string>
+  <string name="message_error_change_password">Something went wrong when updating password.</string>
+  <string name="message_login_failure">Your email or password is incorrect</string>
+  <string name="txt_buy_point">Buy point</string>
+  <string name="message_using_point_to_create_new_property">Using point to create new property.</string>
+  <string name="message_access_to_all_property">Access to all property</string>
+  <string name="messae_using_point_to_extend_expiration_property">Using point to extend expiration property</string>
+  <string name="message_why_you_should_buy_point">Why you should buy point ?</string>
+  <string name="txt_subscription_silver">Silver</string>
+  <string name="txt_subscription_bronze">Bronze</string>
+  <string name="txt_subscription_gold">Gold</string>
 </resources>

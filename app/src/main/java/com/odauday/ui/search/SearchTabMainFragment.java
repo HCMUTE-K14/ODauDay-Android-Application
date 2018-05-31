@@ -36,13 +36,12 @@ import com.odauday.ui.search.common.event.ReloadSearchEvent;
 import com.odauday.ui.search.common.view.InformationBar.InformationBarListener;
 import com.odauday.ui.search.common.view.LoadingFragment;
 import com.odauday.ui.search.common.view.LoadingFragment.LoadingFragmentListener;
-import com.odauday.ui.search.common.view.SavedSearchDialog;
-import com.odauday.ui.search.common.view.SavedSearchDialog.SaveSearchListener;
 import com.odauday.ui.search.common.view.VitalPropertyView;
 import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.ui.search.mapview.MapViewFragment.MapFragmentClickCallBack;
 import com.odauday.ui.search.navigation.FilterNavigationFragment;
 import com.odauday.ui.search.navigation.FilterNavigationFragment.OnCompleteRefineFilter;
+import com.odauday.ui.view.DialogWithTextBox;
 import com.odauday.ui.view.StarView.OnClickStarListener;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.ui.view.maplistbutton.MapListToggleButton.OnClickMapListListener;
@@ -67,7 +66,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
                                                                                           HasSupportFragmentInjector,
                                                                                           OnCompleteRefineFilter,
                                                                                           MapFragmentClickCallBack,
-                                                                                          SaveSearchListener,
                                                                                           LoadingFragmentListener,
                                                                                           OnClickStarListener<PropertyResultEntry>,
                                                                                           SearchTabContract {
@@ -281,27 +279,6 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     
-    @Override
-    public void onSaveSearch(String savedSearchName) {
-        Search search = new Search();
-        search.setId(TextUtils.generatorUUID());
-        SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
-        CoreSearchRequest core = searchRequest.getCore();
-        search.setLatitude(core.getCenter().getLatitude());
-        search.setLongitude(core.getCenter().getLongitude());
-        
-        search.setLatitude_sw(core.getBounds()[0].getLatitude());
-        search.setLongitude_sw(core.getBounds()[0].getLongitude());
-        
-        search.setLatitude_ns(core.getBounds()[1].getLatitude());
-        search.setLongitude_ns(core.getBounds()[1].getLongitude());
-        
-        search.setName(savedSearchName);
-        
-        mSearchTabViewModel.createSearch(search);
-        
-    }
-    
     private void updateTextSearchBar(String text) {
         if (mBinding != null && mBinding.get().toolbar != null &&
             mBinding.get().toolbar.searchBar != null) {
@@ -347,10 +324,11 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         mBinding.get().inforBar.setListener(new InformationBarListener() {
             @Override
             public void onClickSaveSearch() {
-                SavedSearchDialog searchDialog = SavedSearchDialog.newInstance();
-                searchDialog.setSaveSearchListener(SearchTabMainFragment.this);
+                DialogWithTextBox searchDialog = DialogWithTextBox
+                    .newInstance(R.string.txt_save_search_heading, R.string.txt_name, 0);
+                searchDialog.setListener(searchName -> saveSearch(searchName));
                 searchDialog.setTargetFragment(SearchTabMainFragment.this,
-                    SavedSearchDialog.REQUEST_CODE);
+                    DialogWithTextBox.REQUEST_CODE);
                 if (getFragmentManager() != null) {
                     searchDialog.show(getFragmentManager(), TAG);
                 }
@@ -504,11 +482,32 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onSuccessSavedSearch(MessageResponse response) {
-        Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.message_search_is_saved_successfully,
+            Toast.LENGTH_SHORT).show();
     }
     
     @Override
     public void onFailSavedSearch(Throwable throwable) {
     
+    }
+    
+    private void saveSearch(String savedSearchName) {
+        Search search = new Search();
+        search.setId(TextUtils.generatorUUID());
+        SearchRequest searchRequest = mSearchPropertyRepository.getCurrentSearchRequest();
+        CoreSearchRequest core = searchRequest.getCore();
+        search.setLatitude(core.getCenter().getLatitude());
+        search.setLongitude(core.getCenter().getLongitude());
+        
+        search.setLatitude_sw(core.getBounds()[0].getLatitude());
+        search.setLongitude_sw(core.getBounds()[0].getLongitude());
+        
+        search.setLatitude_ns(core.getBounds()[1].getLatitude());
+        search.setLongitude_ns(core.getBounds()[1].getLongitude());
+        
+        search.setName(savedSearchName);
+        
+        mSearchTabViewModel.createSearch(search);
+        
     }
 }

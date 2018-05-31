@@ -9,5 +9,9 @@ public interface ProfileUserContract {
     
     void onFailureClearHistory();
     
+    void onSuccessUpdateProfile();
+    
+    void onFailureUpdateProfile();
+    
     void loading(boolean isLoading);
 }

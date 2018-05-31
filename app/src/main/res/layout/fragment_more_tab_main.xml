@@ -11,6 +11,7 @@
         android:id="@+id/profile_user"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:clickable="true"
         android:background="@color/background_gray_white">
         <com.odauday.ui.view.CircleImageView
           android:id="@+id/avatar"

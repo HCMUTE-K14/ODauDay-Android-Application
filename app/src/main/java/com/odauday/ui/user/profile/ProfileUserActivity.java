@@ -16,8 +16,8 @@ import com.odauday.data.local.cache.UserPreferenceHelper;
 import com.odauday.databinding.ActivityProfileBinding;
 import com.odauday.model.User;
 import com.odauday.ui.base.BaseMVVMActivity;
-import com.odauday.ui.search.common.view.SavedSearchDialog;
 import com.odauday.ui.user.profile.history.ClearHistoryCallBack;
+import com.odauday.ui.view.DialogWithTextBox;
 import com.odauday.utils.ImageLoader;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
@@ -45,6 +45,9 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
     
     private ProfileUserTabAdapter mAdapter;
     
+    private User mCurrentUser;
+    
+    
     @Override
     protected int getLayoutId() {
         return R.layout.activity_profile;
@@ -57,13 +60,13 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
         setupToolBar();
         setupTabs();
         
-        User user = mUserPreferenceHelper.getCurrentUser();
-        if (user != null) {
-            ImageLoader.load(mBinding.profileCard.profilePicture, user.getAvatar(),
+        mCurrentUser = mUserPreferenceHelper.getCurrentUser();
+        if (mCurrentUser != null) {
+            ImageLoader.load(mBinding.profileCard.profilePicture, mCurrentUser.getAvatar(),
                 new RequestOptions().error(R.drawable.ic_profile_picture_default));
             
-            mBinding.profileCard.profileName.setText(user.getDisplayName());
-            mBinding.profileCard.profileEmail.setText(user.getEmail());
+            mBinding.profileCard.profileName.setText(mCurrentUser.getDisplayName());
+            mBinding.profileCard.profileEmail.setText(mCurrentUser.getEmail());
             
             mBinding.profileCard.container.setOnClickListener(view -> {
                 showDialogChangeDisplayName();
@@ -85,12 +88,16 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
                         if (resource.task.equals(Task.TASK_CLEAR_HISTORY)) {
                             loading(false);
                             onFailureClearHistory();
+                        } else if (resource.task.equals(Task.TASK_UPDATE_PROFILE)) {
+                            onFailureUpdateProfile();
                         }
                         break;
                     case SUCCESS:
                         if (resource.task.equals(Task.TASK_CLEAR_HISTORY)) {
                             loading(false);
                             onSuccessClearHistory();
+                        } else if (resource.task.equals(Task.TASK_UPDATE_PROFILE)) {
+                            onSuccessUpdateProfile();
                         }
                         break;
                     case LOADING:
@@ -121,9 +128,6 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.action_change_display_name:
-                showDialogChangeDisplayName();
                 return true;
             case R.id.action_clear_history:
                 showDialogConfirmClearHistory();
@@ -186,8 +190,24 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
     }
     
     @Override
+    public void onSuccessUpdateProfile() {
+        mBinding.profileCard.profileName.setText(mCurrentUser.getDisplayName());
+        mUserPreferenceHelper.putCurrentUser(mCurrentUser);
+    }
+    
+    @Override
+    public void onFailureUpdateProfile() {
+        Toast.makeText(this, R.string.message_update_display_name_failure, Toast.LENGTH_SHORT)
+            .show();
+    }
+    
+    @Override
     public void loading(boolean isLoading) {
     
+    }
+    
+    public ProfileUserTabAdapter getAdapter() {
+        return mAdapter;
     }
     
     private void showDialogConfirmClearHistory() {
@@ -205,6 +225,24 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
         dialog.create().show();
     }
     
+    private void showDialogChangeDisplayName() {
+        DialogWithTextBox changeDisplayNameDialog = DialogWithTextBox
+            .newInstance(R.string.txt_update_display_name, R.string.txt_name,
+                R.string.txt_update_display_name_hint);
+        changeDisplayNameDialog.setListener(objNewDisplayName -> {
+            
+            if (mCurrentUser != null) {
+                mCurrentUser.setDisplayName(objNewDisplayName);
+                mProfileUserViewModel.updateProfile(mCurrentUser);
+            }
+        });
+        changeDisplayNameDialog.setTargetFragment(null,
+            DialogWithTextBox.REQUEST_CODE);
+        if (getFragmentManager() != null) {
+            changeDisplayNameDialog.show(getSupportFragmentManager(), TAG);
+        }
+    }
+    
     private void showDialogConfirmLogout() {
         AlertDialog.Builder dialog = new Builder(this);
         dialog.setTitle(R.string.txt_wait_a_second)
@@ -219,18 +257,6 @@ public class ProfileUserActivity extends BaseMVVMActivity<ActivityProfileBinding
                 });
         
         dialog.create().show();
-    }
-    
-    private void showDialogChangeDisplayName() {
-        ChangeDisplayNameDialog changeDisplayNameDialog = ChangeDisplayNameDialog.newInstance();
-        changeDisplayNameDialog.setChangeDisplayNameListener(newDisplayName -> {
-        
-        });
-        changeDisplayNameDialog.setTargetFragment(null,
-            SavedSearchDialog.REQUEST_CODE);
-        if (getFragmentManager() != null) {
-            changeDisplayNameDialog.show(getSupportFragmentManager(), TAG);
-        }
     }
     
     private void logOut() {

@@ -9,6 +9,7 @@ import com.odauday.data.remote.user.UserService;
 import com.odauday.data.remote.user.UserService.Protect;
 import com.odauday.data.remote.user.UserService.Public;
 import com.odauday.data.remote.user.model.AbstractAuthRequest;
+import com.odauday.data.remote.user.model.ChangePasswordRequest;
 import com.odauday.data.remote.user.model.FacebookAuthRequest;
 import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.data.remote.user.model.LoginResponse;
@@ -150,6 +151,90 @@ public class UserRepository implements Repository {
         UserInJWTModel model = JwtUtils.parseBody(jwtModel, UserInJWTModel.class);
         
         return model.getUser();
+    }
+    
+    public Single<MessageResponse> updateProfile(User user) {
+        return mProtectUserService.updateProfile(user.getId(), user)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    } else {
+                        throw new ForgotPasswordException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof ForgotPasswordException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+    }
+    
+    public Single<MessageResponse> reSendActivation(String email) {
+        return mPublicUserService
+            .reSendActivation(email)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    } else {
+                        throw new ForgotPasswordException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof ForgotPasswordException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+    }
+    
+    public Single<MessageResponse> changePassword(ChangePasswordRequest request) {
+        return mProtectUserService
+            .changePassword(request)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    } else {
+                        throw new ForgotPasswordException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof ForgotPasswordException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+    }
+    
+    public Single<Long> getAmount() {
+        String userId = mPreferencesHelper.get(PrefKey.USER_ID, "");
+        return mProtectUserService
+            .getAmount(userId)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    } else {
+                        throw new ForgotPasswordException(response.getErrors());
+                    }
+                } catch (Exception ex) {
+                    if (ex instanceof ForgotPasswordException) {
+                        throw ex;
+                    }
+                    throw new RegisterException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
     
     

@@ -2,6 +2,7 @@ package com.odauday.ui.user.profile;
 
 import android.arch.lifecycle.ViewModelProvider;
 import com.odauday.data.HistoryRepository;
+import com.odauday.data.UserRepository;
 import com.odauday.viewmodel.ViewModelFactory;
 import dagger.Module;
 import dagger.Provides;
@@ -19,7 +20,8 @@ public class ProfileUserModule {
     }
     
     @Provides
-    ProfileUserViewModel provideProfileUserViewModel(HistoryRepository historyRepository) {
-        return new ProfileUserViewModel(historyRepository);
+    ProfileUserViewModel provideProfileUserViewModel(HistoryRepository historyRepository,
+        UserRepository userRepository) {
+        return new ProfileUserViewModel(historyRepository, userRepository);
     }
 }

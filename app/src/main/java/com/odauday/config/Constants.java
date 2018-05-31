@@ -23,6 +23,10 @@ public class Constants {
     public static final String INTENT_EXTRA_PROPERTY_DETAIL = "intent_extra_property_detail";
     public static final String INTENT_EXTRA_SELECT_ITEM_DATA = "intent_extra_select_item_data";
     public static final String INTENT_EXTRA_SELECTED_IMAGE_POSITION = "intent_extra_selected_image_position";
+    public static final String INTENT_EXTRA_TITLE = "intent_extra_title";
+    public static final String INTENT_EXTRA_MESSAGE = "intent_extra_message";
+    public static final String INTENT_EXTRA_HINT = "intent_extra_hint";
+    public static final String INTENT_EXTRA_IS_NEED_LOAD_PREMIUM = "intent_extra_is_need_load_premium";
     
     public class Task {
         
@@ -41,5 +45,11 @@ public class Constants {
         public static final String TASK_GET_HISTORY = "task_get_history";
         
         public static final String TASK_CLEAR_HISTORY = "task_clear_history";
+        public static final String TASK_UPDATE_PROFILE = "task_update_profile";
+        public static final String TASK_RESEND_ACTIVE_ACCOUNT = "task_resend_active_account";
+        public static final String TASK_CHANGE_PASSWORD = "task_change_password";
+        public static final String TASK_GET_AMOUNT = "task_get_amount";
+        public static final String TASK_GET_PREMIUM = "task_get_premium";
+        public static final String TASK_SUBSCRIBE = "task_subscribe";
     }
 }

@@ -18,6 +18,8 @@ public class EndPoint {
     
     public static final String FORGOT_PASSWORD = USERS + "/forgot-password";
     public static final String CHANGE_PASSWORD = USERS + "/change-password";
+    public static final String RESEND_ACTIVATION = USERS + "/resend-activation";
+    public static final String GET_AMOUNT = USERS + "/get-amount";
     
     
     public static final String SEARCH_PROPERTY = "search";
@@ -34,12 +36,13 @@ public class EndPoint {
     public static final String IMAGE = "image";
     public static final String IMAGE_UPLOAD = IMAGE + "/upload";
     
-    public static final String GET_IMAGE = BASE_URL + IMAGE;
-    
     public static final String STATIC_MAP = "static-map";
     
     public static final String DIRECTION = "direction";
     
     public static final String PROPERTY_DETAIL = PROPERTY + "/detail";
     public static final String NOTE = "note";
+    
+    public static final String PREMIUM = "premium";
+    public static final String SUBSCRIBE = PREMIUM + "/subscribe";
 }

@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
-    android:id="@+id/action_change_display_name"
-    android:title="@string/txt_change_display_name"
-    app:showAsAction="never" />
-  <item
     android:id="@+id/action_clear_history"
     android:title="@string/txt_clear_history"
     app:showAsAction="never" />
