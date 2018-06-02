@@ -11,6 +11,7 @@ import com.odauday.model.MyEmail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
 import com.odauday.ui.propertydetail.rowdetails.enquiry.ChoiceEmailDialog.OnSelectedEmail;
 import com.odauday.utils.EmailIntentBuilder;
+import com.odauday.utils.TextUtils;
 import com.odauday.utils.ValidationHelper;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class EnquiryViewHolder extends BaseRowViewHolder<EnquiryDetailRow> {
         if (enquiryDetailRow.getData() == null) {
             return;
         }
-        String address = enquiryDetailRow.getData().getAddress();
+        String address = TextUtils.formatAddress(enquiryDetailRow.getData().getAddress());
         String starterText = itemView.getContext()
             .getString(R.string.txt_enquiry_starter_text, address);
         

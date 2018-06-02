@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.config.Constants;
 import com.odauday.model.Premium;
 import com.odauday.ui.user.subscribe.SubscribePremiumActivity;
 import com.odauday.utils.ImageLoader;
@@ -61,7 +62,7 @@ public class SubscriptionPackView extends LinearLayout {
         mPrice.setOnClickListener(view -> {
             if (mPremium != null) {
                 Intent intent = new Intent(getContext(), SubscribePremiumActivity.class);
-                intent.putExtra("a", mPremium);
+                intent.putExtra(Constants.INTENT_EXTRA_PREMIUM, mPremium);
                 
                 getContext().startActivity(intent);
             }

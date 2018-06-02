@@ -22,7 +22,7 @@ public class PropertyDetail implements Parcelable {
     @SerializedName("images")
     @Expose
     private List<Image> images;
-    @SerializedName("type")
+    @SerializedName("type_id")
     @Expose
     private int type;
     @SerializedName("price")

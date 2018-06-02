@@ -34,9 +34,17 @@ public class SimilarProperty {
     @Expose
     private int numOfParking;
     
+    @SerializedName("land_size")
+    @Expose
+    private long size;
+    
     @SerializedName("image")
     @Expose
     private Image image = new Image();
+    
+    @SerializedName("isFavorited")
+    @Expose
+    private boolean isFavorite;
     
     public SimilarProperty() {
     
@@ -96,6 +104,22 @@ public class SimilarProperty {
     
     public void setImage(Image image) {
         this.image = image;
+    }
+    
+    public long getSize() {
+        return size;
+    }
+    
+    public void setSize(long size) {
+        this.size = size;
+    }
+    
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+    
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
     
     @Override

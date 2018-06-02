@@ -45,4 +45,6 @@ public class EndPoint {
     
     public static final String PREMIUM = "premium";
     public static final String SUBSCRIBE = PREMIUM + "/subscribe";
+    
+    public static final String SIMILAR_PROPERTY = "similar-property";
 }

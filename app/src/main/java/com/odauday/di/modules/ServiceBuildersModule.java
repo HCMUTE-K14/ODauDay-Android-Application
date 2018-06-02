@@ -19,6 +19,7 @@ import com.odauday.data.remote.note.NoteService;
 import com.odauday.data.remote.premium.PremiumService;
 import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
+import com.odauday.data.remote.similar.SimilarPropertyService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
@@ -112,6 +113,13 @@ public class ServiceBuildersModule {
     @Singleton
     PremiumService providePremiumService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(PremiumService.class);
+    }
+    
+    @Provides
+    @Singleton
+    SimilarPropertyService provideSimilarPropertyService(
+        @Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(SimilarPropertyService.class);
     }
     
     //--------------------------LOCAL---------------------------//

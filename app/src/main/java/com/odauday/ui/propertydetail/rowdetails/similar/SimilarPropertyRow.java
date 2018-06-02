@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
+import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.propertydetail.StageRow;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
@@ -14,6 +15,8 @@ import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 public class SimilarPropertyRow extends BaseRowDetail<PropertyDetail, SimilarPropertyViewHolder> {
     
     private PropertyDetail mPropertyDetail;
+    
+    private SimilarPropertyRepository mSimilarPropertyRepository;
     
     @Override
     public PropertyDetail getData() {
@@ -30,6 +33,15 @@ public class SimilarPropertyRow extends BaseRowDetail<PropertyDetail, SimilarPro
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.row_similar_property_root, parent, false);
         return new SimilarPropertyViewHolder(view);
+    }
+    
+    public void setSimilarPropertyRepository(
+        SimilarPropertyRepository similarPropertyRepository) {
+        mSimilarPropertyRepository = similarPropertyRepository;
+    }
+    
+    public SimilarPropertyRepository getSimilarPropertyRepository() {
+        return mSimilarPropertyRepository;
     }
     
     @Override

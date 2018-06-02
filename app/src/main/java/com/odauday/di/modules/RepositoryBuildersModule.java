@@ -12,6 +12,7 @@ import com.odauday.data.PropertyRepository;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.data.SavedSearchRepository;
 import com.odauday.data.SearchPropertyRepository;
+import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -29,6 +30,7 @@ import com.odauday.data.remote.note.NoteService;
 import com.odauday.data.remote.premium.PremiumService;
 import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
+import com.odauday.data.remote.similar.SimilarPropertyService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
@@ -148,6 +150,14 @@ public class RepositoryBuildersModule {
         PreferencesHelper preferencesHelper,
         SchedulersExecutor schedulersExecutor) {
         return new PremiumRepository(premiumService, preferencesHelper, schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    SimilarPropertyRepository provideSimilarPropertyRespository(
+        SimilarPropertyService similarPropertyService,
+        SchedulersExecutor schedulersExecutor) {
+        return new SimilarPropertyRepository(similarPropertyService, schedulersExecutor);
     }
     
     //--------------------------LOCAL---------------------------//

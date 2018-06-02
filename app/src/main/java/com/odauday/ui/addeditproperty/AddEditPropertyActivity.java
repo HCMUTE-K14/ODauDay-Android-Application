@@ -162,7 +162,7 @@ public class AddEditPropertyActivity extends
             mCurrentProperty.setType_id(property.getType_id());
             mCurrentProperty.setPrice(property.getPrice());
             mCurrentProperty.setLocation(property.getLocation());
-            mCurrentProperty.setAddress(property.getAddress());
+            mCurrentProperty.setAddress(TextUtils.formatAddress(property.getAddress()));
             mCurrentProperty.setEmails(property.getEmails());
             mCurrentProperty.setPhones(property.getPhones());
             mCurrentProperty.setCategories(property.getCategories());

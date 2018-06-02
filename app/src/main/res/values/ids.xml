@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <item name="hide" type="id">999</item>
+  <item name="image_view_id" type="id">88</item>
+  <item name="image_view_position" type="id">77</item>
+  <item name="image_view_state" type="id">66</item>
+
 </resources>

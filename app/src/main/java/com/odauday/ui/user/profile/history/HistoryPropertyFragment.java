@@ -133,6 +133,9 @@ public class HistoryPropertyFragment extends
         mBinding.get().infoContainer.setVisibility(View.GONE);
         
         HistoryDetailResultEntry result = (HistoryDetailResultEntry) object;
+        if (mAdapter.getItemCount() == result.getHistories().size()) {
+            return;
+        }
         if (result.getHistories().isEmpty()) {
             showMessage(R.string.message_error_no_history);
         } else {

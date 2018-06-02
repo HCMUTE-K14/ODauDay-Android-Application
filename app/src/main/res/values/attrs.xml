@@ -47,5 +47,10 @@
     <attr format="integer" name="widthRatio" />
     <attr format="dimension" name="scaleFactor" />
   </declare-styleable>
+  <declare-styleable name="AspectRatioViewPager">
+    <attr format="integer" name="heightRatio_viewpager" />
+    <attr format="integer" name="widthRatio_viewpager" />
+    <attr format="dimension" name="scaleFactor_viewpager" />
+  </declare-styleable>
 
 </resources>

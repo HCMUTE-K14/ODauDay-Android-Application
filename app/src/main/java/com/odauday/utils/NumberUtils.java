@@ -38,4 +38,8 @@ public class NumberUtils {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }
+    
+    public static int getHeightWithAspectRatio(int viewWidth, float ratio, float scaleFactor) {
+        return (int) ((((float) viewWidth) / ratio) * scaleFactor);
+    }
 }

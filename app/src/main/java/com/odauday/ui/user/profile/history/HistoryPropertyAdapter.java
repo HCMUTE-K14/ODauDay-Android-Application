@@ -61,7 +61,7 @@ public class HistoryPropertyAdapter extends BaseAdapter<HistoryDetail, ItemHisto
                 mOnClickHistory.onClickHistory(item);
             }
         });
-        binding.address.setText(item.getAddress());
+        binding.address.setText(TextUtils.formatAddress(item.getAddress()));
         if (item.getImages() != null) {
             int placeHolder = ImageLoader.randomPlaceHolder();
             RequestOptions options = new RequestOptions();

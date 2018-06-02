@@ -13,6 +13,7 @@ import com.odauday.config.Constants;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseActivity;
 import com.odauday.ui.view.CircleIndicator;
+import com.odauday.utils.TextUtils;
 
 /**
  * Created by infamouSs on 5/8/18.
@@ -47,7 +48,7 @@ public class GalleryViewerActivity extends BaseActivity implements OnPageChangeL
         setSupportActionBar(toolbar);
         
         if (propertyDetail != null && getSupportActionBar() != null) {
-            String title = propertyDetail.getAddress();
+            String title = TextUtils.formatAddress(propertyDetail.getAddress());
             getSupportActionBar().setTitle(title);
             
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

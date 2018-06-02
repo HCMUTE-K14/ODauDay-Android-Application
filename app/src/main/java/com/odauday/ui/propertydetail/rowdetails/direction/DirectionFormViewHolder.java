@@ -47,7 +47,7 @@ public class DirectionFormViewHolder {
     
     public void update(PropertyDetail data) {
         if (data != null) {
-            mDirectionOrigin.setText(data.getAddress());
+            mDirectionOrigin.setText(TextUtils.formatAddress(data.getAddress()));
         }
     }
     

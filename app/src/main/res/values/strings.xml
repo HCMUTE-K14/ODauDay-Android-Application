@@ -313,4 +313,15 @@
   <string name="txt_subscription_silver">Silver</string>
   <string name="txt_subscription_bronze">Bronze</string>
   <string name="txt_subscription_gold">Gold</string>
+  <string name="txt_serial_number">Serial</string>
+  <string name="txt_pin_number">Pin</string>
+  <string name="txt_subscribe">Subscribe</string>
+  <string name="message_thanks_for_subscribing">Thanks for subscribing</string>
+  <string name="txt_tittle_subscribe_plan">%1$s Plan</string>
+  <string name="message_serial_number_is_required">Serial number is required</string>
+  <string name="message_pin_number_is_required">Pin is required</string>
+  <string name="message_some_thing_went_wrong_when_subscribing">Something went wrong when subscribing. PLease try later.</string>
+  <string name="message_error_network_header">Network error</string>
+  <string name="message_error_network_sub_header">We couldn\'t fulfill your request. Please check your network connection and try again.</string>
+  <string name="txt_sort">Sort</string>
 </resources>

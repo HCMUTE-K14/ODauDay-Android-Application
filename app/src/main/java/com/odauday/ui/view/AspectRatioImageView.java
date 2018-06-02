@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.odauday.R;
+import com.odauday.utils.NumberUtils;
 
 /**
  * Created by infamouSs on 5/18/18.
@@ -39,14 +40,13 @@ public class AspectRatioImageView extends ImageView {
         if (MeasureSpec.getMode(widthMeasureSpec) != 0) {
             int width = getMeasuredWidth();
             super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec
-                .makeMeasureSpec(getHeightWithAspectRatio(width, this.mRatio, this.mScaleFactor),
+                .makeMeasureSpec(
+                    NumberUtils.getHeightWithAspectRatio(width, this.mRatio, this.mScaleFactor),
                     MeasureSpec.EXACTLY));
             return;
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
     
-    private int getHeightWithAspectRatio(int viewWidth, float ratio, float scaleFactor) {
-        return (int) ((((float) viewWidth) / ratio) * scaleFactor);
-    }
+    
 }

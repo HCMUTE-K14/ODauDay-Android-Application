@@ -89,13 +89,11 @@ public class MapListToggleButton extends RelativeLayout {
         
         switch (mCurrentState) {
             case SHOWING_MAP_VIEW:
-                mButtonListener.onHideMapView();
                 mButtonListener.onShowListView();
                 
                 mCurrentState = StateMapListButton.SHOWING_LIST_VIEW;
                 break;
             case SHOWING_LIST_VIEW:
-                mButtonListener.onHideListView();
                 mButtonListener.onShowMapView();
                 
                 mCurrentState = StateMapListButton.SHOWING_MAP_VIEW;
@@ -123,10 +121,6 @@ public class MapListToggleButton extends RelativeLayout {
         
         void onShowListView();
         
-        void onHideListView();
-        
         void onShowMapView();
-        
-        void onHideMapView();
     }
 }

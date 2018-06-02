@@ -242,4 +242,8 @@ public class TextUtils {
     public static String capitalize(String input) {
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
+    
+    public static String formatAddress(String address){
+        return address.replaceAll("Unnamed Road,", "").trim();
+    }
 }

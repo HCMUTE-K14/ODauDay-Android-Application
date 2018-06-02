@@ -60,7 +60,7 @@ public interface UserService {
         @POST(CHANGE_PASSWORD)
         Single<JsonResponse<MessageResponse>> changePassword(@Body ChangePasswordRequest request);
         
-        @GET(GET_AMOUNT)
+        @GET(GET_AMOUNT + "/{id}")
         Single<JsonResponse<Long>> getAmount(@Path("id") String userId);
         
     }

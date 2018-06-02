@@ -3,7 +3,8 @@
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
     <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
@@ -11,5 +12,93 @@
       android:background="?attr/colorPrimary"
       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <LinearLayout
+      android:id="@+id/input_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_below="@id/toolbar"
+      android:orientation="vertical">
+      <android.support.design.widget.TextInputLayout
+        android:id="@+id/txt_input_serial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+        <EditText
+          android:id="@+id/serial"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_serial_number"
+          android:inputType="text"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+      <android.support.design.widget.TextInputLayout
+        android:id="@+id/txt_input_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+        <EditText
+          android:id="@+id/pin"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/txt_pin_number"
+          android:inputType="numberPassword"
+          android:textColor="#303030"
+          android:textSize="16sp" />
+      </android.support.design.widget.TextInputLayout>
+      <Button
+        android:id="@+id/subscribe"
+        style="@style/Widget.Button.Flat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_subscribe" />
+      <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent" />
+    </LinearLayout>
+    <android.support.v7.widget.CardView
+      android:id="@+id/success_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:layout_marginLeft="32dp"
+      android:layout_marginRight="32dp"
+      android:layout_below="@id/toolbar"
+      android:visibility="gone">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="16dp"
+        android:orientation="vertical">
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingBottom="8dp"
+          android:gravity="center"
+          android:text="@string/message_thanks_for_subscribing"
+          android:textColor="@color/green"
+          android:textSize="24sp" />
+        <ImageView
+          android:layout_width="60dp"
+          android:layout_height="60dp"
+          android:layout_gravity="center"
+          android:src="@drawable/ic_thanks_you"
+          android:tint="@color/green" />
+        <Button
+          android:id="@+id/btn_ok"
+          style="@style/Widget.Button.Flat"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:text="@string/txt_ok" />
+      </LinearLayout>
+
+    </android.support.v7.widget.CardView>
   </RelativeLayout>
 </layout>

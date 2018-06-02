@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.odauday.R;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
+import com.odauday.utils.TextUtils;
 
 /**
  * Created by infamouSs on 5/8/18.
@@ -45,7 +46,7 @@ public class VitalDetailViewHolder extends BaseRowViewHolder<VitalDetailRow> {
         
         mPrice.setText(propertyDetail.getTextPrice());
         
-        mAddress.setText(propertyDetail.getAddress());
+        mAddress.setText(TextUtils.formatAddress(propertyDetail.getAddress()));
     }
     
     @Override

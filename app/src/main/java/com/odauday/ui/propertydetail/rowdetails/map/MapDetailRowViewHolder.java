@@ -75,7 +75,7 @@ public class MapDetailRowViewHolder extends BaseRowViewHolder<MapDetailRow> {
                                      location.getLatitude() +
                                      "," +
                                      location.getLongitude() + "(" +
-                                     mData.getAddress() + ")");
+                                     TextUtils.formatAddress(mData.getAddress()) + ")");
         } else {
             gmmIntentUri = Uri.parse(Constants.MAPS_INTENT_URI + mData.getAddress());
         }

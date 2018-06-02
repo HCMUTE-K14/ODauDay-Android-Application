@@ -21,6 +21,7 @@ import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.data.DirectionRepository;
 import com.odauday.data.NoteRepository;
+import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.model.MyPhone;
 import com.odauday.model.PropertyDetail;
@@ -73,6 +74,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Inject
     PropertyDetailViewModel mPropertyDetailViewModel;
+    
+    @Inject
+    SimilarPropertyRepository mSimilarPropertyRepository;
     
     @Override
     protected int getLayoutId() {
@@ -171,6 +175,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         directionDetailRow.setDirectionsPreferenceHelper(mDirectionsPreferenceHelper);
         
         noteDetailRow.setNoteRepository(mNoteRepository);
+        similarPropertyRow.setSimilarPropertyRepository(mSimilarPropertyRepository);
         
         mDefaultRows.add(vitalDetailRow);
         mDefaultRows.add(bedBathParkingRow);
@@ -416,7 +421,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         Intent shareIntent = new Intent("android.intent.action.SEND");
         shareIntent.setType("text/plain");
         shareIntent.putExtra("android.intent.extra.TEXT",
-            (!TextUtils.isEmpty(mPropertyDetail.getAddress()) ? mPropertyDetail.getAddress() + "\\n"
+            (!TextUtils.isEmpty(mPropertyDetail.getAddress()) ? TextUtils.formatAddress(mPropertyDetail.getAddress()) + "\\n"
                 : "") +
             getString(R.string.txt_share_text));
         shareIntent.putExtra("android.intent.extra.SUBJECT",

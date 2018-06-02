@@ -51,6 +51,10 @@ public class Image implements Parcelable {
         this.dateCreated = dateCreated;
     }
     
+    public Image(String url) {
+        this.url = url;
+    }
+    
     protected Image(Parcel in) {
         id = in.readString();
         url = in.readString();

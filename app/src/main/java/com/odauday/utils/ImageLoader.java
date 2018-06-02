@@ -41,6 +41,7 @@ public class ImageLoader {
         load(imageView.getContext(), imageView, image);
     }
     
+    
     public static void loadWithoutOptions(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
             .load(image)

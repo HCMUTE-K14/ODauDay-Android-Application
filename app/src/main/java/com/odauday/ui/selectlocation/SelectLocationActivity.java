@@ -39,6 +39,7 @@ import com.odauday.ui.search.autocomplete.AutoCompletePlaceActivity;
 import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
 import com.odauday.ui.search.mapview.MapViewFragment;
 import com.odauday.utils.MapUtils;
+import com.odauday.utils.TextUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
 import com.odauday.viewmodel.BaseViewModel;
@@ -142,7 +143,7 @@ public class SelectLocationActivity extends
             
             MarkerOptions markerOptions = createMakerOptionAtLocation(
                 mAddressAndLocationObject.getLocation());
-            markerOptions.title(mAddressAndLocationObject.getAddress());
+            markerOptions.title(TextUtils.formatAddress(mAddressAndLocationObject.getAddress()));
             
             mMap.addMarker(markerOptions).showInfoWindow();
             
@@ -254,7 +255,7 @@ public class SelectLocationActivity extends
             } else {
                 MarkerOptions markerOptions = createMakerOptionAtLocation(
                     mAddressAndLocationObject.getLocation())
-                    .title(mAddressAndLocationObject.getAddress());
+                    .title(TextUtils.formatAddress(mAddressAndLocationObject.getAddress()));
                 mMap.addMarker(markerOptions).showInfoWindow();
                 MapUtils.moveMap(mMap, mAddressAndLocationObject.getLocation(),
                     MapPreferenceHelper.DEFAULT_ZOOM_LEVEL, true);
@@ -313,7 +314,7 @@ public class SelectLocationActivity extends
     
     @Override
     public void onSuccessGetInfoLocation(AddressAndLocationObject object) {
-        mCurrentMarker.setTitle(object.getAddress());
+        mCurrentMarker.setTitle(TextUtils.formatAddress(object.getAddress()));
         mAddressAndLocationObject = object;
         mCurrentMarker.showInfoWindow();
     }

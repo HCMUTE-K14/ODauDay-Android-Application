@@ -75,16 +75,7 @@ public class VitalPropertyView extends RelativeLayout {
                 PropertyDetail propertyDetail = new PropertyDetail();
                 propertyDetail.setId(mProperty.getId());
                 propertyDetail.setFavorite(mProperty.isFavorite());
-                propertyDetail.setImages(mProperty.getImages());
-                //propertyDetail.setLocation(mProperty.getLocation());
-//                propertyDetail.setAddress(mProperty.getAddress());
-//                propertyDetail.setNumOfParkings(mProperty.getNumOfParkings());
-//                propertyDetail.setNumOfBathrooms(mProperty.getNumOfBathRooms());
-//                propertyDetail.setNumOfBedrooms(mProperty.getNumOfBedRooms());
-//                propertyDetail.setType(mProperty.getSearchType().equals(Type.BUY) ? 1 : 2);
-//
-//                propertyDetail.setPrice(mProperty.getPrice());
-//
+                
                 Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
                 intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
                 
@@ -123,6 +114,8 @@ public class VitalPropertyView extends RelativeLayout {
                 String urlFirstImage =
                     property.getImages().get(0) == null ? "" : property.getImages().get(0).getUrl();
                 setImage(EndPoint.BASE_URL + urlFirstImage);
+            } else {
+                setImage(ImageLoader.randomPlaceHolder());
             }
         } else {
             setImage(ImageLoader.randomPlaceHolder());
@@ -141,7 +134,7 @@ public class VitalPropertyView extends RelativeLayout {
             .append("<b>")
             .append(getContext().getString(R.string.txt_at))
             .append("</b> ")
-            .append(property.getAddress()).toString();
+            .append(TextUtils.formatAddress(property.getAddress())).toString();
         
         getTextViewAddress().setText(Html.fromHtml(address));
     }
@@ -157,7 +150,6 @@ public class VitalPropertyView extends RelativeLayout {
             .subscribe(success -> {
                 mStarView.addOnClick(mProperty);
             });
-        // mStarView.setOnClickListener(view -> {
     }
     
     public void setImage(String url) {

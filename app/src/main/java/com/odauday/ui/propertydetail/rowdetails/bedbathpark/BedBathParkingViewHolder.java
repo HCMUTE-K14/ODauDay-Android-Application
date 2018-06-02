@@ -64,9 +64,9 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
         
         double landSize = propertyDetail.getSize();
         
-        showData(mBedsContainer, mBeds, beds, false);
-        showData(mBathContainer, mBaths, baths, false);
-        showData(mParkingContainer, mParkings, parking, false);
+        showData(mBedsContainer, mBeds, beds);
+        showData(mBathContainer, mBaths, baths);
+        showData(mParkingContainer, mParkings, parking);
         
         if (landSize <= 0) {
             ViewUtils.showHideView(mLandSizeContainer, false);
@@ -111,7 +111,7 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
         }
     }
     
-    private void showData(View container, TextView textView, int value, boolean isLandSize) {
+    private void showData(View container, TextView textView, int value) {
         if (value <= 0) {
             ViewUtils.showHideView(container, false);
         } else {

@@ -17,7 +17,6 @@ public class Constants {
     public static final String INTENT_EXTRA_SELECTED_TAG = "intent_extra_selected_tag";
     public static final String INTENT_EXTRA_RECENT_TAG = "intent_extra_recent_tag";
     
-    public static final String INTENT_EXTRA_ARRAY_IMAGES = "intent_extra_array_images";
     public static final String INTENT_EXTRA_SELECTED_IMAGE_URL = "intent_extra_selected_image_url";
     public static final String MAPS_INTENT_URI = "geo:0,0?q=";
     public static final String INTENT_EXTRA_PROPERTY_DETAIL = "intent_extra_property_detail";
@@ -26,7 +25,7 @@ public class Constants {
     public static final String INTENT_EXTRA_TITLE = "intent_extra_title";
     public static final String INTENT_EXTRA_MESSAGE = "intent_extra_message";
     public static final String INTENT_EXTRA_HINT = "intent_extra_hint";
-    public static final String INTENT_EXTRA_IS_NEED_LOAD_PREMIUM = "intent_extra_is_need_load_premium";
+    public static final String INTENT_EXTRA_PREMIUM = "intent_extra_premium";
     
     public class Task {
         
