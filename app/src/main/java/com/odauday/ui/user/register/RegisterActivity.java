@@ -115,7 +115,7 @@ public class RegisterActivity extends
     @Override
     public void onSuccess(Object object) {
         SnackBarUtils.showSnackBar(findViewById(android.R.id.content),
-            getString(R.string.message_register_successfull));
+            getString(R.string.message_register_successful));
         finish();
     }
     

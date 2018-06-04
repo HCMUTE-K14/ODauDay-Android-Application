@@ -324,5 +324,5 @@
   <string name="message_error_network_header">Network error</string>
   <string name="message_error_network_sub_header">We couldn\'t fulfill your request. Please check your network connection and try again.</string>
   <string name="txt_sort">Sort</string>
-  <string name="message_register_successfull">Your account is created. Please check email to active account.</string>
+  <string name="message_register_successful">Your account is created. Please check email to active account.</string>
 </resources>
