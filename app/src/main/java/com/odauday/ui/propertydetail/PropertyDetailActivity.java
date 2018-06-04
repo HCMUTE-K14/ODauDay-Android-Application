@@ -103,8 +103,6 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         initRows();
         initButtonController();
         mPropertyDetailViewModel.getFullDetail(mPropertyDetail);
-        
-        
     }
     
     private void initButtonController() {

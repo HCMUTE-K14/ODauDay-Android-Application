@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
@@ -18,7 +19,6 @@ import com.odauday.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 6/1/18.
@@ -30,13 +30,16 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
     private final LinkedList<View> mRecycledViewsList;
     private Context mContext;
     
-    public GalleryViewPagerListener mGalleryViewPagerListener;
+    private GalleryViewPagerListener mGalleryViewPagerListener;
+    private OnClickListener mOnClickImageListener;
     
     public GalleryViewPagerAdapter(Context context,
-        GalleryViewPagerListener galleryViewPagerListener) {
+        GalleryViewPagerListener galleryViewPagerListener,
+        OnClickListener onClickListener) {
         mRecycledViewsList = new LinkedList<>();
         mContext = context;
         mGalleryViewPagerListener = galleryViewPagerListener;
+        mOnClickImageListener = onClickListener;
     }
     
     @Override
@@ -73,36 +76,20 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         } else {
             imageView = (ImageView) mRecycledViewsList.pop();
         }
-        if (position == 1) {
-            if (mGalleryViewPagerListener != null) {
-                mGalleryViewPagerListener.showHints();
-            }
-        } else {
-            if (mGalleryViewPagerListener != null) {
-                mGalleryViewPagerListener.hideHints();
-            }
-        }
         
         Image image = mImages.get(position);
         String url = image.getUrl();
         imageView.setTag(R.id.image_view_id, url);
         imageView.setTag(R.id.image_view_position, position);
-        Timber.d(url);
         int placeHolder = ImageLoader.randomPlaceHolder();
         if (!TextUtils.isEmpty(url)) {
             ImageLoader.load(imageView, url, new RequestOptions()
-                .placeholder(placeHolder)
-                .error(placeHolder)
                 .priority(getPriority(position))
             );
         }
         
-        imageView.setOnClickListener(view -> {
-            if (mGalleryViewPagerListener != null) {
-                mGalleryViewPagerListener.onClickImage(position);
-            }
-        });
-        
+        imageView.setOnClickListener(mOnClickImageListener);
+
         container.addView(imageView);
         
         return url;
@@ -145,6 +132,5 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         
         void hideHints();
         
-        void onClickImage(int position);
     }
 }

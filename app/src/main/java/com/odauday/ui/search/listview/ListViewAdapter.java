@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.odauday.utils.ViewUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 6/1/18.
@@ -35,8 +37,6 @@ public class ListViewAdapter extends
                                                                                           GalleryViewPagerListener {
     
     private Context mContext;
-    
-    private PropertyResultEntry mCurrentItem;
     
     private OnClickStarListener mOnClickStarListener;
     
@@ -64,9 +64,9 @@ public class ListViewAdapter extends
     
     @Override
     protected void bind(ItemForListPropertyBinding binding, PropertyResultEntry item) {
-        mCurrentItem = item;
+        OnClickListener onClickListener = v -> openPropertyDetailActivity(item);
         GalleryViewPagerAdapter galleryViewPagerAdapter = new GalleryViewPagerAdapter(mContext,
-            this);
+            this, onClickListener);
         galleryViewPagerAdapter.setData(item);
         binding.galleryViewPager.setAdapter(galleryViewPagerAdapter);
         binding.galleryViewPager.postDelayed(() -> {
@@ -86,7 +86,8 @@ public class ListViewAdapter extends
         updateViewHolder();
         
         binding.vitalContainer.setOnClickListener(view -> {
-            openPropertyDetailActivity();
+            Timber.d(item.getId());
+            openPropertyDetailActivity(item);
         });
         binding.favorite.setOnClickStarListener(mOnClickStarListener);
         RxView.clicks(binding.favorite)
@@ -136,18 +137,11 @@ public class ListViewAdapter extends
         getBinding().hints.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_out));
     }
     
-    @Override
-    public void onClickImage(int position) {
-        
-        openPropertyDetailActivity();
-    }
-    
-    private void openPropertyDetailActivity() {
-        PropertyResultEntry property = mCurrentItem;
-        if (property != null) {
+    private void openPropertyDetailActivity(PropertyResultEntry entry) {
+        if (entry != null) {
             PropertyDetail propertyDetail = new PropertyDetail();
-            propertyDetail.setId(property.getId());
-            propertyDetail.setFavorite(property.isFavorite());
+            propertyDetail.setId(entry.getId());
+            propertyDetail.setFavorite(entry.isFavorite());
             
             Intent intent = new Intent(mContext, PropertyDetailActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);

@@ -54,6 +54,9 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
     private TextView mErrorHeader;
     private TextView mErrorSubHeader;
     
+    private int mOrderPosition = -1 ;
+    
+    
     public static ListViewFragment newInstance() {
         
         Bundle args = new Bundle();
@@ -170,15 +173,15 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
         showDialogSort();
     }
     
-    
     public void showDialogSort() {
         AlertDialog.Builder builder = new Builder(this.getActivity());
         builder.setTitle(R.string.txt_sort);
         String[] sortList = getResources().getStringArray(R.array.sort_property);
         
-        builder.setSingleChoiceItems(sortList, -1, new OnClickListener() {
+        builder.setSingleChoiceItems(sortList, mOrderPosition, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                mOrderPosition = which;
                 SortType sortType = SortType.getSortType(which);
                 List<PropertyResultEntry> data = SortPropertyEntryUtils
                     .sort(mAdapter.getData(), sortType);

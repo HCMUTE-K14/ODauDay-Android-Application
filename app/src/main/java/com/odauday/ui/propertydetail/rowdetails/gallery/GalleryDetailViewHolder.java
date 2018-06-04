@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.api.EndPoint;
 import com.odauday.utils.ImageLoader;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 5/7/18.
@@ -19,6 +20,7 @@ public class GalleryDetailViewHolder {
     
     
     public void update(GalleryDetailRow galleryDetailRow) {
+        Timber.d("Update gallery row");
         if (galleryDetailRow.getData() == null) {
             return;
         }
