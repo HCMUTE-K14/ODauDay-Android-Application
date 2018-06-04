@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
 import com.odauday.data.remote.model.ErrorResponse;
-import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.data.remote.user.model.RegisterRequest;
 import com.odauday.databinding.ActivityRegisterBinding;
 import com.odauday.exception.BaseException;
@@ -115,8 +114,9 @@ public class RegisterActivity extends
     
     @Override
     public void onSuccess(Object object) {
-        String message = ((MessageResponse) object).getMessage();
-        Timber.tag(TAG).i(message);
+        SnackBarUtils.showSnackBar(findViewById(android.R.id.content),
+            getString(R.string.message_register_successfull));
+        finish();
     }
     
     @Override
