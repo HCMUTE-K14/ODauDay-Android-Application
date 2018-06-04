@@ -372,9 +372,7 @@ public class FavoriteTabMainFragment extends
                 mProperties = sortLastAdded(list);
                 showDataView();
             }
-            Timber.tag(TAG).d(list.get(0).getAddress());
         } else {
-            Timber.tag(TAG).d("Null Favorite");
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
     }

@@ -32,6 +32,7 @@ import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
 import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
 import com.odauday.ui.search.common.event.OnErrorDownloadPropertyEvent;
 import com.odauday.ui.search.common.event.OnFavouriteEvent;
+import com.odauday.ui.search.common.event.OnNeedLoadWithSavedSearch;
 import com.odauday.ui.search.common.event.OnShowSortDialogEvent;
 import com.odauday.ui.search.common.event.ReInitMapFragmentEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
@@ -565,6 +566,11 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     @Override
     public void onFailSavedSearch(Throwable throwable) {
     
+    }
+    
+    
+    public void loadSavedSearch(Search search) {
+        EventBus.getDefault().post(new OnNeedLoadWithSavedSearch(search));
     }
     
     private void saveSearch(String savedSearchName) {

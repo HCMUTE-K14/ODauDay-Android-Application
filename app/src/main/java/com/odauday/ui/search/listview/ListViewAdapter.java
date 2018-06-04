@@ -18,6 +18,7 @@ import com.odauday.databinding.ItemForListPropertyBinding;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.propertydetail.PropertyDetailActivity;
+import com.odauday.ui.search.common.event.OnHistoryEvent;
 import com.odauday.ui.search.listview.GalleryViewPagerAdapter.GalleryViewPagerListener;
 import com.odauday.ui.view.StarView.OnClickStarListener;
 import com.odauday.ui.view.StarView.STATUS;
@@ -26,6 +27,7 @@ import com.odauday.utils.ViewUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.greenrobot.eventbus.EventBus;
 import timber.log.Timber;
 
 /**
@@ -64,7 +66,10 @@ public class ListViewAdapter extends
     
     @Override
     protected void bind(ItemForListPropertyBinding binding, PropertyResultEntry item) {
-        OnClickListener onClickListener = v -> openPropertyDetailActivity(item);
+        OnClickListener onClickListener = v -> {
+            EventBus.getDefault().post(new OnHistoryEvent(item.getLocation()));
+            openPropertyDetailActivity(item);
+        };
         GalleryViewPagerAdapter galleryViewPagerAdapter = new GalleryViewPagerAdapter(mContext,
             this, onClickListener);
         galleryViewPagerAdapter.setData(item);
@@ -86,7 +91,7 @@ public class ListViewAdapter extends
         updateViewHolder();
         
         binding.vitalContainer.setOnClickListener(view -> {
-            Timber.d(item.getId());
+            EventBus.getDefault().post(new OnHistoryEvent(item.getLocation()));
             openPropertyDetailActivity(item);
         });
         binding.favorite.setOnClickStarListener(mOnClickStarListener);

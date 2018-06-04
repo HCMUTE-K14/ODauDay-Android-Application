@@ -11,6 +11,7 @@ import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
+import com.odauday.ui.savedsearch.OnClickSavedSearch;
 import com.odauday.ui.search.SearchTabMainFragment;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
@@ -21,6 +22,9 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import java.util.Stack;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implements
                                                                         HasSupportFragmentInjector {
@@ -47,6 +51,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         MapsInitializer.initialize(getApplicationContext());
         if (mUserRepository.isNeedLogin()) {
             ViewUtils.startActivity(this, LoginActivity.class);
@@ -69,6 +74,28 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     protected void processingTaskFromViewModel() {
     
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onClickSavedSearch(OnClickSavedSearch onClickSavedSearch) {
+        mBinding.bottomNavBar.select(SearchTabMainFragment.TAG, false);
+        
+        mNavigationController.navigateTo(SearchTabMainFragment.TAG);
+        ViewUtils.delay(() -> {
+            SearchTabMainFragment searchTabMainFragment = (SearchTabMainFragment) getSupportFragmentManager()
+                .findFragmentByTag(SearchTabMainFragment.TAG);
+            
+            if (searchTabMainFragment != null) {
+                searchTabMainFragment.loadSavedSearch(onClickSavedSearch.getSearch());
+            }
+        }, 500);
+        
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
     
     @Override
@@ -95,8 +122,8 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             
             mBinding.bottomNavBar.select(mTabStack.peek(), false);
             mNavigationController.navigateTo(mTabStack.peek());
-//            getSupportFragmentManager()
-//                .popBackStack(mTabStack.peek(), 0);
+            //            getSupportFragmentManager()
+            //                .popBackStack(mTabStack.peek(), 0);
         } catch (Exception ex) {
             finish();
         }

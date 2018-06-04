@@ -50,6 +50,8 @@ import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.event.NeedCloseVitalPropertyEvent;
 import com.odauday.ui.search.common.event.OnCompleteDownloadPropertyEvent;
 import com.odauday.ui.search.common.event.OnFavouriteEvent;
+import com.odauday.ui.search.common.event.OnHistoryEvent;
+import com.odauday.ui.search.common.event.OnNeedLoadWithSavedSearch;
 import com.odauday.ui.search.common.event.OnSelectedPlaceEvent;
 import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
 import com.odauday.ui.search.common.event.ReloadSearchEvent;
@@ -413,6 +415,47 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         }
     }
     
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHistoryEvent(OnHistoryEvent historyEvent) {
+        if (historyEvent.getGeoLocation() != null) {
+            PropertyResultEntry entry = mMapViewAdapter
+                .getEntriesAtLocation(historyEvent.getGeoLocation())
+                .get(0);
+            
+            if (!entry.isVisited()) {
+                mHistoryRepository.create(entry.getId())
+                    .subscribe(success -> {
+                    }, throwable -> {
+                    });
+            }
+            entry.setVisited(true);
+            
+            Marker marker = mMapMarkers.get(historyEvent.getGeoLocation());
+            
+            marker.setVisible(false);
+            marker.setIcon(mMapViewAdapter.getMarkerIconForLocation(mOpenedLocation));
+            marker.setVisible(true);
+        }
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNeedLoadWithSavedSearch(OnNeedLoadWithSavedSearch event) {
+        double lat = event.getSearch().getLatitude();
+        double lng = event.getSearch().getLongitude();
+        
+        double latNE = event.getSearch().getLatitude_ns();
+        double lngNE = event.getSearch().getLongitude_ns();
+        
+        double latSW = event.getSearch().getLatitude_sw();
+        double lngSW = event.getSearch().getLongitude_sw();
+        
+        mLastGeoLocation = new GeoLocation(lat, lng);
+        mLastBounds = new GeoLocation[]{new GeoLocation(latSW, lngSW),
+            new GeoLocation(latNE, lngNE)};
+        
+        moveToLastLocation();
+    }
+    
     
     @Override
     public void onClickMapLayer(int type) {
@@ -484,18 +527,16 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         
         marker.setVisible(false);
         
-       
-        if(!entry.isVisited()){
+        if (!entry.isVisited()) {
             mHistoryRepository.create(entry.getId())
                 .subscribe(success -> {
                 }, throwable -> {
                 });
         }
-    
         entry.setVisited(true);
         marker.setIcon(mMapViewAdapter.getMarkerIconForLocation(mOpenedLocation));
         marker.setVisible(true);
-    
+        
         mMapViewAdapter
             .addToHistoryList(entry);
         return true;

@@ -13,7 +13,7 @@ import com.odauday.model.Search;
 import com.odauday.ui.base.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import timber.log.Timber;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by kunsubin on 4/10/2018.
@@ -85,7 +85,7 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     }
     
     public void onClickRecentSearch(Search search) {
-        Timber.tag(TAG).d("Click: " + search.getName());
+        EventBus.getDefault().post(new OnClickSavedSearch(search));
     }
     
     public interface OnClickRemoveRecentSearches {

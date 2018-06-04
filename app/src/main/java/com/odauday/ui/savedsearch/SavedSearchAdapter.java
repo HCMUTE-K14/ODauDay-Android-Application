@@ -15,6 +15,7 @@ import com.odauday.ui.view.NotificationView;
 import com.odauday.ui.view.NotificationView.OnClickNotificationListener;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import timber.log.Timber;
 
 /**
@@ -104,7 +105,7 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     }
     
     public void onClickSavedSearch(Search search) {
-        Timber.tag(TAG).d("Click: " + search.getName());
+        EventBus.getDefault().post(new OnClickSavedSearch(search));
     }
     
     public interface OnClickRemoveSavedSearches {
