@@ -13,6 +13,7 @@ import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.admin.propertymanager.ConfirmPropertyProvider;
 import com.odauday.ui.admin.usermanager.UserManagerProvider;
 import com.odauday.ui.alert.AlertTabProvider;
+import com.odauday.ui.alert.service.FirebaseMessaging;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
@@ -99,4 +100,7 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = {ConfirmPropertyProvider.class, UserManagerProvider.class})
     @PerActivity
     abstract ActivityAdminManager provideActivityAdminManager();
+    
+    @ContributesAndroidInjector
+    abstract FirebaseMessaging contributeFirebaseMessaging();
 }

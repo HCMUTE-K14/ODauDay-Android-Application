@@ -1,5 +1,6 @@
 package com.odauday;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar.OnTabSelectedListener;
 import com.odauday.data.UserRepository;
 import com.odauday.databinding.ActivityMainBinding;
+import com.odauday.ui.alert.service.FirebaseMessaging;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
 import com.odauday.ui.search.SearchTabMainFragment;

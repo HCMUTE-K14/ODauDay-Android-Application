@@ -7,7 +7,6 @@ import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.exception.FavoriteException;
 import com.odauday.model.Favorite;
-import com.odauday.model.PropertyID;
 import com.odauday.model.ShareFavorite;
 import io.reactivex.Single;
 import java.util.List;
@@ -94,7 +93,7 @@ public class FavoriteRepository implements Repository {
             .observeOn(mSchedulersExecutor.ui());
     }
     
-    public Single<MessageResponse> unCheckFavorites(List<PropertyID> list) {
+    public Single<MessageResponse> unCheckFavorites(List<Favorite> list) {
         Single<JsonResponse<MessageResponse>> result = mFavoriteService.unCheckFavorites(list);
         return result
             .map(response -> {

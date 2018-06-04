@@ -14,7 +14,13 @@ public class Favorite {
     private String userId;
     
     @SerializedName("property_id")
+    @Expose
     private String propertyId;
+    
+    public Favorite(String userId, String propertyId) {
+        this.userId = userId;
+        this.propertyId = propertyId;
+    }
     
     public String getUserId() {
         return userId;

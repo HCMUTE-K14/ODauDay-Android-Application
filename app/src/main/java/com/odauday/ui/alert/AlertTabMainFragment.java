@@ -1,11 +1,14 @@
 package com.odauday.ui.alert;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.odauday.R;
 import com.odauday.databinding.FragmentAlertTabMainBinding;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.viewmodel.BaseViewModel;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 3/31/18.
@@ -22,6 +25,12 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         AlertTabMainFragment fragment = new AlertTabMainFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+    
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Timber.tag(TAG).d("Token: " + FirebaseInstanceId.getInstance().getToken());
     }
     
     @Override

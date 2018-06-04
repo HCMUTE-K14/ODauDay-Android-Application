@@ -6,7 +6,6 @@ import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.model.Favorite;
-import com.odauday.model.PropertyID;
 import com.odauday.model.ShareFavorite;
 import io.reactivex.Single;
 import java.util.List;
@@ -33,7 +32,7 @@ public interface FavoriteService {
     Single<JsonResponse<MessageResponse>> unCheckFavorite(@Query("property_id") String propertyId);
     
     @HTTP(method = "DELETE", path = FAVORITE + "/all", hasBody = true)
-    Single<JsonResponse<MessageResponse>> unCheckFavorites(@Body List<PropertyID> list);
+    Single<JsonResponse<MessageResponse>> unCheckFavorites(@Body List<Favorite> list);
     
     @POST(FAVORITE + "/share")
     Single<JsonResponse<MessageResponse>> shareFavorite(@Body ShareFavorite shareFavorite);

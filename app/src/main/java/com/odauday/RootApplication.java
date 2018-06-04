@@ -2,7 +2,9 @@ package com.odauday;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.local.history.DaoSession;
@@ -13,9 +15,11 @@ import com.odauday.di.modules.NetworkModule;
 import com.odauday.di.modules.PreferenceModule;
 import com.odauday.di.modules.RepositoryBuildersModule;
 import com.odauday.di.modules.ServiceBuildersModule;
+import com.odauday.ui.alert.service.FirebaseMessaging;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.HasServiceInjector;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -23,11 +27,14 @@ import timber.log.Timber;
  * Created by infamouSs on 2/27/18.
  */
 
-public class RootApplication extends Application implements HasActivityInjector {
+public class RootApplication extends Application implements HasActivityInjector,
+                                                            HasServiceInjector {
     
     private static Context mContext;
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
+    @Inject
+    DispatchingAndroidInjector<Service> mServiceDispatchingAndroidInjector;
     @Inject
     DaoSession mDaoSession;
     
@@ -66,5 +73,10 @@ public class RootApplication extends Application implements HasActivityInjector 
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return mDispatchingAndroidInjector;
+    }
+    
+    @Override
+    public AndroidInjector<Service> serviceInjector() {
+        return mServiceDispatchingAndroidInjector;
     }
 }
