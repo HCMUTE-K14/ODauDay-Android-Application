@@ -84,6 +84,10 @@ public class BindingAdapterUtils {
     public static void loadImage(ImageView view, String url) {
         ImageLoader.loadImageForUser(view, EndPoint.BASE_URL + url);
     }
+    @BindingAdapter("loadImageNotification")
+    public static void loadImageNotification(ImageView view,String url){
+        ImageLoader.loadImageForNotification(view, EndPoint.BASE_URL + url);
+    }
     @BindingAdapter("loadIconMenu")
     public static void loadIconMenu(ImageView view, String icon_name) {
         Context context = view.getContext();
@@ -135,7 +139,7 @@ public class BindingAdapterUtils {
     public static void setTypeProperty(TextView view, String type) {
         switch (type) {
             case Type.BUY:
-                view.setText(view.getContext().getString(R.string.sell));
+                view.setText(type);
                 break;
             case Type.RENT:
                 view.setText(type);
@@ -143,6 +147,11 @@ public class BindingAdapterUtils {
             default:
                 break;
         }
+    }
+    @BindingAdapter("setDateNotification")
+    public static void setDateNotification(TextView textView,long millisecond){
+        String time=DateTimeUtils.getTimeNotification(millisecond,textView.getContext());
+        textView.setText(time);
     }
     
 }

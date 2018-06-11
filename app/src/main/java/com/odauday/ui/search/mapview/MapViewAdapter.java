@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 /**
  * Created by infamouSs on 4/13/18.
@@ -32,6 +33,7 @@ public class MapViewAdapter {
     private final Context mContext;
     private OnUpdatedListLocation mOnUpdatedListLocation;
     
+    @Inject
     public MapViewAdapter(Context context) {
         this.mContext = context;
         mMarkSelectedBitmapDescriptor = MapUtils.buildMarkSelectedBitmapDescriptorWithPadding(context);

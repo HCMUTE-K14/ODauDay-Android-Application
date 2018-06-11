@@ -37,5 +37,6 @@ public class EndPoint {
     public static final String GET_IMAGE = BASE_URL + IMAGE;
     
     public static final String ADMIN="admin";
+    public static final String NOTIFI="notifi";
     
 }

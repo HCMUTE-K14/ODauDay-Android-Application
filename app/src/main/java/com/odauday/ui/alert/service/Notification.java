@@ -1,5 +1,7 @@
 package com.odauday.ui.alert.service;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 /**
@@ -8,15 +10,36 @@ import java.util.Date;
 
 public class Notification {
     
+    private String mId;
+    
+    @SerializedName("title")
+    @Expose
     private String mTitle;
+    
+    @SerializedName("body")
+    @Expose
     private String mBody;
+    
+    @SerializedName("user_id")
+    @Expose
     private String mUserID;
+    
+    @SerializedName("property_id")
+    @Expose
     private String mPropertyID;
+    
+    @SerializedName("image")
+    @Expose
     private String mImage;
+    
+    @SerializedName("type")
+    @Expose
     private String mType;
+    
     private long mDate;
     
     public Notification() {
+        this.mId="";
         this.mTitle="";
         this.mBody="";
         this.mUserID="";
@@ -25,8 +48,9 @@ public class Notification {
         this.mType="";
         this.mDate=0;
     }
-    public Notification(String title, String body, String userID, String propertyID,
+    public Notification(String id,String title, String body, String userID, String propertyID,
         String image, String type,long date) {
+        mId=id;
         mTitle = title;
         mBody = body;
         mUserID = userID;
@@ -34,6 +58,14 @@ public class Notification {
         mImage = image;
         mType = type;
         mDate=date;
+    }
+    
+    public String getId() {
+        return mId;
+    }
+    
+    public void setId(String id) {
+        mId = id;
     }
     
     public String getTitle() {
@@ -94,8 +126,9 @@ public class Notification {
     
     @Override
     public String toString() {
-        return "Notification{" +
-               "mTitle='" + mTitle + '\'' +
+        return "RefreshTokenDevice{" +
+               "mId='" + mId + '\'' +
+               ", mTitle='" + mTitle + '\'' +
                ", mBody='" + mBody + '\'' +
                ", mUserID='" + mUserID + '\'' +
                ", mPropertyID='" + mPropertyID + '\'' +

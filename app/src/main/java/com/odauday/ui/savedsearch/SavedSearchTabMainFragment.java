@@ -251,26 +251,32 @@ public class SavedSearchTabMainFragment extends
         }
     }
     private void changeView(){
-        if(mSearches.size()>0){
+        if(mSearches!=null&&mSearches.size()>0){
             mRelativeLayoutSavedSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
         }
         
-        if(mRecentSearches.size()>0){
+        if(mRecentSearches!=null&&mRecentSearches.size()>0){
             mRelativeLayoutRecentSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
             mRelativeLayoutRecentSearch.setVisibility(View.GONE);
         }
         
-        if(mSearches.size()<1&&mRecentSearches.size()<1){
+        if((mSearches==null||mSearches.size()<1)&&(mRecentSearches==null||mRecentSearches.size()<1)){
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
             mRelativeLayoutRecentSearch.setVisibility(View.GONE);
             mRecyclerViewEmpty.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
         }
+       /* if(mSearches==null&&mRecentSearches==null){
+            mRelativeLayoutSavedSearch.setVisibility(View.GONE);
+            mRelativeLayoutRecentSearch.setVisibility(View.GONE);
+            mRecyclerViewEmpty.setVisibility(View.VISIBLE);
+            mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
+        }*/
     }
     public void onClickRefresh() {
         getData();

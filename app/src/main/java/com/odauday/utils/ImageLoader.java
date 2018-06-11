@@ -54,6 +54,14 @@ public class ImageLoader {
                 .error(R.drawable.user_default))
             .into(imageView);
     }
+    public static void loadImageForNotification(ImageView imageView,Object  image){
+        Glide.with(imageView.getContext())
+            .load(image)
+            .apply(new RequestOptions()
+                .placeholder(R.drawable.ic_gallery_placeholder1)
+                .error(R.drawable.ic_gallery_placeholder1))
+            .into(imageView);
+    }
     public static int randomPlaceHolder() {
         return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length)];
     }

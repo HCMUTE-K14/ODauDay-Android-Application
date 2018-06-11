@@ -13,7 +13,7 @@
         android:id="@+id/ic_back"
         android:layout_width="50.0dip"
         android:layout_height="fill_parent"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
         android:gravity="center_vertical"
         android:onClick="onClickBack"

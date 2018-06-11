@@ -22,4 +22,5 @@ public class PrefKey {
     public static final String MAP_UNLOCKED = "map_unlocked";
     public static final String RECENT_SEARCH = "recent_search";
     public static final String PREF_LANGUAGE = "pref_language";
+    public static final String REFRESH_TOKEN_DEVICE="refresh_token_device";
 }

@@ -207,7 +207,7 @@
   <string name="logout_user_success">Logout account success</string>
   <string name="txt_click_to_select_time_contact">Tap to select time contact</string>
   <string name="message_date_time_can_not_less_than_current">Time contact can not less than current time</string>
-  <string name="txt_land_size_hint" >Land size (m²)</string>
+  <string name="txt_land_size_hint">Land size (m²)</string>
   <string name="txt_all_time">All time</string>
   <string name="txt_select_time">Select time</string>
   <string name="message_creat_property_successfull">Property is created. Please wait admin confirm this property !</string>
@@ -234,4 +234,13 @@
   <string name="txt_disabled">Disabled</string>
   <string name="txt_active_message">Are you active?</string>
   <string name="txt_ban_message">Are you ban?</string>
+  <string name="txt_empty_notification">Nice work!</string>
+  <string name="txt_note_empty_notification">You\'re on top of your notifications.</string>
+  <string name="txt_body_notifi_confirm_property">Your property has been confirmed</string>
+  <string name="txt_title_notifi_confirm_property">Confirmed property</string>
+  <string name="txt_dismiss">Dismiss</string>
+  <string name="txt_day">day</string>
+  <string name="txt_hour">hour</string>
+  <string name="txt_minute">minute</string>
+  <string name="txt_now">Now</string>
 </resources>

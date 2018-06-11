@@ -1,5 +1,8 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.notification.NotificationServiceImp;
+import com.odauday.data.local.notification.NotificationEntityDao;
+import com.odauday.data.local.notification.NotificationService;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.place.RecentSearchPlaceServiceImpl;
@@ -96,6 +99,11 @@ public class ServiceBuildersModule {
     AdminService provideAdminService(@Named("protectRetrofit")Retrofit retrofit){
         return  retrofit.create(AdminService.class);
     }
+    @Provides
+    @Singleton
+    com.odauday.data.remote.NotificationService provideNotificationServiceRemote(@Named("protectRetrofit")Retrofit retrofit){
+        return retrofit.create(com.odauday.data.remote.NotificationService.class);
+    }
     
     //--------------------------LOCAL---------------------------//
     
@@ -110,6 +118,12 @@ public class ServiceBuildersModule {
     RecentSearchPlaceService provideRecentSearchPlaceService(
         RecentSearchPlaceDao recentSearchPlaceDao) {
         return new RecentSearchPlaceServiceImpl(recentSearchPlaceDao);
+    }
+    
+    @Provides
+    @Singleton
+    NotificationService provideNotificationService(NotificationEntityDao notificationEntityDao){
+        return new NotificationServiceImp(notificationEntityDao);
     }
     
     

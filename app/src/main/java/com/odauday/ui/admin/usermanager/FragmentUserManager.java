@@ -17,6 +17,7 @@ import com.odauday.data.remote.user.model.Status;
 import com.odauday.databinding.FragmentUserManagerBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.User;
+import com.odauday.ui.ClearMemory;
 import com.odauday.ui.admin.usermanager.UserManagerAdapter.OnClickActionListener;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
@@ -32,7 +33,8 @@ import timber.log.Timber;
  * Created by kunsubin on 5/4/2018.
  */
 
-public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBinding> implements UserManagerContract{
+public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBinding> implements UserManagerContract,
+                                                                                                 ClearMemory{
     
     public static final String TAG=FragmentUserManager.class.getSimpleName();
     @Inject
@@ -260,6 +262,21 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
         SnackBarUtils.showSnackBar(mBinding.get().userManager, "Error change status");
     }
     
+    @Override
+    public void onStop() {
+        clearMemory();
+        super.onStop();
+    }
+    
+    @Override
+    public void clearMemory() {
+        mBuilderAlertDialog =null;
+        mRecyclerView=null;
+        mServiceUnavailableAdapter=null;
+        mUserManagerAdapter=null;
+        mLayoutManager=null;
+    }
+    
     public void onClickMoreStatus(View view){
         mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
@@ -326,4 +343,6 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
             alert11.show();
         }
     }
+    
+   
 }

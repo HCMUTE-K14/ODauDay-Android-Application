@@ -204,9 +204,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 .addOnConnectionFailedListener(this)
                 .build();
         }
-        
-        mMapViewAdapter = new MapViewAdapter(this.getContext());
-        mMapViewAdapter.setOnUpdatedListLocation(this);
     }
     
     
@@ -242,7 +239,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     public void onStop() {
         super.onStop();
         this.mLocationClient.disconnect();
-        mRxCameraIdleListener.stop();
+        //mRxCameraIdleListener.stop();
     }
     
     @Override
@@ -261,6 +258,8 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             return;
         }
         this.mMap = googleMap;
+        mMapViewAdapter = new MapViewAdapter(this.getContext());
+        mMapViewAdapter.setOnUpdatedListLocation(this);
         mRxCameraIdleListener = new RxCameraIdleListener(mMap, this);
         
         mMap.setMinZoomPreference(MIN_ZOOM_LEVEL);

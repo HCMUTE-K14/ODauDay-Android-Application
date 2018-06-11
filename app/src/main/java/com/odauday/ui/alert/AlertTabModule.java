@@ -1,6 +1,7 @@
 package com.odauday.ui.alert;
 
 import android.arch.lifecycle.ViewModelProvider;
+import com.odauday.data.NotificationRepository;
 import com.odauday.viewmodel.ViewModelFactory;
 import dagger.Module;
 import dagger.Provides;
@@ -18,7 +19,7 @@ public class AlertTabModule {
     }
     
     @Provides
-    AlertTabViewModel provideAlertTabViewModel() {
-        return new AlertTabViewModel();
+    AlertTabViewModel provideAlertTabViewModel(NotificationRepository notificationRepository) {
+        return new AlertTabViewModel(notificationRepository);
     }
 }

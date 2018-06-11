@@ -6,6 +6,8 @@ import com.odauday.data.AutoCompletePlaceRepository;
 import com.odauday.data.FavoriteRepository;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.HistoryRepository;
+import com.odauday.data.NotificationManagerRepository;
+import com.odauday.data.NotificationRepository;
 import com.odauday.data.PropertyRepository;
 import com.odauday.data.RecentTagRepository;
 import com.odauday.data.SavedSearchRepository;
@@ -13,6 +15,7 @@ import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.local.notification.NotificationService;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.remote.AdminService;
@@ -127,6 +130,13 @@ public class RepositoryBuildersModule {
         return  new AdminRepository(adminService,schedulersExecutor);
     }
     
+    @Provides
+    @Singleton
+    NotificationManagerRepository provideNotificationManagerRepository(
+        com.odauday.data.remote.NotificationService notificationService,SchedulersExecutor schedulersExecutor){
+        return new NotificationManagerRepository(notificationService,schedulersExecutor);
+    }
+    
     //--------------------------LOCAL---------------------------//
     
     @Provides
@@ -139,5 +149,10 @@ public class RepositoryBuildersModule {
             recentTagService,
             preferencesHelper,
             schedulersExecutor);
+    }
+    @Provides
+    @Singleton
+    NotificationRepository provideNotificationRepository(NotificationService notificationService,SchedulersExecutor schedulersExecutor){
+        return new NotificationRepository(notificationService,schedulersExecutor);
     }
 }
