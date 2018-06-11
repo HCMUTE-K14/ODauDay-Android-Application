@@ -98,6 +98,26 @@ public class PropertyRepository implements Repository {
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
     }
+    public Single<MessageResponse> changeStatus(String property_id,String status) {
+        Single<MessageResponse> result = mProtectPropertyService
+            .changeStatus(property_id, status)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new PropertyException(response.getErrors());
+                } catch (Exception ex) {
+                    if (ex instanceof PropertyException) {
+                        throw ex;
+                    }
+                    throw new PropertyException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+        return result;
+    }
     
     public Single<PropertyDetail> getFullDetail(String id) {
         Timber.tag("ID").d(id);
@@ -106,9 +126,8 @@ public class PropertyRepository implements Repository {
                 try {
                     if (response.isSuccess()) {
                         return response.getData();
-                    } else {
-                        throw new PropertyException(response.getErrors());
                     }
+                    throw new PropertyException(response.getErrors());
                 } catch (Exception ex) {
                     if (ex instanceof PropertyException) {
                         throw ex;
@@ -116,7 +135,7 @@ public class PropertyRepository implements Repository {
                     throw new PropertyException(ex.getMessage());
                 }
             })
-            .observeOn(mSchedulersExecutor.ui())
-            .subscribeOn(mSchedulersExecutor.io());
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
     }
 }

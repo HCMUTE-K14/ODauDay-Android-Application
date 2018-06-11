@@ -38,6 +38,9 @@ public class EndPoint {
     
     public static final String STATIC_MAP = "static-map";
     
+    public static final String ADMIN="admin";
+    public static final String NOTIFI="notifi";
+    
     public static final String DIRECTION = "direction";
     
     public static final String PROPERTY_DETAIL = PROPERTY + "/detail";

@@ -2,10 +2,11 @@ package com.odauday;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.local.favorite.DaoSession;
+import com.odauday.data.local.notification.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
 import com.odauday.di.modules.BusModule;
 import com.odauday.di.modules.LocalDaoModule;
@@ -16,6 +17,7 @@ import com.odauday.di.modules.ServiceBuildersModule;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import dagger.android.HasServiceInjector;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -23,13 +25,14 @@ import timber.log.Timber;
  * Created by infamouSs on 2/27/18.
  */
 
-public class RootApplication extends Application implements HasActivityInjector {
+public class RootApplication extends Application implements HasActivityInjector,HasServiceInjector {
     
     private static Context mContext;
     
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
-    
+    @Inject
+    DispatchingAndroidInjector<Service> mServiceDispatchingAndroidInjector;
     @Inject
     DaoSession mDaoSession;
     
@@ -68,5 +71,10 @@ public class RootApplication extends Application implements HasActivityInjector 
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return mDispatchingAndroidInjector;
+    }
+    
+    @Override
+    public AndroidInjector<Service> serviceInjector() {
+        return mServiceDispatchingAndroidInjector;
     }
 }

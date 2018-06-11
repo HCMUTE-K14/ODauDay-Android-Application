@@ -1,12 +1,10 @@
 package com.odauday.ui.savedsearch;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import com.odauday.R;
 import com.odauday.databinding.ItemRecentSearchesBinding;
 import com.odauday.model.Search;
@@ -23,11 +21,10 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     
     private static final String TAG = RecentSearchAdapter.class.getSimpleName();
     private PopupMenu mPopupMenu;
-    private Context mContext;
     private OnClickRemoveRecentSearches mOnClickRemoveRecentSearches;
     
-    public RecentSearchAdapter(Context context) {
-        this.mContext = context;
+    public RecentSearchAdapter() {
+    
     }
     
     @Override
@@ -70,7 +67,7 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
     }
     
     public void onClickMoreMenu(View view, Search search) {
-        mPopupMenu = new PopupMenu(mContext, (ImageView) view);
+        mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.popup_more_menu_saved_search, mPopupMenu.getMenu());
         mPopupMenu.setOnMenuItemClickListener(item -> {
@@ -93,3 +90,4 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
         void ClickRemoveRecentSearch(Search search);
     }
 }
+

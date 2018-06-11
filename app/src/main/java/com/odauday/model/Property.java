@@ -63,6 +63,10 @@ public class Property {
     @Expose
     private double land_size;
     
+    @SerializedName("user_id_created")
+    @Expose
+    private String user_id_created;
+    
     @SerializedName("type_id")
     @Expose
     private String type_id;
@@ -286,6 +290,14 @@ public class Property {
     
     public void setFavorite(Favorite favorite) {
         mFavorite = favorite;
+    }
+    
+    public String getUser_id_created() {
+        return user_id_created;
+    }
+    
+    public void setUser_id_created(String user_id_created) {
+        this.user_id_created = user_id_created;
     }
     
     @Override

@@ -1,11 +1,11 @@
 package com.odauday.ui.favorite;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
+import com.google.gson.Gson;
 import com.odauday.R;
 import com.odauday.config.Type;
 import com.odauday.data.local.cache.PrefKey;
@@ -14,18 +14,19 @@ import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.databinding.FragmentFavoriteTabMainBinding;
 import com.odauday.exception.RetrofitException;
+import com.odauday.model.Favorite;
 import com.odauday.model.Property;
-import com.odauday.model.PropertyID;
+import com.odauday.model.User;
+import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.FavoriteAdapter.OnClickStarListener;
 import com.odauday.ui.favorite.sharefavorite.FragmentDialogFavoriteShare;
 import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.SortAndFilterUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -36,7 +37,8 @@ import timber.log.Timber;
 
 public class FavoriteTabMainFragment extends
                                      BaseMVVMFragment<FragmentFavoriteTabMainBinding> implements
-                                                                                      FavoriteContract {
+                                                                                      FavoriteContract,
+                                                                                      ClearMemory {
     
     
     public static final String TAG = NavigationTab.FAVORITE_TAB.getNameTab();
@@ -47,12 +49,14 @@ public class FavoriteTabMainFragment extends
     PreferencesHelper mPreferencesHelper;
     HeaderFavoriteView mHeaderFavoriteView;
     private List<Property> mProperties;
-    private ProgressDialog mProgressDialog;
-    private List<PropertyID> mPropertiesIdNeedUnCheck;
+    private List<Favorite> mFavoritesIdNeedUnCheck;
     private FavoriteAdapter mFavoriteAdapter;
     private EmptyFavoriteAdapter mEmptyFavoriteAdapter;
     private ServiceUnavailableAdapter mServiceUnavailableAdapter;
     private FragmentDialogFavoriteShare mFragmentDialogFavoriteShare;
+    private LoadingAdapter mLoadingAdapter;
+    private String mUserId;
+    
     enum SortType {
         LAST_ADDED, LOWEST_PRICE, HIGHEST_PRICE
     }
@@ -64,6 +68,7 @@ public class FavoriteTabMainFragment extends
     enum STATUS {
         GET, UN_CHECK
     }
+    
     private STATUS mSTATUS = STATUS.GET;
     private SortType SORT_TYPE = SortType.LAST_ADDED;
     private FilterType FILTER_TYPE = FilterType.ALL;
@@ -82,8 +87,14 @@ public class FavoriteTabMainFragment extends
     //Event click share
     HeaderFavoriteView.OnClickShareListener mOnClickShareListener = view -> {
         Timber.tag(TAG).d("Share click");
-        mFragmentDialogFavoriteShare = new FragmentDialogFavoriteShare("Quoc",
-            "kunsubin96@gmail.com");
+        
+        String struser = mPreferencesHelper.get(PrefKey.CURRENT_USER, "");
+        User user = new Gson().fromJson(struser, User.class);
+        if (user == null) {
+            return;
+        }
+        mFragmentDialogFavoriteShare = new FragmentDialogFavoriteShare(user.getDisplayName(),
+            user.getEmail());
         mFragmentDialogFavoriteShare.setOnClickSendEmailListener(mOnClickSendEmailListener);
         mFragmentDialogFavoriteShare.show(getActivity().getFragmentManager(), "");
         
@@ -92,25 +103,26 @@ public class FavoriteTabMainFragment extends
         @Override
         public void onCheckStar(Property property) {
             Timber.tag(TAG).d("Check: " + property.getAddress());
-            if (mPropertiesIdNeedUnCheck != null && mPropertiesIdNeedUnCheck.size() > 0) {
+            if (mFavoritesIdNeedUnCheck != null && mFavoritesIdNeedUnCheck.size() > 0) {
                 int pos = -1;
-                for (int i = 0; i < mPropertiesIdNeedUnCheck.size(); i++) {
-                    if (mPropertiesIdNeedUnCheck.get(i).getPropertyId().equals(property.getId())) {
+                for (int i = 0; i < mFavoritesIdNeedUnCheck.size(); i++) {
+                    if (mFavoritesIdNeedUnCheck.get(i).getPropertyId().equals(property.getId()) &&
+                        mFavoritesIdNeedUnCheck.get(i).getUserId().equals(mUserId)) {
                         pos = i;
                         break;
                     }
                 }
-                mPropertiesIdNeedUnCheck.remove(pos);
+                mFavoritesIdNeedUnCheck.remove(pos);
                 
             }
-            Timber.tag(TAG).d("Check: " + mPropertiesIdNeedUnCheck.size());
+            Timber.tag(TAG).d("Check: " + mFavoritesIdNeedUnCheck.size());
         }
         
         @Override
         public void onUnCheckStar(Property property) {
             Timber.tag(TAG).d("UnCheck: " + property.getAddress());
-            mPropertiesIdNeedUnCheck.add(new PropertyID(property.getId()));
-            Timber.tag(TAG).d("UnCheck: " + mPropertiesIdNeedUnCheck.size());
+            mFavoritesIdNeedUnCheck.add(new Favorite(mUserId, property.getId()));
+            Timber.tag(TAG).d("UnCheck: " + mFavoritesIdNeedUnCheck.size());
             
         }
     };
@@ -150,6 +162,9 @@ public class FavoriteTabMainFragment extends
         }
         mHeaderFavoriteView.setTextViewFilter(item.getTitle().toString());
     };
+    ServiceUnavailableAdapter.OnClickTryAgain mOnClickTryAgain = () -> {
+        getFavorite();
+    };
     
     public static FavoriteTabMainFragment newInstance() {
         
@@ -160,33 +175,41 @@ public class FavoriteTabMainFragment extends
         
         return fragment;
     }
-
+    
     @Override
     public int getLayoutId() {
         return R.layout.fragment_favorite_tab_main;
     }
-
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initHeaderView();
     }
-
+    
     private void initHeaderView() {
         mProperties = new ArrayList<>();
-        mPropertiesIdNeedUnCheck = new ArrayList<>();
+        mFavoritesIdNeedUnCheck = new ArrayList<>();
         mHeaderFavoriteView = mBinding.get().headerFavorite;
-        
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.setMessage(getActivity().getString(R.string.txt_progress));
-        mProgressDialog.show();
+        mUserId = mPreferencesHelper.get(PrefKey.USER_ID, "");
         
         mHeaderFavoriteView.setTitle(getResources().getString(R.string.txt_shortlist));
         mHeaderFavoriteView.setOnClickShareListener(mOnClickShareListener);
         mHeaderFavoriteView.setOnClickMapListener(mOnClickMapListener);
         mHeaderFavoriteView.setOnItemClickMenuSort(mOnItemClickMenuSort);
         mHeaderFavoriteView.setOnItemClickMenuFilter(mOnItemClickMenuFilter);
+        
+        mBinding.get().recycleViewFavorite
+            .setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        mBinding.get().recycleViewFavorite.setNestedScrollingEnabled(false);
+        mFavoriteAdapter = new FavoriteAdapter();
+        mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
+        
+        mEmptyFavoriteAdapter = new EmptyFavoriteAdapter();
+        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
+        mLoadingAdapter = new LoadingAdapter();
+        
+        mServiceUnavailableAdapter.setOnClickTryAgain(mOnClickTryAgain);
     }
     
     @Override
@@ -228,63 +251,48 @@ public class FavoriteTabMainFragment extends
                 }
             }
         });
-        mBinding.get().recycleViewFavorite
-            .setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        mBinding.get().recycleViewFavorite.setNestedScrollingEnabled(false);
-        mFavoriteAdapter = new FavoriteAdapter();
-        mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
-        
-        mEmptyFavoriteAdapter = new EmptyFavoriteAdapter();
-        mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
-        
     }
     
     private void showDataView() {
-        if (mProperties == null || mProperties.isEmpty()) {
+        if (mProperties.size() < 1) {
             return;
         }
-        List<Property> propertyList = getPropertyFilter();
+        List<Property> propertyList = getPropertyFilter(mProperties);
         if (propertyList != null && propertyList.size() > 0) {
-            
-            if (mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter) {
-            
-            } else {
+            if (!(mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter)) {
                 mBinding.get().recycleViewFavorite.setAdapter(mFavoriteAdapter);
             }
             mFavoriteAdapter.setData(propertyList);
         } else {
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
-        
     }
     
-    private List<Property> getPropertyFilter() {
-        List<Property> list = mProperties;
+    private List<Property> getPropertyFilter(List<Property> propertyList) {
+        List<Property> list = new ArrayList<>(propertyList);
         switch (FILTER_TYPE) {
             case ALL:
                 break;
             case BUY:
-                list = getList(list, Type.BUY);
+                list = SortAndFilterUtils.getListPropertyByType(list, Type.BUY);
                 break;
             case RENT:
-                list = getList(list, Type.RENT);
+                list = SortAndFilterUtils.getListPropertyByType(list, Type.RENT);
                 break;
             default:
                 break;
         }
-        /*End list null or empty*/
-        if (list == null || list.isEmpty()) {
+        if (list == null || list.size() < 1) {
             return list;
         }
-        
         switch (SORT_TYPE) {
             case LAST_ADDED:
                 break;
             case LOWEST_PRICE:
-                list = getListOrderByLowestPrice(list);
+                list = SortAndFilterUtils.sortListPropertyLowestPrice(list);
                 break;
             case HIGHEST_PRICE:
-                list = getListOrderByHighestPrice(list);
+                list = SortAndFilterUtils.sortListPropertyHighestPrice(list);
                 break;
             default:
                 break;
@@ -292,69 +300,10 @@ public class FavoriteTabMainFragment extends
         return list;
     }
     
-    private List<Property> getList(List<Property> list, String type) {
-        List<Property> propertyList = new ArrayList<>();
-        for (Property property : list) {
-            if (property.getType_id().equals(type)) {
-                propertyList.add(property);
-            }
-        }
-        return propertyList;
-    }
-    
-    private List<Property> getListOrderByLowestPrice(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getPrice() < property2.getPrice()) {
-                return -1;
-            }
-            if (property1.getPrice() > property2.getPrice()) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
-    private List<Property> getListOrderByHighestPrice(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getPrice() > property2.getPrice()) {
-                return -1;
-            }
-            if (property1.getPrice() < property2.getPrice()) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
-    private List<Property> sortLastAdded(List<Property> list) {
-        List<Property> propertyList = list;
-        Comparator<Property> comparator = (property1, property2) -> {
-            if (property1.getFavorite().getDate_created()
-                .after(property2.getFavorite().getDate_created())) {
-                return -1;
-            }
-            if (property1.getFavorite().getDate_created()
-                .before(property2.getFavorite().getDate_created())) {
-                return 1;
-            }
-            return 0;
-        };
-        Collections.sort(propertyList, comparator);
-        return propertyList;
-    }
-    
     @Override
     public void loading(boolean isLoading) {
-        if (isLoading) {
-            mProgressDialog.show();
-        } else {
-            mProgressDialog.dismiss();
+        if (isLoading && mSTATUS == STATUS.GET) {
+            mBinding.get().recycleViewFavorite.setAdapter(mLoadingAdapter);
         }
         Timber.tag(TAG).d("Loading");
     }
@@ -368,11 +317,15 @@ public class FavoriteTabMainFragment extends
         FavoriteResponse favoriteResponse = (FavoriteResponse) object;
         if (favoriteResponse != null) {
             List<Property> list = favoriteResponse.getProperties();
-            if (list != null) {
-                mProperties = sortLastAdded(list);
+            if (list != null && list.size() > 0) {
+                mProperties = SortAndFilterUtils.sortFavoriteLastAdded(list);
                 showDataView();
+            } else {
+                mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
             }
+            
         } else {
+            Timber.tag(TAG).d("Null Favorite");
             mBinding.get().recycleViewFavorite.setAdapter(mEmptyFavoriteAdapter);
         }
     }
@@ -413,15 +366,30 @@ public class FavoriteTabMainFragment extends
     
     @Override
     public void onStop() {
-        super.onStop();
-        Timber.tag(TAG).d("On Stop");
         unCheckFavorites();
+        clearMemory();
+        super.onStop();
+        
     }
     
     public void unCheckFavorites() {
         mSTATUS = STATUS.UN_CHECK;
-        if (mPropertiesIdNeedUnCheck != null && mPropertiesIdNeedUnCheck.size() > 0) {
-            mFavoriteViewModel.unCheckFavorites(mPropertiesIdNeedUnCheck);
+        if (mFavoritesIdNeedUnCheck != null && mFavoritesIdNeedUnCheck.size() > 0) {
+            mFavoriteViewModel.unCheckFavorites(mFavoritesIdNeedUnCheck);
         }
     }
+    
+    @Override
+    public void clearMemory() {
+        mHeaderFavoriteView = null;
+        mProperties = null;
+        mFavoritesIdNeedUnCheck = null;
+        mFavoriteAdapter = null;
+        mEmptyFavoriteAdapter = null;
+        mServiceUnavailableAdapter = null;
+        mFragmentDialogFavoriteShare = null;
+        mLoadingAdapter = null;
+        mUserId = null;
+    }
 }
+

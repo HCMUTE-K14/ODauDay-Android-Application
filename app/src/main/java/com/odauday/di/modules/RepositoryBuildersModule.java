@@ -1,12 +1,15 @@
 package com.odauday.di.modules;
 
 import com.odauday.SchedulersExecutor;
+import com.odauday.data.AdminRepository;
 import com.odauday.data.AutoCompletePlaceRepository;
 import com.odauday.data.DirectionRepository;
 import com.odauday.data.FavoriteRepository;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.HistoryRepository;
 import com.odauday.data.NoteRepository;
+import com.odauday.data.NotificationManagerRepository;
+import com.odauday.data.NotificationRepository;
 import com.odauday.data.PremiumRepository;
 import com.odauday.data.PropertyRepository;
 import com.odauday.data.RecentTagRepository;
@@ -16,8 +19,10 @@ import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.data.TagRepository;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.data.local.notification.NotificationService;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.tag.RecentTagService;
+import com.odauday.data.remote.AdminService;
 import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.HistoryService;
 import com.odauday.data.remote.SavedSearchService;
@@ -77,8 +82,9 @@ public class RepositoryBuildersModule {
     @Provides
     @Singleton
     FavoriteRepository provideFavoriteRepository(FavoriteService favoriteService,
+        PreferencesHelper preferencesHelper,
         SchedulersExecutor schedulersExecutor) {
-        return new FavoriteRepository(favoriteService, schedulersExecutor);
+        return new FavoriteRepository(favoriteService, preferencesHelper, schedulersExecutor);
     }
     
     @Provides
@@ -131,6 +137,21 @@ public class RepositoryBuildersModule {
     
     @Provides
     @Singleton
+    AdminRepository provideAdminRepository(AdminService adminService,
+        SchedulersExecutor schedulersExecutor) {
+        return new AdminRepository(adminService, schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    NotificationManagerRepository provideNotificationManagerRepository(
+        com.odauday.data.remote.NotificationService notificationService,
+        SchedulersExecutor schedulersExecutor) {
+        return new NotificationManagerRepository(notificationService, schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
     DirectionRepository provideDirectionRepository(DirectionService directionService,
         SchedulersExecutor schedulersExecutor) {
         return new DirectionRepository(directionService, schedulersExecutor);
@@ -172,5 +193,12 @@ public class RepositoryBuildersModule {
             recentTagService,
             preferencesHelper,
             schedulersExecutor);
+    }
+    
+    @Provides
+    @Singleton
+    NotificationRepository provideNotificationRepository(NotificationService notificationService,
+        SchedulersExecutor schedulersExecutor) {
+        return new NotificationRepository(notificationService, schedulersExecutor);
     }
 }

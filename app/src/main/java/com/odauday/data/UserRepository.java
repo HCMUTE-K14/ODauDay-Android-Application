@@ -1,5 +1,6 @@
 package com.odauday.data;
 
+import android.support.design.widget.TabLayout.TabGravity;
 import com.odauday.SchedulersExecutor;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -15,8 +16,10 @@ import com.odauday.data.remote.user.model.ForgotPasswordRequest;
 import com.odauday.data.remote.user.model.LoginResponse;
 import com.odauday.data.remote.user.model.NormalAuthRequest;
 import com.odauday.data.remote.user.model.RegisterRequest;
+import com.odauday.exception.BaseException;
 import com.odauday.exception.ForgotPasswordException;
 import com.odauday.exception.LoginException;
+import com.odauday.exception.PropertyException;
 import com.odauday.exception.RegisterException;
 import com.odauday.model.User;
 import com.odauday.utils.JwtUtils;
@@ -152,7 +155,6 @@ public class UserRepository implements Repository {
         
         return model.getUser();
     }
-    
     public Single<MessageResponse> updateProfile(User user) {
         return mProtectUserService.updateProfile(user.getId(), user)
             .map(response -> {
@@ -236,8 +238,6 @@ public class UserRepository implements Repository {
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
     }
-    
-    
     public Public getPublicUserService() {
         return mPublicUserService;
     }

@@ -12,7 +12,9 @@ import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.databinding.FragmentMoreTabMainBinding;
 import com.odauday.model.User;
+import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.user.profile.ProfileUserActivity;
@@ -28,25 +30,25 @@ import timber.log.Timber;
  * Created by infamouSs on 3/31/18.
  */
 
-public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBinding> {
-    
+public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBinding> implements
+                                                                                      ClearMemory{
     public static final String TAG = NavigationTab.MORE_TAB.getNameTab();
     @Inject
     PreferencesHelper mPreferencesHelper;
     private List<MenuItemMore> mMenuItemMores;
     private MoreAdapter mMoreAdapter;
+    
     private MoreAdapter.OnClickMenuMoreListener mOnClickMenuMoreListener = item -> {
         switch (item.getId()) {
             case ItemType.PROPERTY_MANAGER:
                 Timber.tag(TAG).d("Click: " + item.getName());
-                Intent intentPropertyManager = new Intent(getActivity(),
-                    ActivityPropertyManager.class);
-                startActivity(intentPropertyManager);
+                ViewUtils.startActivity(getActivity(), ActivityPropertyManager.class);
                 break;
             case ItemType.POST_NEWS:
                 Timber.tag(TAG).d("Click: " + item.getName());
                 break;
-            case ItemType.CONFIRM_PROPERTY:
+            case ItemType.ADMIN_MANAGER:
+                ViewUtils.startActivity(getActivity(), ActivityAdminManager.class);
                 Timber.tag(TAG).d("Click: " + item.getName());
                 break;
             case ItemType.SETTINGS:
@@ -78,6 +80,9 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
+        showInfo();
+        getMenu();
+        showMenu();
     }
     
     private void init() {
@@ -87,7 +92,6 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
         mBinding.get().recycleViewMore.setNestedScrollingEnabled(false);
         mMoreAdapter.setOnClickMenuMoreListener(mOnClickMenuMoreListener);
         mBinding.get().recycleViewMore.setAdapter(mMoreAdapter);
-        
         mBinding.get().profileUser.setOnClickListener(view -> {
             ViewUtils.startActivity(getActivity(), ProfileUserActivity.class);
         });
@@ -97,20 +101,12 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     public int getLayoutId() {
         return R.layout.fragment_more_tab_main;
     }
-    
+
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return null;
     }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-        showInfo();
-        getMenu();
-        showMenu();
-    }
-    
+
     private void showInfo() {
         String string = mPreferencesHelper.get(PrefKey.CURRENT_USER, "");
         User user = new Gson().fromJson(string, User.class);
@@ -119,19 +115,31 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
             mBinding.get().txtEmail.setText(user.getEmail());
         }
     }
-    
+
     private void getMenu() {
         mMenuItemMores = MenuItemMore.getListMenuMore(getActivity(), "admin");
     }
-    
+
     private void showMenu() {
         if (mMenuItemMores != null && mMenuItemMores.size() > 0) {
             mMoreAdapter.setData(mMenuItemMores);
         }
     }
-    
+
     @Override
     protected void processingTaskFromViewModel() {
+
+    }
     
+    @Override
+    public void onStop() {
+        clearMemory();
+        super.onStop();
+    }
+    
+    @Override
+    public void clearMemory() {
+        mMenuItemMores=null;
+        mMoreAdapter=null;
     }
 }

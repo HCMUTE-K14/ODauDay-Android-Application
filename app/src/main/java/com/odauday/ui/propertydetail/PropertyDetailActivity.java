@@ -20,12 +20,14 @@ import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.data.DirectionRepository;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.NoteRepository;
 import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.model.MyPhone;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.ui.propertydetail.common.OnChangeNoteEvent;
 import com.odauday.ui.propertydetail.common.SelectPhoneCallDialog;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
@@ -42,15 +44,20 @@ import com.odauday.ui.propertydetail.rowdetails.tag.TagDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.vital.VitalDetailRow;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.TextUtils;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 5/7/18.
  */
-@SuppressLint("MissingPermission")
+@SuppressLint({"MissingPermission", "CheckResult"})
 public class PropertyDetailActivity extends BaseMVVMActivity implements RowControllerListener,
                                                                         PropertyDetailContract {
     
@@ -74,6 +81,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Inject
     PropertyDetailViewModel mPropertyDetailViewModel;
+    
+    @Inject
+    FavoriteRepository mFavoriteRepository;
     
     @Inject
     SimilarPropertyRepository mSimilarPropertyRepository;
@@ -104,6 +114,28 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         initButtonController();
         mPropertyDetailViewModel.getFullDetail(mPropertyDetail);
     }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeNote(OnChangeNoteEvent noteEvent) {
+        mPropertyDetail.setFavorite(true);
+        for (BaseRowDetail row : mDefaultRows) {
+            row.setData(mPropertyDetail);
+        }
+        invalidateOptionsMenu();
+    }
+    
     
     private void initButtonController() {
         Button buttonEmail = findViewById(R.id.email);
@@ -173,6 +205,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         directionDetailRow.setDirectionsPreferenceHelper(mDirectionsPreferenceHelper);
         
         noteDetailRow.setNoteRepository(mNoteRepository);
+        noteDetailRow.setFavoriteRepository(mFavoriteRepository);
         similarPropertyRow.setSimilarPropertyRepository(mSimilarPropertyRepository);
         
         mDefaultRows.add(vitalDetailRow);
@@ -194,7 +227,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unBindRow();
+        //  unBindRow();
     }
     
     @Override
@@ -252,6 +285,14 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     }
     
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menu_item_favorite);
+        menuItem.setIcon(mPropertyDetail.isFavorite() ? R.drawable.ic_star_selected
+            : R.drawable.ic_star_un_selected);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_property_detail, menu);
         if (mPropertyDetail != null) {
@@ -272,6 +313,11 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
                 shareProperty();
                 return true;
             case R.id.menu_item_favorite:
+                if (!mPropertyDetail.isFavorite()) {
+                    checkFavorite();
+                } else {
+                    unCheckFavorite();
+                }
                 mPropertyDetail.setFavorite(!mPropertyDetail.isFavorite());
                 item.setIcon(mPropertyDetail.isFavorite() ? R.drawable.ic_star_selected
                     : R.drawable.ic_star_un_selected);
@@ -279,6 +325,26 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    
+    private void checkFavorite() {
+        mFavoriteRepository
+            .checkFavorite(mPropertyDetail.getId())
+            .subscribe(success -> {
+            
+            }, throwable -> {
+                Timber.d(throwable.getMessage());
+            });
+    }
+    
+    private void unCheckFavorite() {
+        mFavoriteRepository
+            .unCheckFavorite(mPropertyDetail.getId())
+            .subscribe(success -> {
+            
+            }, throwable -> {
+                Timber.d(throwable.getMessage());
+            });
     }
     
     @Override
@@ -305,10 +371,13 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void removeRow(BaseRowDetail row) {
         int rowIndex = this.mDefaultRows.indexOf(row);
-        if (rowIndex > -1) {
-            this.mDefaultRows.remove(rowIndex);
-            this.mAdapter.notifyItemRemoved(rowIndex);
-        }
+        ViewUtils.delay(() -> {
+            if (rowIndex > -1) {
+                this.mDefaultRows.remove(rowIndex);
+                this.mAdapter.notifyItemRemoved(rowIndex);
+            }
+        }, 100);
+        
     }
     
     @Override

@@ -47,7 +47,22 @@ public class ImageLoader {
             .load(image)
             .into(imageView);
     }
-    
+    public static void loadImageForUser(ImageView imageView, Object image){
+        Glide.with(imageView.getContext())
+            .load(image)
+            .apply(new RequestOptions()
+                .placeholder(R.drawable.user_default)
+                .error(R.drawable.user_default))
+            .into(imageView);
+    }
+    public static void loadImageForNotification(ImageView imageView,Object  image){
+        Glide.with(imageView.getContext())
+            .load(image)
+            .apply(new RequestOptions()
+                .placeholder(R.drawable.ic_gallery_placeholder1)
+                .error(R.drawable.ic_gallery_placeholder1))
+            .into(imageView);
+    }
     public static void load(ImageView imageView, Object image, RequestOptions options) {
         Glide.with(imageView.getContext())
             .load(image)

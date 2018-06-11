@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.request.RequestOptions;
 import com.odauday.R;
 import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
@@ -15,7 +16,6 @@ import com.odauday.config.Type;
 import com.odauday.model.Image;
 import com.odauday.ui.propertymanager.status.Status;
 import java.util.List;
-import timber.log.Timber;
 
 
 /**
@@ -63,6 +63,7 @@ public class BindingAdapterUtils {
     public static void textDoublePrice(TextView view, double value) {
         String text = new StringBuilder()
             .append(TextUtils.formatNumber(value, LANGUAGE.VI))
+            .append(" ")
             .append(AppConfig.VN_CURRENCY).toString();
         
         view.setText(text);
@@ -76,8 +77,23 @@ public class BindingAdapterUtils {
     @BindingAdapter("loadImageMainPropertyInListImage")
     public static void loadImageMainPropertyInListImage(ImageView view, List<Image> images) {
         if (images != null && images.size() > 0) {
-            ImageLoader.loadWithoutOptions(view, EndPoint.BASE_URL + images.get(0).getUrl());
+            int placeHolder = ImageLoader.randomPlaceHolder();
+            ImageLoader.load(view, EndPoint.BASE_URL + images.get(0).getUrl(),
+                new RequestOptions()
+                    .skipMemoryCache(true)
+                    .placeholder(placeHolder)
+                    .error(placeHolder));
         }
+    }
+    
+    @BindingAdapter("loadImage")
+    public static void loadImage(ImageView view, String url) {
+        ImageLoader.loadImageForUser(view, EndPoint.BASE_URL + url);
+    }
+    
+    @BindingAdapter("loadImageNotification")
+    public static void loadImageNotification(ImageView view, String url) {
+        ImageLoader.loadImageForNotification(view, EndPoint.BASE_URL + url);
     }
     
     @BindingAdapter("loadIconMenu")
@@ -90,17 +106,36 @@ public class BindingAdapterUtils {
     
     @BindingAdapter("activeProperty")
     public static void activeProperty(TextView view, String status) {
-        Timber.d(status);
         switch (status) {
             case Status.ACTIVE:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
                 view.setText(status);
                 break;
             case Status.PENDING:
-                view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
                 break;
             case Status.EXPIRED:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
+                view.setText(status);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    @BindingAdapter("statusUser")
+    public static void statusUser(TextView view, String status) {
+        switch (status) {
+            case com.odauday.data.remote.user.model.Status.ACTIVE:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.colorPrimary));
+                view.setText(status);
+                break;
+            case com.odauday.data.remote.user.model.Status.PENDING:
+                view.setTextColor(view.getContext().getResources().getColor(R.color.red));
+                view.setText(status);
+                break;
+            case com.odauday.data.remote.user.model.Status.DISABLED:
                 view.setTextColor(view.getContext().getResources().getColor(R.color.red));
                 view.setText(status);
                 break;
@@ -113,7 +148,7 @@ public class BindingAdapterUtils {
     public static void setTypeProperty(TextView view, String type) {
         switch (type) {
             case Type.BUY:
-                view.setText(view.getContext().getString(R.string.sell));
+                view.setText(type);
                 break;
             case Type.RENT:
                 view.setText(type);
@@ -121,6 +156,12 @@ public class BindingAdapterUtils {
             default:
                 break;
         }
+    }
+    
+    @BindingAdapter("setDateNotification")
+    public static void setDateNotification(TextView textView, long millisecond) {
+        String time = DateTimeUtils.getTimeNotification(millisecond, textView.getContext());
+        textView.setText(time);
     }
     
 }

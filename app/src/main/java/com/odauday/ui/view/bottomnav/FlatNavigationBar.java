@@ -1,6 +1,7 @@
 package com.odauday.ui.view.bottomnav;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -194,12 +195,29 @@ public class FlatNavigationBar extends FrameLayout {
     }
     
     private void setAlertBubbleText(int numberOfNotifications) {
+        Timber.tag(FlatNavigationBar.class.getSimpleName()).d("setAlertBubbleText: "+numberOfNotifications);
         if (numberOfNotifications > MAX_NOTIFICATIONS_SHOWN) {
             this.mAlertBubbleItem.setText(String.valueOf(MAX_NOTIFICATIONS_SHOWN));
         } else if (numberOfNotifications < MAX_NOTIFICATIONS_SHOWN) {
             this.mAlertBubbleItem.setText(" " + String.valueOf(numberOfNotifications) + " ");
         } else {
             this.mAlertBubbleItem.setText(String.valueOf(numberOfNotifications));
+        }
+    }
+    public void setNumberNotification(int numberNotification){
+        if (this.mAlertBubbleItem != null) {
+            if (numberNotification > 0) {
+                setAlertBubbleText(numberNotification);
+                new Handler().postDelayed(new Runnable() {
+                    public TextBadgeItem textBadgeItem =mAlertBubbleItem;
+                    public void run() {
+                        this.textBadgeItem.show();
+                    }
+                    
+                }, 10);
+                return;
+            }
+            this.mAlertBubbleItem.hide();
         }
     }
 }

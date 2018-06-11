@@ -1,12 +1,10 @@
 package com.odauday.ui.savedsearch;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import com.odauday.R;
 import com.odauday.databinding.ItemSavedSearchBinding;
 import com.odauday.model.Search;
@@ -37,11 +35,11 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
         }
     };
     private PopupMenu mPopupMenu;
-    private Context mContext;
+    
     private OnClickRemoveSavedSearches mOnClickRemoveSavedSearches;
     
-    public SavedSearchAdapter(Context context) {
-        this.mContext = context;
+    public SavedSearchAdapter() {
+    
     }
     
     @Override
@@ -84,7 +82,7 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     }
     
     public void onClickMoreMenu(View view, Search search) {
-        mPopupMenu = new PopupMenu(mContext, (ImageView) view);
+        mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.popup_more_menu_saved_search, mPopupMenu.getMenu());
         mPopupMenu.setOnMenuItemClickListener(item -> {
@@ -113,3 +111,4 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
         void onClickRemoveSavedSearches(Search search);
     }
 }
+

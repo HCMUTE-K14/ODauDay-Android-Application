@@ -543,7 +543,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onCheckStar(PropertyResultEntry item) {
-        Timber.d("Favorite");
+        mSearchTabViewModel.checkFavorite(item.getId());
         
         item.setFavorite(true);
         mBus.post(new OnFavouriteEvent(item));
@@ -551,7 +551,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onUnCheckStar(PropertyResultEntry item) {
-        Timber.d("Un-Favorite");
+        mSearchTabViewModel.unCheckFavorite(item.getId());
         
         item.setFavorite(false);
         mBus.post(new OnFavouriteEvent(item));

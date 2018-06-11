@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:clickable="true"
-        android:background="@color/background_gray_white">
+        android:background="?android:attr/selectableItemBackground">
         <com.odauday.ui.view.CircleImageView
           android:id="@+id/avatar"
           android:layout_width="80dp"
@@ -60,7 +60,7 @@
           android:layout_below="@+id/recycle_view_more"
           android:layout_centerHorizontal="true"
           android:text="@string/txt_version" />
-        <ImageView
+       <ImageView
           android:layout_width="match_parent"
           android:layout_height="150dp"
           android:layout_below="@id/txt_version"

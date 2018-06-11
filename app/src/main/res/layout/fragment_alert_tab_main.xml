@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-  <data />
+  <data>
+    <variable
+      name="handler"
+      type="com.odauday.ui.alert.AlertTabMainFragment"/>
+  </data>
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,21 +22,17 @@
         android:text="@string/txt_notifications"
         android:textColor="@color/colorWhite"
         android:textSize="20dp" />
-      <RelativeLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="?android:attr/selectableItemBackground">
+
         <ImageView
           android:layout_width="30dp"
           android:layout_height="30dp"
-          android:layout_marginRight="10dp"
-          android:layout_centerHorizontal="true"
+          android:layout_marginRight="15dp"
+          android:layout_alignParentRight="true"
+          android:onClick="@{(view)->handler.onClickClearAllNotification()}"
           android:layout_centerVertical="true"
+          android:clickable="true"
+          android:background="?selectableItemBackgroundBorderless"
           android:src="@drawable/ic_notify_clear" />
-      </RelativeLayout>
-
 
     </RelativeLayout>
 
@@ -47,6 +47,7 @@
         android:layout_height="match_parent">
 
       </android.support.v7.widget.RecyclerView>
+
     </RelativeLayout>
   </RelativeLayout>
 </layout>

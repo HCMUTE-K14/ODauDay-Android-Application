@@ -27,9 +27,11 @@ public class SimilarPropertyViewHolder extends BaseRowViewHolder<SimilarProperty
             mContentHolder = new SimilarPropertyContentViewHolder(
                 View.inflate(itemView.getContext(), R.layout.row_similar_property_content, null),
                 this);
-            mContentHolder.setSimilarPropertyRepository(getRow().getSimilarPropertyRepository());
-            mContentHolder.setPropertyId(getRow().getData().getId());
-            ((ViewGroup) itemView).addView(mContentHolder.getRootView());
+            if(getRow().getData() != null){
+                mContentHolder.setSimilarPropertyRepository(getRow().getSimilarPropertyRepository());
+                mContentHolder.setPropertyId(getRow().getData().getId());
+                ((ViewGroup) itemView).addView(mContentHolder.getRootView());
+            }
         }
         mContentHolder.bind();
     }

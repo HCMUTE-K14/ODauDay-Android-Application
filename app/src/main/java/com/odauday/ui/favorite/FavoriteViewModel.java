@@ -1,7 +1,7 @@
 package com.odauday.ui.favorite;
 
 import com.odauday.data.FavoriteRepository;
-import com.odauday.model.PropertyID;
+import com.odauday.model.Favorite;
 import com.odauday.model.ShareFavorite;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
@@ -37,7 +37,7 @@ public class FavoriteViewModel extends BaseViewModel {
         mCompositeDisposable.add(disposable);
     }
     
-    public void unCheckFavorites(List<PropertyID> list) {
+    public void unCheckFavorites(List<Favorite> list) {
         Disposable disposable = mFavoriteRepository.unCheckFavorites(list)
             .doOnSubscribe(onSubscribe -> {
                 response.setValue(Resource.loading(null));

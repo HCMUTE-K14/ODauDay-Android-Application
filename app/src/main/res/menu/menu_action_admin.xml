@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/delete"
+    android:title="@string/txt_delete" />
+  <item
+    android:id="@+id/mark_the_end"
+    android:title="@string/txt_mark_the_end" />
+  <item
+    android:id="@+id/confirm"
+    android:title="@string/txt_confirm" />
+</menu>

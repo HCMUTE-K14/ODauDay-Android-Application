@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 import com.odauday.R;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
@@ -32,7 +33,6 @@ import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import timber.log.Timber;
 
 /**
  * Created by infamouSs on 6/1/18.
@@ -48,6 +48,9 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
     
     @Inject
     EventBus mBus;
+    
+    @Inject
+    FavoriteRepository mFavoriteRepository;
     
     private ListViewAdapter mAdapter;
     
@@ -153,7 +156,6 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Timber.d("On destroy ListViewFragment");
         mBus.unregister(this);
         mAdapter = null;
     }
@@ -196,7 +198,8 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
     
     @Override
     public void onCheckStar(PropertyResultEntry item) {
-        Timber.d("Check favorite");
+        mFavoriteRepository.checkFavorite(item.getId())
+            .subscribe();
         
         item.setFavorite(true);
         mBus.post(new OnFavouriteEvent(item));
@@ -204,7 +207,9 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
     
     @Override
     public void onUnCheckStar(PropertyResultEntry item) {
-        Timber.d("Un-check favorite");
+        mFavoriteRepository
+            .unCheckFavorite(item.getId())
+            .subscribe();
         
         item.setFavorite(false);
         mBus.post(new OnFavouriteEvent(item));

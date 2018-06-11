@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-
 def getProperty(String filename, String propName) {
     def propsFile = rootProject.file(filename)
     if (propsFile.exists()) {
@@ -50,6 +49,7 @@ dependencies {
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:27.1.0'
@@ -84,7 +84,7 @@ dependencies {
     def googlePlayVersion = "12.0.1"
     def eventBusVersion = "3.1.1"
     def rxViewBindingVersion = "2.1.1"
-    def imagePickerVersion = "1.12.0"
+    def fireBaseVersion = "12.0.1"
     def scaleImageViewVersion = "3.10.0"
 
     implementation "com.google.dagger:dagger:${daggerVersion}"
@@ -124,11 +124,14 @@ dependencies {
 
     implementation "org.greenrobot:eventbus:${eventBusVersion}"
     implementation "com.jakewharton.rxbinding2:rxbinding:${rxViewBindingVersion}"
-    implementation "com.github.esafirm.android-image-picker:imagepicker:${imagePickerVersion}"
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:1.12.0'
     implementation "com.davemorrissey.labs:subsampling-scale-image-view:${scaleImageViewVersion}"
 
+    compile "com.google.firebase:firebase-core:${fireBaseVersion}"
+    compile "com.google.firebase:firebase-messaging:${fireBaseVersion}"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+apply plugin: 'com.google.gms.google-services'

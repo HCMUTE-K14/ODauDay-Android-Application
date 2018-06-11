@@ -38,6 +38,18 @@
         <data android:scheme="@string/fb_login_protocol_scheme" />
       </intent-filter>
     </activity>
+
+    <service android:name=".ui.alert.service.FirebaseMessaging">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+      </intent-filter>
+    </service>
+    <service android:name=".ui.alert.service.FirebaseIDService">
+      <intent-filter>
+        <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+      </intent-filter>
+    </service>
+
     <activity
       android:label="@string/app_name"
       android:name=".MainActivity" />
@@ -61,10 +73,10 @@
       android:name="com.google.android.geo.API_KEY"
       android:value="@string/google_maps_key" />
 
-
     <activity android:name=".ui.propertymanager.ActivityPropertyManager" />
     <activity android:name=".ui.settings.ActivitySettings" />
-    <activity android:name=".ui.confirmproperty.ActivityConfirmProperty" />
+    <activity android:name=".ui.admin.ActivityAdminManager" />
+    <activity android:name=".ui.alert.Demo"></activity>
     <activity
       android:name=".ui.propertydetail.PropertyDetailActivity"
       android:windowSoftInputMode="stateHidden|adjustResize" />
@@ -73,5 +85,4 @@
     <activity android:name=".ui.user.buypoint.BuyPointActivity" />
     <activity android:name=".ui.user.subscribe.SubscribePremiumActivity" />
   </application>
-
 </manifest>

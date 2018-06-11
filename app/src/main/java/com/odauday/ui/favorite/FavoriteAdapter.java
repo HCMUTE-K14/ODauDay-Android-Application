@@ -4,11 +4,15 @@ import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.bumptech.glide.request.RequestOptions;
 import com.odauday.R;
+import com.odauday.api.EndPoint;
 import com.odauday.databinding.ItemPropertyBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.view.StarView;
+import com.odauday.utils.ImageLoader;
+import com.odauday.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
@@ -49,8 +53,20 @@ public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> 
     
     @Override
     protected void bind(ItemPropertyBinding binding, Property item) {
+        binding.imageRoom.setImageDrawable(null);
+    
+        if (item.getImages().size() > 0) {
+            int placeHolder = ImageLoader.randomPlaceHolder();
+            ImageLoader
+                .load(binding.imageRoom, EndPoint.BASE_URL + item.getImages().get(0).getUrl(),
+                    new RequestOptions()
+                        .placeholder(placeHolder)
+                        .error(placeHolder));
+        }
         binding.setProperty(item);
         binding.setHandler(this);
+        binding.txtAddress.setText(TextUtils.formatAddress(item.getAddress()));
+        
         binding.starView.setOnClickStarListener(mOnClickStarListener);
         
     }

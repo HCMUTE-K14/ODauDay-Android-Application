@@ -13,7 +13,7 @@
         android:id="@+id/ic_back"
         android:layout_width="50.0dip"
         android:layout_height="fill_parent"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
         android:gravity="center_vertical"
         android:onClick="onClickBack"
@@ -42,6 +42,8 @@
     <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
       android:layout_below="@+id/layout_top_bar"
       android:fillViewport="true">
       <LinearLayout
@@ -68,6 +70,7 @@
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickSelectLanguage">
           <TextView
@@ -93,6 +96,7 @@
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickClearHistory">
           <TextView
@@ -108,10 +112,12 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="0.2dp"
+          android:layout_marginLeft="5dp"
           android:background="@color/gray_view" />
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickLogout">
           <TextView
@@ -135,13 +141,16 @@
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickPrivacyPolicy">
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text="@string/txt_privacy_policy"
             android:textColor="@color/colorGray"
@@ -150,10 +159,12 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="0.2dp"
+          android:layout_marginLeft="5dp"
           android:background="@color/gray_view" />
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickConditionsOfUse">
           <TextView
@@ -169,10 +180,12 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="0.2dp"
+          android:layout_marginLeft="5dp"
           android:background="@color/gray_view" />
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickInformation">
           <TextView
@@ -188,10 +201,12 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="0.2dp"
+          android:layout_marginLeft="5dp"
           android:background="@color/gray_view" />
         <RelativeLayout
           android:layout_width="match_parent"
           android:layout_height="50dp"
+          android:layout_marginLeft="5dp"
           android:background="?android:attr/selectableItemBackground">
           <TextView
             android:id="@+id/app_version"

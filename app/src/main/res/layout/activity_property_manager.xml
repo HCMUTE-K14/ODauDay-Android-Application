@@ -17,7 +17,7 @@
         android:id="@+id/ic_back"
         android:layout_width="50.0dip"
         android:layout_height="fill_parent"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
         android:gravity="center_vertical"
         android:onClick="onClickBack"
@@ -48,7 +48,7 @@
         android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:onClick="onClickMore"
         android:src="@drawable/ic_menu"
         android:tint="@color/white" />
@@ -79,7 +79,9 @@
       <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view_properties"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp">
 
       </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
@@ -98,4 +100,5 @@
       app:elevation="4dp" />
 
   </RelativeLayout>
+
 </layout>

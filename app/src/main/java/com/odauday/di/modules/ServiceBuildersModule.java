@@ -1,5 +1,8 @@
 package com.odauday.di.modules;
 
+import com.odauday.data.local.notification.NotificationServiceImp;
+import com.odauday.data.local.notification.NotificationEntityDao;
+import com.odauday.data.local.notification.NotificationService;
 import com.odauday.data.local.favorite.FavoritePropertyDao;
 import com.odauday.data.local.favorite.FavoriteServiceImpl;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
@@ -8,6 +11,7 @@ import com.odauday.data.local.place.RecentSearchPlaceServiceImpl;
 import com.odauday.data.local.tag.RecentTagDao;
 import com.odauday.data.local.tag.RecentTagService;
 import com.odauday.data.local.tag.RecentTagServiceImpl;
+import com.odauday.data.remote.AdminService;
 import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.HistoryService;
 import com.odauday.data.remote.SavedSearchService;
@@ -96,6 +100,16 @@ public class ServiceBuildersModule {
     ImageService provideImageService(@Named("protectRetrofit") Retrofit retrofit) {
         return retrofit.create(ImageService.class);
     }
+    @Provides
+    @Singleton
+    AdminService provideAdminService(@Named("protectRetrofit")Retrofit retrofit){
+        return  retrofit.create(AdminService.class);
+    }
+    @Provides
+    @Singleton
+    com.odauday.data.remote.NotificationService provideNotificationServiceRemote(@Named("protectRetrofit")Retrofit retrofit){
+        return retrofit.create(com.odauday.data.remote.NotificationService.class);
+    }
     
     @Provides
     @Singleton
@@ -139,6 +153,10 @@ public class ServiceBuildersModule {
     
     @Provides
     @Singleton
+    NotificationService provideNotificationService(NotificationEntityDao notificationEntityDao){
+        return new NotificationServiceImp(notificationEntityDao);
+    }
+    
     com.odauday.data.local.favorite.FavoriteService provideFavoriteServiceLocal(
         FavoritePropertyDao favoritePropertyDao) {
         return new FavoriteServiceImpl(favoritePropertyDao);
