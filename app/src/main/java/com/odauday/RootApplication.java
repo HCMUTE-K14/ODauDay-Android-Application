@@ -6,7 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.local.history.DaoSession;
+import com.odauday.data.local.favorite.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
 import com.odauday.di.modules.BusModule;
 import com.odauday.di.modules.LocalDaoModule;
@@ -25,10 +25,10 @@ import timber.log.Timber;
  * Created by infamouSs on 2/27/18.
  */
 
-public class RootApplication extends Application implements HasActivityInjector,
-                                                            HasServiceInjector {
+public class RootApplication extends Application implements HasActivityInjector,HasServiceInjector {
     
     private static Context mContext;
+    
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
     @Inject

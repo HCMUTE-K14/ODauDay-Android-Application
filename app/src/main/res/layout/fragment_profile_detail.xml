@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:text="@string/txt_profile"
+        android:textSize="16sp" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/phone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeader="@{@string/txt_phone_number}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/facebook"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeader="@{@string/txt_facebook_profile}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/role"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeader="@{@string/txt_role}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/status"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeader="@{@string/txt_status}" />
+      </LinearLayout>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:text="@string/txt_account"
+        android:textSize="16sp" />
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/amount"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeader="@{@string/txt_point}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/subscriber"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeaderWithoutColon="@{@string/txt_buy_point}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/change_password"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeaderWithoutColon="@{@string/txt_change_password}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/log_out"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeaderWithoutColon="@{@string/txt_logout}" />
+      </LinearLayout>
+    </LinearLayout>
+  </android.support.v4.widget.NestedScrollView>
+
+</layout>

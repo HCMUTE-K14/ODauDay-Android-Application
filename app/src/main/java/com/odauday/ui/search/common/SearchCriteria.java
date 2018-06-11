@@ -64,13 +64,13 @@ public class SearchCriteria implements Parcelable {
     public SearchCriteria() {
         this.searchType = SearchType.ALL.getValue();
         this.price =
-                  this.size = new MinMaxObject<>(-1, -1);
+            this.size = new MinMaxObject<>(-1, -1);
         this.bedrooms = new MinMaxObject<>(-1, -1);
         this.bathrooms = new MinMaxObject<>(-1, -1);
         this.parking = new MinMaxObject<>(-1, -1);
         this.propertyTypes = new ArrayList<>();
         this.display = new SearchCriteriaDisplay();
-
+        
     }
     
     protected SearchCriteria(Parcel in) {
@@ -87,13 +87,13 @@ public class SearchCriteria implements Parcelable {
     public int getSearchType() {
         return searchType;
     }
-
+    
     public SearchCriteria setSearchType(int searchType) {
         this.searchType = searchType;
-
+        
         return this;
     }
-
+    
     public MinMaxObject<Integer> getPrice() {
         return price;
     }
@@ -127,7 +127,7 @@ public class SearchCriteria implements Parcelable {
         
         return this;
     }
-
+    
     public SearchCriteria setPropertyTypeByListInteger(List<Integer> propertyType) {
         List<PropertyType> list = new ArrayList<>();
         for (int i : propertyType) {
@@ -135,12 +135,12 @@ public class SearchCriteria implements Parcelable {
         }
         return this.setPropertyType(list);
     }
-
-
+    
+    
     public MinMaxObject<Integer> getBedrooms() {
         return bedrooms;
     }
-
+    
     public void setBedrooms(MinMaxObject<Integer> bedrooms) {
         this.bedrooms = bedrooms;
     }
@@ -148,7 +148,7 @@ public class SearchCriteria implements Parcelable {
     public MinMaxObject<Integer> getBathrooms() {
         return bathrooms;
     }
-
+    
     public void setBathrooms(MinMaxObject<Integer> bathrooms) {
         this.bathrooms = bathrooms;
     }
@@ -156,11 +156,11 @@ public class SearchCriteria implements Parcelable {
     public MinMaxObject<Integer> getParking() {
         return parking;
     }
-
+    
     public void setParking(MinMaxObject<Integer> parking) {
         this.parking = parking;
     }
-
+    
     public SearchCriteriaDisplay getDisplay() {
         return display;
     }
@@ -168,8 +168,8 @@ public class SearchCriteria implements Parcelable {
     public void setDisplay(SearchCriteriaDisplay display) {
         this.display = display;
     }
-
-
+    
+    
     @SuppressWarnings("unchecked")
     public SearchCriteria normalize() {
         SearchCriteria searchCriteria = this;
@@ -191,12 +191,12 @@ public class SearchCriteria implements Parcelable {
         
         if (searchCriteria.bedrooms != null) {
             _bedrooms = (MinMaxObject<Integer>) searchCriteria.bedrooms
-                      .normalize();
+                .normalize();
         }
         
         if (searchCriteria.bathrooms != null) {
             _bathrooms = (MinMaxObject<Integer>) searchCriteria.bathrooms
-                      .normalize();
+                .normalize();
         }
         
         if (searchCriteria.parking != null) {

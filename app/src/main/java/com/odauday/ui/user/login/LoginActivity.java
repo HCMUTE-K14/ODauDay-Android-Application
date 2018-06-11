@@ -16,7 +16,6 @@ import com.odauday.data.remote.user.model.AbstractAuthRequest;
 import com.odauday.data.remote.user.model.FacebookAuthRequest;
 import com.odauday.data.remote.user.model.NormalAuthRequest;
 import com.odauday.databinding.ActivityLoginBinding;
-import com.odauday.exception.RetrofitException;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.register.RegisterActivity;
@@ -199,15 +198,7 @@ public class LoginActivity extends BaseMVVMActivity<ActivityLoginBinding> implem
     public void onFailure(Exception ex) {
         Timber.tag(TAG).e(ex.getMessage());
         
-        String message;
-        
-        if (ex instanceof RetrofitException) {
-            message = getString(R.string.message_service_unavailable);
-        } else {
-            message = ex.getMessage();
-        }
-        
-        SnackBarUtils.showSnackBar(mBinding.mainLayout, message);
+        SnackBarUtils.showSnackBar(mBinding.mainLayout, getString(R.string.message_login_failure));
     }
     
     //====================== Helper Method ======================//

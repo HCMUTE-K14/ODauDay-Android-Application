@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-
 def getProperty(String filename, String propName) {
     def propsFile = rootProject.file(filename)
     if (propsFile.exists()) {
@@ -50,11 +49,12 @@ dependencies {
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:design:27.0.2'
-    implementation 'com.android.support:cardview-v7:27.0.2'
-    implementation "com.android.support:support-fragment:27.0.2"
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:cardview-v7:27.1.0'
+    implementation "com.android.support:support-fragment:27.1.0"
 
     /*Open Library
     * 1. Dagger 2.14.1
@@ -84,7 +84,8 @@ dependencies {
     def googlePlayVersion = "12.0.1"
     def eventBusVersion = "3.1.1"
     def rxViewBindingVersion = "2.1.1"
-    def fireBaseVersion = "12.0.1";
+    def fireBaseVersion = "12.0.1"
+    def scaleImageViewVersion = "3.10.0"
 
     implementation "com.google.dagger:dagger:${daggerVersion}"
     implementation "com.google.dagger:dagger-android-support:${daggerVersion}"
@@ -124,6 +125,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:${eventBusVersion}"
     implementation "com.jakewharton.rxbinding2:rxbinding:${rxViewBindingVersion}"
     implementation 'com.github.esafirm.android-image-picker:imagepicker:1.12.0'
+    implementation "com.davemorrissey.labs:subsampling-scale-image-view:${scaleImageViewVersion}"
 
     compile "com.google.firebase:firebase-core:${fireBaseVersion}"
     compile "com.google.firebase:firebase-messaging:${fireBaseVersion}"

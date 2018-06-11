@@ -19,7 +19,7 @@ public class FilterNavigationModule {
     
     @Provides
     FilterNavigationViewModel provideFilterNavigationViewModel(
-              RecentTagRepository recentTagRepository) {
+        RecentTagRepository recentTagRepository) {
         return new FilterNavigationViewModel(recentTagRepository);
     }
 }

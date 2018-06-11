@@ -18,6 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.odauday.data.NotificationManagerRepository;
 import com.odauday.data.NotificationRepository;
+import com.google.android.gms.maps.MapsInitializer;
 import com.odauday.data.UserRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -30,6 +31,7 @@ import com.odauday.ui.alert.service.Notification;
 import com.odauday.ui.alert.service.NotificationEvent;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.common.NavigationController;
+import com.odauday.ui.savedsearch.OnClickSavedSearch;
 import com.odauday.ui.search.SearchTabMainFragment;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
@@ -82,6 +84,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         MapsInitializer.initialize(getApplicationContext());
         if (mUserRepository.isNeedLogin()) {
             ViewUtils.startActivity(this, LoginActivity.class);
@@ -116,7 +119,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
         setNumberNotification();
         //mBinding.bottomNavBar.setNumberNotification(12);
     }
@@ -124,12 +126,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     protected void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-    
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+       
     }
     
     @Override
@@ -145,6 +142,28 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     protected void processingTaskFromViewModel() {
     
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onClickSavedSearch(OnClickSavedSearch onClickSavedSearch) {
+        mBinding.bottomNavBar.select(SearchTabMainFragment.TAG, false);
+        
+        mNavigationController.navigateTo(SearchTabMainFragment.TAG);
+        ViewUtils.delay(() -> {
+            SearchTabMainFragment searchTabMainFragment = (SearchTabMainFragment) getSupportFragmentManager()
+                .findFragmentByTag(SearchTabMainFragment.TAG);
+            
+            if (searchTabMainFragment != null) {
+                searchTabMainFragment.loadSavedSearch(onClickSavedSearch.getSearch());
+            }
+        }, 500);
+        
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
     
     @Override
@@ -170,8 +189,9 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
             }
             
             mBinding.bottomNavBar.select(mTabStack.peek(), false);
-            getSupportFragmentManager()
-                .popBackStack(mTabStack.peek(), 0);
+            mNavigationController.navigateTo(mTabStack.peek());
+            //            getSupportFragmentManager()
+            //                .popBackStack(mTabStack.peek(), 0);
         } catch (Exception ex) {
             finish();
         }

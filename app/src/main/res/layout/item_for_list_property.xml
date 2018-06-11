@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
+    <com.odauday.ui.view.AspectRatioViewPager
+      android:id="@+id/gallery_view_pager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:heightRatio_viewpager="9"
+      app:widthRatio_viewpager="16" />
+    <FrameLayout
+      android:id="@+id/pager_overlay_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignBottom="@id/gallery_view_pager"
+      android:layout_alignTop="@id/gallery_view_pager">
+      <include
+        android:id="@+id/hints"
+        layout="@layout/include_gallery_hints"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+      <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <include
+          android:id="@+id/property_type"
+          layout="@layout/include_property_type" />
+        <TextView
+          android:id="@+id/price"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingTop="4dp"
+          android:paddingBottom="8dp"
+          android:paddingLeft="16dp"
+          android:textStyle="bold"
+          android:paddingRight="8dp"
+          android:ellipsize="end"
+          android:singleLine="true"
+          android:text="fdsafsafsafdsafsda"
+          android:textColor="@color/white"
+          android:textSize="18sp" />
+      </LinearLayout>
+      <com.odauday.ui.view.StarView
+        android:id="@+id/favorite"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="end|top"
+        android:padding="16dp"
+        android:src="@drawable/ic_listing_shortlist_selected_no_padding" />
+    </FrameLayout>
+    <RelativeLayout
+      android:id="@+id/vital_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/gallery_view_pager"
+      android:background="@drawable/item_listing_background"
+      android:clickable="true">
+      <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="fdsafasfasfdsafsafasfsafda"
+        android:textColor="#263248"
+        android:textSize="16sp" />
+      <Space
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignTop="@id/address" />
+      <RelativeLayout
+        android:id="@+id/feature_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address"
+        android:paddingLeft="16dp"
+        android:orientation="horizontal">
+        <LinearLayout
+          android:id="@+id/beds_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingRight="5dp">
+
+          <TextView
+            android:id="@+id/beds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textColor="#263248"
+            android:textSize="16sp"
+            android:visibility="visible" />
+          <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_bedrooms" />
+        </LinearLayout>
+        <LinearLayout
+          android:id="@+id/baths_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+
+          android:layout_toRightOf="@id/beds_container"
+          android:paddingRight="5dp">
+          <TextView
+            android:id="@+id/baths"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textColor="#263248"
+            android:textSize="16sp"
+            android:visibility="visible" />
+          <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_bathrooms" />
+        </LinearLayout>
+        <LinearLayout
+          android:id="@+id/parkings_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/baths_container"
+          android:paddingRight="10dp">
+          <TextView
+            android:id="@+id/parkings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:drawablePadding="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textColor="#263248"
+            android:textSize="16sp"
+            android:visibility="visible" />
+          <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_parkings" />
+        </LinearLayout>
+      </RelativeLayout>
+
+    </RelativeLayout>
+
+  </RelativeLayout>
+</layout>

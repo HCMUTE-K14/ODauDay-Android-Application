@@ -96,10 +96,16 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
         }
     }
     
+    private VB mBinding;
+    
     @Override
     public BaseViewHolder<VB> onCreateViewHolder(ViewGroup parent, int viewType) {
-        VB binding = createBinding(parent);
-        return new BaseViewHolder<>(binding);
+        mBinding = createBinding(parent);
+        return new BaseViewHolder<>(mBinding);
+    }
+    
+    public VB getBinding() {
+        return mBinding;
     }
     
     @Override

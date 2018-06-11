@@ -16,6 +16,8 @@ import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.alert.service.FirebaseMessaging;
 import com.odauday.ui.favorite.FavoriteTabProvider;
 import com.odauday.ui.more.MoreTabProvider;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
+import com.odauday.ui.propertydetail.PropertyDetailModule;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.propertymanager.PropertyManagerModule;
 import com.odauday.ui.savedsearch.SavedSearchProvider;
@@ -26,12 +28,20 @@ import com.odauday.ui.selectlocation.SelectLocationActivity;
 import com.odauday.ui.selectlocation.SelectLocationModule;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.settings.SettingsModule;
+import com.odauday.ui.user.buypoint.BuyPointActivity;
+import com.odauday.ui.user.buypoint.BuyPointModule;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordActivity;
 import com.odauday.ui.user.forgotpassword.ForgotPasswordModule;
 import com.odauday.ui.user.login.LoginActivity;
 import com.odauday.ui.user.login.LoginModule;
+import com.odauday.ui.user.profile.ProfileUserActivity;
+import com.odauday.ui.user.profile.ProfileUserModule;
+import com.odauday.ui.user.profile.detail.ProfileDetailProvider;
+import com.odauday.ui.user.profile.history.HistoryPropertyProvider;
 import com.odauday.ui.user.register.RegisterActivity;
 import com.odauday.ui.user.register.RegisterModule;
+import com.odauday.ui.user.subscribe.SubscribePremiumActivity;
+import com.odauday.ui.user.subscribe.SubscribePremiumModule;
 import com.odauday.ui.welcome.WelcomeActivity;
 import com.odauday.ui.welcome.WelcomeActivityModule;
 import dagger.Module;
@@ -61,11 +71,11 @@ public abstract class ViewBuildersModule {
     abstract AutoCompletePlaceActivity bindAutoCompletePlaceActitivty();
     
     @ContributesAndroidInjector(modules = {
-              AddEditPropertyModule.class,
-              Step1Provider.class,
-              Step2Provider.class,
-              Step3Provider.class,
-              Step4Provider.class
+        AddEditPropertyModule.class,
+        Step1Provider.class,
+        Step2Provider.class,
+        Step3Provider.class,
+        Step4Provider.class
     })
     @PerActivity
     abstract AddEditPropertyActivity bindAddEditPropertyActivity();
@@ -73,10 +83,14 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = SelectLocationModule.class)
     @PerActivity
     abstract SelectLocationActivity bindSelectLocationActivity();
-
+    
     @ContributesAndroidInjector(modules = WelcomeActivityModule.class)
     @PerActivity
     abstract WelcomeActivity bindWelcomeActivity();
+    
+    @ContributesAndroidInjector(modules = PropertyDetailModule.class)
+    @PerActivity
+    abstract PropertyDetailActivity bindPropertyDetailActivity();
     
     @ContributesAndroidInjector(modules = {
         SearchTabProvider.class,
@@ -103,4 +117,20 @@ public abstract class ViewBuildersModule {
     
     @ContributesAndroidInjector
     abstract FirebaseMessaging contributeFirebaseMessaging();
+    @ContributesAndroidInjector(modules = {
+        ProfileUserModule.class,
+        HistoryPropertyProvider.class,
+        ProfileDetailProvider.class
+    })
+    @PerActivity
+    abstract ProfileUserActivity provideProfileUserActivity();
+    
+    @ContributesAndroidInjector(modules = BuyPointModule.class)
+    @PerActivity
+    abstract BuyPointActivity provideBuyPointActivity();
+    
+    @ContributesAndroidInjector(modules = SubscribePremiumModule.class)
+    @PerActivity
+    abstract SubscribePremiumActivity provideSubscribePremiumActivity();
+
 }

@@ -86,10 +86,10 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         
         if (mSearchPropertyRepository.getCurrentSearchRequest() == null) {
             SearchCriteria searchCriteria = mMapPreferenceHelper
-                      .getRecentSearchCriteria(lastSearchMode);
+                .getRecentSearchCriteria(lastSearchMode);
             this.mSearchPropertyRepository
-                      .setCurrentSearchRequest(
-                                new SearchRequest(searchCriteria));
+                .setCurrentSearchRequest(
+                    new SearchRequest(searchCriteria));
         }
         setSearchCriteria(mMapPreferenceHelper.getRecentSearchCriteria(lastSearchMode));
     }
@@ -127,6 +127,8 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Override
     public void onDestroy() {
         mBus.unregister(this);
+        mOnCompleteRefineFilter = null;
+        mSearchCriteria = null;
         super.onDestroy();
     }
     
@@ -135,69 +137,69 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNeedUpdateCriteria(OnUpdateCriteriaEvent event) {
         SearchCriteria searchCriteria = mSearchPropertyRepository.getCurrentSearchRequest()
-                  .getCriteria();
+            .getCriteria();
         
         setSearchCriteria(searchCriteria);
     }
     
     @Override
     public void onCompletePickedNumber(int requestCode,
-              PickerMinMaxReturnObject minMaxReturnObject) {
+        PickerMinMaxReturnObject minMaxReturnObject) {
         FilterOption option = FilterOption.getByRequestCode(requestCode);
         switch (option) {
             case PRICE:
                 mSearchCriteria.setPrice(minMaxReturnObject.getValue());
                 String textPrice = mFilterNavigationViewModel
-                          .getMaxMinText(option, minMaxReturnObject);
+                    .getMaxMinText(option, minMaxReturnObject);
                 if (textPrice.split("-").length == 2) {
                     String[] textPricePart = textPrice.split("-");
                     String text = TextUtils.build(
-                              getString(R.string.txt_from),
-                              " ",
-                              textPricePart[0].trim());
+                        getString(R.string.txt_from),
+                        " ",
+                        textPricePart[0].trim());
                     
                     String moreText = TextUtils.build(
-                              getString(R.string.txt_to),
-                              " ",
-                              textPricePart[1].trim());
+                        getString(R.string.txt_to),
+                        " ",
+                        textPricePart[1].trim());
                     mBinding.get().filterPrice.setTextValue(text);
                     mBinding.get().filterPrice.setMoreValue(moreText);
                     
                     mSearchCriteria.getDisplay()
-                              .setDisplayPrice(new TextAndMoreTextValue(text, moreText));
+                        .setDisplayPrice(new TextAndMoreTextValue(text, moreText));
                     return;
                 }
                 mBinding.get().filterPrice.setMoreValue("");
                 mBinding.get().filterPrice.setTextValue(textPrice);
                 mSearchCriteria.getDisplay()
-                          .setDisplayPrice(new TextAndMoreTextValue(textPrice, ""));
+                    .setDisplayPrice(new TextAndMoreTextValue(textPrice, ""));
                 
                 break;
             case SIZE:
                 mSearchCriteria.setSize(minMaxReturnObject.getValue());
                 String textSize = mFilterNavigationViewModel
-                          .getMaxMinText(option, minMaxReturnObject);
+                    .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterSize.setTextValue(textSize);
                 mSearchCriteria.getDisplay().setDisplaySize(textSize);
                 break;
             case BEDROOMS:
                 mSearchCriteria.setBedrooms(minMaxReturnObject.getValue());
                 String textBed = mFilterNavigationViewModel
-                          .getMaxMinText(option, minMaxReturnObject);
+                    .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBedrooms.setTextValue(textBed);
                 mSearchCriteria.getDisplay().setDisplayBedroom(textBed);
                 break;
             case BATHROOMS:
                 mSearchCriteria.setBathrooms(minMaxReturnObject.getValue());
                 String textBath = mFilterNavigationViewModel
-                          .getMaxMinText(option, minMaxReturnObject);
+                    .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterBathRooms.setTextValue(textBath);
                 mSearchCriteria.getDisplay().setDisplayBathroom(textBath);
                 break;
             case PARKING:
                 mSearchCriteria.setParking(minMaxReturnObject.getValue());
                 String textPark = mFilterNavigationViewModel
-                          .getMaxMinText(option, minMaxReturnObject);
+                    .getMaxMinText(option, minMaxReturnObject);
                 mBinding.get().filterParking.setTextValue(textPark);
                 mSearchCriteria.getDisplay().setDisplayParking(textPark);
                 break;
@@ -215,7 +217,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 List<Integer> listSelectedPropertyType = (List<Integer>) value;
                 mSearchCriteria.setPropertyTypeByListInteger(listSelectedPropertyType);
                 TextAndMoreTextValue displayValueProperty = TextAndMoreTextValue
-                          .build(getContext(), option, mSearchCriteria.getPropertyType());
+                    .build(getContext(), option, mSearchCriteria.getPropertyType());
                 
                 mBinding.get().filterPropertyType.setTextValue(displayValueProperty.getText());
                 mBinding.get().filterPropertyType.setMoreValue(displayValueProperty.getMoreText());
@@ -225,7 +227,7 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
                 List<Tag> selectedTag = TagChip.convertToTag((List<ChipInterface>) value);
                 mSearchCriteria.setTags(selectedTag);
                 TextAndMoreTextValue displayValueTags = TextAndMoreTextValue
-                          .build(getContext(), option, mSearchCriteria.getTags());
+                    .build(getContext(), option, mSearchCriteria.getTags());
                 mBinding.get().filterTag.setTextValue(displayValueTags.getText());
                 mBinding.get().filterTag.setMoreValue(displayValueTags.getMoreText());
                 
@@ -272,13 +274,11 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         mBinding.get().filterSize.setTextValue(displaySize);
         
         TextAndMoreTextValue displayPropertyType = mSearchCriteria.getDisplay()
-                  .getDisplayPropertyType();
+            .getDisplayPropertyType();
         mBinding.get().filterPropertyType.setText(displayPropertyType);
         
-
         String displayBedroom = mSearchCriteria.getDisplay().getDisplayBedroom();
         mBinding.get().filterBedrooms.setTextValue(displayBedroom);
-
         
         String displayBathroom = mSearchCriteria.getDisplay().getDisplayBathroom();
         mBinding.get().filterBathRooms.setTextValue(displayBathroom);
@@ -305,11 +305,11 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
     
     public OnCompleteRefineFilter getOnCompleteRefineFilter() {
         return mOnCompleteRefineFilter;
-
+        
     }
     
     public void setOnCompleteRefineFilter(
-              OnCompleteRefineFilter onCompleteRefineFilter) {
+        OnCompleteRefineFilter onCompleteRefineFilter) {
         mOnCompleteRefineFilter = onCompleteRefineFilter;
     }
     

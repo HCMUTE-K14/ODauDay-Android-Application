@@ -57,8 +57,8 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
         
         mRecyclerView = mView.findViewById(R.id.recycler_view);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-                  mRecyclerView.getContext(),
-                  LinearLayoutManager.VERTICAL);
+            mRecyclerView.getContext(),
+            LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         
         mChipsInput = mView.findViewById(R.id.chips_input);
@@ -66,11 +66,11 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
         
         if (getArguments() == null) {
             throw new IllegalArgumentException(
-                      "Need EXTRA_INTENT_SELECTED_TAG && EXTRA_INTENT_RECENT_TAG");
+                "Need EXTRA_INTENT_SELECTED_TAG && EXTRA_INTENT_RECENT_TAG");
         }
         
         List<Tag> selectedTags = getArguments()
-                  .getParcelableArrayList(INTENT_EXTRA_SELECTED_TAG);
+            .getParcelableArrayList(INTENT_EXTRA_SELECTED_TAG);
         
         List<Tag> recentTags = getArguments().getParcelableArrayList(INTENT_EXTRA_RECENT_TAG);
         setChipsData();
@@ -83,10 +83,10 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
             Fragment fragment = TagTypeDialog.this.getTargetFragment();
             if (fragment != null && (fragment instanceof OnCompletePickedType)) {
                 ((OnCompletePickedType) fragment)
-                          .onCompletePickedType(
-                                    TagTypeDialog.this.getTargetRequestCode(),
-                                    Collections
-                                              .unmodifiableList(mChipsInput.getSelectedChipList()));
+                    .onCompletePickedType(
+                        TagTypeDialog.this.getTargetRequestCode(),
+                        Collections
+                            .unmodifiableList(mChipsInput.getSelectedChipList()));
             }
             dismiss();
         });
@@ -132,7 +132,7 @@ public class TagTypeDialog extends BaseDialogFragment implements OnClickTagRecen
     }
     
     public void setOnCompletePickedType(
-              OnCompletePickedType onCompletePickedType) {
+        OnCompletePickedType onCompletePickedType) {
         mOnCompletePickedType = onCompletePickedType;
     }
 }

@@ -12,16 +12,18 @@
     android:scaleType="centerInside"
     android:src="@drawable/ic_error_image_no_results" />
   <TextView
+    android:id="@+id/header"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/txt_no_search_results"
     android:textColor="#747c8a"
     android:textSize="26sp" />
   <TextView
+    android:id="@+id/sub_header"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:text="@string/txt_empty_search_subtitle"
     android:textColor="#979da7"
-    android:textSize="18sp" />
+    android:textSize="16sp" />
 </LinearLayout>

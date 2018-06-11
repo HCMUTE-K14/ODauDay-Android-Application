@@ -1,6 +1,7 @@
 package com.odauday.ui.search.common.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -8,12 +9,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.odauday.R;
+import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
+import com.odauday.config.Constants;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
+import com.odauday.model.PropertyDetail;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
+import com.odauday.ui.view.StarView;
+import com.odauday.ui.view.StarView.OnClickStarListener;
+import com.odauday.ui.view.StarView.STATUS;
 import com.odauday.utils.ImageLoader;
 import com.odauday.utils.TextUtils;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by infamouSs on 4/18/18.
@@ -24,6 +34,11 @@ public class VitalPropertyView extends RelativeLayout {
     TextView mTextViewPrice;
     TextView mTextViewFeature;
     TextView mTextViewAddress;
+    StarView<PropertyResultEntry> mStarView;
+    OnClickStarListener<PropertyResultEntry> mOnClickStarListener;
+    
+    RelativeLayout mContainerVital;
+    
     private PropertyResultEntry mProperty;
     
     public VitalPropertyView(Context context) {
@@ -48,11 +63,25 @@ public class VitalPropertyView extends RelativeLayout {
             return;
         }
         View rootView = inflater.inflate(R.layout.layout_property_detail_vital, this, true);
-        
+        mContainerVital = rootView.findViewById(R.id.container_vital);
         mImageView = rootView.findViewById(R.id.image);
         mTextViewPrice = rootView.findViewById(R.id.txt_price);
         mTextViewFeature = rootView.findViewById(R.id.txt_feature);
         mTextViewAddress = rootView.findViewById(R.id.txt_address);
+        mStarView = rootView.findViewById(R.id.star_view);
+        
+        mContainerVital.setOnClickListener(view -> {
+            if (mProperty != null) {
+                PropertyDetail propertyDetail = new PropertyDetail();
+                propertyDetail.setId(mProperty.getId());
+                propertyDetail.setFavorite(mProperty.isFavorite());
+                
+                Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
+                
+                getContext().startActivity(intent);
+            }
+        });
     }
     
     
@@ -78,11 +107,15 @@ public class VitalPropertyView extends RelativeLayout {
     
     public void setProperty(PropertyResultEntry property) {
         mProperty = property;
-        Timber.d(mProperty.toString());
+        mStarView.setSTATUS(mProperty.isFavorite() ? STATUS.UN_CHECK : STATUS.CHECK);
+        
         if (property.getImages() != null) {
             if (!property.getImages().isEmpty()) {
-                String urlFirstImage = property.getImages().get(0).getUrl();
-                setImage(urlFirstImage);
+                String urlFirstImage =
+                    property.getImages().get(0) == null ? "" : property.getImages().get(0).getUrl();
+                setImage(EndPoint.BASE_URL + urlFirstImage);
+            } else {
+                setImage(ImageLoader.randomPlaceHolder());
             }
         } else {
             setImage(ImageLoader.randomPlaceHolder());
@@ -91,30 +124,32 @@ public class VitalPropertyView extends RelativeLayout {
         String buildPriceText = TextUtils.formatIntToCurrency((float) property.getPrice() *
                                                               AppConfig.RATE_VND);
         setPrice(buildPriceText);
+        String featureText = getContext()
+            .getString(R.string.txt_display_bedroom_bathroom_parking, property.getNumOfBedRooms(),
+                property.getNumOfBathRooms(), property.getNumOfParkings());
         
-        String buildFeatureText = new StringBuilder()
-            .append(property.getNumOfBathRooms())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_bedrooms))
-            .append(", ")
-            .append(property.getNumOfBedRooms())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_bathrooms))
-            .append(", ")
-            .append(property.getNumOfParkings())
-            .append(" ")
-            .append(getContext().getString(R.string.txt_parking))
-            .toString();
-        
-        setFeature(buildFeatureText);
+        setFeature(featureText);
         
         String address = new StringBuilder()
             .append("<b>")
             .append(getContext().getString(R.string.txt_at))
             .append("</b> ")
-            .append(property.getAddress()).toString();
+            .append(TextUtils.formatAddress(property.getAddress())).toString();
         
         getTextViewAddress().setText(Html.fromHtml(address));
+    }
+    
+    public void setOnClickStarListener(
+        OnClickStarListener<PropertyResultEntry> onClickStarListener) {
+        mOnClickStarListener = onClickStarListener;
+        mStarView.setOnClickStarListener(mOnClickStarListener);
+        
+        RxView.clicks(mStarView)
+            .throttleLast(300, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                mStarView.addOnClick(mProperty);
+            });
     }
     
     public void setImage(String url) {

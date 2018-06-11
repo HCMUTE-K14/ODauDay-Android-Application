@@ -48,7 +48,7 @@ public class InformationBar extends LinearLayout {
     }
     
     public InformationBar(Context context,
-              @Nullable AttributeSet attrs) {
+        @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
         
@@ -61,7 +61,7 @@ public class InformationBar extends LinearLayout {
     
     public void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -77,24 +77,24 @@ public class InformationBar extends LinearLayout {
         inforBar.setOutAnimation(AnimationUtils.loadAnimation(context, android.R.anim.fade_out));
         inforBar.setVisibility(View.VISIBLE);
         Drawable drawable = getResources()
-                  .getDrawable(R.drawable.progress_indeterminate_infor_bar);
+            .getDrawable(R.drawable.progress_indeterminate_infor_bar);
         drawable.setCallback(null);
         getProgressBar().setIndeterminateDrawable(drawable);
         getImageLighting().startAnimation(
-                  AnimationUtils.loadAnimation(context, R.anim.fade_out_reverse_repeat));
+            AnimationUtils.loadAnimation(context, R.anim.fade_out_reverse_repeat));
     }
     
     @SuppressLint("CheckResult")
     private void setupListener() {
         RxView.clicks(getRootView())
-                  .throttleFirst(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(success -> {
-                      if (mListener != null &&
-                          getContainerError().getVisibility() == View.VISIBLE) {
-                          mListener.onClickReload();
-                      }
-                  });
+            .throttleFirst(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                if (mListener != null &&
+                    getContainerError().getVisibility() == View.VISIBLE) {
+                    mListener.onClickReload();
+                }
+            });
         
         getButtonSort().setOnClickListener(btnSort -> {
             if (mListener != null) {
@@ -144,7 +144,7 @@ public class InformationBar extends LinearLayout {
     }
     
     public void updateWithSearchRequestAndSearchResult(SearchRequest searchRequest,
-              SearchResult searchResult) {
+        SearchResult searchResult) {
         long totalCount = searchResult.getCount();
         int count = searchResult.getResult().size();
         StringBuilder builder = new StringBuilder();
@@ -153,18 +153,18 @@ public class InformationBar extends LinearLayout {
         } else {
             if (totalCount > count) {
                 builder.append("<b>")
-                          .append(count)
-                          .append("</b>")
-                          .append(" ")
-                          .append(getContext().getString(R.string.txt_of))
-                          .append(" ");
+                    .append(count)
+                    .append("</b>")
+                    .append(" ")
+                    .append(getContext().getString(R.string.txt_of))
+                    .append(" ");
                 builder.append("<b>").append(totalCount).append(" </b>");
             } else {
                 builder.append("<b>").append(count).append(" </b>");
             }
             
             builder.append(getResources()
-                      .getQuantityString(R.plurals.property_plural, count));
+                .getQuantityString(R.plurals.property_plural, count));
             SearchCriteria searchCriteria = searchRequest.getCriteria();
             if (searchCriteria.getSearchType() != SearchType.ALL.getValue()) {
                 SearchType searchType = SearchType.getByValue(searchCriteria.getSearchType());
@@ -174,19 +174,19 @@ public class InformationBar extends LinearLayout {
             
             List<String> inforBarFilters = new ArrayList<>();
             String priceRange = TextUtils
-                      .getPriceText(searchCriteria.getPrice().getMin() * AppConfig.RATE_VND,
-                                searchCriteria.getPrice().getMax() * AppConfig.RATE_VND, true);
+                .getPriceText(searchCriteria.getPrice().getMin() * AppConfig.RATE_VND,
+                    searchCriteria.getPrice().getMax() * AppConfig.RATE_VND, true);
             if (!TextUtils.isEmpty(priceRange)) {
                 inforBarFilters.add(priceRange);
             }
             String bedRange = TextUtils
-                      .getBedRangeDisplayString(searchCriteria.getBedrooms().getMin(),
-                                searchCriteria.getBedrooms().getMax());
+                .getBedRangeDisplayString(searchCriteria.getBedrooms().getMin(),
+                    searchCriteria.getBedrooms().getMax());
             String bathRange = TextUtils
-                      .getBathRangeDisplayString(searchCriteria.getBathrooms().getMin(),
-                                searchCriteria.getBathrooms().getMax());
+                .getBathRangeDisplayString(searchCriteria.getBathrooms().getMin(),
+                    searchCriteria.getBathrooms().getMax());
             String parkingRange = TextUtils
-                      .getParkingRangeDisplayString(searchCriteria.getParking().getMin());
+                .getParkingRangeDisplayString(searchCriteria.getParking().getMin());
             
             shortenAndAdd(inforBarFilters, bedRange);
             shortenAndAdd(inforBarFilters, bathRange);
@@ -201,14 +201,14 @@ public class InformationBar extends LinearLayout {
     private void shortenAndAdd(List<String> infoBarFilters, String filterRangeDisplayString) {
         if (getContext() != null) {
             if (!TextUtils.isEmpty(filterRangeDisplayString) && !filterRangeDisplayString.trim()
-                      .equals(getContext().getString(R.string.txt_any))) {
+                .equals(getContext().getString(R.string.txt_any))) {
                 String anyString = getContext().getString(R.string.txt_any);
                 filterRangeDisplayString = filterRangeDisplayString
-                          .replaceAll("-" + anyString, "+");
+                    .replaceAll("-" + anyString, "+");
                 if (!filterRangeDisplayString
-                          .contains(getContext().getString(R.string.txt_studio))) {
+                    .contains(getContext().getString(R.string.txt_studio))) {
                     filterRangeDisplayString = filterRangeDisplayString
-                              .replaceAll(anyString + "-", "&lt;");
+                        .replaceAll(anyString + "-", "&lt;");
                 }
                 infoBarFilters.add(filterRangeDisplayString);
             }

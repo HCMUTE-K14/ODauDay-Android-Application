@@ -28,38 +28,38 @@ public class AutoCompletePlaceViewModel extends BaseViewModel {
     
     public void search(String keyword) {
         Disposable disposable = mAutoCompletePlaceRepository
-                  .search(keyword)
-                  .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
-                  .subscribe(success -> response.setValue(Resource.success(TASK_SEARCH, success)),
-                            error -> response.setValue(Resource.error(TASK_SEARCH, error)));
+            .search(keyword)
+            .doOnSubscribe(onSubscribe -> response.setValue(Resource.loading(null)))
+            .subscribe(success -> response.setValue(Resource.success(TASK_SEARCH, success)),
+                error -> response.setValue(Resource.error(TASK_SEARCH, error)));
         
         mCompositeDisposable.add(disposable);
     }
     
     public void searchLocal() {
         Disposable disposable = mAutoCompletePlaceRepository
-                  .getRecentSearchLocal()
-                  .subscribe(success -> mContract.onSuccessGetRecentSearchFromLocal(success),
-                            error -> Timber.d(error.getMessage()));
+            .getRecentSearchLocal()
+            .subscribe(success -> mContract.onSuccessGetRecentSearchFromLocal(success),
+                error -> Timber.d(error.getMessage()));
         
         mCompositeDisposable.add(disposable);
     }
     
     public void create(AutoCompletePlace autoCompletePlace) {
         Disposable disposable = mAutoCompletePlaceRepository
-                  .createRecentSearch(autoCompletePlace)
-                  .subscribe(success -> Timber.d("Create successull"),
-                            error -> Timber.d(error.getMessage()));
+            .createRecentSearch(autoCompletePlace)
+            .subscribe(success -> Timber.d("Create successull"),
+                error -> Timber.d(error.getMessage()));
         
         mCompositeDisposable.add(disposable);
     }
     
     public void delete(AutoCompletePlace autoCompletePlace) {
         Disposable disposable = mAutoCompletePlaceRepository
-                  .deleteRecentSearch(autoCompletePlace)
-                  .subscribe(success -> mContract
-                                      .onSuccessDeleteRecentSearchFromLocal(autoCompletePlace),
-                            error -> Timber.d(error.getMessage()));
+            .deleteRecentSearch(autoCompletePlace)
+            .subscribe(success -> mContract
+                    .onSuccessDeleteRecentSearchFromLocal(autoCompletePlace),
+                error -> Timber.d(error.getMessage()));
         
         mCompositeDisposable.add(disposable);
     }

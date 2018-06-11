@@ -112,3 +112,4 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
         void onClickRemoveSavedSearches(Search search);
     }
 }
+

@@ -44,7 +44,7 @@ public class TextAndMoreTextValue implements Parcelable {
     
     @SuppressWarnings("unchecked")
     public static TextAndMoreTextValue build(Context context, FilterOption option,
-              List lists) {
+        List lists) {
         String text;
         String moreText = "";
         
@@ -82,20 +82,20 @@ public class TextAndMoreTextValue implements Parcelable {
         for (int i = 2; i < size; i++) {
             String item = buildItemIndex(context, option, lists, i);
             stringBuilder
-                      .append(item)
-                      .append(", ");
+                .append(item)
+                .append(", ");
         }
         
         return stringBuilder.toString().trim();
     }
     
     private static String buildItemIndex(Context context, FilterOption option, List lists,
-              int index) {
+        int index) {
         try {
             String item = "";
             if (option == FilterOption.PROPERTY_TYPE) {
                 item = context
-                          .getString(((PropertyType) lists.get(index)).getDisplayStringResource());
+                    .getString(((PropertyType) lists.get(index)).getDisplayStringResource());
             } else if (option == FilterOption.TAGS) {
                 item = ((Tag) lists.get(index)).getName();
             }

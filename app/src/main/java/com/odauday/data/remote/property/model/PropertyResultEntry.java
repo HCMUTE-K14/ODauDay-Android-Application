@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.odauday.model.Image;
 import com.odauday.utils.ObjectUtils;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,17 +15,6 @@ import java.util.List;
 
 public class PropertyResultEntry implements Parcelable {
     
-    public static final Creator<PropertyResultEntry> CREATOR = new Creator<PropertyResultEntry>() {
-        @Override
-        public PropertyResultEntry createFromParcel(Parcel in) {
-            return new PropertyResultEntry(in);
-        }
-        
-        @Override
-        public PropertyResultEntry[] newArray(int size) {
-            return new PropertyResultEntry[size];
-        }
-    };
     @SerializedName("id")
     @Expose
     private String id;
@@ -35,7 +24,7 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("price")
     @Expose
     private double price;
-    @SerializedName("type")
+    @SerializedName("type_id")
     @Expose
     private String searchType;
     @SerializedName("num_of_bedroom")
@@ -50,15 +39,22 @@ public class PropertyResultEntry implements Parcelable {
     @SerializedName("location")
     @Expose
     private GeoLocation location;
-    @SerializedName("is_favorite")
+    @SerializedName("isFavorited")
     @Expose
     private boolean isFavorite;
-    @SerializedName("is_visited")
+    @SerializedName("isViewed")
     @Expose
     private boolean isVisited;
     @SerializedName("images")
     @Expose
-    private List<Image> images = new ArrayList<>();
+    private List<Image> images;
+    @SerializedName("time_contact")
+    @Expose
+    private String timeContact;
+    
+    @SerializedName("date_created")
+    @Expose
+    private Date dateCreated;
     
     public PropertyResultEntry() {
     
@@ -76,7 +72,20 @@ public class PropertyResultEntry implements Parcelable {
         isFavorite = in.readByte() != 0;
         isVisited = in.readByte() != 0;
         images = in.createTypedArrayList(Image.CREATOR);
+        timeContact = in.readString();
     }
+    
+    public static final Creator<PropertyResultEntry> CREATOR = new Creator<PropertyResultEntry>() {
+        @Override
+        public PropertyResultEntry createFromParcel(Parcel in) {
+            return new PropertyResultEntry(in);
+        }
+        
+        @Override
+        public PropertyResultEntry[] newArray(int size) {
+            return new PropertyResultEntry[size];
+        }
+    };
     
     public String getId() {
         return id;
@@ -167,6 +176,22 @@ public class PropertyResultEntry implements Parcelable {
         this.images = images;
     }
     
+    public String getTimeContact() {
+        return timeContact;
+    }
+    
+    public void setTimeContact(String timeContact) {
+        this.timeContact = timeContact;
+    }
+    
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+    
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -217,18 +242,19 @@ public class PropertyResultEntry implements Parcelable {
     }
     
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        
-        parcel.writeString(id);
-        parcel.writeString(address);
-        parcel.writeDouble(price);
-        parcel.writeString(searchType);
-        parcel.writeInt(numOfBedRooms);
-        parcel.writeInt(numOfBathRooms);
-        parcel.writeInt(numOfParkings);
-        parcel.writeParcelable(location, i);
-        parcel.writeByte((byte) (isFavorite ? 1 : 0));
-        parcel.writeByte((byte) (isVisited ? 1 : 0));
-        parcel.writeTypedList(images);
+    public void writeToParcel(Parcel dest, int flags) {
+    
+        dest.writeString(id);
+        dest.writeString(address);
+        dest.writeDouble(price);
+        dest.writeString(searchType);
+        dest.writeInt(numOfBedRooms);
+        dest.writeInt(numOfBathRooms);
+        dest.writeInt(numOfParkings);
+        dest.writeParcelable(location, flags);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
+        dest.writeByte((byte) (isVisited ? 1 : 0));
+        dest.writeTypedList(images);
+        dest.writeString(timeContact);
     }
 }

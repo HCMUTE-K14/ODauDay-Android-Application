@@ -41,6 +41,7 @@ public class ImageLoader {
         load(imageView.getContext(), imageView, image);
     }
     
+    
     public static void loadWithoutOptions(ImageView imageView, Object image) {
         Glide.with(imageView.getContext())
             .load(image)
@@ -62,6 +63,13 @@ public class ImageLoader {
                 .error(R.drawable.ic_gallery_placeholder1))
             .into(imageView);
     }
+    public static void load(ImageView imageView, Object image, RequestOptions options) {
+        Glide.with(imageView.getContext())
+            .load(image)
+            .apply(options)
+            .into(imageView);
+    }
+    
     public static int randomPlaceHolder() {
         return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length)];
     }

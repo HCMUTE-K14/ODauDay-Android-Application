@@ -1,6 +1,7 @@
 package com.odauday.ui.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +52,17 @@ public class StarView<T> extends RelativeLayout {
         }
         mRelativeLayout = rootView.findViewById(R.id.relative_layout_star);
         mImageView = rootView.findViewById(R.id.image_star);
-      
+        
         mSTATUS = STATUS.UN_CHECK;
+    }
+    
+    public void setTintColor(int color) {
+        mImageView.setColorFilter(ContextCompat.getColor(getContext(), color),
+            android.graphics.PorterDuff.Mode.MULTIPLY);
+    }
+    
+    public void setBackGroundColor(int color) {
+        mRelativeLayout.setBackgroundColor(color);
     }
     
     private void changeStatus(Context context) {
@@ -92,7 +102,7 @@ public class StarView<T> extends RelativeLayout {
         mOnClickStarListener = onClickStarListener;
     }
     
-    enum STATUS {
+    public enum STATUS {
         CHECK, UN_CHECK
     }
     

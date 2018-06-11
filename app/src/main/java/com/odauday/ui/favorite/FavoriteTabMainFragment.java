@@ -388,3 +388,4 @@ public class FavoriteTabMainFragment extends
         mUserId=null;
     }
 }
+

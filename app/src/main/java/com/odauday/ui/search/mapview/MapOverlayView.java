@@ -35,7 +35,7 @@ public class MapOverlayView extends RelativeLayout {
     
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
-                  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (inflater == null) {
             return;
         }
@@ -54,12 +54,12 @@ public class MapOverlayView extends RelativeLayout {
         getButtonMapLayer().setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder
-                      .setTitle(context.getString(R.string.txt_dialog_title_map_type))
-                      .setItems(R.array.map_type, (dialogInterface, i) -> {
-                          if (mMapOverlayListener != null) {
-                              mMapOverlayListener.onClickMapLayer(i);
-                          }
-                      });
+                .setTitle(context.getString(R.string.txt_dialog_title_map_type))
+                .setItems(R.array.map_type, (dialogInterface, i) -> {
+                    if (mMapOverlayListener != null) {
+                        mMapOverlayListener.onClickMapLayer(i);
+                    }
+                });
             builder.create().show();
         });
         
@@ -83,7 +83,7 @@ public class MapOverlayView extends RelativeLayout {
     }
     
     public void setMapOverlayListener(
-              MapOverlayListener mapOverlayListener) {
+        MapOverlayListener mapOverlayListener) {
         mMapOverlayListener = mapOverlayListener;
     }
     

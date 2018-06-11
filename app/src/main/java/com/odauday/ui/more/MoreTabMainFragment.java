@@ -17,6 +17,7 @@ import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
+import com.odauday.ui.user.profile.ProfileUserActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
@@ -91,6 +92,9 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
         mBinding.get().recycleViewMore.setNestedScrollingEnabled(false);
         mMoreAdapter.setOnClickMenuMoreListener(mOnClickMenuMoreListener);
         mBinding.get().recycleViewMore.setAdapter(mMoreAdapter);
+        mBinding.get().profileUser.setOnClickListener(view -> {
+            ViewUtils.startActivity(getActivity(), ProfileUserActivity.class);
+        });
     }
     
     @Override

@@ -25,7 +25,7 @@ public class BaseDialogFragment extends DialogFragment {
     
     private static final float MATCH_PARENT_WIDTH = 400.0f;
     
-    private Builder mDialogBuilder;
+    protected Builder mDialogBuilder;
 
     private View mDialogView;
     private OnShowListener mOnShowListener;

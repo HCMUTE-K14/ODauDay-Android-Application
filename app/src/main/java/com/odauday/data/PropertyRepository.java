@@ -8,11 +8,13 @@ import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.model.CreatePropertyRequest;
 import com.odauday.exception.PropertyException;
 import com.odauday.model.Property;
+import com.odauday.model.PropertyDetail;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 import javax.inject.Inject;
 import okhttp3.MultipartBody;
+import timber.log.Timber;
 
 /**
  * Created by kunsubin on 4/18/2018.
@@ -97,16 +99,35 @@ public class PropertyRepository implements Repository {
             .observeOn(mSchedulersExecutor.ui());
     }
     public Single<MessageResponse> changeStatus(String property_id,String status) {
-        Single<JsonResponse<MessageResponse>> result = mProtectPropertyService
-            .changeStatus(property_id, status);
-        return result
+        Single<MessageResponse> result = mProtectPropertyService
+            .changeStatus(property_id, status)
             .map(response -> {
                 try {
                     if (response.isSuccess()) {
                         return response.getData();
                     }
                     throw new PropertyException(response.getErrors());
-                    
+                } catch (Exception ex) {
+                    if (ex instanceof PropertyException) {
+                        throw ex;
+                    }
+                    throw new PropertyException(ex.getMessage());
+                }
+            })
+            .subscribeOn(mSchedulersExecutor.io())
+            .observeOn(mSchedulersExecutor.ui());
+        return result;
+    }
+    
+    public Single<PropertyDetail> getFullDetail(String id) {
+        Timber.tag("ID").d(id);
+        return mProtectPropertyService.getDetail(id)
+            .map(response -> {
+                try {
+                    if (response.isSuccess()) {
+                        return response.getData();
+                    }
+                    throw new PropertyException(response.getErrors());
                 } catch (Exception ex) {
                     if (ex instanceof PropertyException) {
                         throw ex;

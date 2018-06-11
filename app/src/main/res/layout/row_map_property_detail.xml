@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:outlineProvider="bounds"
+  app:elevation="2dp">
+  <View
+    android:id="@+id/spacer"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/white" />
+  <ImageView
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_below="@id/spacer"
+    android:scaleType="fitXY" />
+  <ImageView
+    android:id="@+id/street_view"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_alignTop="@id/map"
+    android:background="@color/transparent"
+    android:src="@drawable/ic_streetview_normal" />
+  <ImageView
+    android:id="@+id/directions"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginTop="4dp"
+    android:layout_alignLeft="@id/street_view"
+    android:layout_below="@id/street_view"
+    android:background="@color/transparent"
+    android:src="@drawable/ic_directions_normal" />
+</RelativeLayout>

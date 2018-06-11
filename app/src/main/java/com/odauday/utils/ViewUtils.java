@@ -1,10 +1,13 @@
 package com.odauday.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+import com.facebook.internal.NativeProtocol;
 import com.odauday.R;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,6 +95,13 @@ public class ViewUtils {
         }
     }
     
+    @SuppressLint("WrongConstant")
+    public static boolean isIntentAvailable(Context context, Intent intent) {
+        return context.getPackageManager()
+                   .queryIntentActivities(intent, NativeProtocol.MESSAGE_GET_ACCESS_TOKEN_REQUEST)
+                   .size() > 0;
+    }
+    
     public static void showDateTimePicker(Context context, Date currentDate, Date date,
         DateTimePickerListener dateTimePickerListener) {
         final Calendar _currentDate = Calendar.getInstance();
@@ -115,6 +126,18 @@ public class ViewUtils {
                 .show();
         }, _currentDate.get(Calendar.YEAR), _currentDate.get(Calendar.MONTH),
             _currentDate.get(Calendar.DATE)).show();
+    }
+    
+    @SuppressLint("MissingPermission")
+    private static void openCallActivity(Activity activity, String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        
+        activity.startActivity(intent);
+    }
+    
+    public static void delay(Runnable runnable, long duration) {
+        new Handler().postDelayed(runnable, duration);
     }
     
     public interface DateTimePickerListener {

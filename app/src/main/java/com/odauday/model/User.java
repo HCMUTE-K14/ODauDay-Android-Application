@@ -9,6 +9,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
     
+    public static final String STATUS_PENDING = "pending";
+    public static final String STATUS_ACTIVE = "active";
+    public static final String STATUS_DISABLED = "disabled";
+    
     @SerializedName("id")
     @Expose
     private String id;
@@ -43,7 +47,7 @@ public class User {
     
     @SerializedName("amount")
     @Expose
-    private double amount;
+    private long amount;
     
     
     public User() {
@@ -115,11 +119,11 @@ public class User {
         this.facebookId = facebookId;
     }
     
-    public double getAmount() {
+    public long getAmount() {
         return amount;
     }
     
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
     

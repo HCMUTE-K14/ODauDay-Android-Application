@@ -3,6 +3,8 @@ package com.odauday.di.modules;
 import com.odauday.data.local.notification.NotificationServiceImp;
 import com.odauday.data.local.notification.NotificationEntityDao;
 import com.odauday.data.local.notification.NotificationService;
+import com.odauday.data.local.favorite.FavoritePropertyDao;
+import com.odauday.data.local.favorite.FavoriteServiceImpl;
 import com.odauday.data.local.place.RecentSearchPlaceDao;
 import com.odauday.data.local.place.RecentSearchPlaceService;
 import com.odauday.data.local.place.RecentSearchPlaceServiceImpl;
@@ -14,10 +16,14 @@ import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.HistoryService;
 import com.odauday.data.remote.SavedSearchService;
 import com.odauday.data.remote.autocompleteplace.AutoCompletePlaceService;
+import com.odauday.data.remote.direction.DirectionService;
 import com.odauday.data.remote.geoinfo.GeoInfoService;
 import com.odauday.data.remote.image.ImageService;
+import com.odauday.data.remote.note.NoteService;
+import com.odauday.data.remote.premium.PremiumService;
 import com.odauday.data.remote.property.PropertyService;
 import com.odauday.data.remote.property.SearchService;
+import com.odauday.data.remote.similar.SimilarPropertyService;
 import com.odauday.data.remote.user.UserService;
 import dagger.Module;
 import dagger.Provides;
@@ -105,6 +111,31 @@ public class ServiceBuildersModule {
         return retrofit.create(com.odauday.data.remote.NotificationService.class);
     }
     
+    @Provides
+    @Singleton
+    DirectionService provideDirectionService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(DirectionService.class);
+    }
+    
+    @Provides
+    @Singleton
+    NoteService provideNoteService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(NoteService.class);
+    }
+    
+    @Provides
+    @Singleton
+    PremiumService providePremiumService(@Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(PremiumService.class);
+    }
+    
+    @Provides
+    @Singleton
+    SimilarPropertyService provideSimilarPropertyService(
+        @Named("protectRetrofit") Retrofit retrofit) {
+        return retrofit.create(SimilarPropertyService.class);
+    }
+    
     //--------------------------LOCAL---------------------------//
     
     @Provides
@@ -126,5 +157,9 @@ public class ServiceBuildersModule {
         return new NotificationServiceImp(notificationEntityDao);
     }
     
+    com.odauday.data.local.favorite.FavoriteService provideFavoriteServiceLocal(
+        FavoritePropertyDao favoritePropertyDao) {
+        return new FavoriteServiceImpl(favoritePropertyDao);
+    }
     
 }

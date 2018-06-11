@@ -30,3 +30,6 @@ public class Favorite {
         return propertyId;
     }
 }
+
+
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="85dp"
+    android:clickable="true"
+    android:background="@drawable/list_item_selector">
+    <ImageView
+      android:id="@+id/image"
+      android:layout_width="85dp"
+      android:layout_height="85dp"
+      android:scaleType="centerCrop"
+      android:layout_marginRight="8dp" />
+    <TextView
+      android:id="@+id/date_viewed"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentTop="true"
+      android:paddingRight="8dp"
+      android:layout_above="@id/address"
+      android:textColor="#979da7"
+      android:textSize="12sp" />
+    <View
+      android:id="@id/divider"
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_alignParentBottom="true"
+      android:background="@drawable/divider_line_light" />
+    <Space
+      android:id="@+id/middle_marker"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true" />
+    <TextView
+      android:id="@+id/address"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@id/middle_marker"
+      android:layout_toRightOf="@id/image"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="#747c8a"
+      android:textSize="16sp" />
+    <TextView
+      android:id="@+id/bed_bath_park"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/middle_marker"
+      android:layout_toRightOf="@id/image"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="#979da7"
+      android:textSize="14sp" />
+  </RelativeLayout>
+</layout>
+

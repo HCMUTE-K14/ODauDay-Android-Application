@@ -54,6 +54,7 @@
       android:paddingLeft="8dp"
       android:singleLine="true"
       android:textColor="#747c8a"
+      android:layout_toLeftOf="@id/btn_sort"
       android:textSize="14sp"
       tools:ignore="RtlSymmetry" />
     <Button
@@ -69,7 +70,7 @@
     <Button
       android:id="@+id/btn_sort"
       style="@style/Widget.Button.Flat"
-      android:layout_width="60dp"
+      android:layout_width="56dp"
       android:layout_height="match_parent"
       android:layout_toLeftOf="@id/btn_save_search"
       android:layout_toStartOf="@id/btn_save_search"

@@ -105,6 +105,8 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     
     @Override
     public void onDestroy() {
+        mStep1Helper = null;
+    
         super.onDestroy();
     }
     
@@ -206,7 +208,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         Intent intent = new Intent(this.getContext(), SelectLocationActivity.class);
         if (mProperty.getLocation() != null) {
             intent.putExtra(SelectLocationActivity.EXTRA_LAST_LOCATION,
-                new AddressAndLocationObject(mProperty.getAddress(),
+                new AddressAndLocationObject(TextUtils.formatAddress(mProperty.getAddress()),
                     mProperty.getLocation().toLatLng()));
         }
         this.startActivityForResult(intent, OnCompleteSelectLocationEvent.REQUEST_CODE);
@@ -220,7 +222,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     private void updateSelectLocation(AddressAndLocationObject object) {
         mProperty.setAddress(object.getAddress());
         mProperty.setLocation(GeoLocation.fromLatLng(object.getLocation()));
-        mBinding.get().selectLocation.setText(object.getAddress());
+        mBinding.get().selectLocation.setText(TextUtils.formatAddress(object.getAddress()));
     }
     
     public void openChoosePropertyTypeDialog(View view) {

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingTop="8dp"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp"
+  android:background="@color/white"
+  android:elevation="2dp"
+  android:orientation="vertical">
+  <RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+      android:id="@+id/beds_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingRight="5dp">
+
+      <TextView
+        android:id="@+id/beds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:minHeight="36dp"
+        android:singleLine="true"
+        android:textColor="#263248"
+        android:textSize="16sp"
+        android:visibility="visible" />
+      <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_bedrooms" />
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/baths_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+
+      android:layout_toRightOf="@id/beds_container"
+      android:paddingRight="5dp">
+      <TextView
+        android:id="@+id/baths"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:minHeight="36dp"
+        android:singleLine="true"
+        android:textColor="#263248"
+        android:textSize="16sp"
+        android:visibility="visible" />
+      <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_bathrooms" />
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/parkings_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@id/baths_container"
+      android:paddingRight="10dp">
+      <TextView
+        android:id="@+id/parkings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:minHeight="36dp"
+        android:singleLine="true"
+        android:textColor="#263248"
+        android:textSize="16sp"
+        android:visibility="visible" />
+      <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_parkings" />
+    </LinearLayout>
+
+    <LinearLayout
+      android:id="@+id/land_size_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@id/parkings_container"
+      android:paddingRight="5dp">
+      <TextView
+        android:id="@+id/land_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="8dp"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:minHeight="36dp"
+        android:singleLine="true"
+        android:textColor="#263248"
+        android:textSize="16sp"
+        android:visibility="visible" />
+      <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_land_size" />
+    </LinearLayout>
+  </RelativeLayout>
+  <TextView
+    android:id="@+id/category"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#263248"
+    android:textSize="16sp" />
+</LinearLayout>

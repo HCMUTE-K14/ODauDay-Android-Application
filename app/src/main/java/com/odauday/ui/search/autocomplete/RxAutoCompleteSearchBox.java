@@ -29,15 +29,15 @@ public class RxAutoCompleteSearchBox {
     
     private Disposable createDisposable(EditText editText) {
         return RxTextView.afterTextChangeEvents(editText)
-                  .debounce(DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(success -> {
-                      if (mOnSearchQuery != null) {
-                          mOnSearchQuery.onSearchQuery(
-                                    TextUtils.isEmpty(success.editable().toString()) ? ""
-                                              : success.editable().toString());
-                      }
-                  }, throwable -> Timber.d(throwable.getMessage()));
+            .debounce(DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                if (mOnSearchQuery != null) {
+                    mOnSearchQuery.onSearchQuery(
+                        TextUtils.isEmpty(success.editable().toString()) ? ""
+                            : success.editable().toString());
+                }
+            }, throwable -> Timber.d(throwable.getMessage()));
     }
     
     public void start() {

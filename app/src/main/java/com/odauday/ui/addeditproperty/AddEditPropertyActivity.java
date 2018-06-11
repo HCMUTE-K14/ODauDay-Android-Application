@@ -1,6 +1,5 @@
 package com.odauday.ui.addeditproperty;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -60,8 +59,6 @@ public class AddEditPropertyActivity extends
     
     private MyProperty mCurrentProperty;
     
-    ProgressDialog mProgressDialog;
-    
     @Inject
     AddEditPropertyViewModel mAddEditPropertyViewModel;
     
@@ -115,8 +112,12 @@ public class AddEditPropertyActivity extends
     
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mStep1Fragment = null;
+        mStep2Fragment = null;
+        mStep3Fragment = null;
+        mStep4Fragment = null;
+        super.onDestroy();
     }
     
     @Override
@@ -161,7 +162,7 @@ public class AddEditPropertyActivity extends
             mCurrentProperty.setType_id(property.getType_id());
             mCurrentProperty.setPrice(property.getPrice());
             mCurrentProperty.setLocation(property.getLocation());
-            mCurrentProperty.setAddress(property.getAddress());
+            mCurrentProperty.setAddress(TextUtils.formatAddress(property.getAddress()));
             mCurrentProperty.setEmails(property.getEmails());
             mCurrentProperty.setPhones(property.getPhones());
             mCurrentProperty.setCategories(property.getCategories());
@@ -247,12 +248,6 @@ public class AddEditPropertyActivity extends
     }
     
     private void init() {
-        
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.setTitle(R.string.txt_wait_a_second);
-        mProgressDialog.setMessage(getString(R.string.txt_creating_property));
-        
         getProperty();
         initStepFragment();
         initToolbar();
@@ -343,7 +338,7 @@ public class AddEditPropertyActivity extends
     
     @Override
     public void onSuccessCreateProperty() {
-        Toast.makeText(this, R.string.message_creat_property_successfull, Toast.LENGTH_SHORT)
+        Toast.makeText(this, R.string.message_create_property_successfully, Toast.LENGTH_SHORT)
             .show();
         finish();
     }
@@ -357,10 +352,5 @@ public class AddEditPropertyActivity extends
     
     @Override
     public void loading(boolean showing) {
-        //        if (showing) {
-        //            mProgressDialog.show();
-        //            return;
-        //        }
-        //        mProgressDialog.hide();
     }
 }

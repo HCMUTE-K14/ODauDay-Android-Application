@@ -92,3 +92,4 @@ public class RecentSearchAdapter extends BaseAdapter<Search, ItemRecentSearchesB
         void ClickRemoveRecentSearch(Search search);
     }
 }
+

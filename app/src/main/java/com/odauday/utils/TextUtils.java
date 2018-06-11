@@ -1,10 +1,12 @@
 package com.odauday.utils;
 
+import android.net.Uri;
 import com.odauday.R;
 import com.odauday.RootApplication;
 import com.odauday.api.EndPoint;
 import com.odauday.config.AppConfig;
 import com.odauday.config.AppConfig.LANGUAGE;
+import com.odauday.data.remote.property.model.GeoLocation;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -30,6 +32,26 @@ public class TextUtils {
     private static final String[] SHORT_MONEY = new String[]{" Ngàn", " Triệu", " Tỷ", " Trăm tỷ"};
     private static final String CURRENCY = " VND ";
     
+    public static String buildUrlStaticMap(GeoLocation geoLocation, float zoom, String size) {
+        if (zoom <= 0) {
+            zoom = 15f;
+        }
+        if (TextUtils.isEmpty(size)) {
+            size = "600x300";
+        }
+        
+        return Uri.parse(EndPoint.BASE_URL + EndPoint.STATIC_MAP)
+            .buildUpon()
+            .appendQueryParameter("location",
+                geoLocation.getLatitude() + "," + geoLocation.getLongitude())
+            .appendQueryParameter("zoom", String.valueOf(zoom))
+            .appendQueryParameter("size", size)
+            .toString();
+    }
+    
+    public static String getTagsById(int id) {
+        return RootApplication.getContext().getResources().getStringArray(R.array.tags)[id];
+    }
     
     public static String generatorUUID() {
         return UUID.randomUUID().toString();
@@ -164,8 +186,7 @@ public class TextUtils {
     
     public static String doubleFormat(double value) {
         BigDecimal number = new BigDecimal(value);
-        String result = number.stripTrailingZeros().toPlainString();
-        return result;
+        return number.stripTrailingZeros().toPlainString();
     }
     
     public static String formatDecimal(double value) {
@@ -197,5 +218,35 @@ public class TextUtils {
     public static String formatDateTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat(AppConfig.PATTERN_DATE);
         return dateFormat.format(date);
+    }
+    
+    public static String formatGeoLocationForRequest(GeoLocation location) {
+        return location.getLatitude() + "," + location.getLongitude();
+    }
+    
+    public static String getImageUrl(String url) {
+        return EndPoint.BASE_URL + url;
+    }
+    
+    public static String formatDateForDisplayHistory(Date dateCreated) {
+        long minDiff = (System.currentTimeMillis() - dateCreated.getTime()) / 60000;
+        String text = "";
+        if (minDiff < 60) {
+            text = minDiff + "m";
+        } else if (minDiff < 1440) {
+            text = (minDiff / 60) + "h";
+        } else {
+            text = (minDiff / 1440) + "d";
+        }
+        
+        return text;
+    }
+    
+    public static String capitalize(String input) {
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+    
+    public static String formatAddress(String address){
+        return address.replaceAll("Unnamed Road,", "").trim();
     }
 }

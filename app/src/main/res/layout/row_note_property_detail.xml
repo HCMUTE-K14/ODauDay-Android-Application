@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/property_notes_layout"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="8dp"
+  android:background="@color/white"
+  android:focusable="true"
+  app:cardElevation="2dp">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:orientation="vertical">
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:text="@string/txt_your_notes"
+      android:textColor="@color/black"
+      android:textSize="20sp" />
+    <EditText
+      android:id="@+id/property_notes"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="16dp"
+      android:hint="@string/txt_hint_property_notes"
+      android:maxLength="2000"
+      android:textColor="#747c8a"
+      android:textSize="16sp" />
+    <TextView
+      android:id="@+id/property_notes_char_count"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:layout_marginLeft="12dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:textColor="#747c8a"
+      android:textSize="14sp" />
+    <Button
+      android:id="@+id/property_notes_done"
+      style="@style/Widget.Button.Flat"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingRight="16dp"
+      android:gravity="end|center_vertical"
+      android:text="@string/txt_save"
+      android:visibility="gone" />
+  </LinearLayout>
+</android.support.v7.widget.CardView>

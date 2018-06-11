@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/add_location_container"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:paddingBottom="8dp"
+  android:background="#f5f5f5">
+  <com.odauday.ui.view.SelectableViewGroup
+    android:id="@+id/controller_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="16dp"
+    android:layout_toRightOf="@id/transit_icon"
+    android:gravity="center"
+    android:orientation="horizontal">
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_weight="1"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:background="@drawable/button_flat"
+      android:src="@drawable/ic_directions_driving" />
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_weight="1"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:background="@drawable/button_flat"
+      android:src="@drawable/ic_directions_bus" />
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_weight="1"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:background="@drawable/button_flat"
+      android:src="@drawable/ic_directions_cycling" />
+    <ImageView
+      android:layout_width="60dp"
+      android:layout_height="60dp"
+      android:layout_weight="1"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:background="@drawable/button_flat"
+      android:src="@drawable/ic_directions_walking" />
+  </com.odauday.ui.view.SelectableViewGroup>
+  <View
+    android:id="@+id/divider"
+    android:layout_width="wrap_content"
+    android:layout_height="2dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_below="@id/controller_container"
+    android:layout_toRightOf="@id/transit_icon"
+    android:background="#eaebed" />
+  <ImageView
+    android:id="@+id/transit_icon"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_marginTop="8dp"
+    android:layout_below="@id/divider"
+    android:paddingTop="4dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:src="@drawable/location_joiner" />
+  <TextView
+    android:id="@+id/direction_origin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_alignTop="@id/transit_icon"
+    android:layout_toRightOf="@id/transit_icon"
+    android:paddingLeft="4dp"
+    android:paddingRight="16dp"
+    android:text="dfsafdasfsdafasdfsdafsadfsafsadf"
+    android:textColor="#747c8a"
+    android:textSize="14sp" />
+  <EditText
+    android:id="@+id/direction_destination"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="16dp"
+    android:layout_alignLeft="@id/direction_origin"
+    android:layout_below="@id/direction_origin"
+    android:hint="@string/txt_destination_hint"
+    android:focusable="false"
+    android:textSize="16sp" />
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:layout_marginBottom="16dp"
+    android:background="#eaebed" />
+</RelativeLayout>

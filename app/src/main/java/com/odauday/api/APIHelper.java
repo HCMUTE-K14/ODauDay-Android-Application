@@ -5,15 +5,19 @@ import android.support.annotation.NonNull;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.odauday.BuildConfig;
 import com.odauday.R;
 import com.odauday.config.AppConfig;
+import com.odauday.data.local.cache.UserPreferenceHelper;
 import com.odauday.exception.NetworkException;
 import com.odauday.utils.NetworkUtils;
 import com.odauday.utils.TextUtils;
 import java.io.File;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import okhttp3.Cache;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -40,6 +44,7 @@ public class APIHelper {
     
     private final Context mContext;
     
+    @Inject
     public APIHelper(Context context) {
         this.mContext = context.getApplicationContext();
     }
@@ -70,6 +75,25 @@ public class APIHelper {
         };
     }
     
+    public Interceptor createProtectInterceptor(UserPreferenceHelper userPreferenceHelper) {
+        return chain -> {
+            try {
+                Headers.Builder builder = new Headers.Builder();
+                
+                builder.add(APIHelper.ACCESS_TOKEN, userPreferenceHelper.getAccessToken());
+                builder.add(APIHelper.API_KEY, BuildConfig.API_KEY);
+                builder.add(APIHelper.USER_ID, userPreferenceHelper.getUserId());
+                
+                Request modifiedRequest = chain.request().newBuilder()
+                    .headers(builder.build())
+                    .build();
+                return chain.proceed(modifiedRequest);
+            } catch (SocketTimeoutException e) {
+                throw new NetworkException("Cannot connect to Service");
+            }
+        };
+    }
+    
     public Interceptor createDefaultInterceptor() {
         return chain -> {
             try {
@@ -78,7 +102,7 @@ public class APIHelper {
                 return chain.proceed(modifiedRequest);
             } catch (SocketTimeoutException e) {
                 throw new NetworkException(
-                          mContext.getString(R.string.message_cannot_connect_to_service));
+                    mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -90,17 +114,17 @@ public class APIHelper {
                 HttpUrl originalHttpUrl = original.url();
                 
                 HttpUrl url = originalHttpUrl.newBuilder()
-                          .addQueryParameter("lang", lang)
-                          .build();
+                    .addQueryParameter("lang", lang)
+                    .build();
                 
                 Request.Builder requestBuilder = original.newBuilder()
-                          .url(url);
+                    .url(url);
                 
                 Request request = requestBuilder.build();
                 return chain.proceed(request);
             } catch (Exception ex) {
                 throw new NetworkException(
-                          mContext.getString(R.string.message_cannot_connect_to_service));
+                    mContext.getString(R.string.message_cannot_connect_to_service));
             }
         };
     }
@@ -118,20 +142,20 @@ public class APIHelper {
     }
     
     public OkHttpClient createClient(Cache cache, Interceptor interceptor,
-              Interceptor languageInterceptor) {
+        Interceptor languageInterceptor) {
         
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
             message -> Timber.tag("Network").d(message))
             .setLevel(Level.BODY);
         
         return new OkHttpClient.Builder()
-                  .cache(cache)
-                    //.addInterceptor(logging)
-                  .addInterceptor(interceptor)
-                  .addInterceptor(languageInterceptor)
-                  .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
-                  .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                  .build();
+            .cache(cache)
+            .addInterceptor(logging)
+            .addInterceptor(interceptor)
+            .addInterceptor(languageInterceptor)
+            .readTimeout(AppConfig.READ_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(AppConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .build();
     }
     
     public Retrofit createRetrofit(String baseURL, @NonNull OkHttpClient client, Gson gson) {
@@ -166,7 +190,7 @@ public class APIHelper {
             return retrofit.create(clazz);
         } catch (Exception e) {
             throw new NetworkException(
-                      mContext.getString(R.string.message_cannot_connect_to_service));
+                mContext.getString(R.string.message_cannot_connect_to_service));
         }
     }
 }

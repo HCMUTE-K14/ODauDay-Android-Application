@@ -12,8 +12,8 @@ public class AutoCompletePlaceCollection {
     private List<AutoCompletePlace> mSuggestionSearch;
     
     public AutoCompletePlaceCollection(
-              List<AutoCompletePlace> recentSearch,
-              List<AutoCompletePlace> suggestionSearch) {
+        List<AutoCompletePlace> recentSearch,
+        List<AutoCompletePlace> suggestionSearch) {
         mRecentSearch = recentSearch;
         mSuggestionSearch = suggestionSearch;
     }
@@ -23,7 +23,7 @@ public class AutoCompletePlaceCollection {
     }
     
     public void setRecentSearch(
-              List<AutoCompletePlace> recentSearch) {
+        List<AutoCompletePlace> recentSearch) {
         mRecentSearch = recentSearch;
     }
     
@@ -32,7 +32,7 @@ public class AutoCompletePlaceCollection {
     }
     
     public void setSuggestionSearch(
-              List<AutoCompletePlace> suggestionSearch) {
+        List<AutoCompletePlace> suggestionSearch) {
         mSuggestionSearch = suggestionSearch;
     }
 }

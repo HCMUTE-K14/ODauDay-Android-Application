@@ -28,14 +28,14 @@ public class LoadingFragment extends Fragment {
     }
     
     public void setLoadingFragmentListener(
-              LoadingFragmentListener loadingFragmentListener) {
+        LoadingFragmentListener loadingFragmentListener) {
         mLoadingFragmentListener = loadingFragmentListener;
     }
     
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-              @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         
         View view = inflater.inflate(R.layout.fragment_loading_search_tab, container, false);
         

@@ -25,7 +25,7 @@ public class PropertyTypeDialogAdapter extends
     
     
     private List<PropertyDialogItem> buildDataForAdapter(Context context,
-              List<Integer> selectedPropertyType) {
+        List<Integer> selectedPropertyType) {
         List<PropertyDialogItem> list = new ArrayList<>();
         if (selectedPropertyType == null) {
             selectedPropertyType = new ArrayList<>();
@@ -43,9 +43,9 @@ public class PropertyTypeDialogAdapter extends
     @Override
     protected ItemTextWithCheckBoxBinding createBinding(ViewGroup parent) {
         return DataBindingUtil
-                  .inflate(LayoutInflater.from(parent.getContext()),
-                            R.layout.item_text_with_check_box,
-                            parent, false, null);
+            .inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.item_text_with_check_box,
+                parent, false, null);
     }
     
     @Override

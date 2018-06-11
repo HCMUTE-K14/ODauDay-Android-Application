@@ -9,6 +9,7 @@ import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.property.model.CreatePropertyRequest;
 import com.odauday.model.Image;
 import com.odauday.model.MyProperty;
+import com.odauday.utils.BitmapUtils;
 import com.odauday.utils.TextUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
@@ -41,7 +42,7 @@ public class AddEditPropertyViewModel extends BaseViewModel {
     }
     
     
-    public void create(MyProperty property) {
+    public void create(MyProperty property){
         String userId = mPreferencesHelper.get(PrefKey.USER_ID, "");
         
         //        if (TextUtils.isEmpty(userId)) {
@@ -59,7 +60,8 @@ public class AddEditPropertyViewModel extends BaseViewModel {
                     continue;
                 }
                 RequestBody requestBodyFile = RequestBody
-                    .create(MediaType.parse("multipart/form-data"), image);
+                    .create(MediaType.parse("multipart/form-data"),
+                        BitmapUtils.compressImage(image));
                 String fileName = System.currentTimeMillis() + "_" + image.getName();
                 MultipartBody.Part multipartFile =
                     MultipartBody.Part.createFormData("images", fileName, requestBodyFile);

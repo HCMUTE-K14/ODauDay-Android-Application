@@ -30,20 +30,19 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         
         if (!builder.isCurrency) {
             return FilterNumberPickerDialog
-                      .newInstance(builder.title, builder.valueRes, builder.displayValueRes,
-                                builder.selectedFrom, builder.selectedTo, builder.hasToWheel);
+                .newInstance(builder.title, builder.valueRes, builder.displayValueRes,
+                    builder.selectedFrom, builder.selectedTo, builder.hasToWheel);
         } else {
             return FilterNumberPickerDialog.newInstanceWithCurrency(builder.title, builder.valueRes,
-                      builder.selectedFrom, builder.selectedTo);
+                builder.selectedFrom, builder.selectedTo);
         }
     }
     
     private static FilterNumberPickerDialog newInstance(
-              String title, int valueRes,
-              int displayValueRes, int selectedFrom,
-              int selectedTo, boolean hasToWheel) {
+        String title, int valueRes,
+        int displayValueRes, int selectedFrom,
+        int selectedTo, boolean hasToWheel) {
 
-        
         FilterNumberPickerDialog dialog = new FilterNumberPickerDialog();
         
         Bundle bundle = new Bundle();
@@ -60,8 +59,8 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
     }
     
     private static FilterNumberPickerDialog newInstanceWithCurrency(
-              String title, int valueRes,
-              int selectedFrom, int selectedTo) {
+        String title, int valueRes,
+        int selectedFrom, int selectedTo) {
         FilterNumberPickerDialog dialog = new FilterNumberPickerDialog();
         
         Bundle bundle = new Bundle();
@@ -94,27 +93,27 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         
         if (this.mIsCurrency) {
             int[] intValues = getResources()
-                      .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
+                .getIntArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_RES));
             this.mFilterNumberPickerFrom
-                      .setViewAdapter(new WheelAdapterImpl(this, intValues, true, true));
+                .setViewAdapter(new WheelAdapterImpl(this, intValues, true, true));
             this.mFilterNumberPickerTo
-                      .setViewAdapter(new WheelAdapterImpl(this, intValues, false, true));
+                .setViewAdapter(new WheelAdapterImpl(this, intValues, false, true));
         } else {
             String[] displayedValues = getResources().getStringArray(
-                      getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
+                getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
             this.mFilterNumberPickerFrom
-                      .setViewAdapter(new WheelAdapterImpl(this, displayedValues, true, true));
+                .setViewAdapter(new WheelAdapterImpl(this, displayedValues, true, true));
             this.mFilterNumberPickerTo
-                      .setViewAdapter(new WheelAdapterImpl(this, displayedValues, false, true));
+                .setViewAdapter(new WheelAdapterImpl(this, displayedValues, false, true));
         }
         int currentItemFrom = getSelectedValue(
-                  getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_FROM));
+            getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_FROM));
         this.mFilterNumberPickerFrom.setCurrentItem(currentItemFrom);
         this.mFilterNumberPickerFrom.setHeading(getString(R.string.txt_min));
         
         if (this.mHasToWheel) {
             int currentItemTo = getSelectedValue(
-                      getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_TO));
+                getArguments().getInt(Constants.INTENT_EXTRA_SELECTION_TO));
             this.mFilterNumberPickerTo.setCurrentItem(currentItemTo);
             this.mFilterNumberPickerTo.setHeading(getString(R.string.txt_max));
         } else {
@@ -124,7 +123,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         setTitle(getArguments().getString("TITLE"));
         setContent(v);
         setPositiveButton(getString(R.string.txt_done), false,
-                  new OnShowFilterPickerDialogEvent());
+            new OnShowFilterPickerDialogEvent());
         return create();
 
     }
@@ -171,7 +170,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                     this.mFilterNumberPickerFrom.getCurrentItem() >
                     this.mFilterNumberPickerTo.getCurrentItem()) {
                     this.mFilterNumberPickerTo
-                              .setCurrentItem(this.mFilterNumberPickerFrom.getCurrentItem(), true);
+                        .setCurrentItem(this.mFilterNumberPickerFrom.getCurrentItem(), true);
 
                     return;
                 }
@@ -181,7 +180,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                     this.mFilterNumberPickerTo.getCurrentItem() <
                     this.mFilterNumberPickerFrom.getCurrentItem()) {
                     this.mFilterNumberPickerFrom
-                              .setCurrentItem(this.mFilterNumberPickerTo.getCurrentItem(), true);
+                        .setCurrentItem(this.mFilterNumberPickerTo.getCurrentItem(), true);
                     return;
                 }
                 return;
@@ -217,7 +216,7 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
         
         int index = picker.getCurrentItem();
         String[] stringValues = getResources()
-                  .getStringArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
+            .getStringArray(getArguments().getInt(Constants.INTENT_EXTRA_VALUE_STRING_RES));
         
         if (!this.mIsCurrency) {
             return stringValues[index];
@@ -296,37 +295,37 @@ public class FilterNumberPickerDialog extends BaseDialogFragment implements OnWh
                 int toValue;
                 if (FilterNumberPickerDialog.this.mHasToWheel) {
                     toValue = FilterNumberPickerDialog.this
-                              .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerTo);
+                        .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerTo);
                 } else {
                     toValue = 0;
                 }
                 int fromValue = FilterNumberPickerDialog.this
-                          .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerFrom);
+                    .getIntValue(FilterNumberPickerDialog.this.mFilterNumberPickerFrom);
                 if (!FilterNumberPickerDialog.this.mHasToWheel || toValue <= 0 ||
                     toValue >= fromValue) {
                     MinMaxObject<String> display = new MinMaxObject<>(
-                              getStringValue(mFilterNumberPickerFrom),
-                              getStringValue(mFilterNumberPickerTo));
+                        getStringValue(mFilterNumberPickerFrom),
+                        getStringValue(mFilterNumberPickerTo));
                     
                     MinMaxObject<Integer> value = new MinMaxObject<>(fromValue, toValue);
                     
                     PickerMinMaxReturnObject returnObject = new PickerMinMaxReturnObject(display,
-                              value);
+                        value);
                     ((OnCompletePickedNumberListener) fragment)
-                              .onCompletePickedNumber(
-                                        FilterNumberPickerDialog.this.getTargetRequestCode(),
-                                        returnObject);
+                        .onCompletePickedNumber(
+                            FilterNumberPickerDialog.this.getTargetRequestCode(),
+                            returnObject);
                     FilterNumberPickerDialog.this.dismiss();
                     
                     Timber.tag("PICKER")
-                              .d("STRING_FROM:" + getStringValue(mFilterNumberPickerFrom));
+                        .d("STRING_FROM:" + getStringValue(mFilterNumberPickerFrom));
                     Timber.tag("PICKER").d("STRING_TO:" + getStringValue(mFilterNumberPickerTo));
                     
                     return;
                 }
                 Toast.makeText(FilterNumberPickerDialog.this.getActivity(),
-                          R.string.message_max_value_less_than_min_value, Toast.LENGTH_SHORT)
-                          .show();
+                    R.string.message_max_value_less_than_min_value, Toast.LENGTH_SHORT)
+                    .show();
             }
         }
     }

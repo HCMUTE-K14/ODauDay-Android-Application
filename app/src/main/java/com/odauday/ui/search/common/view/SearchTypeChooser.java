@@ -22,10 +22,10 @@ import java.util.List;
  * Created by infamouSs on 4/1/18.
  */
 @BindingMethods(
-          {
-                    @BindingMethod(type = SearchTypeChooser.class,
-                              attribute = "app:onSelectedSearchType", method = "setListener")
-          }
+    {
+        @BindingMethod(type = SearchTypeChooser.class,
+            attribute = "onSelectedSearchType", method = "setListener")
+    }
 )
 public class SearchTypeChooser extends LinearLayout {
     
@@ -65,7 +65,7 @@ public class SearchTypeChooser extends LinearLayout {
     
     private void setupSpinner(Context context) {
         List<String> searchTypes = getSearchTypes(context);
-
+        
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
             android.R.layout.simple_spinner_item,
             searchTypes);
@@ -76,7 +76,7 @@ public class SearchTypeChooser extends LinearLayout {
             public void onItemSelected(AdapterView<?> adapterView, View view, final int i, long l) {
                 if (mListener != null) {
                     new Handler().postDelayed(
-                              () -> mListener.onSelectedSearchType(SearchType.getByValue(i)), 10);
+                        () -> mListener.onSelectedSearchType(SearchType.getByValue(i)), 10);
                 }
             }
             
