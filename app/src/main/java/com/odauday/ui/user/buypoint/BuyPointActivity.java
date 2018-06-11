@@ -117,7 +117,9 @@ public class BuyPointActivity extends BaseMVVMActivity<ActivityBuyPointBinding> 
     
     @Override
     public void onSuccessGetPremium(List<Premium> premiums) {
-        for (Premium premium : premiums) {
+        
+        for (int i = premiums.size() - 1; i >= 0; i--) {
+            Premium premium = premiums.get(i);
             SubscriptionPackView view = new SubscriptionPackView(this);
             view.setPremium(premium);
             mBinding.subscriptionContainer.addView(view);

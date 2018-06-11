@@ -83,7 +83,7 @@ public class ListViewFragment extends BaseMVVMFragment<FragmentListViewBinding> 
         super.onViewCreated(view, savedInstanceState);
         mAdapter = new ListViewAdapter(getContext());
         mAdapter.setOnClickStarListener(this);
-        
+        mBinding.get().recyclerView.setHasFixedSize(true);
         mBinding.get().recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.get().recyclerView.addItemDecoration(
             new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

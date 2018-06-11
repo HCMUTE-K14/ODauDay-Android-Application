@@ -367,6 +367,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void onSuccessGetDetailProperty(PropertyDetail propertyDetail) {
         mPropertyDetail = propertyDetail;
+        if (mPropertyDetail.getImages() != null && !mPropertyDetail.getImages().isEmpty()) {
+            expandAppBar();
+        }
         mGalleryDetailRow.bind(mPropertyDetail);
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
@@ -419,7 +422,8 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         Intent shareIntent = new Intent("android.intent.action.SEND");
         shareIntent.setType("text/plain");
         shareIntent.putExtra("android.intent.extra.TEXT",
-            (!TextUtils.isEmpty(mPropertyDetail.getAddress()) ? TextUtils.formatAddress(mPropertyDetail.getAddress()) + "\\n"
+            (!TextUtils.isEmpty(mPropertyDetail.getAddress()) ?
+                TextUtils.formatAddress(mPropertyDetail.getAddress()) + "\\n"
                 : "") +
             getString(R.string.txt_share_text));
         shareIntent.putExtra("android.intent.extra.SUBJECT",
