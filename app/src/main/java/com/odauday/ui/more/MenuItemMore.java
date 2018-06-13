@@ -31,7 +31,7 @@ public class MenuItemMore {
                 R.string.post_news));
         MenuItemMore menuItemMoreConfirmProperty = new MenuItemMore(ItemType.ADMIN_MANAGER,
             R.drawable.ic_admin_manager, context.getString(
-            R.string.confirm_property));
+            R.string.txt_administrator));
         MenuItemMore menuItemMoreSetting = new MenuItemMore(ItemType.SETTINGS,R.drawable.ic_settings,
             context.getString(
                 R.string.action_settings));

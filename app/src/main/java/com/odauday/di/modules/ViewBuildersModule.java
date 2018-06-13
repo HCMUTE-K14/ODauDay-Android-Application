@@ -3,6 +3,7 @@ package com.odauday.di.modules;
 import com.odauday.MainActivity;
 import com.odauday.MainActivityModule;
 import com.odauday.di.scopes.PerActivity;
+import com.odauday.di.scopes.PerFragment;
 import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.addeditproperty.AddEditPropertyModule;
 import com.odauday.ui.addeditproperty.step1.Step1Provider;
@@ -12,6 +13,8 @@ import com.odauday.ui.addeditproperty.step4.Step4Provider;
 import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.admin.propertymanager.ConfirmPropertyProvider;
 import com.odauday.ui.admin.usermanager.UserManagerProvider;
+import com.odauday.ui.admin.usermanager.userdetail.ActivityUserDetail;
+import com.odauday.ui.admin.usermanager.userdetail.UserHistoryProvide;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.alert.service.FirebaseMessaging;
 import com.odauday.ui.favorite.FavoriteTabProvider;
@@ -132,5 +135,8 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = SubscribePremiumModule.class)
     @PerActivity
     abstract SubscribePremiumActivity provideSubscribePremiumActivity();
-
+    
+    @ContributesAndroidInjector(modules = UserHistoryProvide.class)
+    @PerActivity
+    abstract ActivityUserDetail provideActivityUserDetail();
 }

@@ -84,5 +84,6 @@
     <activity android:name=".ui.user.profile.ProfileUserActivity" />
     <activity android:name=".ui.user.buypoint.BuyPointActivity" />
     <activity android:name=".ui.user.subscribe.SubscribePremiumActivity" />
+    <activity android:name=".ui.admin.usermanager.userdetail.ActivityUserDetail"/>
   </application>
 </manifest>

@@ -1,5 +1,6 @@
 package com.odauday.ui.favorite;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import com.google.gson.Gson;
 import com.odauday.R;
+import com.odauday.config.Constants;
 import com.odauday.config.Type;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -16,11 +18,13 @@ import com.odauday.databinding.FragmentFavoriteTabMainBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.Favorite;
 import com.odauday.model.Property;
+import com.odauday.model.PropertyDetail;
 import com.odauday.model.User;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.FavoriteAdapter.OnClickStarListener;
 import com.odauday.ui.favorite.sharefavorite.FragmentDialogFavoriteShare;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
@@ -96,6 +100,18 @@ public class FavoriteTabMainFragment extends
         mFragmentDialogFavoriteShare.setOnClickSendEmailListener(mOnClickSendEmailListener);
         mFragmentDialogFavoriteShare.show(getActivity().getFragmentManager(), "");
         
+    };
+    private FavoriteAdapter.OnClickItemPropertyListener mOnClickItemPropertyListener=property -> {
+        if(property!=null){
+            PropertyDetail propertyDetail = new PropertyDetail();
+            propertyDetail.setId(property.getId());
+            propertyDetail.setFavorite(true);
+        
+            Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
+            intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
+        
+            getContext().startActivity(intent);
+        }
     };
     FavoriteAdapter.OnClickStarListener mOnClickStarListener = new OnClickStarListener() {
         @Override
@@ -201,6 +217,7 @@ public class FavoriteTabMainFragment extends
         mBinding.get().recycleViewFavorite.setNestedScrollingEnabled(false);
         mFavoriteAdapter = new FavoriteAdapter();
         mFavoriteAdapter.setOnClickStarListeners(mOnClickStarListener);
+        mFavoriteAdapter.setOnClickItemPropertyListener(mOnClickItemPropertyListener);
     
         mEmptyFavoriteAdapter = new EmptyFavoriteAdapter();
         mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
@@ -222,8 +239,6 @@ public class FavoriteTabMainFragment extends
     
     private void getFavorite() {
         mSTATUS = STATUS.GET;
-        //mPreferencesHelper.put(PrefKey.USER_ID, "a88211ba-3077-40e2-9685-5ab450abb114");
-        //mPreferencesHelper.put(PrefKey.ACCESS_TOKEN, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiYTg4MjExYmEtMzA3Ny00MGUyLTk2ODUtNWFiNDUwYWJiMTE0IiwiZW1haWwiOiJkYW9odXVsb2M5NDE5QGdtYWlsLmNvbSIsImRpc3BsYXlfbmFtZSI6ImluZmFtb3VTcyIsInBob25lIjpudWxsLCJhdmF0YXIiOm51bGwsInJvbGUiOiJ1c2VyIiwic3RhdHVzIjoicGVuZGluZyIsImZhY2Vib29rX2lkIjpudWxsLCJhbW91bnQiOm51bGx9LCJpYXQiOjE1MjIyMTM4NzN9.kbl64zvlPOFlc8NdFqlcbAc-I5I7D1WVC_BwUYearjs");
         mFavoriteViewModel.getFavoritePropertyByUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
     }
     
@@ -363,9 +378,14 @@ public class FavoriteTabMainFragment extends
     @Override
     public void onStop() {
         unCheckFavorites();
-        clearMemory();
         super.onStop();
        
+    }
+    
+    @Override
+    public void onDestroy() {
+        clearMemory();
+        super.onDestroy();
     }
     
     public void unCheckFavorites() {
@@ -374,7 +394,6 @@ public class FavoriteTabMainFragment extends
             mFavoriteViewModel.unCheckFavorites(mFavoritesIdNeedUnCheck);
         }
     }
-    
     @Override
     public void clearMemory() {
         mHeaderFavoriteView=null;

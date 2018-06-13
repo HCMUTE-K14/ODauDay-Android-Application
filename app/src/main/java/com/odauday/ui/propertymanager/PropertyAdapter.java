@@ -28,7 +28,7 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     private OnClickMenuListener mOnClickMenuListener;
     private Filter mFilter = new ItemFilter();
     private List<Property> mDisplayProperty = new ArrayList<>();
-    
+    private OnClickItemPropertyListener mOnClickItemPropertyListener;
     @Override
     protected ItemPropertyManagerBinding createBinding(ViewGroup parent) {
         ItemPropertyManagerBinding itemPropertyManagerBinding = DataBindingUtil
@@ -45,6 +45,7 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     
     @Override
     protected void bind(ItemPropertyManagerBinding binding, Property item) {
+        binding.imageProperty.setImageDrawable(null);
         binding.setProperty(item);
         binding.setHandler(this);
     }
@@ -131,6 +132,11 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         
     }
     
+    public void setOnClickItemPropertyListener(
+        OnClickItemPropertyListener onClickItemPropertyListener) {
+        mOnClickItemPropertyListener = onClickItemPropertyListener;
+    }
+    
     public void setOnClickMenuListener(
         OnClickMenuListener onClickMenuListener) {
         mOnClickMenuListener = onClickMenuListener;
@@ -150,7 +156,14 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         }
         
     }
-    
+    public void onClickItemProperty(Property property){
+        if(mOnClickItemPropertyListener!=null){
+            mOnClickItemPropertyListener.onClickItemProperty(property);
+        }
+    }
+    public interface OnClickItemPropertyListener{
+        void onClickItemProperty(Property property);
+    }
     public interface OnClickMenuListener {
         
         void editProperty(Property property);

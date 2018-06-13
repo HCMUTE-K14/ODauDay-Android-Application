@@ -20,6 +20,7 @@ import timber.log.Timber;
 public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> {
     
     public static final String TAG = FavoriteAdapter.class.getSimpleName();
+    private OnClickItemPropertyListener mOnClickItemPropertyListener;
     private OnClickStarListener mOnClickStarListeners;
     StarView.OnClickStarListener<Property> mOnClickStarListener = new StarView.OnClickStarListener<Property>() {
         @Override
@@ -75,6 +76,11 @@ public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> 
         notifyDataSetChanged();
     }
     
+    public void setOnClickItemPropertyListener(
+        OnClickItemPropertyListener onClickItemPropertyListener) {
+        mOnClickItemPropertyListener = onClickItemPropertyListener;
+    }
+    
     public void setOnClickStarListeners(
         OnClickStarListener onClickStarListeners) {
         mOnClickStarListeners = onClickStarListeners;
@@ -86,8 +92,13 @@ public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> 
     
     public void onClickProperty(Property property) {
         Timber.tag(TAG).d("Property: " + property.getAddress());
+        if(mOnClickItemPropertyListener!=null){
+            mOnClickItemPropertyListener.onClickItemProperty(property);
+        }
     }
-    
+    public interface OnClickItemPropertyListener{
+        void onClickItemProperty(Property property);
+    }
     public interface OnClickStarListener {
         
         void onCheckStar(Property property);

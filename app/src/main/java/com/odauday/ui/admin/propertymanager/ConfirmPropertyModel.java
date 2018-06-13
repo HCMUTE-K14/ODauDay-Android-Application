@@ -22,6 +22,7 @@ public class ConfirmPropertyModel extends BaseViewModel{
     public ConfirmPropertyModel(AdminRepository adminRepository,
         PropertyRepository propertyRepository) {
         mAdminRepository = adminRepository;
+        mPropertyRepository=propertyRepository;
     }
     
     public void setConfirmPropertyContract(

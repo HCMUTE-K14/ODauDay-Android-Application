@@ -95,6 +95,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
         init();
         Timber.tag("TOKEN").d(FirebaseInstanceId.getInstance().getToken());
         showNotifi();
+        setNumberNotification();
     }
     
     private void showNotifi() {
@@ -119,8 +120,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onStart() {
         super.onStart();
-        setNumberNotification();
-        //mBinding.bottomNavBar.setNumberNotification(12);
     }
     
     @Override
@@ -245,7 +244,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     public void saveRefreshTokenDeviceForUser(){
         Timber.tag("RefreshToken").d("RUN CHECK");
         String tokenFirebase=FirebaseInstanceId.getInstance().getToken();
-        Timber.tag("RefreshToken").d(tokenFirebase);
         String tokenSave=mPreferencesHelper.get(PrefKey.REFRESH_TOKEN_DEVICE,"");
         if(!tokenFirebase.equals(tokenSave)){
             String userId=mPreferencesHelper.get(PrefKey.USER_ID,"");

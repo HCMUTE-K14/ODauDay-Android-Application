@@ -1,10 +1,16 @@
 package com.odauday.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.odauday.R;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
 
 /**
@@ -69,7 +75,23 @@ public class ImageLoader {
             .apply(options)
             .into(imageView);
     }
-    
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            if(TextUtils.isEmpty(src)){
+                return null;
+            }
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
+    }
     public static int randomPlaceHolder() {
         return PLACE_HOLDER[new Random().nextInt(PLACE_HOLDER.length)];
     }

@@ -1,5 +1,7 @@
 package com.odauday.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by infamouSs on 2/27/18.
  */
 
-public class User {
+public class User implements Parcelable{
     
     public static final String STATUS_PENDING = "pending";
     public static final String STATUS_ACTIVE = "active";
@@ -54,6 +56,30 @@ public class User {
 
     }
     
+    
+    protected User(Parcel in) {
+        id = in.readString();
+        email = in.readString();
+        displayName = in.readString();
+        phone = in.readString();
+        avatar = in.readString();
+        role = in.readString();
+        status = in.readString();
+        facebookId = in.readString();
+        amount = in.readLong();
+    }
+    
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+        
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     
     public String getId() {
         return id;
@@ -164,5 +190,23 @@ public class User {
                ", facebookId='" + facebookId + '\'' +
                ", amount=" + amount +
                '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(email);
+        parcel.writeString(displayName);
+        parcel.writeString(phone);
+        parcel.writeString(avatar);
+        parcel.writeString(role);
+        parcel.writeString(status);
+        parcel.writeString(facebookId);
+        parcel.writeLong(amount);
     }
 }

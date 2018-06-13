@@ -3,6 +3,7 @@ package com.odauday.ui.admin.propertymanager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,20 +11,24 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupMenu;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.odauday.R;
+import com.odauday.config.Constants;
 import com.odauday.data.NotificationManagerRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.databinding.FragmentConfirmPropertyBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.Property;
+import com.odauday.model.PropertyDetail;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.admin.propertymanager.ConfirmPropertyAdapter.OnClickMenuListener;
 import com.odauday.ui.alert.service.Notification;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.propertymanager.EmptyPropertyAdapter;
 import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
@@ -47,8 +52,6 @@ public class FragmentConfirmProperty extends
     
     @Inject
     ConfirmPropertyModel mConfirmPropertyModel;
-    @Inject
-    NotificationManagerRepository mNotificationManagerRepository;
     @Inject
     PreferencesHelper mPreferencesHelper;
     
@@ -109,6 +112,7 @@ public class FragmentConfirmProperty extends
                     && (visibleItemCount + pastVisibleItems) == totalItemCount) {
                     
                     propertyScrolled = false;
+                    Timber.tag(TAG).d("EndScroll");
                     
                     numPage++;
                     getData();
@@ -136,6 +140,19 @@ public class FragmentConfirmProperty extends
             actionAdmin(property, getString(R.string.message_confirm), 3);
         }
     };
+    private ConfirmPropertyAdapter.onClickItemPropertyListener mOnClickItemPropertyListener=property -> {
+        if(property!=null){
+            PropertyDetail propertyDetail = new PropertyDetail();
+            propertyDetail.setId(property.getId());
+            propertyDetail.setFavorite(false);
+        
+            Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
+            intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
+        
+            getContext().startActivity(intent);
+        }
+        Timber.tag(TAG).d(property.toString());
+    };
     ServiceUnavailableAdapter.OnClickTryAgain mOnClickTryAgain = () -> {
         getData();
     };
@@ -146,9 +163,18 @@ public class FragmentConfirmProperty extends
     }
     
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+    
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Timber.tag(TAG).d("onCreatedView");
         init();
+        getData();
+        setUpSearch();
     }
     
     private void init() {
@@ -168,6 +194,7 @@ public class FragmentConfirmProperty extends
         mBinding.get().setHandler(this);
         mConfirmPropertyAdapter = new ConfirmPropertyAdapter();
         mConfirmPropertyAdapter.setOnClickMenuListener(mOnClickMenuListener);
+        mConfirmPropertyAdapter.setOnClickItemPropertyListener(mOnClickItemPropertyListener);
         mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
         mServiceUnavailableAdapter.setOnClickTryAgain(mOnClickTryAgain);
         mEmptyPropertyAdapter = new EmptyPropertyAdapter();
@@ -189,8 +216,7 @@ public class FragmentConfirmProperty extends
     @Override
     public void onStart() {
         super.onStart();
-        getData();
-        setUpSearch();
+        Timber.tag(TAG).d("onStartView");
     }
     
     private void getData() {
@@ -203,6 +229,7 @@ public class FragmentConfirmProperty extends
         RxTextView.afterTextChangeEvents(mBinding.get().editTextSearch)
             .debounce(500, TimeUnit.MILLISECONDS).observeOn(
             AndroidSchedulers.mainThread()).subscribe(success -> {
+            Timber.tag(TAG).d("RxTextView");
             updateUI();
         }, throwable -> {
             Timber.tag(TAG).d("Error RxTextView");
@@ -210,6 +237,7 @@ public class FragmentConfirmProperty extends
     }
     
     private void updateUI() {
+        Timber.tag(TAG).d("kunsubin ho");
         mLimit = 10;
         numPage = 1;
         mStatusGetProperty = true;
@@ -254,10 +282,14 @@ public class FragmentConfirmProperty extends
     
     @Override
     public void onSuccess(Object object) {
-        Timber.tag(TAG).d("Success");
+        Timber.tag(TAG).d("Successgkfdlj3");
         
         List<Property> list = (List<Property>) object;
+      
         if (list != null && list.size() > 0) {
+            if(mConfirmPropertyAdapter.getData()!=null&&mConfirmPropertyAdapter.getData().equals(list)){
+                return;
+            }
             if (!(mRecyclerView.getAdapter() instanceof ConfirmPropertyAdapter)) {
                 mRecyclerView.setAdapter(mConfirmPropertyAdapter);
             }
@@ -277,7 +309,6 @@ public class FragmentConfirmProperty extends
     
     @Override
     public void onFailure(Exception ex) {
-        
         if (mConfirmPropertyAdapter.getItemCount() < 1) {
             if (ex instanceof RetrofitException) {
                 mRecyclerView.setAdapter(mServiceUnavailableAdapter);
@@ -318,7 +349,6 @@ public class FragmentConfirmProperty extends
                 } else {
                     mConfirmPropertyAdapter.removeItem(mPropertyChange);
                 }
-                sendNotificationToUser(mPropertyChange);
             }
             mAction = Action.NONE;
             return;
@@ -348,8 +378,15 @@ public class FragmentConfirmProperty extends
     
     @Override
     public void onStop() {
-        clearMemory();
         super.onStop();
+        Timber.tag(TAG).d("onStopView");
+    }
+    
+    @Override
+    public void onDestroy() {
+        clearMemory();
+        super.onDestroy();
+        Timber.tag(TAG).d("onDestroyView");
     }
     
     @Override
@@ -451,31 +488,5 @@ public class FragmentConfirmProperty extends
             alert11.show();
         }
     }
-    
-    public void sendNotificationToUser(Property property) {
-        Notification notification = new Notification();
-        notification.setTitle(getString(R.string.txt_title_notifi_confirm_property));
-        notification.setBody(
-            getString(R.string.txt_body_notifi_confirm_property) + ": " + property.getAddress());
-        notification.setUserID(property.getUser_id_created());
-        notification.setPropertyID(property.getId());
-        if(property.getImages()!=null){
-            notification.setImage(property.getImages().get(0).getUrl());
-        }else {
-            notification.setImage("");
-        }
-        
-        notification.setType("1");
-        
-        mNotificationManagerRepository.sendNotification(notification)
-            .doOnSubscribe(onSubscribe -> {
-                Timber.tag(TAG).d("OnLoadingSendNotification");
-            })
-            .subscribe(success -> {
-                Timber.tag(TAG).d("OnSuccessSendNotification: " + success.getMessage());
-            }, error -> {
-                Timber.tag(TAG).d("OnErrorSendNotification: " + error.getMessage());
-            });
-    }
-    
+
 }

@@ -26,8 +26,8 @@
           android:onClick="onClickBack"
           android:orientation="vertical">
           <ImageView
-            android:layout_width="50.0dip"
-            android:layout_height="match_parent"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:padding="10.0dip"
             android:src="@drawable/ic_back_button_white" />
         </LinearLayout>

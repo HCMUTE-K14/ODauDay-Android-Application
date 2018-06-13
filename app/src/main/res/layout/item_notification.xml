@@ -56,8 +56,9 @@
         android:background="?selectableItemBackgroundBorderless"
         android:layout_marginTop="2dp"
         android:layout_alignParentRight="true"
+        android:tint="@color/colorGray"
         android:onClick="@{(view)->handler.onClickAction(view,notification)}"
-        android:src="@drawable/ic_nav_bar_more_vertical" />
+        android:src="@drawable/ic_menu" />
       <TextView
         android:id="@+id/txt_date"
         android:layout_width="wrap_content"

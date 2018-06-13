@@ -236,9 +236,14 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     }
     @Override
     public void onStop() {
-        clearMemory();
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+    
+    @Override
+    public void onDestroy() {
+        clearMemory();
+        super.onDestroy();
     }
     
     @Override

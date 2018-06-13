@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout
+      android:id="@+id/layout_top_bar"
+      android:layout_width="fill_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/colorPrimary"
+      android:gravity="center_vertical">
+      <LinearLayout
+        android:id="@+id/ic_back"
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="onClickBack"
+        android:orientation="vertical">
+        <ImageView
+          android:layout_width="45dp"
+          android:layout_height="match_parent"
+          android:padding="10.0dip"
+          android:src="@drawable/ic_back_button_white" />
+      </LinearLayout>
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/image_more"
+        android:layout_toRightOf="@+id/ic_back"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:text="@string/txt_notification_detail"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+    </RelativeLayout>
+    <LinearLayout
+      android:id="@+id/linear_layout_notification"
+      android:layout_below="@id/layout_top_bar"
+      android:layout_marginTop="10dp"
+      android:orientation="horizontal"
+      android:weightSum="3"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <TextView
+          android:id="@+id/txt_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="15dp"
+          android:layout_toRightOf="@id/image_notification"
+          android:textColor="@color/colorGray"
+          android:text="Lang thang khong nha"
+          android:textSize="16dp" />
+        <TextView
+          android:id="@+id/txt_content"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="15dp"
+          android:layout_below="@id/txt_title"
+          android:layout_toRightOf="@id/image_notification"
+          android:textColor="@color/colorGray"
+          android:text="sdkfdsjkfhasjkfdhkjwer ereewrewr"
+          android:textSize="14dp" />
+      </RelativeLayout>
+       <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight="2">
+         <ImageView
+           android:layout_width="100dp"
+           android:layout_height="90dp"
+           android:src="@color/colorGray"
+           android:layout_centerVertical="true"
+           android:layout_centerHorizontal="true"/>
+       </RelativeLayout>
+    </LinearLayout>
+  </RelativeLayout>
+</layout>

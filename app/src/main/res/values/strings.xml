@@ -181,7 +181,7 @@
   <string name="cannot_delete_property">Cannot delete property</string>
   <string name="txt_version">v1.0.0.0</string>
   <string name="post_news">Post news</string>
-  <string name="confirm_property">Confirm Property</string>
+  <string name="txt_administrator">Administrator</string>
   <string name="feedback">Feedback</string>
   <string name="share_this_app">Share this app</string>
   <string name="txt_a_z"><![CDATA[A->Z]]></string>
@@ -353,4 +353,5 @@
   <string name="message_error_network_sub_header">We couldn\'t fulfill your request. Please check your network connection and try again.</string>
   <string name="txt_sort">Sort</string>
   <string name="message_register_successful">Your account is created. Please check email to active account.</string>
+  <string name="txt_notification_detail">Notification detail</string>
 </resources>

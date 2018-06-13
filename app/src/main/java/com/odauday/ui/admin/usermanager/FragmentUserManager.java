@@ -2,6 +2,7 @@ package com.odauday.ui.admin.usermanager;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.PopupMenu;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.odauday.R;
@@ -19,6 +21,7 @@ import com.odauday.exception.RetrofitException;
 import com.odauday.model.User;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.admin.usermanager.UserManagerAdapter.OnClickActionListener;
+import com.odauday.ui.admin.usermanager.userdetail.ActivityUserDetail;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.utils.SnackBarUtils;
@@ -92,14 +95,20 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
             Timber.tag(TAG).d("Active: "+user.getEmail());
             actionUser(user,getString(R.string.txt_active_message),Status.ACTIVE);
         }
-    
         @Override
         public void Ban(User user) {
             Timber.tag(TAG).d("Ban: "+user.getEmail());
             actionUser(user,getString(R.string.txt_ban_message),Status.DISABLED);
         }
     };
-    
+    private UserManagerAdapter.OnClickItemUserListener mOnClickItemUserListener=user -> {
+        if(user!=null){
+            Timber.tag(TAG).d("On Click user: "+user.getDisplayName());
+            Intent intent =new Intent(getContext(), ActivityUserDetail.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
+        }
+    };
     public static FragmentUserManager newInstance() {
         
         Bundle args = new Bundle();
@@ -115,9 +124,17 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
     }
     
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+    
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
+        getData();
+        setUpSearch();
     }
     
     private void init() {
@@ -134,6 +151,7 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
         mServiceUnavailableAdapter=new ServiceUnavailableAdapter();
         mUserManagerAdapter=new UserManagerAdapter();
         mUserManagerAdapter.setOnClickActionListener(mOnClickActionListener);
+        mUserManagerAdapter.setOnClickItemUserListener(mOnClickItemUserListener);
         mLayoutManager=new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -149,8 +167,7 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
     @Override
     public void onStart() {
         super.onStart();
-        getData();
-        setUpSearch();
+       
     }
     
     private void getData() {
@@ -209,6 +226,9 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
         
         List<User> list=(List<User>) object;
         if(list!=null&&list.size()>0){
+            if(mUserManagerAdapter.getData()!=null&&mUserManagerAdapter.getData().equals(list)){
+                return;
+            }
             if(!(mRecyclerView.getAdapter() instanceof UserManagerAdapter)){
                 mRecyclerView.setAdapter(mUserManagerAdapter);
             }
@@ -263,9 +283,9 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
     }
     
     @Override
-    public void onStop() {
+    public void onDestroy() {
         clearMemory();
-        super.onStop();
+        super.onDestroy();
     }
     
     @Override

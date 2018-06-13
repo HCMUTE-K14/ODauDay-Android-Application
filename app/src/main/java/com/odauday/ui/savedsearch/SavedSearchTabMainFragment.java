@@ -271,12 +271,6 @@ public class SavedSearchTabMainFragment extends
             mRecyclerViewEmpty.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
         }
-       /* if(mSearches==null&&mRecentSearches==null){
-            mRelativeLayoutSavedSearch.setVisibility(View.GONE);
-            mRelativeLayoutRecentSearch.setVisibility(View.GONE);
-            mRecyclerViewEmpty.setVisibility(View.VISIBLE);
-            mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
-        }*/
     }
     public void onClickRefresh() {
         getData();
