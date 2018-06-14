@@ -25,6 +25,7 @@ import com.odauday.ui.admin.usermanager.userdetail.ActivityUserDetail;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.List;
@@ -225,7 +226,7 @@ public class FragmentUserManager extends BaseMVVMFragment<FragmentUserManagerBin
         Timber.tag(TAG).d("Success");
         
         List<User> list=(List<User>) object;
-        if(list!=null&&list.size()>0){
+        if(!ValidationHelper.isEmptyList(list)){
             if(mUserManagerAdapter.getData()!=null&&mUserManagerAdapter.getData().equals(list)){
                 return;
             }

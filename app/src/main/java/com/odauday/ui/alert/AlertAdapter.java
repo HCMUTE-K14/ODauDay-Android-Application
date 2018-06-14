@@ -20,6 +20,7 @@ import java.util.List;
 public class AlertAdapter extends BaseAdapter<Notification,ItemNotificationBinding> {
     private PopupMenu mPopupMenu;
     private OnClickActionNotificationListener mOnClickActionNotificationListener;
+    private OnClickItemNotificationListener mOnClickItemNotificationListener;
     @Override
     protected ItemNotificationBinding createBinding(ViewGroup parent) {
         ItemNotificationBinding itemNotificationBinding = DataBindingUtil.inflate(
@@ -67,6 +68,11 @@ public class AlertAdapter extends BaseAdapter<Notification,ItemNotificationBindi
         mOnClickActionNotificationListener = onClickActionNotificationListener;
     }
     
+    public void setOnClickItemNotificationListener(
+        OnClickItemNotificationListener onClickItemNotificationListener) {
+        mOnClickItemNotificationListener = onClickItemNotificationListener;
+    }
+    
     public void onClickAction(View view, Notification notification){
         mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
@@ -82,6 +88,11 @@ public class AlertAdapter extends BaseAdapter<Notification,ItemNotificationBindi
         });
         mPopupMenu.show();
     }
+    public void onClickItemNotification(Notification notification){
+        if(mOnClickItemNotificationListener!=null){
+            mOnClickItemNotificationListener.onClickItemNotification(notification);
+        }
+    }
     public void putNotification(Notification notification){
         if(data==null){
             data=new ArrayList<>();
@@ -91,5 +102,8 @@ public class AlertAdapter extends BaseAdapter<Notification,ItemNotificationBindi
     }
     public interface OnClickActionNotificationListener{
         void onClickAction(Notification notification);
+    }
+    public interface OnClickItemNotificationListener{
+        void onClickItemNotification(Notification notification);
     }
 }

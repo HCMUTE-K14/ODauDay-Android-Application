@@ -205,9 +205,6 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mDisplayProperty.clear();
             mDisplayProperty = (ArrayList<Property>) results.values;
-           /* if(mDisplayProperty!=null&&mDisplayProperty.size()>0){
-                Timber.tag(TAG).d("Anh ky:"+mDisplayProperty.get(0).toString());
-            }*/
             notifyDataSetChanged();
         }
     }

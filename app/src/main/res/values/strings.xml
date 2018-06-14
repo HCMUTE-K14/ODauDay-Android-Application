@@ -354,4 +354,6 @@
   <string name="txt_sort">Sort</string>
   <string name="message_register_successful">Your account is created. Please check email to active account.</string>
   <string name="txt_notification_detail">Notification detail</string>
+  <string name="txt_cannot_remove_saved_search">Cannot remove SavedSearch</string>
+  <string name="txt_remove_saved_search_successfully">Removing SavedSearch is successfully</string>
 </resources>

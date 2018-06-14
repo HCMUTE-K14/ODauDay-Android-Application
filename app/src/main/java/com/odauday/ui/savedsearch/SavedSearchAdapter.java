@@ -13,6 +13,7 @@ import com.odauday.model.Search;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.view.NotificationView;
 import com.odauday.ui.view.NotificationView.OnClickNotificationListener;
+import com.odauday.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
@@ -105,6 +106,17 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     
     public void onClickSavedSearch(Search search) {
         Timber.tag(TAG).d("Click: " + search.getName());
+    }
+    
+    public void removeItem(Search search) {
+        if(data!=null&&data.size()>0){
+            data.remove(search);
+            notifyDataSetChanged();
+        }
+    }
+    
+    public List<Search> getData() {
+        return data;
     }
     
     public interface OnClickRemoveSavedSearches {

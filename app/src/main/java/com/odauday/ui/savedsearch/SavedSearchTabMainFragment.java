@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import com.odauday.R;
+import com.odauday.data.SavedSearchRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.model.MessageResponse;
@@ -19,7 +20,9 @@ import com.odauday.ui.ClearMemory;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
+import com.odauday.viewmodel.model.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -39,6 +42,8 @@ public class SavedSearchTabMainFragment extends
     SavedSearchViewModel mSavedSearchViewModel;
     @Inject
     PreferencesHelper mPreferencesHelper;
+    @Inject
+    SavedSearchRepository mSavedSearchRepository;
     
     private SavedSearchAdapter mSavedSearchAdapter;
     private RecentSearchAdapter mRecentSearchAdapter;
@@ -50,18 +55,12 @@ public class SavedSearchTabMainFragment extends
     private RecyclerView mRecyclerViewEmpty;
     private RelativeLayout mRelativeLayoutSavedSearch;
     private RelativeLayout mRelativeLayoutRecentSearch;
-    private ProgressDialog mProgressDialog;
-    private String mSearchID;
     
-    enum STATUS {
-        GET, REMOVE
-    }
-    private STATUS mSTATUS = STATUS.GET;
     RecentSearchAdapter.OnClickRemoveRecentSearches mOnClickRemoveRecentSearches = search -> {
         
         Timber.tag(TAG).d("Remove: " + search.getName());
         
-        if (mRecentSearches != null && mRecentSearches.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mRecentSearches)) {
             for (Search s: mRecentSearches) {
                 if (s.getId().trim().equals(search.getId().trim())) {
                     mRecentSearches.remove(s);
@@ -77,9 +76,18 @@ public class SavedSearchTabMainFragment extends
     };
     SavedSearchAdapter.OnClickRemoveSavedSearches mOnClickRemoveSavedSearches = search -> {
         Timber.tag(TAG).d("Remove: " + search.getName());
-        mSTATUS = STATUS.REMOVE;
-        mSearchID = search.getId();
-        mSavedSearchViewModel.removeSearch(search.getId());
+        mSavedSearchRepository.removeSearch(search.getId())
+            .doOnSubscribe(onSubscribe -> {
+                Timber.tag(TAG).d("onSubscribe remove saved search");
+            })
+            .subscribe(success -> {
+                if(!ValidationHelper.isNull(success)){
+                    onSuccessRemove(success.getMessage(),search.getId());
+                }
+            }, error -> {
+                String message = getActivity().getString(R.string.cannot_remove_saved_search);
+                SnackBarUtils.showSnackBar(mBinding.get().savedSearch, message);
+            });
     };
     public static SavedSearchTabMainFragment newInstance() {
 
@@ -97,6 +105,7 @@ public class SavedSearchTabMainFragment extends
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        getData();
     }
     
     private void initView() {
@@ -104,10 +113,6 @@ public class SavedSearchTabMainFragment extends
         mSearches = new ArrayList<>();
         mRecentSearches = new ArrayList<>();
         mBinding.get().setHandler(this);
-        
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.setMessage(getActivity().getString(R.string.txt_progress));
     
         mSavedSearchAdapter = new SavedSearchAdapter();
         mRecentSearchAdapter = new RecentSearchAdapter();
@@ -130,16 +135,9 @@ public class SavedSearchTabMainFragment extends
         mRecyclerViewEmpty.setLayoutManager(new GridLayoutManager(getActivity(),1));
     }
     
-    @Override
-    public void onStart() {
-        super.onStart();
-        getData();
-    }
-    
     private void getData() {
-        mSTATUS = STATUS.GET;
-        
         mRecentSearches = mPreferencesHelper.getList(PrefKey.RECENT_SEARCH, "");
+        setRecentSearch();
         mSavedSearchViewModel.getSearchByUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
     }
     @Override
@@ -172,69 +170,43 @@ public class SavedSearchTabMainFragment extends
     
     @Override
     public void loading(boolean isLoading) {
-        if (isLoading) {
-            mProgressDialog.show();
-        } else {
-            mProgressDialog.dismiss();
-        }
         Timber.tag(TAG).d("Loading Search");
     }
     
     @Override
     public void onSuccess(Object object) {
-        if (mSTATUS == STATUS.REMOVE) {
-            onSuccessRemove(object);
-            return;
-        }
         onSuccessSavedSearch(object);
-    
-        setRecentSearch();
-    
         changeView();
     }
     
     @Override
     public void onFailure(Exception ex) {
         Timber.tag(TAG).d(ex.getMessage());
-        if (mSTATUS == STATUS.REMOVE) {
-            String message;
-            message = getActivity().getString(R.string.cannot_remove_saved_search);
-            SnackBarUtils.showSnackBar(mBinding.get().savedSearch, message);
-            mSTATUS = STATUS.GET;
-            return;
-        }
-        if (mRecentSearches != null && mRecentSearches.size()>0) {
-            if (!(mRecyclerViewRecentSearch.getAdapter() instanceof RecentSearchAdapter)) {
-                mRecyclerViewRecentSearch.setAdapter(mRecentSearchAdapter);
-            }
-            mRecentSearchAdapter.setData(mRecentSearches);
-        } else {
-            mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
-        }
         changeView();
     }
-    private void onSuccessRemove(Object object){
-        if (mSearches != null && mSearches.size() > 0) {
+    private void onSuccessRemove(Object object,String idSavedSearch){
+        if (!ValidationHelper.isEmptyList(mSearches)) {
             for (Search search : mSearches) {
-                if (search.getId().trim().equals(mSearchID.trim())) {
+                if (search.getId().trim().equals(idSavedSearch)) {
                     mSearches.remove(search);
+                    mSavedSearchAdapter.removeItem(search);
                     break;
                 }
             }
-            mSavedSearchAdapter.setData(mSearches);
             changeView();
         }
-        mSTATUS = STATUS.GET;
         SnackBarUtils
-            .showSnackBar(mBinding.get().savedSearch, ((MessageResponse) object).getMessage());
+            .showSnackBar(mBinding.get().savedSearch, getString(R.string.txt_remove_saved_search_successfully));
     }
     private void onSuccessSavedSearch(Object object){
         SavedSearchResponse savedSearchResponse = (SavedSearchResponse) object;
-        if (savedSearchResponse != null) {
+        if (!ValidationHelper.isNull(savedSearchResponse)) {
             List<Search> searches = savedSearchResponse.getSearches();
-            if (searches != null && searches.size()>0) {
+            if (!ValidationHelper.isEmptyList(searches)) {
+                if(mSavedSearchAdapter.getData()!=null&&mSavedSearchAdapter.getData().equals(searches)){
+                    return;
+                }
                 mSearches = searches;
-               // mPreferencesHelper.putList(PrefKey.RECENT_SEARCH,searches);
                 if (!(mRecyclerViewSavedSearch.getAdapter() instanceof SavedSearchAdapter)) {
                     mRecyclerViewSavedSearch.setAdapter(mSavedSearchAdapter);
                 }
@@ -243,22 +215,23 @@ public class SavedSearchTabMainFragment extends
         }
     }
     private void setRecentSearch(){
-        if (mRecentSearches != null && mRecentSearches.size()>0) {
+        if (!ValidationHelper.isEmptyList(mRecentSearches)) {
             if (!(mRecyclerViewRecentSearch.getAdapter() instanceof RecentSearchAdapter)) {
                 mRecyclerViewRecentSearch.setAdapter(mRecentSearchAdapter);
             }
             mRecentSearchAdapter.setData(mRecentSearches);
         }
+        changeView();
     }
     private void changeView(){
-        if(mSearches!=null&&mSearches.size()>0){
+        if(!ValidationHelper.isEmptyList(mSearches)){
             mRelativeLayoutSavedSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
         }
         
-        if(mRecentSearches!=null&&mRecentSearches.size()>0){
+        if(!ValidationHelper.isEmptyList(mRecentSearches)){
             mRelativeLayoutRecentSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
         }else {
@@ -292,7 +265,5 @@ public class SavedSearchTabMainFragment extends
         mRecyclerViewEmpty=null;
         mRelativeLayoutSavedSearch=null;
         mRelativeLayoutRecentSearch=null;
-        mProgressDialog=null;
-        mSearchID=null;
     }
 }

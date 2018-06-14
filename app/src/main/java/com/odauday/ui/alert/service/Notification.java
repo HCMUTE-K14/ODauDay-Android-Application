@@ -1,5 +1,7 @@
 package com.odauday.ui.alert.service;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.Date;
  * Created by kunsubin on 5/17/2018.
  */
 
-public class Notification {
+public class Notification implements Parcelable{
     
     private String mId;
     
@@ -59,6 +61,29 @@ public class Notification {
         mType = type;
         mDate=date;
     }
+    
+    protected Notification(Parcel in) {
+        mId = in.readString();
+        mTitle = in.readString();
+        mBody = in.readString();
+        mUserID = in.readString();
+        mPropertyID = in.readString();
+        mImage = in.readString();
+        mType = in.readString();
+        mDate = in.readLong();
+    }
+    
+    public static final Creator<Notification> CREATOR = new Creator<Notification>() {
+        @Override
+        public Notification createFromParcel(Parcel in) {
+            return new Notification(in);
+        }
+        
+        @Override
+        public Notification[] newArray(int size) {
+            return new Notification[size];
+        }
+    };
     
     public String getId() {
         return mId;
@@ -136,5 +161,23 @@ public class Notification {
                ", mType='" + mType + '\'' +
                ", mDate=" + mDate +
                '}';
+    }
+    
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    
+        parcel.writeString(mId);
+        parcel.writeString(mTitle);
+        parcel.writeString(mBody);
+        parcel.writeString(mUserID);
+        parcel.writeString(mPropertyID);
+        parcel.writeString(mImage);
+        parcel.writeString(mType);
+        parcel.writeLong(mDate);
     }
 }

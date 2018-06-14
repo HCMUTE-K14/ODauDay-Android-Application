@@ -29,6 +29,7 @@ import com.odauday.ui.propertymanager.PropertyAdapter.OnClickMenuListener;
 import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.SortAndFilterUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.Collections;
 import java.util.Comparator;
@@ -69,7 +70,7 @@ public class ActivityPropertyManager extends
         public void deleteProperty(Property property) {
             Timber.tag(TAG).d("delete:" + property.getAddress());
             
-            if (property != null) {
+            if (!ValidationHelper.isNull(property)) {
                 
                 mBuilderAlertDialog.setMessage(getString(R.string.message_delele_property));
                 mBuilderAlertDialog.setCancelable(true);
@@ -91,7 +92,7 @@ public class ActivityPropertyManager extends
         @Override
         public void markTheEndProperty(Property property) {
             Timber.tag(TAG).d("mark:" + property.getAddress());
-            if(property!=null){
+            if(!ValidationHelper.isNull(property)){
                 mBuilderAlertDialog.setMessage(getString(R.string.message_mark_the_end));
                 mBuilderAlertDialog.setCancelable(true);
                 mBuilderAlertDialog.setIcon(getResources().getDrawable(R.drawable.ic_warning));
@@ -124,7 +125,7 @@ public class ActivityPropertyManager extends
         getData();
     };
     private PropertyAdapter.OnClickItemPropertyListener mOnClickItemPropertyListener=property -> {
-        if(property!=null){
+        if(!ValidationHelper.isNull(property)){
             PropertyDetail propertyDetail = new PropertyDetail();
             propertyDetail.setId(property.getId());
             propertyDetail.setFavorite(false);
@@ -189,19 +190,11 @@ public class ActivityPropertyManager extends
             }
         });
     }
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //getData();
-    }
-    
     @Override
     protected void onStop() {
         super.onStop();
         mBinding.txtSearchBar.setText("");
     }
-    
     private void getData() {
         mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
     }
@@ -272,7 +265,7 @@ public class ActivityPropertyManager extends
     public void onSuccessDeleteProperty(Object object) {
         Timber.tag(TAG).d("On Success delete");
         mBinding.txtSearchBar.setText("");
-        if (mProperties != null && mProperties.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mProperties)) {
             if (mPropertyDelete != null) {
                 mProperties.remove(mPropertyDelete);
                 if (!(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter)) {
@@ -302,10 +295,10 @@ public class ActivityPropertyManager extends
     @Override
     public void onSuccessMarkTheEnd(Object object) {
         MessageResponse messageResponse=(MessageResponse) object;
-        if(messageResponse!=null){
+        if(!ValidationHelper.isNull(messageResponse)){
             SnackBarUtils.showSnackBar(mBinding.propertyManager, messageResponse.getMessage());
         }
-        if(mPropertyMark!=null){
+        if(!ValidationHelper.isNull(mPropertyMark)){
             mPropertyAdapter.changeStatusItem(mPropertyMark,Status.EXPIRED);
         }
     }
@@ -364,7 +357,7 @@ public class ActivityPropertyManager extends
        
     }
     private void setAdapter(List<Property> list){
-        if (list != null && list.size() > 0) {
+        if (!ValidationHelper.isEmptyList(list)) {
             if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
             
             } else {

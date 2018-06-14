@@ -126,4 +126,23 @@ public class Search {
                ", date_created='" + date_created + '\'' +
                '}';
     }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        
+        Search search = (Search) object;
+    
+        return id != null ? id.equals(search.id) : search.id == null;
+    }
+    
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

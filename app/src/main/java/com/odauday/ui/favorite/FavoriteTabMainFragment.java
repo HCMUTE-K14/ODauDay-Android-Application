@@ -29,6 +29,7 @@ import com.odauday.ui.view.HeaderFavoriteView;
 import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.SortAndFilterUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,7 @@ public class FavoriteTabMainFragment extends
         
         String struser=mPreferencesHelper.get(PrefKey.CURRENT_USER,"");
         User user=new Gson().fromJson(struser,User.class);
-        if(user==null){
+        if(ValidationHelper.isNull(user)){
             return;
         }
         mFragmentDialogFavoriteShare = new FragmentDialogFavoriteShare(user.getDisplayName(),
@@ -102,7 +103,7 @@ public class FavoriteTabMainFragment extends
         
     };
     private FavoriteAdapter.OnClickItemPropertyListener mOnClickItemPropertyListener=property -> {
-        if(property!=null){
+        if(!ValidationHelper.isNull(property)){
             PropertyDetail propertyDetail = new PropertyDetail();
             propertyDetail.setId(property.getId());
             propertyDetail.setFavorite(true);
@@ -117,7 +118,7 @@ public class FavoriteTabMainFragment extends
         @Override
         public void onCheckStar(Property property) {
             Timber.tag(TAG).d("Check: " + property.getAddress());
-            if (mFavoritesIdNeedUnCheck != null && mFavoritesIdNeedUnCheck.size() > 0) {
+            if (!ValidationHelper.isNull(mFavoritesIdNeedUnCheck)) {
                 int pos = -1;
                 for (int i = 0; i < mFavoritesIdNeedUnCheck.size(); i++) {
                     if (mFavoritesIdNeedUnCheck.get(i).getPropertyId().equals(property.getId())&&mFavoritesIdNeedUnCheck.get(i).getUserId().equals(mUserId)) {
@@ -270,7 +271,7 @@ public class FavoriteTabMainFragment extends
             return;
         }
         List<Property> propertyList = getPropertyFilter(mProperties);
-        if (propertyList != null && propertyList.size() > 0) {
+        if (!ValidationHelper.isEmptyList(propertyList)) {
             if (!(mBinding.get().recycleViewFavorite.getAdapter() instanceof FavoriteAdapter)) {
                 mBinding.get().recycleViewFavorite.setAdapter(mFavoriteAdapter);
             }
@@ -328,7 +329,7 @@ public class FavoriteTabMainFragment extends
         FavoriteResponse favoriteResponse = (FavoriteResponse) object;
         if (favoriteResponse != null) {
             List<Property> list = favoriteResponse.getProperties();
-            if (list != null&&list.size()>0) {
+            if (!ValidationHelper.isEmptyList(list)) {
                 mProperties = SortAndFilterUtils.sortFavoriteLastAdded(list);
                 showDataView();
             }else{
@@ -390,7 +391,7 @@ public class FavoriteTabMainFragment extends
     
     public void unCheckFavorites() {
         mSTATUS = STATUS.UN_CHECK;
-        if (mFavoritesIdNeedUnCheck != null && mFavoritesIdNeedUnCheck.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mFavoritesIdNeedUnCheck)) {
             mFavoriteViewModel.unCheckFavorites(mFavoritesIdNeedUnCheck);
         }
     }

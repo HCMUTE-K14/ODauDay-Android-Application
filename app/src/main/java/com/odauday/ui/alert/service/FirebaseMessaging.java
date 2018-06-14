@@ -18,6 +18,7 @@ import com.odauday.R;
 import com.odauday.data.NotificationRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
+import com.odauday.ui.alert.ActivityDetailNotification;
 import com.odauday.ui.alert.Demo;
 import com.odauday.utils.ImageLoader;
 import com.odauday.viewmodel.model.Resource;
@@ -79,13 +80,12 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     private void showNotification(Notification notification){
         NotificationManager notificationManager =
             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("body",notification.getBody());
+        Intent intent = new Intent(this, ActivityDetailNotification.class);
+        intent.putExtra("notification",notification);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        
         
         String NOTIFICATION_CHANNEL_ID = "01";
         

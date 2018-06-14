@@ -65,8 +65,8 @@ public class ImageLoader {
         Glide.with(imageView.getContext())
             .load(image)
             .apply(new RequestOptions()
-                .placeholder(R.drawable.ic_gallery_placeholder1)
-                .error(R.drawable.ic_gallery_placeholder1))
+                .placeholder(R.drawable.ic_notification)
+                .error(R.drawable.ic_notification))
             .into(imageView);
     }
     public static void load(ImageView imageView, Object image, RequestOptions options) {

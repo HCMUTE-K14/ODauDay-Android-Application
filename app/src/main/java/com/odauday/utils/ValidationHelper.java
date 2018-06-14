@@ -1,5 +1,6 @@
 package com.odauday.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,5 +38,11 @@ public class ValidationHelper {
         Matcher matcher = pattern.matcher(phone);
     
         return matcher.matches();
+    }
+    public static <T> boolean isEmptyList(List<T> list){
+        if(list!=null&&list.size()>0){
+            return false;
+        }
+        return true;
     }
 }

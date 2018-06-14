@@ -15,6 +15,7 @@ import com.odauday.ui.admin.propertymanager.ConfirmPropertyProvider;
 import com.odauday.ui.admin.usermanager.UserManagerProvider;
 import com.odauday.ui.admin.usermanager.userdetail.ActivityUserDetail;
 import com.odauday.ui.admin.usermanager.userdetail.UserHistoryProvide;
+import com.odauday.ui.alert.ActivityDetailNotification;
 import com.odauday.ui.alert.AlertTabProvider;
 import com.odauday.ui.alert.service.FirebaseMessaging;
 import com.odauday.ui.favorite.FavoriteTabProvider;
@@ -139,4 +140,8 @@ public abstract class ViewBuildersModule {
     @ContributesAndroidInjector(modules = UserHistoryProvide.class)
     @PerActivity
     abstract ActivityUserDetail provideActivityUserDetail();
+    
+    @ContributesAndroidInjector
+    @PerActivity
+    abstract ActivityDetailNotification provideActivityDetailNotification();
 }

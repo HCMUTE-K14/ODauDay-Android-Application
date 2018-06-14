@@ -32,6 +32,7 @@ import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.propertymanager.EmptyPropertyAdapter;
 import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.List;
@@ -286,7 +287,7 @@ public class FragmentConfirmProperty extends
         
         List<Property> list = (List<Property>) object;
       
-        if (list != null && list.size() > 0) {
+        if (!ValidationHelper.isEmptyList(list)) {
             if(mConfirmPropertyAdapter.getData()!=null&&mConfirmPropertyAdapter.getData().equals(list)){
                 return;
             }
@@ -488,5 +489,4 @@ public class FragmentConfirmProperty extends
             alert11.show();
         }
     }
-
 }

@@ -19,6 +19,7 @@ import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.user.profile.ProfileUserActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     }
 
     private void showMenu() {
-        if (mMenuItemMores != null && mMenuItemMores.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mMenuItemMores)) {
             mMoreAdapter.setData(mMenuItemMores);
         }
     }

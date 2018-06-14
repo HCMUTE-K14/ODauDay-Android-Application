@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+      name="notification"
+      type="com.odauday.ui.alert.service.Notification"/>
+    <variable
+      name="propertydetail"
+      type="com.odauday.model.PropertyDetail"/>
+    <variable
+      name="handler"
+      type="com.odauday.ui.alert.ActivityDetailNotification"/>
+  </data>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <RelativeLayout
@@ -42,9 +53,20 @@
       android:layout_below="@id/layout_top_bar"
       android:layout_marginTop="10dp"
       android:orientation="horizontal"
-      android:weightSum="3"
+      android:weightSum="4"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+        <ImageView
+          android:layout_width="75dp"
+          android:layout_height="75dp"
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_notification"
+          android:layout_centerHorizontal="true"/>
+      </RelativeLayout>
       <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,7 +78,7 @@
           android:layout_marginLeft="15dp"
           android:layout_toRightOf="@id/image_notification"
           android:textColor="@color/colorGray"
-          android:text="Lang thang khong nha"
+          android:text="@{notification.title}"
           android:textSize="16dp" />
         <TextView
           android:id="@+id/txt_content"
@@ -66,20 +88,166 @@
           android:layout_below="@id/txt_title"
           android:layout_toRightOf="@id/image_notification"
           android:textColor="@color/colorGray"
-          android:text="sdkfdsjkfhasjkfdhkjwer ereewrewr"
+          android:text="@{notification.body}"
           android:textSize="14dp" />
       </RelativeLayout>
-       <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_weight="2">
-         <ImageView
-           android:layout_width="100dp"
-           android:layout_height="90dp"
-           android:src="@color/colorGray"
-           android:layout_centerVertical="true"
-           android:layout_centerHorizontal="true"/>
-       </RelativeLayout>
+
     </LinearLayout>
+    <RelativeLayout
+      android:id="@+id/relative_detail_notification"
+      android:layout_below="@id/linear_layout_notification"
+      android:layout_marginTop="10dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:orientation="vertical">
+        <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="250dp"
+          android:background="@color/gray">
+          <ImageView
+            android:id="@+id/image_room"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@color/colorGray"
+            app:loadImageMainPropertyInListImage="@{propertydetail.images}"
+            />
+          <RelativeLayout
+            android:id="@+id/relative_type"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary">
+            <TextView
+              android:textStyle="bold"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:text="@{String.valueOf(propertydetail.type)}"
+              android:gravity="center"
+              android:textColor="@color/white" />
+          </RelativeLayout>
+          <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/white"
+            app:textDoublePrice="@{propertydetail.price}"
+            android:textSize="25dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+          android:id="@+id/relative_info"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+          <TextView
+            android:id="@+id/txt_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/black"
+            android:text="@{propertydetail.address}"
+            android:textSize="18dp"
+            />
+          <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/txt_address">
+            <TextView
+              android:id="@+id/txt_number_bed_room"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/black"
+              app:textInteger="@{propertydetail.numOfBedrooms}"
+              android:textSize="15dp" />
+            <ImageView
+              android:id="@+id/image_bedroom"
+              android:layout_width="20dp"
+              android:layout_height="20dp"
+              android:layout_marginLeft="5dp"
+              android:layout_toRightOf="@id/txt_number_bed_room"
+              android:src="@drawable/ic_bedroom"
+              android:tint="@color/black" />
+            <TextView
+              android:id="@+id/txt_number_bath_rom"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_toRightOf="@+id/image_bedroom"
+              android:textColor="@color/black"
+              app:textInteger="@{propertydetail.numOfBathrooms}"
+              android:textSize="15dp" />
+            <ImageView
+              android:id="@+id/image_bathroom"
+              android:layout_width="20dp"
+              android:layout_height="20dp"
+              android:layout_marginLeft="5dp"
+              android:layout_toRightOf="@id/txt_number_bath_rom"
+              android:src="@drawable/ic_bathroom"
+              android:tint="@color/black" />
+            <TextView
+              android:id="@+id/txt_number_park"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="15dp"
+              android:layout_toRightOf="@+id/image_bathroom"
+              android:textColor="@color/black"
+              app:textInteger="@{propertydetail.numOfParkings}"
+              android:textSize="15dp" />
+            <ImageView
+              android:id="@+id/image_pack"
+              android:layout_width="20dp"
+              android:layout_height="20dp"
+              android:layout_marginLeft="5dp"
+              android:layout_toRightOf="@id/txt_number_park"
+              android:src="@drawable/ic_pack"
+              android:tint="@color/black" />
+          </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+          android:layout_width="120dp"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:background="?android:attr/selectableItemBackground"
+          android:onClick="@{()->handler.onClickMoreDetail(propertydetail.id)}"
+          >
+          <ImageView
+            android:id="@+id/image_contact"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:tint="@color/green"
+            android:src="@drawable/ic_down" />
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="@string/txt_details"
+            android:layout_centerVertical="true"
+            android:textSize="16dp"
+            android:textColor="@color/green"
+            android:layout_toRightOf="@+id/image_contact"
+
+            />
+        </RelativeLayout>
+      </LinearLayout>
+    </RelativeLayout>
   </RelativeLayout>
 </layout>
