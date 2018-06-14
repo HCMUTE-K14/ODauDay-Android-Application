@@ -39,10 +39,6 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
         binding.txtName.setEllipsize(TextUtils.TruncateAt.END);
         binding.txtName.setMaxLines(2);
         binding.imageProperty.setImageDrawable(null);
-       /* if(item.getImages()!=null&&item.getImages().size()>0){
-            ImageLoader.load(binding.imageProperty.getContext(),binding.imageProperty,
-                EndPoint.BASE_URL+item.getImages().get(0).getUrl());
-        }*/
         binding.setProperty(item);
         binding.setHandler(this);
     }

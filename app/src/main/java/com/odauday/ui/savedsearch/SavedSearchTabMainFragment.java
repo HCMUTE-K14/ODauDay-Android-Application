@@ -248,11 +248,13 @@ public class SavedSearchTabMainFragment extends
     public void onClickRefresh() {
         getData();
     }
+    
     @Override
-    public void onStop() {
+    public void onDestroy() {
         clearMemory();
-        super.onStop();
+        super.onDestroy();
     }
+    
     @Override
     public void clearMemory() {
         mSavedSearchAdapter=null;

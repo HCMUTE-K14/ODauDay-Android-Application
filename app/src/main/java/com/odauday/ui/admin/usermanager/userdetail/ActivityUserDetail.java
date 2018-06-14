@@ -25,9 +25,6 @@ public class ActivityUserDetail extends BaseMVVMActivity<ActivityProfileBinding>
                                                                                  HasSupportFragmentInjector {
     private ProfileUserTabAdapter mAdapter;
     private User mUser;
-    private int mCurrentPage = 1;
-    private long mCount = 0;
-    private long mTotalPage = 1;
     @Inject
     DispatchingAndroidInjector<Fragment> mFragmentDispatchingAndroidInjector;
     

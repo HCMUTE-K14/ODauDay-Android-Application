@@ -196,7 +196,16 @@ public class ActivityPropertyManager extends
         mBinding.txtSearchBar.setText("");
     }
     private void getData() {
-        mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
+        String user_id=getIntent().getStringExtra("user_id");
+        if(ValidationHelper.isNull(user_id)){
+            Timber.tag(TAG).d("getPropertyUser");
+            mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
+        }else {
+            Timber.tag(TAG).d("getPropertyUserForAdmin");
+            mBinding.btnAddEvent.setVisibility(View.GONE);
+            mPropertyManagerViewModel.getPropertyOfUser(user_id);
+        }
+       
     }
     
     @Override

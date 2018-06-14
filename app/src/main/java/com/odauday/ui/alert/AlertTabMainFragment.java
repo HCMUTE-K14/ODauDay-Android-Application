@@ -89,6 +89,7 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         Intent intent = new Intent(getContext(), ActivityDetailNotification.class);
         intent.putExtra("notification", notification);
         getActivity().startActivity(intent);
+        
     };
     private ItemTouchHelper mItemTouchHelper=new ItemTouchHelper(mSimpleCallback);
     @Inject
@@ -108,6 +109,7 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
     
     @Override
@@ -126,12 +128,6 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         mRecyclerView=mBinding.get().recycleViewNotification;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setNestedScrollingEnabled(false);
-    }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
     @Override
     public int getLayoutId() {
@@ -245,13 +241,8 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         }
     }
     @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-    
-    @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         clearMemory();
         super.onDestroy();
     }
@@ -262,4 +253,5 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         mAlertEmptyAdapter=null;
         mRecyclerView=null;
     }
+    
 }

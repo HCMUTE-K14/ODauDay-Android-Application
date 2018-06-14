@@ -1,5 +1,6 @@
 package com.odauday.ui.admin.usermanager.userdetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import com.odauday.R;
 import com.odauday.databinding.FragmentProfileDetailBinding;
 import com.odauday.model.User;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.utils.TextUtils;
 import com.odauday.viewmodel.BaseViewModel;
 
@@ -45,6 +47,7 @@ public class FragmentUserDetail extends BaseMVVMFragment<FragmentProfileDetailBi
         super.onViewCreated(view, savedInstanceState);
         initView();
         showDetailUser();
+        setListener();
     }
     
     private void initView() {
@@ -75,8 +78,21 @@ public class FragmentUserDetail extends BaseMVVMFragment<FragmentProfileDetailBi
         }
         mBinding.get().status.setValue(TextUtils.capitalize(user.getStatus()));
         mBinding.get().amount.setValue(String.valueOf(user.getAmount()));
+        
+    }
+    private void setListener(){
+        mBinding.get().listProperty.setListener(this::onClickListProperty);
     }
     
+    private void onClickListProperty() {
+        User user=((ActivityUserDetail)getActivity()).getUser();
+        if(user==null){
+            return;
+        }
+        Intent intent=new Intent(getActivity(), ActivityPropertyManager.class);
+        intent.putExtra("user_id",user.getId());
+        startActivity(intent);
+    }
     @Override
     protected void injectDI() {
     

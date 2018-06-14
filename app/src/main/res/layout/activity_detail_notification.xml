@@ -128,10 +128,10 @@
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary">
             <TextView
+              android:id="@+id/txt_type"
               android:textStyle="bold"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:text="@{String.valueOf(propertydetail.type)}"
               android:gravity="center"
               android:textColor="@color/white" />
           </RelativeLayout>

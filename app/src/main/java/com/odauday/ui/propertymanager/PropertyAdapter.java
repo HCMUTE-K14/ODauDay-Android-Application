@@ -45,6 +45,8 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     
     @Override
     protected void bind(ItemPropertyManagerBinding binding, Property item) {
+        binding.txtName.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        binding.txtName.setMaxLines(2);
         binding.imageProperty.setImageDrawable(null);
         binding.setProperty(item);
         binding.setHandler(this);
@@ -143,7 +145,7 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     }
     
     public void filter(String text) {
-        if(mDisplayProperty!=null){
+        if(mDisplayProperty!=null&&data!=null){
             if (TextUtils.isEmpty(text)) {
         
                 this.mDisplayProperty.clear();

@@ -131,7 +131,7 @@ public class ProfileDetailFragment extends BaseMVVMFragment<FragmentProfileDetai
     }
     
     private void initData() {
-        
+        mBinding.get().listProperty.setVisibility(View.GONE);
         mBinding.get().phone.setValue(mCurrentUser.getPhone());
         String facebookProfileUrl;
         if (TextUtils.isEmpty(mCurrentUser.getFacebookId())) {

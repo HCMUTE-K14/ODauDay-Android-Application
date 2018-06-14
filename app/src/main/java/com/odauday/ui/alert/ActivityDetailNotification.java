@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
 import com.odauday.config.Constants;
+import com.odauday.data.NotificationRepository;
 import com.odauday.data.PropertyRepository;
 import com.odauday.databinding.ActivityDetailNotificationBinding;
 import com.odauday.model.PropertyDetail;
@@ -27,6 +28,8 @@ public class ActivityDetailNotification extends BaseMVVMActivity<ActivityDetailN
     private static final String TAG=ActivityDetailNotification.class.getSimpleName();
     @Inject
     PropertyRepository mPropertyRepository;
+    @Inject
+    NotificationRepository mNotificationRepository;
     
     @Override
     protected int getLayoutId() {
@@ -58,6 +61,7 @@ public class ActivityDetailNotification extends BaseMVVMActivity<ActivityDetailN
                     Timber.tag(TAG).d("onSuccess");
                     if(!ValidationHelper.isNull(success)){
                         mBinding.setPropertydetail(success);
+                        mBinding.txtType.setText(getString(success.getTextType()));
                     }
                 }, throwable -> {
                     mBinding.relativeDetailNotification.setVisibility(View.GONE);
