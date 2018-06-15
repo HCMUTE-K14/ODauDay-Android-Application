@@ -51,7 +51,7 @@
         android:textSize="13dp" />
       <ImageView
         android:id="@+id/image_more"
-        android:layout_width="25dp"
+        android:layout_width="30dp"
         android:layout_height="30dp"
         android:clickable="true"
         android:background="?selectableItemBackgroundBorderless"

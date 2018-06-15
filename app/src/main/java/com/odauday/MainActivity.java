@@ -94,22 +94,21 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
         saveRefreshTokenDeviceForUser();
         init();
         Timber.tag("TOKEN").d(FirebaseInstanceId.getInstance().getToken());
-        showNotifi();
+        showNotification();
         setNumberNotification();
     }
     
-    private void showNotifi() {
+    private void showNotification() {
     
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create channel to show notifications.
             String channelId  = "01";
-            String channelName = "Channel 1";
+            String channelName = "Channel01";
             NotificationManager notificationManager =
                 getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(new NotificationChannel(channelId,
                 channelName, NotificationManager.IMPORTANCE_LOW));
         }
-        
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
