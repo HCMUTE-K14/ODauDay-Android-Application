@@ -327,6 +327,38 @@ public class Property {
                '}';
     }
     
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        
+        Property property = (Property) object;
+        
+        if (Double.compare(property.latitude, latitude) != 0) {
+            return false;
+        }
+        if (Double.compare(property.longitude, longitude) != 0) {
+            return false;
+        }
+        return id != null ? id.equals(property.id) : property.id == null;
+    }
+    
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id != null ? id.hashCode() : 0;
+        temp = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+    
     public class Favorite {
         
         @SerializedName("date_created")

@@ -7,6 +7,7 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.util.DiffUtil.DiffResult;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import com.odauday.model.Search;
 import io.reactivex.Single;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,4 +159,5 @@ public abstract class BaseAdapter<T, VB extends ViewDataBinding> extends
     public int getItemCount() {
         return data == null ? 0 : data.size();
     }
+    
 }

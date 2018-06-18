@@ -72,6 +72,11 @@
           android:layout_height="wrap_content"
           app:txtHeaderWithoutColon="@{@string/txt_change_password}" />
         <com.odauday.ui.user.profile.common.ProfileDetailView
+          android:id="@+id/list_property"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:txtHeaderWithoutColon="@{@string/txt_list_property}" />
+        <com.odauday.ui.user.profile.common.ProfileDetailView
           android:id="@+id/log_out"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

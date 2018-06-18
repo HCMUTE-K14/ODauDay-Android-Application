@@ -1,5 +1,6 @@
 package com.odauday.ui.alert;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.odauday.MainActivity;
 import com.odauday.R;
+import com.odauday.config.Constants;
 import com.odauday.data.NotificationRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
@@ -23,7 +25,9 @@ import com.odauday.ui.alert.service.Notification;
 import com.odauday.ui.alert.service.NotificationEvent;
 import com.odauday.ui.base.BaseContract;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import com.odauday.viewmodel.model.Resource;
 import java.util.List;
@@ -80,6 +84,13 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
             mRecyclerView.setAdapter(mAlertEmptyAdapter);
         }
     };
+    private AlertAdapter.OnClickItemNotificationListener mOnClickItemNotificationListener=notification -> {
+        Timber.tag(TAG).d("Dismiss: "+notification.getId());
+        Intent intent = new Intent(getContext(), ActivityDetailNotification.class);
+        intent.putExtra("notification", notification);
+        getActivity().startActivity(intent);
+        
+    };
     private ItemTouchHelper mItemTouchHelper=new ItemTouchHelper(mSimpleCallback);
     @Inject
     AlertTabViewModel mAlertTabViewModel;
@@ -98,29 +109,25 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
     
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
+        mAlertTabViewModel.findAllNotificationByUserId(mPreferencesHelper.get(PrefKey.USER_ID,""));
     }
     
     private void init() {
         mBinding.get().setHandler(this);
         mAlertAdapter=new AlertAdapter();
         mAlertAdapter.setOnClickActionNotificationListener(mOnClickActionNotificationListener);
+        mAlertAdapter.setOnClickItemNotificationListener(mOnClickItemNotificationListener);
         mAlertEmptyAdapter=new AlertEmptyAdapter();
         mRecyclerView=mBinding.get().recycleViewNotification;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setNestedScrollingEnabled(false);
-    }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-        mAlertTabViewModel.findAllNotificationByUserId(mPreferencesHelper.get(PrefKey.USER_ID,""));
     }
     @Override
     public int getLayoutId() {
@@ -164,7 +171,7 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
     public void onSuccess(Object object) {
         Timber.tag(TAG).d("success");
         List<Notification> list=(List<Notification>) object;
-        if(list!=null&&list.size()>0){
+        if(!ValidationHelper.isEmptyList(list)){
             if(!(mRecyclerView.getAdapter() instanceof AlertAdapter)){
                 mRecyclerView.setAdapter(mAlertAdapter);
                 mItemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -193,9 +200,8 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
             });
     }
     public void onClickClearAllNotification(){
-        Timber.tag(TAG).d("Lang thang khong co nha de o");
         List<Notification> list=mAlertAdapter.getData();
-        if(list!=null&&list.size()>0){
+        if(!ValidationHelper.isEmptyList(list)){
             mNotificationRepository.clearAllNotification(list)
                 .doOnSubscribe(onSubscribe -> {
                     Timber.tag(TAG).d("doOnSubscribe");
@@ -235,10 +241,10 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         }
     }
     @Override
-    public void onStop() {
-        clearMemory();
+    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        super.onStop();
+        clearMemory();
+        super.onDestroy();
     }
     
     @Override
@@ -247,4 +253,5 @@ public class AlertTabMainFragment extends BaseMVVMFragment<FragmentAlertTabMainB
         mAlertEmptyAdapter=null;
         mRecyclerView=null;
     }
+    
 }

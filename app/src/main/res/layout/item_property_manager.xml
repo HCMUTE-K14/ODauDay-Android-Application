@@ -15,98 +15,119 @@
     android:layout_marginTop="10dp"
     android:layout_marginBottom="5dp"
     android:paddingBottom="10dp"
-    android:background="?android:attr/selectableItemBackground">
-    <RelativeLayout
+    >
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-      <ImageView
-        android:id="@+id/image_property"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:background="@color/gray"
-        app:loadImageMainPropertyInListImage="@{property.images}" />
-
-      <RelativeLayout
-        android:id="@+id/relative_info"
-        android:layout_width="230dp"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:background="?android:attr/selectableItemBackground"
+      android:clickable="true"
+      android:weightSum="8"
+      android:onClick="@{()->handler.onClickItemProperty(property)}">
+      <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/image_property">
+        android:layout_weight="1"
+        android:weightSum="3"
+        android:orientation="horizontal">
+        <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="2"
+          >
+          <ImageView
+            android:id="@+id/image_property"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="@color/gray"
+            app:loadImageMainPropertyInListImage="@{property.images}" />
+        </RelativeLayout>
 
-        <TextView
-          android:id="@+id/txt_name"
-          android:layout_width="wrap_content"
+        <RelativeLayout
+          android:id="@+id/relative_info"
+          android:layout_width="match_parent"
+          android:layout_marginLeft="5dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-          android:text="@{property.address}"
-          android:textColor="@color/black"
-          android:textSize="17dp" />
-        <TextView
-          android:id="@+id/txt_number_bath_rom"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="5dp"
-          android:layout_below="@id/txt_name"
-          android:textColor="@color/colorGray"
-          android:textSize="14dp"
-          app:textInteger="@{property.num_of_bedroom}" />
-        <TextView
-          android:id="@+id/bath_rom"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/txt_name"
-          android:layout_toRightOf="@id/txt_number_bath_rom"
-          android:text="@string/txt_filter_num_of_bathroom"
-          android:textColor="@color/colorGray"
-          android:textSize="14dp" />
+          android:layout_weight="1"
+          android:layout_toRightOf="@id/image_property">
 
-        <TextView
-          android:id="@+id/txt_number_park"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="15dp"
-          android:layout_marginRight="5dp"
-          android:layout_below="@id/txt_name"
-          android:layout_toRightOf="@id/bath_rom"
-          android:textColor="@color/colorGray"
-          android:textSize="14dp"
-          app:textInteger="@{property.num_of_parking}" />
-        <TextView
-          android:id="@+id/txt_park"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_below="@id/txt_name"
-          android:layout_toRightOf="@id/txt_number_park"
-          android:text="@string/txt_filter_num_of_parking"
-          android:textColor="@color/colorGray"
-          android:textSize="14dp" />
-        <TextView
-          android:id="@+id/txt_type"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="5dp"
-          android:layout_below="@+id/txt_number_bath_rom"
-          android:text="@{property.type_id}" />
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="2dp"
-          android:layout_below="@+id/txt_type"
-          android:textColor="@color/color_orange"
-          app:activeProperty="@{property.status}" />
-      </RelativeLayout>
+          <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{property.address}"
+            android:textColor="@color/black"
+            android:textSize="17dp" />
+          <TextView
+            android:id="@+id/txt_number_bath_rom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_below="@id/txt_name"
+            android:textColor="@color/colorGray"
+            android:textSize="14dp"
+            app:textInteger="@{property.num_of_bedroom}" />
+          <TextView
+            android:id="@+id/bath_rom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_name"
+            android:layout_toRightOf="@id/txt_number_bath_rom"
+            android:text="@string/txt_filter_num_of_bathroom"
+            android:textColor="@color/colorGray"
+            android:textSize="14dp" />
+
+          <TextView
+            android:id="@+id/txt_number_park"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_below="@id/txt_name"
+            android:layout_toRightOf="@id/bath_rom"
+            android:textColor="@color/colorGray"
+            android:textSize="14dp"
+            app:textInteger="@{property.num_of_parking}" />
+          <TextView
+            android:id="@+id/txt_park"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_name"
+            android:layout_toRightOf="@id/txt_number_park"
+            android:text="@string/txt_filter_num_of_parking"
+            android:textColor="@color/colorGray"
+            android:textSize="14dp" />
+          <TextView
+            android:id="@+id/txt_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/txt_number_bath_rom"
+            android:text="@{property.type_id}" />
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/txt_type"
+            android:textColor="@color/color_orange"
+            app:activeProperty="@{property.status}" />
+        </RelativeLayout>
+      </LinearLayout>
+
       <RelativeLayout
         android:id="@+id/relative_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/relative_info">
+        android:layout_weight="7"
+        android:layout_gravity="center">
         <ImageView
-          android:layout_width="30dp"
+          android:layout_width="match_parent"
           android:layout_height="60dp"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
@@ -117,6 +138,6 @@
           android:layout_marginRight="5dp"
           android:tint="@color/colorGray" />
       </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
   </android.support.v7.widget.CardView>
 </layout>

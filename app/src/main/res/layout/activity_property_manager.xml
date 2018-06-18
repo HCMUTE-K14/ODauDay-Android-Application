@@ -15,7 +15,7 @@
       android:gravity="center_vertical">
       <LinearLayout
         android:id="@+id/ic_back"
-        android:layout_width="50.0dip"
+        android:layout_width="50dp"
         android:layout_height="fill_parent"
         android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -23,7 +23,7 @@
         android:onClick="onClickBack"
         android:orientation="vertical">
         <ImageView
-          android:layout_width="50.0dip"
+          android:layout_width="45dp"
           android:layout_height="match_parent"
           android:padding="10.0dip"
           android:src="@drawable/ic_back_button_white" />

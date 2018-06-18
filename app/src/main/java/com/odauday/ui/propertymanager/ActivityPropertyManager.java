@@ -3,6 +3,7 @@ package com.odauday.ui.propertymanager;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,19 +12,24 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import com.odauday.R;
+import com.odauday.config.Constants;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.databinding.ActivityPropertyManagerBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.Property;
+import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
+import com.odauday.ui.propertydetail.PropertyDetailActivity;
 import com.odauday.ui.propertymanager.PropertyAdapter.OnClickMenuListener;
 import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.SortAndFilterUtils;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.Collections;
 import java.util.Comparator;
@@ -64,7 +70,7 @@ public class ActivityPropertyManager extends
         public void deleteProperty(Property property) {
             Timber.tag(TAG).d("delete:" + property.getAddress());
             
-            if (property != null) {
+            if (!ValidationHelper.isNull(property)) {
                 
                 mBuilderAlertDialog.setMessage(getString(R.string.message_delele_property));
                 mBuilderAlertDialog.setCancelable(true);
@@ -86,7 +92,7 @@ public class ActivityPropertyManager extends
         @Override
         public void markTheEndProperty(Property property) {
             Timber.tag(TAG).d("mark:" + property.getAddress());
-            if(property!=null){
+            if(!ValidationHelper.isNull(property)){
                 mBuilderAlertDialog.setMessage(getString(R.string.message_mark_the_end));
                 mBuilderAlertDialog.setCancelable(true);
                 mBuilderAlertDialog.setIcon(getResources().getDrawable(R.drawable.ic_warning));
@@ -118,6 +124,18 @@ public class ActivityPropertyManager extends
     private ServiceUnavailableAdapter.OnClickTryAgain mOnClickTryAgain=()->{
         getData();
     };
+    private PropertyAdapter.OnClickItemPropertyListener mOnClickItemPropertyListener=property -> {
+        if(!ValidationHelper.isNull(property)){
+            PropertyDetail propertyDetail = new PropertyDetail();
+            propertyDetail.setId(property.getId());
+            propertyDetail.setFavorite(false);
+        
+            Intent intent = new Intent(this, PropertyDetailActivity.class);
+            intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
+        
+            startActivity(intent);
+        }
+    };
     @Override
     protected int getLayoutId() {
         return R.layout.activity_property_manager;
@@ -131,7 +149,9 @@ public class ActivityPropertyManager extends
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initView();
+        getData();
     }
     
     private void initView() {
@@ -143,6 +163,7 @@ public class ActivityPropertyManager extends
         mPropertyManagerViewModel.setPropertyManagerContract(this);
         mPropertyAdapter = new PropertyAdapter();
         mPropertyAdapter.setOnClickMenuListener(mOnClickMenuListener);
+        mPropertyAdapter.setOnClickItemPropertyListener(mOnClickItemPropertyListener);
         mBinding.recycleViewProperties.setLayoutManager(new GridLayoutManager(this, 1));
         mBinding.recycleViewProperties.setNestedScrollingEnabled(false);
         mServiceUnavailableAdapter = new ServiceUnavailableAdapter();
@@ -169,15 +190,22 @@ public class ActivityPropertyManager extends
             }
         });
     }
-    
     @Override
-    protected void onStart() {
-        super.onStart();
-        getData();
+    protected void onStop() {
+        super.onStop();
+        mBinding.txtSearchBar.setText("");
     }
-    
     private void getData() {
-        mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
+        String user_id=getIntent().getStringExtra("user_id");
+        if(ValidationHelper.isNull(user_id)){
+            Timber.tag(TAG).d("getPropertyUser");
+            mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
+        }else {
+            Timber.tag(TAG).d("getPropertyUserForAdmin");
+            mBinding.btnAddEvent.setVisibility(View.GONE);
+            mPropertyManagerViewModel.getPropertyOfUser(user_id);
+        }
+       
     }
     
     @Override
@@ -246,7 +274,7 @@ public class ActivityPropertyManager extends
     public void onSuccessDeleteProperty(Object object) {
         Timber.tag(TAG).d("On Success delete");
         mBinding.txtSearchBar.setText("");
-        if (mProperties != null && mProperties.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mProperties)) {
             if (mPropertyDelete != null) {
                 mProperties.remove(mPropertyDelete);
                 if (!(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter)) {
@@ -276,10 +304,10 @@ public class ActivityPropertyManager extends
     @Override
     public void onSuccessMarkTheEnd(Object object) {
         MessageResponse messageResponse=(MessageResponse) object;
-        if(messageResponse!=null){
+        if(!ValidationHelper.isNull(messageResponse)){
             SnackBarUtils.showSnackBar(mBinding.propertyManager, messageResponse.getMessage());
         }
-        if(mPropertyMark!=null){
+        if(!ValidationHelper.isNull(mPropertyMark)){
             mPropertyAdapter.changeStatusItem(mPropertyMark,Status.EXPIRED);
         }
     }
@@ -338,7 +366,7 @@ public class ActivityPropertyManager extends
        
     }
     private void setAdapter(List<Property> list){
-        if (list != null && list.size() > 0) {
+        if (!ValidationHelper.isEmptyList(list)) {
             if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
             
             } else {

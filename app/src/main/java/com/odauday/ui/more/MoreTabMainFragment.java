@@ -19,6 +19,7 @@ import com.odauday.ui.propertymanager.ActivityPropertyManager;
 import com.odauday.ui.settings.ActivitySettings;
 import com.odauday.ui.user.profile.ProfileUserActivity;
 import com.odauday.ui.view.bottomnav.NavigationTab;
+import com.odauday.utils.ValidationHelper;
 import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
@@ -117,11 +118,15 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     }
 
     private void getMenu() {
-        mMenuItemMores = MenuItemMore.getListMenuMore(getActivity(), "admin");
+        String string_user=mPreferencesHelper.get(PrefKey.CURRENT_USER,"");
+        User user=new Gson().fromJson(string_user,User.class);
+        if(user!=null){
+            mMenuItemMores = MenuItemMore.getListMenuMore(getActivity(), user.getRole());
+        }
     }
 
     private void showMenu() {
-        if (mMenuItemMores != null && mMenuItemMores.size() > 0) {
+        if (!ValidationHelper.isEmptyList(mMenuItemMores)) {
             mMoreAdapter.setData(mMenuItemMores);
         }
     }
@@ -130,11 +135,10 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
     protected void processingTaskFromViewModel() {
 
     }
-    
     @Override
-    public void onStop() {
+    public void onDestroy() {
         clearMemory();
-        super.onStop();
+        super.onDestroy();
     }
     
     @Override

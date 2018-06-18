@@ -444,7 +444,6 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void onSuccessGetDetailProperty(PropertyDetail propertyDetail) {
         mPropertyDetail = propertyDetail;
-        
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
             mDefaultRows.add(StageRow.DESCRIPTION_ROW.getPos(), descriptionDetailRow);

@@ -56,7 +56,9 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
             .add(0, new Image(TextUtils.buildUrlStaticMap(item.getLocation(), 17.0f, "600x300")));
         
         for (Image image : item.getImages()) {
-            mImages.add(new Image(TextUtils.getImageUrl(image.getUrl())));
+            if(image != null){
+                mImages.add(new Image(TextUtils.getImageUrl(image.getUrl())));
+            }
         }
     }
     

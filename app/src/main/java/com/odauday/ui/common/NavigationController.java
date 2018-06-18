@@ -19,7 +19,7 @@ import javax.inject.Inject;
 
 public class NavigationController {
     
-    public static final long DELAY_ATTACH_FRAGMENT = 300;
+    public static final long DELAY_ATTACH_FRAGMENT = 0;
     
     private final int mContainerId;
     

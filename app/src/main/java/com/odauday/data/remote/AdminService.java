@@ -2,6 +2,7 @@ package com.odauday.data.remote;
 
 import static com.odauday.api.EndPoint.ADMIN;
 
+import com.odauday.data.remote.history.HistoryDetailResultEntry;
 import com.odauday.data.remote.model.JsonResponse;
 import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.model.Property;
@@ -28,4 +29,6 @@ public interface AdminService {
     Single<JsonResponse<MessageResponse>> changeStatusUser(@Query("id") String id,@Query("status")String status);
     @PUT(ADMIN+"/change-status-property")
     Single<JsonResponse<MessageResponse>> changeStatusProperty(@Query("id") String property_id,@Query("status") String status);
+    @GET(ADMIN+"/user-history")
+    Single<JsonResponse<HistoryDetailResultEntry>> getListHistoryForUser(@Query("user_id") String user_id,@Query("page")String page,@Query("limit")String limit);
 }

@@ -11,6 +11,7 @@ import com.odauday.data.remote.user.model.Status;
 import com.odauday.databinding.ItemUserManagerBinding;
 import com.odauday.model.User;
 import com.odauday.ui.base.BaseAdapter;
+import com.odauday.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class UserManagerAdapter extends BaseAdapter<User,ItemUserManagerBinding> {
     private PopupMenu mPopupMenu;
     private OnClickActionListener mOnClickActionListener;
+    private OnClickItemUserListener mOnClickItemUserListener;
     @Override
     protected ItemUserManagerBinding createBinding(ViewGroup parent) {
         ItemUserManagerBinding itemUserManagerBinding = DataBindingUtil
@@ -31,6 +33,7 @@ public class UserManagerAdapter extends BaseAdapter<User,ItemUserManagerBinding>
     
     @Override
     protected void bind(ItemUserManagerBinding binding, User item) {
+        binding.avatar.setImageDrawable(null);
         binding.setUser(item);
         binding.setHandler(this);
     }
@@ -57,6 +60,11 @@ public class UserManagerAdapter extends BaseAdapter<User,ItemUserManagerBinding>
     public void setOnClickActionListener(
         OnClickActionListener onClickActionListener) {
         mOnClickActionListener = onClickActionListener;
+    }
+    
+    public void setOnClickItemUserListener(
+        OnClickItemUserListener onClickItemUserListener) {
+        mOnClickItemUserListener = onClickItemUserListener;
     }
     
     public void clearData(){
@@ -105,6 +113,19 @@ public class UserManagerAdapter extends BaseAdapter<User,ItemUserManagerBinding>
                 break;
                 default:break;
         }
+    }
+    public void onClickItemUser(User user){
+        if(mOnClickItemUserListener!=null){
+            mOnClickItemUserListener.onClickItemUser(user);
+        }
+    }
+    
+    public List<User> getData() {
+        return data;
+    }
+    
+    public interface OnClickItemUserListener{
+        void onClickItemUser(User user);
     }
     public interface OnClickActionListener{
         void Active(User user);

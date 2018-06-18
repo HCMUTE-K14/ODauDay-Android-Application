@@ -28,7 +28,7 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     private OnClickMenuListener mOnClickMenuListener;
     private Filter mFilter = new ItemFilter();
     private List<Property> mDisplayProperty = new ArrayList<>();
-    
+    private OnClickItemPropertyListener mOnClickItemPropertyListener;
     @Override
     protected ItemPropertyManagerBinding createBinding(ViewGroup parent) {
         ItemPropertyManagerBinding itemPropertyManagerBinding = DataBindingUtil
@@ -45,6 +45,9 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
     
     @Override
     protected void bind(ItemPropertyManagerBinding binding, Property item) {
+        binding.txtName.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        binding.txtName.setMaxLines(2);
+        binding.imageProperty.setImageDrawable(null);
         binding.setProperty(item);
         binding.setHandler(this);
     }
@@ -131,13 +134,18 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         
     }
     
+    public void setOnClickItemPropertyListener(
+        OnClickItemPropertyListener onClickItemPropertyListener) {
+        mOnClickItemPropertyListener = onClickItemPropertyListener;
+    }
+    
     public void setOnClickMenuListener(
         OnClickMenuListener onClickMenuListener) {
         mOnClickMenuListener = onClickMenuListener;
     }
     
     public void filter(String text) {
-        if(mDisplayProperty!=null){
+        if(mDisplayProperty!=null&&data!=null){
             if (TextUtils.isEmpty(text)) {
         
                 this.mDisplayProperty.clear();
@@ -150,7 +158,14 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         }
         
     }
-    
+    public void onClickItemProperty(Property property){
+        if(mOnClickItemPropertyListener!=null){
+            mOnClickItemPropertyListener.onClickItemProperty(property);
+        }
+    }
+    public interface OnClickItemPropertyListener{
+        void onClickItemProperty(Property property);
+    }
     public interface OnClickMenuListener {
         
         void editProperty(Property property);
@@ -192,9 +207,6 @@ public class PropertyAdapter extends BaseAdapter<Property, ItemPropertyManagerBi
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mDisplayProperty.clear();
             mDisplayProperty = (ArrayList<Property>) results.values;
-           /* if(mDisplayProperty!=null&&mDisplayProperty.size()>0){
-                Timber.tag(TAG).d("Anh ky:"+mDisplayProperty.get(0).toString());
-            }*/
             notifyDataSetChanged();
         }
     }
