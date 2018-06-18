@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.odauday.model.Search;
+import com.odauday.utils.TextUtils;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,9 @@ public class PreferencesHelper {
     public List<Search> getList(String key, String defaultValue) {
         Gson gson = new Gson();
         String jsonPreferences = mSharedPreferences.getString(key, defaultValue);
+        if (TextUtils.isEmpty(jsonPreferences)) {
+            return new ArrayList<>();
+        }
         Type listType = new TypeToken<ArrayList<Search>>() {
         }.getType();
         return gson.fromJson(jsonPreferences, listType);

@@ -34,16 +34,20 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.odauday.R;
+import com.odauday.config.AppConfig;
 import com.odauday.data.HistoryRepository;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.SearchPropertyState;
 import com.odauday.data.local.cache.MapPreferenceHelper;
+import com.odauday.data.local.cache.PrefKey;
+import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.autocompleteplace.model.AutoCompletePlace;
 import com.odauday.data.remote.property.model.CoreSearchRequest;
 import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.data.remote.property.model.PropertyResultEntry;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.di.Injectable;
+import com.odauday.model.Search;
 import com.odauday.ui.search.common.RxCameraIdleListener;
 import com.odauday.ui.search.common.RxCameraIdleListener.TriggerCameraIdle;
 import com.odauday.ui.search.common.SearchCriteria;
@@ -95,6 +99,9 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     @Inject
     MapPreferenceHelper mMapPreferenceHelper;
+    
+    @Inject
+    PreferencesHelper mPreferencesHelper;
     
     @Inject
     SearchPropertyRepository mSearchRepository;
@@ -249,7 +256,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     public void clear() {
         mLocationClient.disconnect();
-        if(mRxCameraIdleListener != null){
+        if (mRxCameraIdleListener != null) {
             mRxCameraIdleListener.stop();
         }
     }
@@ -323,7 +330,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 &&
                 MapUtils.isCamPositionEqual(currentCameraPosition,
                     this.mLastCameraPosition);
-           
+            
             if (!insignificantMove) {
                 //                    if (this.mMapUnlocked && !this.myIgnoreInitCameraChange) {
                 //                        closeOpenedMarker();
@@ -331,7 +338,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 //                    }
                 this.mLastCameraPosition = currentCameraPosition;
                 if (mMapUnlocked) {
-                   performSearch();
+                    performSearch();
                 }
             }
         }
@@ -400,7 +407,35 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             mAutoCompletePlace = autoCompletePlace;
             mBus.post(new OnUpdateCriteriaEvent());
             mIsSearchWithSuggestionLocation = true;
+            
+            saveToRecentSearch(autoCompletePlace);
         }, 1000);
+    }
+    
+    private void saveToRecentSearch(AutoCompletePlace autoCompletePlace) {
+        List<Search> recentSearchList = mPreferencesHelper.getList(PrefKey.RECENT_SEARCH, "");
+        if (recentSearchList != null) {
+            Search search = new Search();
+            search.setName(autoCompletePlace.getName());
+            search.setLatitude(autoCompletePlace.getLocation().getLatitude());
+            search.setLongitude(autoCompletePlace.getLocation().getLongitude());
+            search.setLatitude_ns(
+                mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude);
+            search.setLongitude_ns(
+                mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude);
+            
+            search.setLatitude_sw(
+                mMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude);
+            search.setLongitude_sw(
+                mMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude);
+            
+            recentSearchList.add(0, search);
+            if (recentSearchList.size() >= AppConfig.LIMIT_RECENT_SEARCH) {
+                recentSearchList.remove(recentSearchList.size() - 1);
+            }
+            Timber.d(recentSearchList.toString());
+            mPreferencesHelper.putList(PrefKey.RECENT_SEARCH, recentSearchList);
+        }
     }
     
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -106,7 +106,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
     @Override
     public void onDestroy() {
         mStep1Helper = null;
-    
+        
         super.onDestroy();
     }
     
@@ -122,7 +122,12 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
         boolean isValid = mStep1Helper
             .validate(selectLocation, selectCategory, txtPrice, phoneContainer,
                 emailContainer, mProperty);
-        
+        double price = txtPrice.getRawValue().doubleValue();
+        if (price >= 1000000000000d) {
+            SnackBarUtils
+                .showSnackBar(txtPrice, R.string.message_price_too_large);
+            return;
+        }
         if (!isValid) {
             return;
         }
@@ -134,7 +139,7 @@ public class Step1Fragment extends BaseStepFragment<FragmentAddEditStep1Binding>
             typeId = "RENT";
         }
         
-        mProperty.setPrice(txtPrice.getRawValue().doubleValue());
+        mProperty.setPrice(price);
         
         mProperty.setEmails(
             (List<MyEmail>) emailContainer.getRawValue(PhoneAndEmailEnum.EMAIL.getId()));
