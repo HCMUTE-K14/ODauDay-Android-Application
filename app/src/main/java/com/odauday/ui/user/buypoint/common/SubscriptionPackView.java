@@ -59,6 +59,15 @@ public class SubscriptionPackView extends LinearLayout {
         mDescription = rootView.findViewById(R.id.description);
         mPrice = rootView.findViewById(R.id.price);
         
+        findViewById(R.id.container).setOnClickListener(v -> {
+            if (mPremium != null) {
+                Intent intent = new Intent(getContext(), SubscribePremiumActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_PREMIUM, mPremium);
+        
+                getContext().startActivity(intent);
+            }
+        });
+        
         mPrice.setOnClickListener(view -> {
             if (mPremium != null) {
                 Intent intent = new Intent(getContext(), SubscribePremiumActivity.class);
@@ -67,6 +76,7 @@ public class SubscriptionPackView extends LinearLayout {
                 getContext().startActivity(intent);
             }
         });
+        
     }
     
     public Premium getPremium() {

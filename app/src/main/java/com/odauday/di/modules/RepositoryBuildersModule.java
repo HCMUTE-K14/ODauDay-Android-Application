@@ -7,9 +7,9 @@ import com.odauday.data.DirectionRepository;
 import com.odauday.data.FavoriteRepository;
 import com.odauday.data.GeoInfoRepository;
 import com.odauday.data.HistoryRepository;
+import com.odauday.data.NoteRepository;
 import com.odauday.data.NotificationManagerRepository;
 import com.odauday.data.NotificationRepository;
-import com.odauday.data.NoteRepository;
 import com.odauday.data.PremiumRepository;
 import com.odauday.data.PropertyRepository;
 import com.odauday.data.RecentTagRepository;
@@ -82,8 +82,9 @@ public class RepositoryBuildersModule {
     @Provides
     @Singleton
     FavoriteRepository provideFavoriteRepository(FavoriteService favoriteService,
+        PreferencesHelper preferencesHelper,
         SchedulersExecutor schedulersExecutor) {
-        return new FavoriteRepository(favoriteService, schedulersExecutor);
+        return new FavoriteRepository(favoriteService, preferencesHelper, schedulersExecutor);
     }
     
     @Provides
@@ -133,17 +134,20 @@ public class RepositoryBuildersModule {
         SchedulersExecutor schedulersExecutor) {
         return new GeoInfoRepository(geoInfoService, schedulersExecutor);
     }
+    
     @Provides
     @Singleton
-    AdminRepository provideAdminRepository(AdminService adminService,SchedulersExecutor schedulersExecutor){
-        return  new AdminRepository(adminService,schedulersExecutor);
+    AdminRepository provideAdminRepository(AdminService adminService,
+        SchedulersExecutor schedulersExecutor) {
+        return new AdminRepository(adminService, schedulersExecutor);
     }
     
     @Provides
     @Singleton
     NotificationManagerRepository provideNotificationManagerRepository(
-        com.odauday.data.remote.NotificationService notificationService,SchedulersExecutor schedulersExecutor){
-        return new NotificationManagerRepository(notificationService,schedulersExecutor);
+        com.odauday.data.remote.NotificationService notificationService,
+        SchedulersExecutor schedulersExecutor) {
+        return new NotificationManagerRepository(notificationService, schedulersExecutor);
     }
     
     @Provides
@@ -190,9 +194,11 @@ public class RepositoryBuildersModule {
             preferencesHelper,
             schedulersExecutor);
     }
+    
     @Provides
     @Singleton
-    NotificationRepository provideNotificationRepository(NotificationService notificationService,SchedulersExecutor schedulersExecutor){
-        return new NotificationRepository(notificationService,schedulersExecutor);
+    NotificationRepository provideNotificationRepository(NotificationService notificationService,
+        SchedulersExecutor schedulersExecutor) {
+        return new NotificationRepository(notificationService, schedulersExecutor);
     }
 }

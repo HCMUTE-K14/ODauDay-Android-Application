@@ -1,6 +1,8 @@
 package com.odauday.data;
 
 import com.odauday.SchedulersExecutor;
+import com.odauday.data.local.cache.PrefKey;
+import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.FavoriteService;
 import com.odauday.data.remote.model.FavoriteResponse;
 import com.odauday.data.remote.model.JsonResponse;
@@ -21,12 +23,15 @@ public class FavoriteRepository implements Repository {
     
     private final FavoriteService mFavoriteService;
     private final SchedulersExecutor mSchedulersExecutor;
+    private final PreferencesHelper mPreferencesHelper;
     
     @Inject
     public FavoriteRepository(FavoriteService favoriteService,
+        PreferencesHelper preferencesHelper,
         SchedulersExecutor schedulersExecutor) {
         mFavoriteService = favoriteService;
         mSchedulersExecutor = schedulersExecutor;
+        mPreferencesHelper = preferencesHelper;
     }
     
     public Single<FavoriteResponse> getFavoritePropertyByUser(String user_id) {
@@ -70,6 +75,16 @@ public class FavoriteRepository implements Repository {
             })
             .subscribeOn(mSchedulersExecutor.io())
             .observeOn(mSchedulersExecutor.ui());
+    }
+    
+    public Single<MessageResponse> checkFavorite(String propertyId) {
+        Favorite favorite = new Favorite();
+        favorite.setPropertyId(propertyId);
+        String userId = mPreferencesHelper.get(PrefKey.USER_ID, "");
+        favorite.setUserId(userId);
+        
+        return checkFavorite(favorite);
+        
     }
     
     public Single<MessageResponse> unCheckFavorite(String propertyId) {

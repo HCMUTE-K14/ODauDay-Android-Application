@@ -14,7 +14,6 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar.OnTabSelectedListener
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.odauday.R;
-import com.odauday.ui.view.MyProgressBar;
 import timber.log.Timber;
 
 /**
@@ -26,7 +25,7 @@ public class FlatNavigationBar extends FrameLayout {
     private static final int MAX_NOTIFICATIONS_SHOWN = 99;
     
     private BottomNavigationBar mBottomNavigationBar;
-
+    
     private TextBadgeItem mAlertBubbleItem;
     
     public FlatNavigationBar(@NonNull Context context) {
@@ -157,6 +156,18 @@ public class FlatNavigationBar extends FrameLayout {
     public void updateAlertsBubble() {
         if (this.mAlertBubbleItem != null) {
             int numOfNotifications = 0;//TODO: GET UNREAD NOTIFY
+            if (numOfNotifications > 0) {
+                setAlertBubbleText(numOfNotifications);
+                this.mAlertBubbleItem.show();
+                return;
+            }
+            this.mAlertBubbleItem.hide();
+        }
+    }
+    
+    public void updateAlertsBubble(int numOfNotifications) {
+        if (this.mAlertBubbleItem != null) {
+            Timber.d("WTF");
             if (numOfNotifications > 0) {
                 setAlertBubbleText(numOfNotifications);
                 this.mAlertBubbleItem.show();

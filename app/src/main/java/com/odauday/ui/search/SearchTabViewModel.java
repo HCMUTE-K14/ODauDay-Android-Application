@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import com.odauday.MainActivity;
 import com.odauday.R;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.SavedSearchRepository;
 import com.odauday.model.Search;
 import com.odauday.viewmodel.BaseViewModel;
@@ -22,10 +23,13 @@ public class SearchTabViewModel extends BaseViewModel {
     private SearchTabMainFragment mSearchTabMainFragment;
     
     private final SavedSearchRepository mSavedSearchRepository;
+    private final FavoriteRepository mFavoriteRepository;
     
     @Inject
-    public SearchTabViewModel(SavedSearchRepository savedSearchRepository) {
+    public SearchTabViewModel(SavedSearchRepository savedSearchRepository,
+        FavoriteRepository favoriteRepository) {
         this.mSavedSearchRepository = savedSearchRepository;
+        mFavoriteRepository = favoriteRepository;
     }
     
     
@@ -89,4 +93,21 @@ public class SearchTabViewModel extends BaseViewModel {
             });
         mCompositeDisposable.add(disposable);
     }
+    
+    public void checkFavorite(String propertyId) {
+        Disposable disposable = mFavoriteRepository
+            .checkFavorite(propertyId)
+            .subscribe();
+        
+        mCompositeDisposable.add(disposable);
+    }
+    
+    public void unCheckFavorite(String propertyId) {
+        Disposable disposable = mFavoriteRepository
+            .unCheckFavorite(propertyId)
+            .subscribe();
+        
+        mCompositeDisposable.add(disposable);
+    }
+    
 }

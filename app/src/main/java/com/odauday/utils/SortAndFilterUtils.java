@@ -23,7 +23,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortListPropertyLowestPrice(List<Property> list) {
-        List<Property> propertyList = list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             if (property1.getPrice() < property2.getPrice()) {
                 return -1;
@@ -37,7 +37,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortListPropertyHighestPrice(List<Property> list) {
-        List<Property> propertyList = list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             if (property1.getPrice() > property2.getPrice()) {
                 return -1;
@@ -51,7 +51,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortFavoriteLastAdded(List<Property> list) {
-        List<Property> propertyList = list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             if (property1.getFavorite().getDate_created()
                 .after(property2.getFavorite().getDate_created())) {
@@ -67,7 +67,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortAddressPropertyAscending(List<Property> list){
-        List<Property> propertyList = list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             return property1.getAddress().compareTo(property2.getAddress());
         };
@@ -75,7 +75,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortAddressPropertyDescending(List<Property> list){
-        List<Property> propertyList = list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             return property2.getAddress().compareTo(property1.getAddress());
         };
@@ -83,7 +83,7 @@ public class SortAndFilterUtils {
         return propertyList;
     }
     public static List<Property> sortPropertyLastAdded(List<Property> list){
-        List<Property> propertyList=list;
+        List<Property> propertyList = new ArrayList<>(list);
         Comparator<Property> comparator = (property1, property2) -> {
             if (property1.getDate_created()
                 .after(property2.getDate_created())) {

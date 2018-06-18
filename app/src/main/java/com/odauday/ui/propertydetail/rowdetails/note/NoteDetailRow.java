@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.NoteRepository;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.propertydetail.StageRow;
@@ -16,6 +17,7 @@ public class NoteDetailRow extends BaseRowDetail<PropertyDetail, NoteDetailViewH
     
     private PropertyDetail mPropertyDetail;
     private NoteRepository mNoteRepository;
+    private FavoriteRepository mFavoriteRepository;
     
     @Override
     public PropertyDetail getData() {
@@ -45,5 +47,13 @@ public class NoteDetailRow extends BaseRowDetail<PropertyDetail, NoteDetailViewH
     
     public void setNoteRepository(NoteRepository noteRepository) {
         mNoteRepository = noteRepository;
+    }
+    
+    public FavoriteRepository getFavoriteRepository() {
+        return mFavoriteRepository;
+    }
+    
+    public void setFavoriteRepository(FavoriteRepository favoriteRepository) {
+        mFavoriteRepository = favoriteRepository;
     }
 }

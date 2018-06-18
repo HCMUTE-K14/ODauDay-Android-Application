@@ -61,6 +61,7 @@ public class HistoryPropertyFragment extends
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mBinding.get().recyclerView.setHasFixedSize(true);
         mBinding.get().recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         mBinding.get().recyclerView.addOnScrollListener(new OnScrollListener() {

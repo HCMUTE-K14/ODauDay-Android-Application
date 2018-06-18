@@ -88,7 +88,7 @@ public class SimilarPropertyItemView extends LinearLayout {
                 .placeholder(ImageLoader.randomPlaceHolder())
                 .error(R.drawable.ic_no_image));
         String textPrice = TextUtils.formatIntToCurrency((float) mData.getPrice() *
-                                                         AppConfig.RATE_VND);
+                                                         AppConfig.RATE_VND, true);
         mPrice.setText(textPrice);
         
         mAddress.setText(mData.getAddress());

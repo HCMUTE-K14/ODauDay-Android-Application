@@ -1,6 +1,7 @@
 package com.odauday.ui.search;
 
 import android.arch.lifecycle.ViewModelProvider;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.SavedSearchRepository;
 import com.odauday.viewmodel.ViewModelFactory;
 import dagger.Module;
@@ -19,7 +20,7 @@ public class SearchTabModule {
     }
     
     @Provides
-    SearchTabViewModel provideSearchTabViewModel(SavedSearchRepository savedSearchRepository) {
-        return new SearchTabViewModel(savedSearchRepository);
+    SearchTabViewModel provideSearchTabViewModel(SavedSearchRepository savedSearchRepository, FavoriteRepository favoriteRepository) {
+        return new SearchTabViewModel(savedSearchRepository, favoriteRepository);
     }
 }

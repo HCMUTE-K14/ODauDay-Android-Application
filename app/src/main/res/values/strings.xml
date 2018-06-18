@@ -203,8 +203,8 @@
   <string name="settings_choose_language">Choose language</string>
   <string name="message_clear_history">Are you clear history?</string>
   <string name="cannot_clear_history">Cannot clear history</string>
-  <string name="logout_user">Are you logout?</string>
-  <string name="logout_user_success">Logout account success</string>
+  <string name="logout_user">Are you want to logout?</string>
+  <string name="logout_user_success">Logout account successfully</string>
   <string name="txt_click_to_select_time_contact">Tap to select time contact</string>
   <string name="message_date_time_can_not_less_than_current">Time contact can not less than current time</string>
   <string name="txt_land_size_hint">Land size (m²)</string>

@@ -15,17 +15,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.odauday.R;
 import com.odauday.config.Constants;
 import com.odauday.data.DirectionRepository;
+import com.odauday.data.FavoriteRepository;
 import com.odauday.data.NoteRepository;
 import com.odauday.data.SimilarPropertyRepository;
 import com.odauday.data.local.cache.DirectionsPreferenceHelper;
 import com.odauday.model.MyPhone;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.ui.propertydetail.common.OnChangeNoteEvent;
 import com.odauday.ui.propertydetail.common.SelectPhoneCallDialog;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowDetail;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
@@ -42,15 +45,20 @@ import com.odauday.ui.propertydetail.rowdetails.tag.TagDetailRow;
 import com.odauday.ui.propertydetail.rowdetails.vital.VitalDetailRow;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.TextUtils;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import timber.log.Timber;
 
 /**
  * Created by infamouSs on 5/7/18.
  */
-@SuppressLint("MissingPermission")
+@SuppressLint({"MissingPermission", "CheckResult"})
 public class PropertyDetailActivity extends BaseMVVMActivity implements RowControllerListener,
                                                                         PropertyDetailContract {
     
@@ -76,6 +84,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     PropertyDetailViewModel mPropertyDetailViewModel;
     
     @Inject
+    FavoriteRepository mFavoriteRepository;
+    
+    @Inject
     SimilarPropertyRepository mSimilarPropertyRepository;
     
     @Override
@@ -88,12 +99,14 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private RelativeLayout mContainerGalleryRow;
     private String mPhoneNumberSelected;
     private AppBarLayout mAppBarLayout;
+    private ProgressBar mProgressBar;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        mProgressBar = findViewById(R.id.progress);
         initToolBar();
         initGalleryRow();
         mPropertyDetail = getIntent().getParcelableExtra(
@@ -104,6 +117,28 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         initButtonController();
         mPropertyDetailViewModel.getFullDetail(mPropertyDetail);
     }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeNote(OnChangeNoteEvent noteEvent) {
+        mPropertyDetail.setFavorite(true);
+        for (BaseRowDetail row : mDefaultRows) {
+            row.setData(mPropertyDetail);
+        }
+        invalidateOptionsMenu();
+    }
+    
     
     private void initButtonController() {
         Button buttonEmail = findViewById(R.id.email);
@@ -173,6 +208,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         directionDetailRow.setDirectionsPreferenceHelper(mDirectionsPreferenceHelper);
         
         noteDetailRow.setNoteRepository(mNoteRepository);
+        noteDetailRow.setFavoriteRepository(mFavoriteRepository);
         similarPropertyRow.setSimilarPropertyRepository(mSimilarPropertyRepository);
         
         mDefaultRows.add(vitalDetailRow);
@@ -194,7 +230,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unBindRow();
+        
     }
     
     @Override
@@ -252,6 +288,14 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     }
     
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menu_item_favorite);
+        menuItem.setIcon(mPropertyDetail.isFavorite() ? R.drawable.ic_star_selected
+            : R.drawable.ic_star_un_selected);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_property_detail, menu);
         if (mPropertyDetail != null) {
@@ -272,6 +316,11 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
                 shareProperty();
                 return true;
             case R.id.menu_item_favorite:
+                if (!mPropertyDetail.isFavorite()) {
+                    checkFavorite();
+                } else {
+                    unCheckFavorite();
+                }
                 mPropertyDetail.setFavorite(!mPropertyDetail.isFavorite());
                 item.setIcon(mPropertyDetail.isFavorite() ? R.drawable.ic_star_selected
                     : R.drawable.ic_star_un_selected);
@@ -281,34 +330,60 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         }
     }
     
+    private void checkFavorite() {
+        mFavoriteRepository
+            .checkFavorite(mPropertyDetail.getId())
+            .subscribe(success -> {
+            
+            }, throwable -> {
+                Timber.d(throwable.getMessage());
+            });
+    }
+    
+    private void unCheckFavorite() {
+        mFavoriteRepository
+            .unCheckFavorite(mPropertyDetail.getId())
+            .subscribe(success -> {
+            
+            }, throwable -> {
+                Timber.d(throwable.getMessage());
+            });
+    }
+    
     @Override
     public void addRow(BaseRowDetail row) {
-        int defaultPosition = this.mDefaultRows.indexOf(row);
-        int newPosition = 0;
-        if (defaultPosition > -1) {
-            for (int i = defaultPosition; i > -1; i--) {
-                int prevRowIndex = this.mDefaultRows.indexOf(this.mDefaultRows.get(i));
-                if (prevRowIndex > -1) {
-                    newPosition = prevRowIndex + 1;
-                    this.mDefaultRows.add(newPosition, row);
-                    break;
+        ViewUtils.delay(() -> {
+            int defaultPosition = this.mDefaultRows.indexOf(row);
+            int newPosition = 0;
+            if (defaultPosition > -1) {
+                for (int i = defaultPosition; i > -1; i--) {
+                    int prevRowIndex = this.mDefaultRows.indexOf(this.mDefaultRows.get(i));
+                    if (prevRowIndex > -1) {
+                        newPosition = prevRowIndex + 1;
+                        this.mDefaultRows.add(newPosition, row);
+                        break;
+                    }
                 }
+            } else {
+                this.mDefaultRows.add(row);
+                newPosition = this.mDefaultRows.size() - 1;
             }
-        } else {
-            this.mDefaultRows.add(row);
-            newPosition = this.mDefaultRows.size() - 1;
-        }
-        this.mAdapter.notifyItemInserted(newPosition);
-        mLayoutManager.scrollToPosition(newPosition);
+            this.mAdapter.notifyItemInserted(newPosition);
+            mLayoutManager.scrollToPosition(newPosition);
+        }, 100);
+        
     }
     
     @Override
     public void removeRow(BaseRowDetail row) {
         int rowIndex = this.mDefaultRows.indexOf(row);
-        if (rowIndex > -1) {
-            this.mDefaultRows.remove(rowIndex);
-            this.mAdapter.notifyItemRemoved(rowIndex);
-        }
+        ViewUtils.delay(() -> {
+            if (rowIndex > -1) {
+                this.mDefaultRows.remove(rowIndex);
+                this.mAdapter.notifyItemRemoved(rowIndex);
+            }
+        }, 100);
+        
     }
     
     @Override
@@ -356,7 +431,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void scrollToTop() {
-        mRecyclerView.smoothScrollToPosition(0);
+        ViewUtils.delay(() -> {
+            mRecyclerView.smoothScrollToPosition(0);
+        }, 20);
     }
     
     @Override
@@ -367,10 +444,6 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void onSuccessGetDetailProperty(PropertyDetail propertyDetail) {
         mPropertyDetail = propertyDetail;
-        if (propertyDetail.getImages() != null) {
-            expandAppBar();
-        }
-        mGalleryDetailRow.bind(mPropertyDetail);
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
             mDefaultRows.add(StageRow.DESCRIPTION_ROW.getPos(), descriptionDetailRow);
@@ -386,8 +459,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
             row.setData(propertyDetail);
         }
         mAdapter.notifyDataSetChanged();
-        
-       // scrollToTop();
+        if (mPropertyDetail.getImages() != null && !mPropertyDetail.getImages().isEmpty()) {
+            expandAppBar();
+        } else {
+            scrollToTop();
+        }
+        mGalleryDetailRow.bind(mPropertyDetail);
     }
     
     @Override
@@ -398,12 +475,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void showProgressBar() {
-    
+        ViewUtils.showHideView(mProgressBar, true);
     }
     
     @Override
     public void hideProgressBar() {
-    
+        ViewUtils.showHideView(mProgressBar, false);
     }
     
     

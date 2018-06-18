@@ -249,7 +249,9 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     
     public void clear() {
         mLocationClient.disconnect();
-        mRxCameraIdleListener.stop();
+        if(mRxCameraIdleListener != null){
+            mRxCameraIdleListener.stop();
+        }
     }
     
     @Override
@@ -257,7 +259,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         clear();
         super.onStop();
         this.mLocationClient.disconnect();
-        //mRxCameraIdleListener.stop();
     }
     
     @Override
@@ -322,6 +323,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 &&
                 MapUtils.isCamPositionEqual(currentCameraPosition,
                     this.mLastCameraPosition);
+           
             if (!insignificantMove) {
                 //                    if (this.mMapUnlocked && !this.myIgnoreInitCameraChange) {
                 //                        closeOpenedMarker();
@@ -329,7 +331,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                 //                    }
                 this.mLastCameraPosition = currentCameraPosition;
                 if (mMapUnlocked) {
-                    performSearch();
+                   performSearch();
                 }
             }
         }
@@ -650,8 +652,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
     private void performSearch() {
         SearchRequest searchRequest = makeSearchRequest();
         mSearchRepository.search(searchRequest);
-        MapUtils.drawCircle(mMap, searchRequest.getCore().getCenter().toLatLng(),
-            searchRequest.getCore().getRadius());
+        
         saveStateSearch(searchRequest);
     }
     

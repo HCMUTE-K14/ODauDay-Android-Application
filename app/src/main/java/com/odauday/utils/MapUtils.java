@@ -70,8 +70,7 @@ public class MapUtils {
                   .center(center)
                   .radius(radius)
                   .strokeColor(Color.RED)
-                  .fillColor(0x30ff0000)
-                  .strokeWidth(2);
+                  .strokeWidth(10);
         
         map.addCircle(circleOptions);
     }

@@ -19,8 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn org.greenrobot.**
+-dontwarn com.beloo.**
+-dontwarn dagger.android.**
+-dontwarn okio.**
+-dontwarn retrofit2.**
+-dontwarn okhttp3.**
+
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
+-keep class org.greenrobot.greendao.**
+-keepclassmembers class * extends de.greenrobot.dao.AbstractDao {
+  public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }

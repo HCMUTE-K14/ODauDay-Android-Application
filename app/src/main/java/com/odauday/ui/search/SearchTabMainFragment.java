@@ -138,7 +138,9 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         setupToolBar(view);
         new Handler().postDelayed(() -> {
             setupFilterNavigation();
-            getFilterNavigation().setOnCompleteRefineFilter(this);
+            if (getFilterNavigation() != null) {
+                getFilterNavigation().setOnCompleteRefineFilter(this);
+            }
         }, 10);
         
         initMainLayout();
@@ -443,8 +445,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void setupFilterNavigation() {
-        if (getActivity().getSupportFragmentManager() == null) {
-            throw new NullPointerException("Fragment manager is null");
+        if (getActivity() == null || getActivity().getSupportFragmentManager() == null) {
+            return;
         }
         
         mFilterNavigationFragment = FilterNavigationFragment
@@ -455,8 +457,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void setupMapView() {
-        if (getActivity().getSupportFragmentManager() == null) {
-            throw new NullPointerException("Fragment manager is null");
+        if (getActivity() == null || getActivity().getSupportFragmentManager() == null) {
+            return;
         }
         
         mMapViewFragment = MapViewFragment.newInstance();
@@ -476,8 +478,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void setupListView() {
-        if (getActivity().getSupportFragmentManager() == null) {
-            throw new NullPointerException("Fragment manager is null");
+        if (getActivity() == null || getActivity().getSupportFragmentManager() == null) {
+            return;
         }
         
         mListViewFragment = ListViewFragment.newInstance();
@@ -498,9 +500,10 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     }
     
     private void setupLoadingFragment() {
-        if (getActivity().getSupportFragmentManager() == null) {
-            throw new NullPointerException("Fragment manager is null");
+        if (getActivity() == null || getActivity().getSupportFragmentManager() == null) {
+            return;
         }
+        
         LoadingFragment loadingFragment = LoadingFragment.newInstance();
         loadingFragment.setLoadingFragmentListener(this);
         
@@ -543,7 +546,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onCheckStar(PropertyResultEntry item) {
-        Timber.d("Favorite");
+        mSearchTabViewModel.checkFavorite(item.getId());
         
         item.setFavorite(true);
         mBus.post(new OnFavouriteEvent(item));
@@ -551,7 +554,7 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
     
     @Override
     public void onUnCheckStar(PropertyResultEntry item) {
-        Timber.d("Un-Favorite");
+        mSearchTabViewModel.unCheckFavorite(item.getId());
         
         item.setFavorite(false);
         mBus.post(new OnFavouriteEvent(item));

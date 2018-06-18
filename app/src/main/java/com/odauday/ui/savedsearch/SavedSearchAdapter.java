@@ -105,7 +105,7 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
     }
     
     public void onClickSavedSearch(Search search) {
-        Timber.tag(TAG).d("Click: " + search.getName());
+        EventBus.getDefault().post(new OnClickSavedSearch(search));
     }
     
     public void removeItem(Search search) {
@@ -114,7 +114,6 @@ public class SavedSearchAdapter extends BaseAdapter<Search, ItemSavedSearchBindi
             notifyDataSetChanged();
         }
     }
-    
     public List<Search> getData() {
         return data;
     }

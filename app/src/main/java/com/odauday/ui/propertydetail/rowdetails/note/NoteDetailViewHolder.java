@@ -7,8 +7,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.odauday.R;
 import com.odauday.model.Note;
+import com.odauday.ui.propertydetail.common.OnChangeNoteEvent;
 import com.odauday.ui.propertydetail.rowdetails.BaseRowViewHolder;
 import com.odauday.utils.TextUtils;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by infamouSs on 5/16/18.
@@ -104,7 +106,17 @@ public class NoteDetailViewHolder extends BaseRowViewHolder<NoteDetailRow> {
     private void createNote(Note note) {
         getRow().getNoteRepository().create(note)
             .subscribe(success -> {
-            
+                if (!getRow().getData().isFavorite()) {
+                    String propertyId = getRow().getData().getId();
+                    
+                    getRow()
+                        .getFavoriteRepository()
+                        .checkFavorite(propertyId)
+                        .subscribe(_success -> {
+                            EventBus.getDefault().post(new OnChangeNoteEvent());
+                        }, _throwable -> {
+                        });
+                }
             }, throwable -> {
             
             });
@@ -113,7 +125,17 @@ public class NoteDetailViewHolder extends BaseRowViewHolder<NoteDetailRow> {
     private void updateNote(Note note) {
         getRow().getNoteRepository().update(note)
             .subscribe(success -> {
-            
+                if (!getRow().getData().isFavorite()) {
+                    String propertyId = getRow().getData().getId();
+                    
+                    getRow()
+                        .getFavoriteRepository()
+                        .checkFavorite(propertyId)
+                        .subscribe(_success -> {
+                            EventBus.getDefault().post(new OnChangeNoteEvent());
+                        }, _throwable -> {
+                        });
+                }
             }, throwable -> {
             
             });
