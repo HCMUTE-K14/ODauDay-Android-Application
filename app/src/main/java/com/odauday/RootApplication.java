@@ -6,7 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import com.odauday.config.AppConfig;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.local.notification.DaoSession;
+import com.odauday.data.local.favorite.DaoSession;
 import com.odauday.di.components.DaggerApplicationComponent;
 import com.odauday.di.modules.BusModule;
 import com.odauday.di.modules.LocalDaoModule;

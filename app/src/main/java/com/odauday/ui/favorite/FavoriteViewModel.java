@@ -54,14 +54,14 @@ public class FavoriteViewModel extends BaseViewModel {
     public void shareFavorite(ShareFavorite shareFavorite) {
         Disposable disposable = mFavoriteRepository.shareFavorite(shareFavorite)
             .doOnSubscribe(onSubscribe -> {
-                mFavoriteContract.loading(true);
+                //mFavoriteContract.loading(true);
             })
             .subscribe(success -> {
                 mFavoriteContract.shareFavoriteSuccess(success);
-                mFavoriteContract.loading(false);
+                //mFavoriteContract.loading(false);
             }, error -> {
                 mFavoriteContract.shareFavoriteError(error);
-                mFavoriteContract.loading(false);
+                //mFavoriteContract.loading(false);
             });
         
         mCompositeDisposable.add(disposable);

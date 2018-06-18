@@ -1,7 +1,7 @@
 package com.odauday.data.local;
 
 import android.content.Context;
-import com.odauday.data.local.notification.DaoMaster.OpenHelper;
+import com.odauday.data.local.favorite.DaoMaster.OpenHelper;
 import javax.inject.Singleton;
 import org.greenrobot.greendao.database.Database;
 import timber.log.Timber;
