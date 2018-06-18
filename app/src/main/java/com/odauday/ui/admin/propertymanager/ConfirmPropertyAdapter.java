@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import com.odauday.R;
-import com.odauday.api.EndPoint;
 import com.odauday.databinding.ItemConfirmPropertyBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.propertymanager.status.Status;
-import com.odauday.utils.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
