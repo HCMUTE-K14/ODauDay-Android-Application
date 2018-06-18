@@ -52,7 +52,8 @@
 
     <activity
       android:label="@string/app_name"
-      android:name=".MainActivity" />
+      android:name=".MainActivity"
+      android:screenOrientation="portrait" />
     <activity android:name=".ui.user.login.LoginActivity" />
     <activity android:name=".ui.user.register.RegisterActivity" />
     <activity android:name=".ui.user.forgotpassword.ForgotPasswordActivity" />

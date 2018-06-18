@@ -2,6 +2,7 @@ package com.odauday.ui.propertydetail.rowdetails.vital;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.odauday.R;
 import com.odauday.model.PropertyDetail;
@@ -18,12 +19,15 @@ public class VitalDetailViewHolder extends BaseRowViewHolder<VitalDetailRow> {
     TextView mStatus;
     Context mContext;
     
+    ProgressBar mProgressBar;
+    
     public VitalDetailViewHolder(View view) {
         super(view);
         this.mContext = view.getContext();
         this.mPrice = this.itemView.findViewById(R.id.price);
         this.mAddress = this.itemView.findViewById(R.id.address);
         this.mStatus = this.itemView.findViewById(R.id.status);
+        this.mProgressBar = itemView.findViewById(R.id.progress);
     }
     
     @Override
@@ -32,6 +36,8 @@ public class VitalDetailViewHolder extends BaseRowViewHolder<VitalDetailRow> {
         
         PropertyDetail propertyDetail = vitalDetailRow.getData();
         if (propertyDetail == null) {
+            mProgressBar.setVisibility(View.GONE);
+    
             return;
         }
         String txtStatus;

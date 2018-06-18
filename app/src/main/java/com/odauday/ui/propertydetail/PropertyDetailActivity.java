@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.odauday.R;
@@ -98,12 +99,14 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     private RelativeLayout mContainerGalleryRow;
     private String mPhoneNumberSelected;
     private AppBarLayout mAppBarLayout;
+    private ProgressBar mProgressBar;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        mProgressBar = findViewById(R.id.progress);
         initToolBar();
         initGalleryRow();
         mPropertyDetail = getIntent().getParcelableExtra(
@@ -227,7 +230,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //  unBindRow();
+        
     }
     
     @Override
@@ -349,23 +352,26 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void addRow(BaseRowDetail row) {
-        int defaultPosition = this.mDefaultRows.indexOf(row);
-        int newPosition = 0;
-        if (defaultPosition > -1) {
-            for (int i = defaultPosition; i > -1; i--) {
-                int prevRowIndex = this.mDefaultRows.indexOf(this.mDefaultRows.get(i));
-                if (prevRowIndex > -1) {
-                    newPosition = prevRowIndex + 1;
-                    this.mDefaultRows.add(newPosition, row);
-                    break;
+        ViewUtils.delay(() -> {
+            int defaultPosition = this.mDefaultRows.indexOf(row);
+            int newPosition = 0;
+            if (defaultPosition > -1) {
+                for (int i = defaultPosition; i > -1; i--) {
+                    int prevRowIndex = this.mDefaultRows.indexOf(this.mDefaultRows.get(i));
+                    if (prevRowIndex > -1) {
+                        newPosition = prevRowIndex + 1;
+                        this.mDefaultRows.add(newPosition, row);
+                        break;
+                    }
                 }
+            } else {
+                this.mDefaultRows.add(row);
+                newPosition = this.mDefaultRows.size() - 1;
             }
-        } else {
-            this.mDefaultRows.add(row);
-            newPosition = this.mDefaultRows.size() - 1;
-        }
-        this.mAdapter.notifyItemInserted(newPosition);
-        mLayoutManager.scrollToPosition(newPosition);
+            this.mAdapter.notifyItemInserted(newPosition);
+            mLayoutManager.scrollToPosition(newPosition);
+        }, 100);
+        
     }
     
     @Override
@@ -425,7 +431,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void scrollToTop() {
-        mRecyclerView.smoothScrollToPosition(0);
+        ViewUtils.delay(() -> {
+            mRecyclerView.smoothScrollToPosition(0);
+        }, 20);
     }
     
     @Override
@@ -436,10 +444,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     @Override
     public void onSuccessGetDetailProperty(PropertyDetail propertyDetail) {
         mPropertyDetail = propertyDetail;
-        if (mPropertyDetail.getImages() != null && !mPropertyDetail.getImages().isEmpty()) {
-            expandAppBar();
-        }
-        mGalleryDetailRow.bind(mPropertyDetail);
+        
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
             mDefaultRows.add(StageRow.DESCRIPTION_ROW.getPos(), descriptionDetailRow);
@@ -455,8 +460,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
             row.setData(propertyDetail);
         }
         mAdapter.notifyDataSetChanged();
-        
-        scrollToTop();
+        if (mPropertyDetail.getImages() != null && !mPropertyDetail.getImages().isEmpty()) {
+            expandAppBar();
+        } else {
+            scrollToTop();
+        }
+        mGalleryDetailRow.bind(mPropertyDetail);
     }
     
     @Override
@@ -467,12 +476,12 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void showProgressBar() {
-    
+        ViewUtils.showHideView(mProgressBar, true);
     }
     
     @Override
     public void hideProgressBar() {
-    
+        ViewUtils.showHideView(mProgressBar, false);
     }
     
     

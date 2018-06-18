@@ -31,8 +31,10 @@ public class RootApplication extends Application implements HasActivityInjector,
     
     @Inject
     DispatchingAndroidInjector<Activity> mDispatchingAndroidInjector;
+    
     @Inject
     DispatchingAndroidInjector<Service> mServiceDispatchingAndroidInjector;
+    
     @Inject
     DaoSession mDaoSession;
     

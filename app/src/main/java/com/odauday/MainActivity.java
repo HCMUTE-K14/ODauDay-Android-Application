@@ -85,6 +85,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
         init();
         Timber.tag("TOKEN").d(FirebaseInstanceId.getInstance().getToken());
         showNotifi();
+        setNumberNotification();
     }
     
     private void showNotifi() {
@@ -110,7 +111,6 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding> implemen
     @Override
     public void onStart() {
         super.onStart();
-        setNumberNotification();
         //mBinding.bottomNavBar.setNumberNotification(12);
     }
     

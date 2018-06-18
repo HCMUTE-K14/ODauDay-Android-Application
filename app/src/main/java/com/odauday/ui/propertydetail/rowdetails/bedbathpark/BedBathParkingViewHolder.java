@@ -3,6 +3,7 @@ package com.odauday.ui.propertydetail.rowdetails.bedbathpark;
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.odauday.R;
 import com.odauday.model.Category;
@@ -30,6 +31,8 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
     TextView mLandSize;
     TextView mCategory;
     
+    ProgressBar mProgressBar;
+    
     Context mContext;
     
     public BedBathParkingViewHolder(View view) {
@@ -46,15 +49,19 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
         mLandSize = itemView.findViewById(R.id.land_size);
         mParkings = itemView.findViewById(R.id.parkings);
         mCategory = itemView.findViewById(R.id.category);
+        mProgressBar = itemView.findViewById(R.id.progress);
     }
     
     
     @Override
     protected void update(BedBathParkingRow bedBathParkingRow) {
+        ViewUtils.showHideView(mProgressBar, true);
         super.update(bedBathParkingRow);
         PropertyDetail propertyDetail = bedBathParkingRow.getData();
         
         if (propertyDetail == null) {
+            ViewUtils.showHideView(mProgressBar, false);
+    
             return;
         }
         
@@ -85,6 +92,8 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
                 mContext.getString(propertyType.getDisplayStringResource()));
         }
         mCategory.setText(builder.toString());
+        ViewUtils.showHideView(mProgressBar, false);
+    
     }
     
     @Override
@@ -119,5 +128,6 @@ public class BedBathParkingViewHolder extends BaseRowViewHolder<BedBathParkingRo
             ViewUtils.showHideView(container, true);
         }
     }
+    
     
 }
