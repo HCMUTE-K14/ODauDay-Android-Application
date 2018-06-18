@@ -1,21 +1,19 @@
 package com.odauday.ui.savedsearch;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import com.odauday.R;
 import com.odauday.databinding.ItemSavedSearchBinding;
 import com.odauday.model.Search;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.view.NotificationView;
 import com.odauday.ui.view.NotificationView.OnClickNotificationListener;
-import com.odauday.utils.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 import timber.log.Timber;
 
 /**
