@@ -53,7 +53,9 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
         return oldItem.equals(newItem);
     }
     public void clearData(){
-        data.clear();
+        if(data!=null){
+            data.clear();
+        }
     }
     public void removeItem(Property property){
         data.remove(property);
