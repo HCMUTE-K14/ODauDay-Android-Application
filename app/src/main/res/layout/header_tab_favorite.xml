@@ -60,7 +60,7 @@
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/image_sort"
-        android:text="Last Added"
+        android:text="@string/txt_last_added"
         android:textSize="15dp" />
       <ImageView
         android:layout_width="30dp"
@@ -93,7 +93,7 @@
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/image_filter"
-        android:text="All"
+        android:text="@string/txt_all"
         android:textSize="15dp" />
       <ImageView
         android:layout_width="30dp"
