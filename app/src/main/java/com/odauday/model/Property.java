@@ -41,7 +41,7 @@ public class Property {
     
     @SerializedName("price")
     @Expose
-    private Double price;
+    private double price;
     
     @SerializedName("description")
     @Expose
@@ -164,7 +164,7 @@ public class Property {
         this.status = status;
     }
     
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
     

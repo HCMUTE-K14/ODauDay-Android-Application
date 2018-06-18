@@ -16,8 +16,6 @@ import android.widget.PopupMenu;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.odauday.R;
 import com.odauday.config.Constants;
-import com.odauday.data.NotificationManagerRepository;
-import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.databinding.FragmentConfirmPropertyBinding;
 import com.odauday.exception.RetrofitException;
@@ -25,7 +23,6 @@ import com.odauday.model.Property;
 import com.odauday.model.PropertyDetail;
 import com.odauday.ui.ClearMemory;
 import com.odauday.ui.admin.propertymanager.ConfirmPropertyAdapter.OnClickMenuListener;
-import com.odauday.ui.alert.service.Notification;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.ui.propertydetail.PropertyDetailActivity;
@@ -46,7 +43,8 @@ import timber.log.Timber;
 
 public class FragmentConfirmProperty extends
                                      BaseMVVMFragment<FragmentConfirmPropertyBinding> implements
-                                                                                      ConfirmPropertyContract,ClearMemory {
+                                                                                      ConfirmPropertyContract,
+                                                                                      ClearMemory {
     
     public static final String TAG = FragmentConfirmProperty.class.getSimpleName();
     
@@ -141,15 +139,15 @@ public class FragmentConfirmProperty extends
             actionAdmin(property, getString(R.string.message_confirm), 3);
         }
     };
-    private ConfirmPropertyAdapter.onClickItemPropertyListener mOnClickItemPropertyListener=property -> {
-        if(property!=null){
+    private ConfirmPropertyAdapter.onClickItemPropertyListener mOnClickItemPropertyListener = property -> {
+        if (property != null) {
             PropertyDetail propertyDetail = new PropertyDetail();
             propertyDetail.setId(property.getId());
             propertyDetail.setFavorite(false);
-        
+            
             Intent intent = new Intent(getContext(), PropertyDetailActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_PROPERTY_DETAIL, propertyDetail);
-        
+            
             getContext().startActivity(intent);
         }
         Timber.tag(TAG).d(property.toString());
@@ -166,7 +164,8 @@ public class FragmentConfirmProperty extends
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getActivity().getWindow()
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
     
     @Override
@@ -174,7 +173,6 @@ public class FragmentConfirmProperty extends
         super.onViewCreated(view, savedInstanceState);
         Timber.tag(TAG).d("onCreatedView");
         init();
-        getData();
         setUpSearch();
     }
     
@@ -226,15 +224,19 @@ public class FragmentConfirmProperty extends
                 mLikeName);
     }
     
+    @SuppressWarnings("CheckResult")
     private void setUpSearch() {
-        RxTextView.afterTextChangeEvents(mBinding.get().editTextSearch)
-            .debounce(500, TimeUnit.MILLISECONDS).observeOn(
-            AndroidSchedulers.mainThread()).subscribe(success -> {
-            Timber.tag(TAG).d("RxTextView");
-            updateUI();
-        }, throwable -> {
-            Timber.tag(TAG).d("Error RxTextView");
-        });
+        Timber.tag(TAG).d("On Setup Search");
+        RxTextView
+            .afterTextChangeEvents(mBinding.get().editTextSearch)
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(success -> {
+                updateUI();
+            }, throwable -> {
+                Timber.tag(TAG).d(throwable.getMessage());
+            });
     }
     
     private void updateUI() {
@@ -286,9 +288,10 @@ public class FragmentConfirmProperty extends
         Timber.tag(TAG).d("Successgkfdlj3");
         
         List<Property> list = (List<Property>) object;
-      
+        
         if (!ValidationHelper.isEmptyList(list)) {
-            if(mConfirmPropertyAdapter.getData()!=null&&mConfirmPropertyAdapter.getData().equals(list)){
+            if (mConfirmPropertyAdapter.getData() != null &&
+                mConfirmPropertyAdapter.getData().equals(list)) {
                 return;
             }
             if (!(mRecyclerView.getAdapter() instanceof ConfirmPropertyAdapter)) {
@@ -392,15 +395,16 @@ public class FragmentConfirmProperty extends
     
     @Override
     public void clearMemory() {
-        mBuilderAlertDialog =null;
-        mProgressDialog=null;
-        mConfirmPropertyAdapter=null;
-        mServiceUnavailableAdapter =null;
+        mBuilderAlertDialog = null;
+        mProgressDialog = null;
+        mConfirmPropertyAdapter = null;
+        mServiceUnavailableAdapter = null;
         mEmptyPropertyAdapter = null;
         mRecyclerView = null;
         mRelativeLayoutLoadMore = null;
         mLayoutManager = null;
     }
+    
     public void onClickSelectStatus(View view) {
         mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()

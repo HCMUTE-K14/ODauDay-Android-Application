@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.odauday.R;
+import com.odauday.data.remote.property.model.GeoLocation;
 import com.odauday.databinding.ItemPropertyBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.view.StarView;
+import com.odauday.utils.ImageLoader;
+import com.odauday.utils.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
@@ -53,7 +56,18 @@ public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> 
         binding.setProperty(item);
         binding.setHandler(this);
         binding.starView.setOnClickStarListener(mOnClickStarListener);
+        binding.txtPrice.setText(TextUtils.formatIntToCurrency((float) item.getPrice(), true));
         
+        if (item.getImages() != null && !item.getImages().isEmpty()) {
+            String urlImage = item.getImages().get(0).getUrl();
+            ImageLoader
+                .load(binding.imageRoom, TextUtils.getImageUrl(urlImage));
+        } else {
+            String staticImage = TextUtils
+                .buildUrlStaticMap(new GeoLocation(item.getLatitude(), item.getLongitude()), 17.0f,
+                    "600x300");
+            ImageLoader.load(binding.imageRoom, staticImage);
+        }
     }
     
     @Override
@@ -92,13 +106,16 @@ public class FavoriteAdapter extends BaseAdapter<Property, ItemPropertyBinding> 
     
     public void onClickProperty(Property property) {
         Timber.tag(TAG).d("Property: " + property.getAddress());
-        if(mOnClickItemPropertyListener!=null){
+        if (mOnClickItemPropertyListener != null) {
             mOnClickItemPropertyListener.onClickItemProperty(property);
         }
     }
-    public interface OnClickItemPropertyListener{
+    
+    public interface OnClickItemPropertyListener {
+        
         void onClickItemProperty(Property property);
     }
+    
     public interface OnClickStarListener {
         
         void onCheckStar(Property property);

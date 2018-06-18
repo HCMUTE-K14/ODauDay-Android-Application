@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import com.odauday.R;
-import com.odauday.api.EndPoint;
 import com.odauday.databinding.ItemConfirmPropertyBinding;
 import com.odauday.model.Property;
 import com.odauday.ui.base.BaseAdapter;
 import com.odauday.ui.propertymanager.status.Status;
-import com.odauday.utils.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +20,12 @@ import java.util.List;
  */
 
 public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPropertyBinding> {
-    private static final String TAG=ConfirmPropertyAdapter.class.getSimpleName();
+    
+    private static final String TAG = ConfirmPropertyAdapter.class.getSimpleName();
     private PopupMenu mPopupMenu;
     private OnClickMenuListener mOnClickMenuListener;
     private onClickItemPropertyListener mOnClickItemPropertyListener;
+    
     @Override
     protected ItemConfirmPropertyBinding createBinding(ViewGroup parent) {
         ItemConfirmPropertyBinding itemConfirmPropertyBinding = DataBindingUtil
@@ -52,20 +52,26 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
     protected boolean areContentsTheSame(Property oldItem, Property newItem) {
         return oldItem.equals(newItem);
     }
-    public void clearData(){
-        data.clear();
+    
+    public void clearData() {
+        if (data != null) {
+            data.clear();
+        }
     }
-    public void removeItem(Property property){
+    
+    public void removeItem(Property property) {
         data.remove(property);
         notifyDataSetChanged();
     }
-    public void changeStatusItem(Property property, String status){
-        int index=data.indexOf(property);
-        if(index>-1){
+    
+    public void changeStatusItem(Property property, String status) {
+        int index = data.indexOf(property);
+        if (index > -1) {
             data.get(index).setStatus(status);
             notifyDataSetChanged();
         }
     }
+    
     @Override
     public void update(List<Property> newData) {
         if (data == null) {
@@ -84,7 +90,7 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
         mPopupMenu = new PopupMenu(view.getContext(), view);
         mPopupMenu.getMenuInflater()
             .inflate(R.menu.menu_action_admin, mPopupMenu.getMenu());
-    
+        
         if (property.getStatus().equals(Status.ACTIVE)) {
             mPopupMenu.getMenu().removeItem(R.id.confirm);
         }
@@ -100,7 +106,7 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
     }
     
     private void onHandlerItem(MenuItem item, Property property) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.delete:
                 mOnClickMenuListener.deleteProperty(property);
                 break;
@@ -118,8 +124,8 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
         mOnClickItemPropertyListener = onClickItemPropertyListener;
     }
     
-    public void onClickProperty(Property property){
-        if(mOnClickItemPropertyListener!=null){
+    public void onClickProperty(Property property) {
+        if (mOnClickItemPropertyListener != null) {
             mOnClickItemPropertyListener.onClickItemProperty(property);
         }
     }
@@ -136,7 +142,9 @@ public class ConfirmPropertyAdapter extends BaseAdapter<Property, ItemConfirmPro
         
         void confirmProperty(Property property);
     }
-    public interface onClickItemPropertyListener{
+    
+    public interface onClickItemPropertyListener {
+        
         void onClickItemProperty(Property property);
     }
     
