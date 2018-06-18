@@ -139,8 +139,8 @@ public class EnquiryViewHolder extends BaseRowViewHolder<EnquiryDetailRow> {
     
     private String buildSubject(String name, String phone, String message) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Hi").append("<br/>").append("Name: ").append(name).append("<br/>")
-            .append("Phone: ").append(phone).append("<br/><br/>").append(message);
+        builder.append("Hi").append("Name: ").append(name)
+            .append(" Phone: ").append(phone).append(message);
         
         return builder.toString();
     }

@@ -357,4 +357,5 @@
   <string name="txt_cannot_remove_saved_search">Cannot remove SavedSearch</string>
   <string name="txt_remove_saved_search_successfully">Removing SavedSearch is successfully</string>
   <string name="txt_list_property">List property</string>
+  <string name="message_price_too_large">Price is too big</string>
 </resources>

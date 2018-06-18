@@ -28,6 +28,8 @@ public class AppConfig {
     
     public static final int THREAD_POOL = 3;
     
+    public static final int LIMIT_RECENT_SEARCH = 10;
+    
     public enum LANGUAGE {
         EN("English (Tiếng Anh)", "en"),
         VI("Vietnamese (Tiếng Việt)", "vi");

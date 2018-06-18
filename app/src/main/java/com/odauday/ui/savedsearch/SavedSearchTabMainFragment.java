@@ -1,6 +1,5 @@
 package com.odauday.ui.savedsearch;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import com.odauday.R;
 import com.odauday.data.SavedSearchRepository;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
-import com.odauday.data.remote.model.MessageResponse;
 import com.odauday.data.remote.model.SavedSearchResponse;
 import com.odauday.databinding.FragmentSavedSearchTabMainBinding;
 import com.odauday.model.Search;
@@ -22,7 +20,6 @@ import com.odauday.ui.view.bottomnav.NavigationTab;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.ValidationHelper;
 import com.odauday.viewmodel.BaseViewModel;
-import com.odauday.viewmodel.model.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,7 +31,8 @@ import timber.log.Timber;
 
 public class SavedSearchTabMainFragment extends
                                         BaseMVVMFragment<FragmentSavedSearchTabMainBinding> implements
-                                                                                            SavedSearchContract,ClearMemory {
+                                                                                            SavedSearchContract,
+                                                                                            ClearMemory {
     
     public static final String TAG = NavigationTab.SAVED_SEARCH_TAB.getNameTab();
     
@@ -61,7 +59,7 @@ public class SavedSearchTabMainFragment extends
         Timber.tag(TAG).d("Remove: " + search.getName());
         
         if (!ValidationHelper.isEmptyList(mRecentSearches)) {
-            for (Search s: mRecentSearches) {
+            for (Search s : mRecentSearches) {
                 if (s.getId().trim().equals(search.getId().trim())) {
                     mRecentSearches.remove(s);
                     break;
@@ -81,26 +79,29 @@ public class SavedSearchTabMainFragment extends
                 Timber.tag(TAG).d("onSubscribe remove saved search");
             })
             .subscribe(success -> {
-                if(!ValidationHelper.isNull(success)){
-                    onSuccessRemove(success.getMessage(),search.getId());
+                if (!ValidationHelper.isNull(success)) {
+                    onSuccessRemove(success.getMessage(), search.getId());
                 }
             }, error -> {
                 String message = getActivity().getString(R.string.cannot_remove_saved_search);
                 SnackBarUtils.showSnackBar(mBinding.get().savedSearch, message);
             });
     };
+    
     public static SavedSearchTabMainFragment newInstance() {
-
+        
         Bundle args = new Bundle();
-
+        
         SavedSearchTabMainFragment fragment = new SavedSearchTabMainFragment();
         fragment.setArguments(args);
         return fragment;
     }
+    
     @Override
     public int getLayoutId() {
         return R.layout.fragment_saved_search_tab_main;
     }
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -113,38 +114,40 @@ public class SavedSearchTabMainFragment extends
         mSearches = new ArrayList<>();
         mRecentSearches = new ArrayList<>();
         mBinding.get().setHandler(this);
-    
+        
         mSavedSearchAdapter = new SavedSearchAdapter();
         mRecentSearchAdapter = new RecentSearchAdapter();
         mEmptySavedSearchAdapter = new EmptySavedSearchAdapter();
-    
+        
         mRecentSearchAdapter.setOnClickRemoveRecentSearches(mOnClickRemoveRecentSearches);
         mSavedSearchAdapter.setOnClickRemoveSavedSearches(mOnClickRemoveSavedSearches);
-    
+        
         mRecyclerViewSavedSearch = mBinding.get().recycleViewSavedSearch;
         mRecyclerViewRecentSearch = mBinding.get().recycleViewRecentSearch;
-        mRecyclerViewEmpty=mBinding.get().recycleViewEmpty;
-        mRelativeLayoutSavedSearch=mBinding.get().relativeSavedSearch;
-        mRelativeLayoutRecentSearch=mBinding.get().relativeRecentSearch;
-    
+        mRecyclerViewEmpty = mBinding.get().recycleViewEmpty;
+        mRelativeLayoutSavedSearch = mBinding.get().relativeSavedSearch;
+        mRelativeLayoutRecentSearch = mBinding.get().relativeRecentSearch;
+        
         mRecyclerViewRecentSearch.setNestedScrollingEnabled(false);
         mRecyclerViewSavedSearch.setNestedScrollingEnabled(false);
-    
+        
         mRecyclerViewSavedSearch.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         mRecyclerViewRecentSearch.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        mRecyclerViewEmpty.setLayoutManager(new GridLayoutManager(getActivity(),1));
+        mRecyclerViewEmpty.setLayoutManager(new GridLayoutManager(getActivity(), 1));
     }
     
     private void getData() {
         mRecentSearches = mPreferencesHelper.getList(PrefKey.RECENT_SEARCH, "");
+        Timber.d(mPreferencesHelper.getList(PrefKey.RECENT_SEARCH, "").toString());
         setRecentSearch();
         mSavedSearchViewModel.getSearchByUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
     }
+    
     @Override
     protected BaseViewModel getViewModel(String tag) {
         return mSavedSearchViewModel;
     }
-
+    
     @Override
     protected void processingTaskFromViewModel() {
         mSavedSearchViewModel.response().observe(this, resource -> {
@@ -184,7 +187,8 @@ public class SavedSearchTabMainFragment extends
         Timber.tag(TAG).d(ex.getMessage());
         changeView();
     }
-    private void onSuccessRemove(Object object,String idSavedSearch){
+    
+    private void onSuccessRemove(Object object, String idSavedSearch) {
         if (!ValidationHelper.isEmptyList(mSearches)) {
             for (Search search : mSearches) {
                 if (search.getId().trim().equals(idSavedSearch)) {
@@ -196,14 +200,17 @@ public class SavedSearchTabMainFragment extends
             changeView();
         }
         SnackBarUtils
-            .showSnackBar(mBinding.get().savedSearch, getString(R.string.txt_remove_saved_search_successfully));
+            .showSnackBar(mBinding.get().savedSearch,
+                getString(R.string.txt_remove_saved_search_successfully));
     }
-    private void onSuccessSavedSearch(Object object){
+    
+    private void onSuccessSavedSearch(Object object) {
         SavedSearchResponse savedSearchResponse = (SavedSearchResponse) object;
         if (!ValidationHelper.isNull(savedSearchResponse)) {
             List<Search> searches = savedSearchResponse.getSearches();
             if (!ValidationHelper.isEmptyList(searches)) {
-                if(mSavedSearchAdapter.getData()!=null&&mSavedSearchAdapter.getData().equals(searches)){
+                if (mSavedSearchAdapter.getData() != null &&
+                    mSavedSearchAdapter.getData().equals(searches)) {
                     return;
                 }
                 mSearches = searches;
@@ -214,7 +221,8 @@ public class SavedSearchTabMainFragment extends
             }
         }
     }
-    private void setRecentSearch(){
+    
+    private void setRecentSearch() {
         if (!ValidationHelper.isEmptyList(mRecentSearches)) {
             if (!(mRecyclerViewRecentSearch.getAdapter() instanceof RecentSearchAdapter)) {
                 mRecyclerViewRecentSearch.setAdapter(mRecentSearchAdapter);
@@ -223,28 +231,31 @@ public class SavedSearchTabMainFragment extends
         }
         changeView();
     }
-    private void changeView(){
-        if(!ValidationHelper.isEmptyList(mSearches)){
+    
+    private void changeView() {
+        if (!ValidationHelper.isEmptyList(mSearches)) {
             mRelativeLayoutSavedSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
-        }else {
+        } else {
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
         }
         
-        if(!ValidationHelper.isEmptyList(mRecentSearches)){
+        if (!ValidationHelper.isEmptyList(mRecentSearches)) {
             mRelativeLayoutRecentSearch.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setVisibility(View.GONE);
-        }else {
+        } else {
             mRelativeLayoutRecentSearch.setVisibility(View.GONE);
         }
         
-        if((mSearches==null||mSearches.size()<1)&&(mRecentSearches==null||mRecentSearches.size()<1)){
+        if ((mSearches == null || mSearches.size() < 1) &&
+            (mRecentSearches == null || mRecentSearches.size() < 1)) {
             mRelativeLayoutSavedSearch.setVisibility(View.GONE);
             mRelativeLayoutRecentSearch.setVisibility(View.GONE);
             mRecyclerViewEmpty.setVisibility(View.VISIBLE);
             mRecyclerViewEmpty.setAdapter(mEmptySavedSearchAdapter);
         }
     }
+    
     public void onClickRefresh() {
         getData();
     }
@@ -257,15 +268,15 @@ public class SavedSearchTabMainFragment extends
     
     @Override
     public void clearMemory() {
-        mSavedSearchAdapter=null;
-        mRecentSearchAdapter=null;
-        mSearches=null;
-        mRecentSearches=null;
-        mEmptySavedSearchAdapter=null;
-        mRecyclerViewSavedSearch=null;
-        mRecyclerViewRecentSearch=null;
-        mRecyclerViewEmpty=null;
-        mRelativeLayoutSavedSearch=null;
-        mRelativeLayoutRecentSearch=null;
+        mSavedSearchAdapter = null;
+        mRecentSearchAdapter = null;
+        mSearches = null;
+        mRecentSearches = null;
+        mEmptySavedSearchAdapter = null;
+        mRecyclerViewSavedSearch = null;
+        mRecyclerViewRecentSearch = null;
+        mRecyclerViewEmpty = null;
+        mRelativeLayoutSavedSearch = null;
+        mRelativeLayoutRecentSearch = null;
     }
 }
