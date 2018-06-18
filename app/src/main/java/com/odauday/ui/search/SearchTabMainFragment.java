@@ -448,12 +448,22 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
         if (getActivity() == null || getActivity().getSupportFragmentManager() == null) {
             return;
         }
-        
+    
         mFilterNavigationFragment = FilterNavigationFragment
             .newInstance();
-        getActivity().getSupportFragmentManager().beginTransaction()
-            .replace(R.id.filter_nav, mFilterNavigationFragment, FilterNavigationFragment.TAG)
-            .commit();
+    
+        Runnable attachRunnableMapView = new AttachFragmentRunnable
+            .AttachFragmentBuilder()
+            .setTypeAttach(AttachFragmentRunnable.TYPE_REPLACE)
+            .setFragmentManager(getActivity().getSupportFragmentManager())
+            .setContainerId(R.id.filter_nav)
+            .setFragment(mFilterNavigationFragment)
+            .setAnimationIn(android.R.anim.fade_in)
+            .setAnimationOut(android.R.anim.fade_out)
+            .setAddToBackTrack(false)
+            .build();
+    
+        new Handler().postDelayed(attachRunnableMapView, 50);
     }
     
     private void setupMapView() {
@@ -514,6 +524,8 @@ public class SearchTabMainFragment extends BaseMVVMFragment<FragmentSearchTabMai
             .setContainerId(R.id.fragment_map_view)
             .setFragment(loadingFragment)
             .setAddToBackTrack(false)
+            .setAnimationIn(android.R.anim.fade_in)
+            .setAnimationOut(android.R.anim.fade_out)
             .build();
         
         new Handler().postDelayed(attachRunnableLoadingFragment, 50);

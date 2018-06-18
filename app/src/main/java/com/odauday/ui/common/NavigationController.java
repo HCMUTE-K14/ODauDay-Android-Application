@@ -65,6 +65,8 @@ public class NavigationController {
             .setContainerId(mContainerId)
             .setFragment(SearchTabMainFragment.newInstance())
             .setTagFragment(SearchTabMainFragment.TAG)
+            .setAnimationIn(R.anim.fade_in)
+            .setAnimationOut(R.anim.fade_out)
             .build();
         
         mHandler.postDelayed(runnableAttachSearchTab, DELAY_ATTACH_FRAGMENT);
@@ -78,6 +80,8 @@ public class NavigationController {
             .setContainerId(mContainerId)
             .setFragment(AlertTabMainFragment.newInstance())
             .setTagFragment(AlertTabMainFragment.TAG)
+            .setAnimationIn(R.anim.fade_in)
+            .setAnimationOut(R.anim.fade_out)
             .build();
         
         mHandler.postDelayed(runnableAttachAlertTab, DELAY_ATTACH_FRAGMENT);
@@ -91,6 +95,8 @@ public class NavigationController {
             .setContainerId(mContainerId)
             .setFragment(FavoriteTabMainFragment.newInstance())
             .setTagFragment(FavoriteTabMainFragment.TAG)
+            .setAnimationIn(R.anim.fade_in)
+            .setAnimationOut(R.anim.fade_out)
             .build();
         
         mHandler.postDelayed(runnableAttachFavoriteTab, DELAY_ATTACH_FRAGMENT);
@@ -104,6 +110,8 @@ public class NavigationController {
             .setContainerId(mContainerId)
             .setFragment(SavedSearchTabMainFragment.newInstance())
             .setTagFragment(SavedSearchTabMainFragment.TAG)
+            .setAnimationIn(R.anim.fade_in)
+            .setAnimationOut(R.anim.fade_out)
             .build();
         
         mHandler.postDelayed(runnableAttachSavedSearchTab, DELAY_ATTACH_FRAGMENT);
@@ -117,6 +125,8 @@ public class NavigationController {
             .setContainerId(mContainerId)
             .setFragment(MoreTabMainFragment.newInstance())
             .setTagFragment(MoreTabMainFragment.TAG)
+            .setAnimationIn(R.anim.fade_in)
+            .setAnimationOut(R.anim.fade_out)
             .build();
         
         mHandler.postDelayed(runnableAttachMoreTab, DELAY_ATTACH_FRAGMENT);
