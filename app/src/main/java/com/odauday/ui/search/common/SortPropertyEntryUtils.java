@@ -14,6 +14,9 @@ public class SortPropertyEntryUtils {
     
     public static List<PropertyResultEntry> sort(List<PropertyResultEntry> list,
         SortType sortType) {
+        if(list==null){
+            return new ArrayList<>();
+        }
         List<PropertyResultEntry> data = new ArrayList<>(list);
         Collections.sort(data, getComparator(sortType));
         

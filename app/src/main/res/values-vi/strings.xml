@@ -358,4 +358,6 @@
   <string name="txt_remove_saved_search_successfully">Mục tìm kiếm đã được xóa</string>
   <string name="txt_list_property">Danh sách các căn hộ</string>
   <string name="message_price_too_large">Giá tiền quá lớn</string>
+  <string name="txt_type">Loại:</string>
+  <string name="txt_done_short">Xong</string>
 </resources>
