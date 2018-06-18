@@ -22,6 +22,7 @@ import com.odauday.databinding.ActivityPropertyManagerBinding;
 import com.odauday.exception.RetrofitException;
 import com.odauday.model.Property;
 import com.odauday.model.PropertyDetail;
+import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.base.BaseMVVMActivity;
 import com.odauday.ui.favorite.ServiceUnavailableAdapter;
 import com.odauday.ui.propertydetail.PropertyDetailActivity;
@@ -30,6 +31,7 @@ import com.odauday.ui.propertymanager.status.Status;
 import com.odauday.utils.SnackBarUtils;
 import com.odauday.utils.SortAndFilterUtils;
 import com.odauday.utils.ValidationHelper;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import java.util.Collections;
 import java.util.Comparator;
@@ -202,7 +204,7 @@ public class ActivityPropertyManager extends
             mPropertyManagerViewModel.getPropertyOfUser(mPreferencesHelper.get(PrefKey.USER_ID, ""));
         }else {
             Timber.tag(TAG).d("getPropertyUserForAdmin");
-            mBinding.btnAddEvent.setVisibility(View.GONE);
+            mBinding.btnAddProperty.setVisibility(View.GONE);
             mPropertyManagerViewModel.getPropertyOfUser(user_id);
         }
        
@@ -352,29 +354,39 @@ public class ActivityPropertyManager extends
     }
     
     private void ascendingProperty() {
+        if(ValidationHelper.isEmptyList(mProperties)){
+            return;
+        }
         List<Property> list = SortAndFilterUtils.sortAddressPropertyAscending(mProperties);
         setAdapter(list);
     }
     
     private void descendingProperty() {
+        if(ValidationHelper.isEmptyList(mProperties)){
+            return;
+        }
         List<Property> list = SortAndFilterUtils.sortAddressPropertyDescending(mProperties);
         setAdapter(list);
     }
     private void sortLastAdded() {
+        if(ValidationHelper.isEmptyList(mProperties)){
+            return;
+        }
         List<Property> propertyList = SortAndFilterUtils.sortPropertyLastAdded(mProperties);
         setAdapter(propertyList);
        
     }
     private void setAdapter(List<Property> list){
         if (!ValidationHelper.isEmptyList(list)) {
-            if (mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter) {
-            
-            } else {
+            if (!(mBinding.recycleViewProperties.getAdapter() instanceof PropertyAdapter)) {
                 mBinding.recycleViewProperties.setAdapter(mPropertyAdapter);
             }
             mPropertyAdapter.setData(list);
         } else {
             mBinding.recycleViewProperties.setAdapter(mEmptyPropertyAdapter);
         }
+    }
+    public void  onClickAddProperty(View view){
+        ViewUtils.startActivity(this, AddEditPropertyActivity.class);
     }
 }

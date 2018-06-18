@@ -56,15 +56,17 @@ public class ActivityDetailNotification extends BaseMVVMActivity<ActivityDetailN
             mPropertyRepository.getFullDetail(notification.getPropertyID())
                 .doOnSubscribe(onSubscribe -> {
                     Timber.tag(TAG).d("onSubscribe");
+                    mBinding.relativeDetailNotification.setVisibility(View.GONE);
                 })
                 .subscribe(success -> {
                     Timber.tag(TAG).d("onSuccess");
+                    mBinding.relativeDetailNotification.setVisibility(View.VISIBLE);
                     if(!ValidationHelper.isNull(success)){
                         mBinding.setPropertydetail(success);
                         mBinding.txtType.setText(getString(success.getTextType()));
                     }
                 }, throwable -> {
-                    mBinding.relativeDetailNotification.setVisibility(View.GONE);
+                    //mBinding.relativeDetailNotification.setVisibility(View.GONE);
                 });
         }else {
             Timber.tag(TAG).d("Notification is null");

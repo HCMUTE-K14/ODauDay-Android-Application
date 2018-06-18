@@ -13,6 +13,7 @@ import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.databinding.FragmentMoreTabMainBinding;
 import com.odauday.model.User;
 import com.odauday.ui.ClearMemory;
+import com.odauday.ui.addeditproperty.AddEditPropertyActivity;
 import com.odauday.ui.base.BaseMVVMFragment;
 import com.odauday.ui.admin.ActivityAdminManager;
 import com.odauday.ui.propertymanager.ActivityPropertyManager;
@@ -47,6 +48,7 @@ public class MoreTabMainFragment extends BaseMVVMFragment<FragmentMoreTabMainBin
                 break;
             case ItemType.POST_NEWS:
                 Timber.tag(TAG).d("Click: " + item.getName());
+                ViewUtils.startActivity(getActivity(), AddEditPropertyActivity.class);
                 break;
             case ItemType.ADMIN_MANAGER:
                 ViewUtils.startActivity(getActivity(), ActivityAdminManager.class);

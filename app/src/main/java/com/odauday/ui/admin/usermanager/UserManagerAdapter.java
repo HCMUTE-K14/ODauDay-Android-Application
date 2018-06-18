@@ -68,7 +68,9 @@ public class UserManagerAdapter extends BaseAdapter<User,ItemUserManagerBinding>
     }
     
     public void clearData(){
-        data.clear();
+        if(data!=null){
+            data.clear();
+        }
     }
     public void changeStatusItem(User user, String status){
         int index=data.indexOf(user);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
   <data>
-
   </data>
   <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/property_manager"
@@ -87,13 +86,14 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-      android:id="@+id/btn_add_event"
+      android:id="@+id/btn_add_property"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="18dp"
       android:layout_marginRight="10dp"
       android:layout_alignParentBottom="true"
       android:layout_alignParentRight="true"
+      android:onClick="onClickAddProperty"
       android:background="?android:attr/selectableItemBackground"
       android:src="@drawable/ic_add_white"
       app:backgroundTint="#2CB34A"
