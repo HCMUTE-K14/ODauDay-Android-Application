@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.view.View;
 import com.odauday.R;
+import com.odauday.config.AppConfig.LANGUAGE;
 import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import com.odauday.data.remote.model.MessageResponse;
@@ -73,6 +74,15 @@ public class ActivitySettings extends BaseMVVMActivity<ActivitySettingsBinding> 
     }
     
     @Override
+    protected void onStart() {
+        super.onStart();
+        
+        String langCode = mPreferencesHelper.get(PrefKey.PREF_LANGUAGE, LANGUAGE.EN.getCode());
+        
+        mBinding.language.setText(LANGUAGE.getStringByCode(langCode));
+    }
+    
+    @Override
     public void onSuccess(Object object) {
         MessageResponse messageResponse = (MessageResponse) object;
         if (messageResponse != null) {
@@ -96,7 +106,6 @@ public class ActivitySettings extends BaseMVVMActivity<ActivitySettingsBinding> 
     }
     
     public void onClickSelectLanguage(View view) {
-        Timber.tag(TAG).d("click select language");
         mChooseLanguageHelper.change(this);
     }
     

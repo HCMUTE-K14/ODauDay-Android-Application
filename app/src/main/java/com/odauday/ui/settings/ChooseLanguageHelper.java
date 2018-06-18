@@ -12,6 +12,7 @@ import com.odauday.data.local.cache.PrefKey;
 import com.odauday.data.local.cache.PreferencesHelper;
 import java.util.Locale;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 /**
  * Created by kunsubin on 4/27/2018.
@@ -36,6 +37,8 @@ public class ChooseLanguageHelper {
         alertDialog.setTitle(R.string.settings_choose_language);
         
         int index = getCurrentLanguage().equals("en") ? 0 : 1;
+    
+        Timber.tag("WWW").d(getCurrentLanguage());
         
         alertDialog.setSingleChoiceItems(LANGUAGE, index, (dialog, which) -> {
             String code = "en";

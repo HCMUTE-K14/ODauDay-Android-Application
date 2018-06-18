@@ -47,5 +47,16 @@ public class AppConfig {
         public String getCode() {
             return mCode;
         }
+        
+        public static String getStringByCode(String code) {
+            switch (code) {
+                
+                case "vi":
+                    return VI.getDisplayString();
+                case "en":
+                default:
+                    return EN.getDisplayString();
+            }
+        }
     }
 }

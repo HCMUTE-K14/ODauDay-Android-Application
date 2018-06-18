@@ -54,14 +54,6 @@
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="5dp"
-          android:layout_marginLeft="10dp"
-          android:text="@string/txt_notification"
-          android:textColor="@color/colorPrimary"
-          android:textSize="15dp" />
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
           android:layout_marginTop="10dp"
           android:layout_marginLeft="10dp"
           android:text="@string/txt_language"
@@ -74,6 +66,7 @@
           android:background="?android:attr/selectableItemBackground"
           android:onClick="onClickSelectLanguage">
           <TextView
+            android:id="@+id/language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
