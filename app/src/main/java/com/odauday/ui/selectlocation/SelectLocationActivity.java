@@ -163,7 +163,7 @@ public class SelectLocationActivity extends
         }
         mBinding.includeToolbar.image.setVisibility(View.VISIBLE);
         mBinding.includeToolbar.image.setOnClickListener(this::openAutoCompletePlaceActivity);
-        
+        mBinding.includeToolbar.btnDone.setText(R.string.txt_done_short);
         mBinding.includeToolbar.btnDone.setVisibility(View.VISIBLE);
         mBinding.includeToolbar.btnDone.setOnClickListener(done -> {
             if (mAddressAndLocationObject != null) {

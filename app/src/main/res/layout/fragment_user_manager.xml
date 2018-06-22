@@ -30,7 +30,7 @@
           android:layout_marginLeft="15dp"
           android:layout_centerVertical="true"
           android:layout_toRightOf="@id/image_sort"
-          android:text="All"
+          android:text="@string/txt_all"
           android:textSize="15dp" />
         <ImageView
           android:layout_width="30dp"
