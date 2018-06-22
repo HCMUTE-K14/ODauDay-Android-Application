@@ -19,8 +19,11 @@ import com.odauday.ui.addeditproperty.step3.Step3Fragment;
 import com.odauday.ui.addeditproperty.step4.OnCompleteStep4Event;
 import com.odauday.ui.addeditproperty.step4.Step4Fragment;
 import com.odauday.ui.base.BaseMVVMActivity;
+import com.odauday.ui.user.login.LoginActivity;
+import com.odauday.ui.view.MyProgressBar.MyProgressBarListener;
 import com.odauday.utils.NumberUtils;
 import com.odauday.utils.TextUtils;
+import com.odauday.utils.ViewUtils;
 import com.odauday.viewmodel.BaseViewModel;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -58,6 +61,18 @@ public class AddEditPropertyActivity extends
     private Stack<Integer> mStackFragment = new Stack<>();
     
     private MyProperty mCurrentProperty;
+    
+    private final MyProgressBarListener mProgressBarListener = new MyProgressBarListener() {
+        @Override
+        public void onShow() {
+            ViewUtils.disabledUserInteraction(AddEditPropertyActivity.this);
+        }
+        
+        @Override
+        public void onHide() {
+            ViewUtils.enabledUserInteraction(AddEditPropertyActivity.this);
+        }
+    };
     
     @Inject
     AddEditPropertyViewModel mAddEditPropertyViewModel;
@@ -276,6 +291,7 @@ public class AddEditPropertyActivity extends
             
             setTitle(mStep1Fragment.getStep());
         }, 200);
+        mBinding.progress.setListener(mProgressBarListener);
     }
     
     private void getProperty() {
@@ -352,5 +368,10 @@ public class AddEditPropertyActivity extends
     
     @Override
     public void loading(boolean showing) {
+        if (showing) {
+            mBinding.progress.show();
+            return;
+        }
+        mBinding.progress.hide();
     }
 }

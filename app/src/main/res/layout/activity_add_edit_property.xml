@@ -6,10 +6,16 @@
     <include
       android:id="@+id/include_toolbar"
       layout="@layout/include_tool_bar_with_text" />
+    <com.odauday.ui.view.MyProgressBar
+      android:id="@+id/progress"
+      android:layout_width="match_parent"
+      android:layout_height="5dp"
+      android:visibility="gone"
+      android:layout_below="@id/include_toolbar" />
     <FrameLayout
       android:id="@+id/step_property_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/include_toolbar" />
+      android:layout_below="@+id/progress" />
   </RelativeLayout>
 </layout>
