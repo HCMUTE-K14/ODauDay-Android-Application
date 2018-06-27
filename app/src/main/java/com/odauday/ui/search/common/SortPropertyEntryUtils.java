@@ -50,6 +50,9 @@ public class SortPropertyEntryUtils {
     
     public static Comparator<PropertyResultEntry> dateComparator() {
         return (o1, o2) -> {
+            if(o1.getDateCreated()==null||o2.getDateCreated()==null){
+                return 0;
+            }
             if (o1.getDateCreated().after(o2.getDateCreated())) {
                 return -1;
             }
