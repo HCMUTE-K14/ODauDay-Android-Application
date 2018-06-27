@@ -443,6 +443,9 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
     
     @Override
     public void onSuccessGetDetailProperty(PropertyDetail propertyDetail) {
+        if (mPropertyDetail != null && mPropertyDetail.equals(propertyDetail)) {
+            return;
+        }
         mPropertyDetail = propertyDetail;
         if (!TextUtils.isEmpty(mPropertyDetail.getDescription())) {
             DescriptionDetailRow descriptionDetailRow = new DescriptionDetailRow();
@@ -461,6 +464,7 @@ public class PropertyDetailActivity extends BaseMVVMActivity implements RowContr
         mAdapter.notifyDataSetChanged();
         if (mPropertyDetail.getImages() != null && !mPropertyDetail.getImages().isEmpty()) {
             expandAppBar();
+            scrollToTop();
         } else {
             scrollToTop();
         }

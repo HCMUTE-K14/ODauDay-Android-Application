@@ -53,7 +53,7 @@ public class GalleryViewPagerAdapter extends PagerAdapter {
         }
         mImages.clear();
         mImages
-            .add(0, new Image(TextUtils.buildUrlStaticMap(item.getLocation(), 17.0f, "600x300")));
+            .add(0, new Image(TextUtils.buildUrlStaticMap(item.getLocation(), 10.0f, "600x300")));
         
         for (Image image : item.getImages()) {
             if(image != null){

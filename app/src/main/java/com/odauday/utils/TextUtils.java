@@ -247,6 +247,10 @@ public class TextUtils {
     }
     
     public static String formatAddress(String address){
-        return address.replaceAll("Unnamed Road,", "").trim();
+        return address
+            .replaceAll("Unnamed Road,", "")
+            .replaceAll(", VietNam", "")
+            .replaceAll(", Việt Nam", "")
+            .trim();
     }
 }

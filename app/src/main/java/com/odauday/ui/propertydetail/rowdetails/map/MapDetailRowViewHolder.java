@@ -43,7 +43,7 @@ public class MapDetailRowViewHolder extends BaseRowViewHolder<MapDetailRow> {
             return;
         }
         
-        String urlMap = TextUtils.buildUrlStaticMap(mData.getLocation(), 13, "600x300");
+        String urlMap = TextUtils.buildUrlStaticMap(mData.getLocation(), 10.0f, "600x300");
         
         Glide.with(mMap.getContext())
             .load(urlMap)
