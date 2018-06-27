@@ -121,8 +121,13 @@ public class Search {
     public String toString() {
         return "Search{" +
                "id='" + id + '\'' +
-               ", latitude='" + latitude + '\'' +
-               ", longitude='" + longitude + '\'' +
+               ", name='" + name + '\'' +
+               ", latitude=" + latitude +
+               ", longitude=" + longitude +
+               ", latitude_ns=" + latitude_ns +
+               ", longitude_ns=" + longitude_ns +
+               ", latitude_sw=" + latitude_sw +
+               ", longitude_sw=" + longitude_sw +
                ", date_created='" + date_created + '\'' +
                '}';
     }

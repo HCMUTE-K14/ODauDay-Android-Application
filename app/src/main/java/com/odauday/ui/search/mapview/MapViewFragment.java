@@ -68,6 +68,7 @@ import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
 import dagger.android.support.AndroidSupportInjection;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
@@ -310,7 +311,7 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         
-        moveToLastLocation();
+        moveToLastLocation(true);
         
         if (this.mPendingToShowLocations != null) {
             onUpdatedListLocation(this.mPendingToShowLocations);
@@ -419,21 +420,23 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
             search.setName(autoCompletePlace.getName());
             search.setLatitude(autoCompletePlace.getLocation().getLatitude());
             search.setLongitude(autoCompletePlace.getLocation().getLongitude());
-            search.setLatitude_ns(
-                mMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude);
-            search.setLongitude_ns(
-                mMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude);
             
-            search.setLatitude_sw(
-                mMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude);
-            search.setLongitude_sw(
-                mMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude);
+            GeoLocation ns = mSearchRepository.getCurrentSearchRequest().getCore().getBounds()[0];
+            GeoLocation sw = mSearchRepository.getCurrentSearchRequest().getCore().getBounds()[1];
+            
+            search.setLatitude_ns(ns.getLatitude());
+            search.setLongitude_ns(ns.getLongitude());
+            
+            search.setLatitude_sw(sw.getLatitude());
+            search.setLongitude_sw(sw.getLongitude());
+            
+            search.setDate_created(new Date().toString());
             
             recentSearchList.add(0, search);
             if (recentSearchList.size() >= AppConfig.LIMIT_RECENT_SEARCH) {
                 recentSearchList.remove(recentSearchList.size() - 1);
             }
-            Timber.d(recentSearchList.toString());
+            
             mPreferencesHelper.putList(PrefKey.RECENT_SEARCH, recentSearchList);
         }
     }
@@ -490,10 +493,11 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         double lngSW = event.getSearch().getLongitude_sw();
         
         mLastGeoLocation = new GeoLocation(lat, lng);
-        mLastBounds = new GeoLocation[]{new GeoLocation(latSW, lngSW),
+        mLastBounds = new GeoLocation[]{
+            new GeoLocation(latSW, lngSW),
             new GeoLocation(latNE, lngNE)};
         
-        moveToLastLocation();
+        moveToLastLocation(true);
     }
     
     
@@ -670,8 +674,11 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         
     }
     
-    private void moveToLastLocation() {
-        MapUtils.moveMap(mMap, mLastGeoLocation.toLatLng(), mZoomLevel, false);
+    private void moveToLastLocation(boolean withBound) {
+        MapUtils.moveMap(mMap, mLastGeoLocation.toLatLng(), mZoomLevel, true);
+        if (!withBound) {
+            return;
+        }
         try {
             mMap.moveCamera(CameraUpdateFactory
                 .newLatLngBounds(
@@ -679,7 +686,6 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
                         mLastBounds[1].toLatLng()),
                     0));
         } catch (Exception ignored) {
-        
         }
     }
     
