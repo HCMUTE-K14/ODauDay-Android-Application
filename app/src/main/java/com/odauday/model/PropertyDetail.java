@@ -181,8 +181,7 @@ public class PropertyDetail implements Parcelable {
     }
     
     public String getTextPrice() {
-        return TextUtils.formatIntToCurrency((float) getPrice() *
-                                             AppConfig.RATE_VND);
+        return TextUtils.formatIntToCurrency((float) getPrice());
     }
     
     public int getNumOfBedrooms() {
