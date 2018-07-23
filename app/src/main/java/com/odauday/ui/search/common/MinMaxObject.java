@@ -30,6 +30,10 @@ public class MinMaxObject<T> implements Parcelable {
     @Expose
     private T max;
     
+    public MinMaxObject(){
+    
+    }
+    
     public MinMaxObject(T min, T max) {
         this.min = min;
         this.max = max;

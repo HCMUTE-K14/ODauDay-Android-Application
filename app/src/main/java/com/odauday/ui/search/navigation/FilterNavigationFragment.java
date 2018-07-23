@@ -5,12 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import com.odauday.R;
+import com.odauday.config.AppConfig;
 import com.odauday.data.SearchPropertyRepository;
 import com.odauday.data.local.cache.MapPreferenceHelper;
 import com.odauday.data.remote.property.model.SearchRequest;
 import com.odauday.databinding.FragmentFilterBinding;
 import com.odauday.model.Tag;
 import com.odauday.ui.base.BaseMVVMFragment;
+import com.odauday.ui.search.common.MinMaxObject;
 import com.odauday.ui.search.common.SearchCriteria;
 import com.odauday.ui.search.common.TextAndMoreTextValue;
 import com.odauday.ui.search.common.event.OnUpdateCriteriaEvent;
@@ -148,6 +150,10 @@ public class FilterNavigationFragment extends BaseMVVMFragment<FragmentFilterBin
         FilterOption option = FilterOption.getByRequestCode(requestCode);
         switch (option) {
             case PRICE:
+//                MinMaxObject<Integer> newValueWithRate = new MinMaxObject<>();
+//                newValueWithRate.setMin(minMaxReturnObject.getValue().getMin() * AppConfig.RATE_VND);
+//                newValueWithRate.setMin(minMaxReturnObject.getValue().getMax() * AppConfig.RATE_VND);
+//                minMaxReturnObject.setValue(newValueWithRate);
                 mSearchCriteria.setPrice(minMaxReturnObject.getValue());
                 String textPrice = mFilterNavigationViewModel
                     .getMaxMinText(option, minMaxReturnObject);

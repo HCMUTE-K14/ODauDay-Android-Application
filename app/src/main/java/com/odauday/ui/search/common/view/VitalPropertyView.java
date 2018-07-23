@@ -121,8 +121,7 @@ public class VitalPropertyView extends RelativeLayout {
             setImage(ImageLoader.randomPlaceHolder());
         }
         
-        String buildPriceText = TextUtils.formatIntToCurrency((float) property.getPrice() *
-                                                              AppConfig.RATE_VND);
+        String buildPriceText = TextUtils.formatIntToCurrency((float) property.getPrice());
         setPrice(buildPriceText);
         String featureText = getContext()
             .getString(R.string.txt_display_bedroom_bathroom_parking, property.getNumOfBedRooms(),

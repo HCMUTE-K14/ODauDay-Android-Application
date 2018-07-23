@@ -63,6 +63,7 @@ import com.odauday.ui.search.mapview.MapOverlayView.MapOverlayListener;
 import com.odauday.ui.search.mapview.MapViewAdapter.OnUpdatedListLocation;
 import com.odauday.utils.MapUtils;
 import com.odauday.utils.NetworkUtils;
+import com.odauday.utils.TextUtils;
 import com.odauday.utils.ViewUtils;
 import com.odauday.utils.permissions.PermissionCallBack;
 import com.odauday.utils.permissions.PermissionHelper;
@@ -417,6 +418,8 @@ public class MapViewFragment extends SupportMapFragment implements OnMapReadyCal
         List<Search> recentSearchList = mPreferencesHelper.getList(PrefKey.RECENT_SEARCH, "");
         if (recentSearchList != null) {
             Search search = new Search();
+            
+            search.setId(TextUtils.generatorUUID());
             search.setName(autoCompletePlace.getName());
             search.setLatitude(autoCompletePlace.getLocation().getLatitude());
             search.setLongitude(autoCompletePlace.getLocation().getLongitude());
